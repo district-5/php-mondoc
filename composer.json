@@ -1,0 +1,39 @@
+{
+    "name": "district5/mondoc",
+    "description": "Mondoc is a lightweight and easy to use model library for MongoDB",
+    "keywords": [],
+    "homepage": "https://github.com/district-5/php-mondoc",
+    "license": "mit",
+    "authors": [
+        {
+            "name": "District5",
+            "email": "hello@district5.co.uk"
+        }
+    ],
+    "repositories":[
+        {
+            "type": "vcs",
+            "url": "git@github.com:district-5/php-mondoc-builder.git"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "mongodb/mongodb": "^1.8",
+        "ext-mongodb": "*",
+        "district5/mondoc-builder": ">=0.0.1"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "phpunit/phpunit": "^7.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "District5\\Mondoc\\": "src/Mondoc/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "District5Tests\\MondocTests\\": "tests/MondocTests/"
+        }
+    }
+}

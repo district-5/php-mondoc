@@ -228,10 +228,19 @@ class ModelFunctionalityTest extends MondocBaseTest
         // save the model
         $this->assertTrue($m->save());
 
+        $this->assertEquals(2, MyService::getAverage('age'));
+        $this->assertEquals(2, MyService::getSum('age'));
+
         $this->assertTrue(MyService::inc($m->getMongoId(), 'age', 2));
         $this->assertEquals(4, MyService::getById($m->getMongoId())->getAge());
+        $this->assertEquals(4, MyService::getAverage('age'));
+        $this->assertEquals(4, MyService::getSum('age'));
+
         $this->assertTrue(MyService::dec($m->getMongoId(), 'age', 2));
         $this->assertEquals(2, MyService::getById($m->getMongoId())->getAge());
+        $this->assertEquals(2, MyService::getAverage('age'));
+        $this->assertEquals(2, MyService::getAverage('age', ['name' => $m->getName()]));
+        $this->assertEquals(2, MyService::getSum('age'));
 
         // Get the ID
         $theId = $m->getMongoIdString();

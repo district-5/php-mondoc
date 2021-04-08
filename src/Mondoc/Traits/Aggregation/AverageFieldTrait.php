@@ -19,14 +19,14 @@
 namespace District5\Mondoc\Traits\Aggregation;
 
 /**
- * Trait SumFieldTrait.
+ * Trait AverageFieldTrait.
  *
  * @package District5\Mondoc\Traits\Aggregation
  */
-trait SumFieldTrait
+trait AverageFieldTrait
 {
     /**
-     * Get the sum of a $fieldName by a given criteria.
+     * Get the average of a $fieldName by a given criteria.
      *
      * @param string $fieldName
      * @param array  $criteria
@@ -34,18 +34,15 @@ trait SumFieldTrait
      * @return float|int
      * @noinspection PhpUnused
      */
-    public static function getSum(string $fieldName, array $criteria = [])
+    public static function getAverage(string $fieldName, array $criteria = [])
     {
         $collection = self::getCollection(get_called_class());
         // @var $collection Collection
-
         $query = [
             [
                 '$group' => [
                     '_id' => null,
-                    $fieldName => [
-                        '$sum' => '$'.$fieldName
-                    ]
+                    $fieldName => ['$avg' => sprintf('$%s', $fieldName)]
                 ]
             ]
         ];

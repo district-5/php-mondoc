@@ -19,6 +19,7 @@
 namespace District5\Mondoc\Service;
 
 use District5\Mondoc\MondocConnections;
+use District5\Mondoc\Traits\Aggregation\AverageFieldTrait;
 use District5\Mondoc\Traits\Aggregation\SumFieldTrait;
 use District5\Mondoc\Traits\AtomicTrait;
 use District5\Mondoc\Traits\CountableTrait;
@@ -48,6 +49,7 @@ abstract class MondocAbstractService
     use DeletionTrait;
     use KeyOperationsTrait;
     use SumFieldTrait;
+    use AverageFieldTrait;
     use DistinctValuesTrait;
 
     /**

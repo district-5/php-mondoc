@@ -42,7 +42,7 @@ trait DeleteMultiTrait
         $collection = self::getCollection(
             get_called_class()
         );
-        // @var $collection Collection
+        /* @var $collection Collection */
         $delete = $collection->deleteMany(
             $query,
             $options

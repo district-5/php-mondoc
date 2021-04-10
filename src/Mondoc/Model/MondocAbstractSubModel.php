@@ -133,14 +133,14 @@ abstract class MondocAbstractSubModel
             }
             if (array_key_exists($k, $this->getKeyToClassMap())) {
                 if ('[]' === substr($this->getKeyToClassMap()[$k], -2)) {
-                    // @var $v MondocAbstractSubModel[]
+                    /* @var $v MondocAbstractSubModel[] */
                     $subs = [];
                     foreach ($v as $datum) {
                         $subs[] = $datum->asArray();
                     }
                     $v = $subs;
                 } else {
-                    // @var $v MondocAbstractSubModel
+                    /* @var $v MondocAbstractSubModel */
                     $v = $v->asArray();
                 }
             }
@@ -181,7 +181,7 @@ abstract class MondocAbstractSubModel
         }
         $cl = get_called_class();
         $inst = new $cl();
-        // @var $cl MondocAbstractSubModel - it's not really.
+        /* @var $cl MondocAbstractSubModel - it's not really. */
         if (!$inst instanceof MondocAbstractSubModel) {
             return [];
         }
@@ -231,7 +231,7 @@ abstract class MondocAbstractSubModel
                     $subClassName = substr($subClassName, 0, -2);
                 }
                 if (class_exists($subClassName)) {
-                    // @var $subClassName MondocAbstractSubModel
+                    /* @var $subClassName MondocAbstractSubModel */
                     if ($isMulti) {
                         $v = $subClassName::inflateMultipleArrays($v);
                     } else {

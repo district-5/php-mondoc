@@ -47,12 +47,12 @@ trait AtomicTrait
         $collection = self::getCollection(
             get_called_class()
         );
-        // @var $collection Collection
+        /* @var $collection Collection */
         $perform = $collection->updateOne(
             ['_id' => $id],
             $query
         );
-        // @var UpdateResult
+        /* @var UpdateResult */
         if (1 === $perform->getModifiedCount()) {
             return true;
         }

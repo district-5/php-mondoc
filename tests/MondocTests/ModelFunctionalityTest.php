@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
 
 /**
  * District5 - Mondoc
@@ -18,11 +18,8 @@
 
 namespace District5Tests\MondocTests;
 
-use DateTime;
-use District5Tests\MondocTests\Example\DateModel;
 use District5Tests\MondocTests\Example\MyModel;
 use District5Tests\MondocTests\Example\MyService;
-use MongoDB\BSON\ObjectId;
 
 /**
  * Class ModelFunctionalityTest.
@@ -228,19 +225,19 @@ class ModelFunctionalityTest extends MondocBaseTest
         // save the model
         $this->assertTrue($m->save());
 
-        $this->assertEquals(2, MyService::getAverage('age'));
-        $this->assertEquals(2, MyService::getSum('age'));
+        $this->assertEquals(2, MyService::aggregate()->getAverage('age'));
+        $this->assertEquals(2, MyService::aggregate()->getSum('age'));
 
         $this->assertTrue(MyService::inc($m->getMongoId(), 'age', 2));
         $this->assertEquals(4, MyService::getById($m->getMongoId())->getAge());
-        $this->assertEquals(4, MyService::getAverage('age'));
-        $this->assertEquals(4, MyService::getSum('age'));
+        $this->assertEquals(4, MyService::aggregate()->getAverage('age'));
+        $this->assertEquals(4, MyService::aggregate()->getSum('age'));
 
         $this->assertTrue(MyService::dec($m->getMongoId(), 'age', 2));
         $this->assertEquals(2, MyService::getById($m->getMongoId())->getAge());
-        $this->assertEquals(2, MyService::getAverage('age'));
-        $this->assertEquals(2, MyService::getAverage('age', ['name' => $m->getName()]));
-        $this->assertEquals(2, MyService::getSum('age'));
+        $this->assertEquals(2, MyService::aggregate()->getAverage('age'));
+        $this->assertEquals(2, MyService::aggregate()->getAverage('age', ['name' => $m->getName()]));
+        $this->assertEquals(2, MyService::aggregate()->getSum('age'));
 
         // Get the ID
         $theId = $m->getMongoIdString();
@@ -250,7 +247,7 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertEquals(1, MyService::countAll(['name' => $name]));
 
         $find = MyService::getOneByCriteria(['name' => $name]);
-        // @var $find MyModel
+        /* @var $find MyModel */
         $this->assertNotNull($find);
         $this->assertInstanceOf(MyModel::class, $find);
 
@@ -263,7 +260,7 @@ class ModelFunctionalityTest extends MondocBaseTest
         unset($find);
 
         $multi = MyService::getMultiByCriteria(['name' => $name]);
-        // @var $multi MyModel[]
+        /* @var $multi MyModel[] */
         $this->assertCount(1, $multi);
         $this->assertNotNull($multi[0]);
         $this->assertInstanceOf(MyModel::class, $multi[0]);
@@ -282,7 +279,7 @@ class ModelFunctionalityTest extends MondocBaseTest
         unset($multi);
 
         $multi = MyService::getMultiByCriteria(['name' => $name]);
-        // @var $multi MyModel[]
+        /* @var $multi MyModel[] */
         $this->assertCount(1, $multi);
         $time = microtime(false);
         $multi[0]->setName('joe-bloggs '.$time);
@@ -290,7 +287,7 @@ class ModelFunctionalityTest extends MondocBaseTest
         unset($multi);
 
         $multi = MyService::getMultiByCriteria(['name' => 'joe-bloggs '.$time]);
-        // @var $multi MyModel[]
+        /* @var $multi MyModel[] */
         $this->assertCount(1, $multi);
 
         // delete the model
@@ -316,31 +313,30 @@ class ModelFunctionalityTest extends MondocBaseTest
         }
         MyService::insertMulti($models);
         foreach ($models as $model) {
-            /* @var $model MyModel */
             $this->assertTrue($model->hasMongoId());
         }
 
-        $this->assertEquals(1, MyService::getPercentile('age', .0));
-        $this->assertEquals(2, MyService::getPercentile('age', .1));
-        $this->assertEquals(3, MyService::getPercentile('age', .2));
-        $this->assertEquals(4, MyService::getPercentile('age', .3));
-        $this->assertEquals(5, MyService::getPercentile('age', .4));
-        $this->assertEquals(6, MyService::getPercentile('age', .5));
-        $this->assertEquals(7, MyService::getPercentile('age', .6));
-        $this->assertEquals(8, MyService::getPercentile('age', .7));
-        $this->assertEquals(9, MyService::getPercentile('age', .8));
-        $this->assertEquals(10, MyService::getPercentile('age', .9));
-        $this->assertNull(MyService::getPercentile('age', 1));
+        $this->assertEquals(1, MyService::aggregate()->getPercentile('age', .0));
+        $this->assertEquals(2, MyService::aggregate()->getPercentile('age', .1));
+        $this->assertEquals(3, MyService::aggregate()->getPercentile('age', .2));
+        $this->assertEquals(4, MyService::aggregate()->getPercentile('age', .3));
+        $this->assertEquals(5, MyService::aggregate()->getPercentile('age', .4));
+        $this->assertEquals(6, MyService::aggregate()->getPercentile('age', .5));
+        $this->assertEquals(7, MyService::aggregate()->getPercentile('age', .6));
+        $this->assertEquals(8, MyService::aggregate()->getPercentile('age', .7));
+        $this->assertEquals(9, MyService::aggregate()->getPercentile('age', .8));
+        $this->assertEquals(10, MyService::aggregate()->getPercentile('age', .9));
+        $this->assertNull(MyService::aggregate()->getPercentile('age', 1));
 
-        $this->assertEquals(10, MyService::getPercentile('age', .0, -1));
-        $this->assertEquals(9, MyService::getPercentile('age', .1, -1));
-        $this->assertEquals(8, MyService::getPercentile('age', .2, -1));
-        $this->assertEquals(7, MyService::getPercentile('age', .3, -1));
-        $this->assertEquals(6, MyService::getPercentile('age', .4, -1));
-        $this->assertEquals(5, MyService::getPercentile('age', .5, -1));
-        $this->assertEquals(4, MyService::getPercentile('age', .6, -1));
-        $this->assertEquals(3, MyService::getPercentile('age', .7, -1));
-        $this->assertEquals(2, MyService::getPercentile('age', .8, -1));
-        $this->assertEquals(1, MyService::getPercentile('age', .9, -1));
+        $this->assertEquals(10, MyService::aggregate()->getPercentile('age', .0, -1));
+        $this->assertEquals(9, MyService::aggregate()->getPercentile('age', .1, -1));
+        $this->assertEquals(8, MyService::aggregate()->getPercentile('age', .2, -1));
+        $this->assertEquals(7, MyService::aggregate()->getPercentile('age', .3, -1));
+        $this->assertEquals(6, MyService::aggregate()->getPercentile('age', .4, -1));
+        $this->assertEquals(5, MyService::aggregate()->getPercentile('age', .5, -1));
+        $this->assertEquals(4, MyService::aggregate()->getPercentile('age', .6, -1));
+        $this->assertEquals(3, MyService::aggregate()->getPercentile('age', .7, -1));
+        $this->assertEquals(2, MyService::aggregate()->getPercentile('age', .8, -1));
+        $this->assertEquals(1, MyService::aggregate()->getPercentile('age', .9, -1));
     }
 }

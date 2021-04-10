@@ -34,26 +34,26 @@ use MongoDB\Model\BSONDocument;
 trait GetSingleTrait
 {
     /**
-     * Get a single model by a given criteria, using given options.
+     * Get a single model by a given filter, using given options.
      *
-     * @param array $criteria
+     * @param array $filter
      * @param array $options
      *
      * @return MondocAbstractModel
      */
-    public static function getOneByCriteria(array $criteria, array $options = []): ?MondocAbstractModel
+    public static function getOneByCriteria(array $filter = [], array $options = []): ?MondocAbstractModel
     {
         $calledClass = get_called_class();
-        // @var $calledClass MondocAbstractService
+        /* @var $calledClass MondocAbstractService */
         $collection = self::getCollection(
             $calledClass
         );
-        // @var $collection Collection
-        $match = $collection->findOne($criteria, $options);
+        /* @var $collection Collection */
+        $match = $collection->findOne($filter, $options);
         if ($match) {
-            // @var $match BSONDocument
+            /* @var $match BSONDocument */
             $clz = $calledClass::$modelClassName;
-            // @var $clz MondocAbstractModel - it's not. It's actually a string.
+            /* @var $clz MondocAbstractModel - it's not. It's actually a string. */
             $m = $clz::inflateSingleBsonDocument($match);
             $m->setMongoCollection($collection);
 
@@ -92,7 +92,7 @@ trait GetSingleTrait
             return null;
         }
         $service = get_called_class();
-        // @var $service MondocAbstractService - it's not. It's actually a string.
+        /* @var $service MondocAbstractService - it's not. It's actually a string. */
         return $service::getOneByCriteria(
             ['_id' => $converted]
         );

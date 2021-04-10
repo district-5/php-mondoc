@@ -41,7 +41,7 @@ trait DistinctValuesTrait
         $collection = self::getCollection(
             get_called_class()
         );
-        // @var $collection Collection
+        /* @var $collection Collection */
         return $collection->distinct($key, $filter, $options);
     }
 }

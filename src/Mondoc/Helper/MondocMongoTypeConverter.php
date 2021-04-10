@@ -103,7 +103,7 @@ class MondocMongoTypeConverter
      */
     public static function convertToMongoId($id): ?ObjectId
     {
-        // @var $id array|null|string|ObjectId
+        /* @var $id array|null|string|ObjectId */
         if (null === $id) {
             return $id;
         }

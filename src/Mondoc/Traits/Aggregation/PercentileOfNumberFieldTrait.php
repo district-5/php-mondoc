@@ -18,6 +18,10 @@
 
 namespace District5\Mondoc\Traits\Aggregation;
 
+use MongoDB\Collection;
+use MongoDB\Driver\Cursor;
+use MongoDB\Model\BSONDocument;
+
 /**
  * Trait PercentileOfNumberFieldTrait.
  *
@@ -26,20 +30,21 @@ namespace District5\Mondoc\Traits\Aggregation;
 trait PercentileOfNumberFieldTrait
 {
     /**
-     * Get the value of the X percentile of a $fieldName by a given criteria. By default the ordering is ascending (1),
+     * Get the value of the X percentile of a $fieldName by a given filter. By default the ordering is ascending (1),
      * but you can provide -1 to sort descending.
      *
      * @param string $fieldName
-     * @param float $percentile
-     * @param int $sortDirection (1 or -1)
-     * @param array $criteria
-     * @return int|float|null
+     * @param float  $percentile
+     * @param int    $sortDirection (1 or -1)
+     * @param array  $filter
+     *
+     * @return null|float|int
      * @noinspection PhpUnused
      */
-    public static function getPercentile(string $fieldName, float $percentile, int $sortDirection = 1, array $criteria = [])
+    public function getPercentile(string $fieldName, float $percentile, int $sortDirection = 1, array $filter = [])
     {
-        $collection = self::getCollection(get_called_class());
-        // @var $collection Collection
+        $collection = $this->service::getCollection($this->service);
+        /* @var $collection Collection */
         $query = [
             [
                 '$sort' => [
@@ -59,7 +64,7 @@ trait PercentileOfNumberFieldTrait
             ],
             [
                 '$project' => [
-                    $fieldName . 'Percentile' => [
+                    $fieldName.'Percentile' => [
                         '$arrayElemAt' => [
                             '$values',
                             [
@@ -77,24 +82,24 @@ trait PercentileOfNumberFieldTrait
                 ]
             ]
         ];
-        if (!empty($criteria)) {
+        if (!empty($filter)) {
             array_unshift(
                 $query,
                 [
-                    '$match' => $criteria
+                    '$match' => $filter
                 ]
             );
         }
         $cursor = $collection->aggregate(
             array_values($query)
         );
-        // @var $cursor Cursor
+        /* @var $cursor Cursor */
         $records = $cursor->toArray();
-        // @var $records BSONDocument[]
+        /* @var $records BSONDocument[] */
         if (1 === count($records)) {
             $array = $records[0]->getArrayCopy();
-            if (array_key_exists($fieldName . 'Percentile', $array)) {
-                return $array[$fieldName . 'Percentile'];
+            if (array_key_exists($fieldName.'Percentile', $array)) {
+                return $array[$fieldName.'Percentile'];
             }
         }
 

@@ -69,7 +69,7 @@ class SubModelFunctionalityTest extends MondocBaseTest
         $id = $m->getMongoId();
 
         $newM = MySubService::getById($id);
-        // @var $newM MyModelWithSub
+        /* @var $newM MyModelWithSub */
         $this->assertEquals('Joe', $newM->getName());
         $this->assertInstanceOf(AgeSubModel::class, $newM->getAge());
         $this->assertEquals(2, $newM->getAge()->getAge());
@@ -112,7 +112,7 @@ class SubModelFunctionalityTest extends MondocBaseTest
         $mTwo->save();
 
         $models = MySubService::getMultiByCriteria(['_id' => ['$in' => [$mOne->getMongoId(), $mTwo->getMongoId()]]]);
-        // @var $models MyModelWithSub[]
+        /* @var $models MyModelWithSub[] */
 
         $this->assertEquals($mOne->getMongoIdString(), $models[0]->getMongoIdString());
         $this->assertEquals($mTwo->getMongoIdString(), $models[1]->getMongoIdString());

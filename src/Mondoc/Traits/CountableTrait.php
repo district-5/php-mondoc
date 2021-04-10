@@ -28,7 +28,7 @@ use MongoDB\Collection;
 trait CountableTrait
 {
     /**
-     * Count all matching documents in a collection using a given criteria, using given options.
+     * Count all matching documents in a collection using a given filter, using given options.
      *
      * @param array $query   (optional)
      * @param array $options (optional)
@@ -59,7 +59,7 @@ trait CountableTrait
     }
 
     /**
-     * Count all matching documents in a collection using a given criteria, using given options.
+     * Count all matching documents in a collection using a given filter, using given options.
      *
      * @param array $query   (optional)
      * @param array $options (optional)
@@ -72,9 +72,28 @@ trait CountableTrait
         $collection = self::getCollection(
             get_called_class()
         );
-        // @var $collection Collection
+        /* @var $collection Collection */
         return $collection->countDocuments(
             $query,
+            $options
+        );
+    }
+
+    /**
+     * Count all matching documents in a collection using a given filter, using given options.
+     *
+     * @param array $options (optional)
+     *
+     * @return int
+     * @noinspection PhpUnused
+     */
+    public static function estimateDocumentCount($options = []): int
+    {
+        $collection = self::getCollection(
+            get_called_class()
+        );
+        /* @var $collection Collection */
+        return $collection->estimatedDocumentCount(
             $options
         );
     }

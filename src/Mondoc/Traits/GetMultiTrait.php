@@ -33,29 +33,29 @@ use MongoDB\Model\BSONDocument;
 trait GetMultiTrait
 {
     /**
-     * Get multiple models by a given criteria, using given options.
+     * Get multiple models by a given filter, using given options.
      *
-     * @param array $criteria
+     * @param array $filter
      * @param array $options
      *
      * @return MondocAbstractModel[]
      * @noinspection PhpUnused
      */
-    public static function getMultiByCriteria(array $criteria, array $options = []): array
+    public static function getMultiByCriteria(array $filter = [], array $options = []): array
     {
         $calledClass = get_called_class();
-        // @var $calledClass MondocAbstractService
+        /* @var $calledClass MondocAbstractService */
         $collection = self::getCollection(
             $calledClass
         );
-        // @var $collection Collection
-        $cursor = $collection->find($criteria, $options);
+        /* @var $collection Collection */
+        $cursor = $collection->find($filter, $options);
         if ($cursor) {
             $objs = [];
             $clz = $calledClass::$modelClassName;
-            // @var $clz MondocAbstractModel - it's not. It's actually a string.
+            /* @var $clz MondocAbstractModel - it's not. It's actually a string. */
             foreach ($cursor as $k => $v) {
-                // @var $v BSONDocument
+                /* @var $v BSONDocument */
                 $m = $clz::inflateSingleBsonDocument($v);
                 $m->setMongoCollection($collection);
                 $objs[] = $m;

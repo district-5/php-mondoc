@@ -19,9 +19,7 @@
 namespace District5\Mondoc\Service;
 
 use District5\Mondoc\MondocConnections;
-use District5\Mondoc\Traits\Aggregation\AverageFieldTrait;
-use District5\Mondoc\Traits\Aggregation\PercentileOfNumberFieldTrait;
-use District5\Mondoc\Traits\Aggregation\SumFieldTrait;
+use District5\Mondoc\Service\ServiceSub\AggregateSubService;
 use District5\Mondoc\Traits\AtomicTrait;
 use District5\Mondoc\Traits\CountableTrait;
 use District5\Mondoc\Traits\DeletionTrait;
@@ -43,16 +41,13 @@ use MongoDB\Database;
 abstract class MondocAbstractService
 {
     use AtomicTrait;
-    use AverageFieldTrait;
     use CountableTrait;
     use DeletionTrait;
     use DistinctValuesTrait;
     use GetMultiTrait;
     use GetSingleTrait;
     use KeyOperationsTrait;
-    use PercentileOfNumberFieldTrait;
     use PersistenceTrait;
-    use SumFieldTrait;
 
     /**
      * @var string
@@ -82,11 +77,19 @@ abstract class MondocAbstractService
      */
     public static function getCollection($clz): Collection
     {
-        // @var $clz MondocAbstractService - it's not. It's actually a string.
+        /* @var $clz MondocAbstractService - it's not. It's actually a string. */
         return MondocConnections::getInstance()->getCollection(
             $clz::getCollectionName(),
             $clz::getConnectionId()
         );
+    }
+
+    /**
+     * @return AggregateSubService
+     */
+    public static function aggregate(): AggregateSubService
+    {
+        return new AggregateSubService(get_called_class());
     }
 
     /**

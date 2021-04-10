@@ -60,26 +60,26 @@ class BuilderTest extends MondocBaseTest
         $queryBuilderObjectId->addQueryPart($equalsObjectId);
 
         $getModel = MyService::getOneByQueryBuilder($queryBuilderStringAndInt);
-        // @var $getModel MyModel
+        /* @var $getModel MyModel */
         $this->assertEquals($m->getMongoIdString(), $getModel->getMongoIdString());
         $this->assertEquals('Foo', $getModel->getName());
         $this->assertEquals(1, $getModel->getAge());
 
         $getModel = MyService::getOneByQueryBuilder($queryBuilderObjectId);
-        // @var $getModel MyModel
+        /* @var $getModel MyModel */
         $this->assertEquals($m->getMongoIdString(), $getModel->getMongoIdString());
         $this->assertEquals('Foo', $getModel->getName());
         $this->assertEquals(1, $getModel->getAge());
 
         $getModels = MyService::getMultiByQueryBuilder($queryBuilderStringAndInt);
-        // @var $getModels MyModel[]
+        /* @var $getModels MyModel[] */
         $this->assertCount(1, $getModels);
         $this->assertEquals($m->getMongoIdString(), $getModels[0]->getMongoIdString());
         $this->assertEquals('Foo', $getModels[0]->getName());
         $this->assertEquals(1, $getModels[0]->getAge());
 
         $getModels = MyService::getMultiByQueryBuilder($queryBuilderObjectId);
-        // @var $getModels MyModel[]
+        /* @var $getModels MyModel[] */
         $this->assertCount(1, $getModels);
         $this->assertEquals($m->getMongoIdString(), $getModels[0]->getMongoIdString());
         $this->assertEquals('Foo', $getModels[0]->getName());

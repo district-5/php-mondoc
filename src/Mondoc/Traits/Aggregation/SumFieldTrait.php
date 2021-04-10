@@ -18,6 +18,10 @@
 
 namespace District5\Mondoc\Traits\Aggregation;
 
+use MongoDB\Collection;
+use MongoDB\Driver\Cursor;
+use MongoDB\Model\BSONDocument;
+
 /**
  * Trait SumFieldTrait.
  *
@@ -26,18 +30,19 @@ namespace District5\Mondoc\Traits\Aggregation;
 trait SumFieldTrait
 {
     /**
-     * Get the sum of a $fieldName by a given criteria.
+     * Get the sum of a $fieldName by a given filter.
      *
      * @param string $fieldName
-     * @param array  $criteria
+     * @param array  $filter
      *
      * @return float|int
      * @noinspection PhpUnused
+     * @noinspection DuplicatedCode
      */
-    public static function getSum(string $fieldName, array $criteria = [])
+    public function getSum(string $fieldName, array $filter = [])
     {
-        $collection = self::getCollection(get_called_class());
-        // @var $collection Collection
+        $collection = $this->service::getCollection($this->service);
+        /* @var $collection Collection */
 
         $query = [
             [
@@ -49,20 +54,20 @@ trait SumFieldTrait
                 ]
             ]
         ];
-        if (!empty($criteria)) {
+        if (!empty($filter)) {
             array_unshift(
                 $query,
                 [
-                    '$match' => $criteria
+                    '$match' => $filter
                 ]
             );
         }
         $cursor = $collection->aggregate(
             array_values($query)
         );
-        // @var $cursor Cursor
+        /* @var $cursor Cursor */
         $records = $cursor->toArray();
-        // @var $records BSONDocument[]
+        /* @var $records BSONDocument[] */
         if (1 === count($records)) {
             $array = $records[0]->getArrayCopy();
             if (array_key_exists($fieldName, $array)) {

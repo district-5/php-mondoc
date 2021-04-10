@@ -70,7 +70,7 @@ trait UpdateTrait
         $collection = self::getCollection(
             get_called_class()
         );
-        // @var $collection Collection
+        /* @var $collection Collection */
         $query = ['$set' => $changeSet];
         if (!empty($unsetValues)) {
             $query['$unset'] = $unsetValues;

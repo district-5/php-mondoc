@@ -55,7 +55,7 @@ trait InsertMultiTrait
         $collection = self::getCollection(
             get_called_class()
         );
-        // @var $collection Collection
+        /* @var $collection Collection */
         $insert = $collection->insertMany(
             $data
         );

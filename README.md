@@ -265,17 +265,17 @@ Finding documents..
 // get multiple models with options
 \District5Tests\MondocTests\Example\MyService::getMultiByCriteria(['foo' => 'bar'], ['sort' => ['foo' => -1]]);
 
-// average age with criteria
-\District5Tests\MondocTests\Example\MyService::getAverage('age', ['foo' => 'bar']);
-
-// 10% percentile, sorted asc with criteria
-\District5Tests\MondocTests\Example\MyService::getPercentile('age', 0.1, 1, ['foo' => 'bar']);
-
-// get sum of a field with a given criteria
-\District5Tests\MondocTests\Example\MyService::getSum('age', ['foo' => 'bar']);
-
-// get the distinct values for 'age' with a criteria and options
+// get the distinct values for 'age' with a filter and options
 \District5Tests\MondocTests\Example\MyService::getDistinctValuesForKey('age', ['foo' => 'bar'], ['sort' => ['age' => 1]]);
+
+// average age with filter
+\District5Tests\MondocTests\Example\MyService::aggregate()->getAverage('age', ['foo' => 'bar']);
+
+// 10% percentile, sorted asc with filter
+\District5Tests\MondocTests\Example\MyService::aggregate()->getPercentile('age', 0.1, 1, ['foo' => 'bar']);
+
+// get sum of a field with a given filter
+\District5Tests\MondocTests\Example\MyService::aggregate()->getSum('age', ['foo' => 'bar']);
 ```
 
 #### Query building

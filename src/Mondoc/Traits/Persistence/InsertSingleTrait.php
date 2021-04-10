@@ -51,7 +51,7 @@ trait InsertSingleTrait
         if ($model->hasPresetMongoId()) {
             $data['_id'] = $model->getPresetMongoId();
         }
-        // @var $collection Collection
+        /* @var $collection Collection */
         $insert = $collection->insertOne(
             $data
         );

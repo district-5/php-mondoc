@@ -46,7 +46,7 @@ trait KeyOperationsTrait
         $collection = self::getCollection(
             get_called_class()
         );
-        // @var $collection Collection
+        /* @var $collection Collection */
         $result = $collection->updateOne(
             ['_id' => $model->getMongoId()],
             ['$unset' => [$key => 1]]

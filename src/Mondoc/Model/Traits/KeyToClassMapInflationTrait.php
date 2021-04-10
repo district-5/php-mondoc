@@ -72,7 +72,7 @@ trait KeyToClassMapInflationTrait
                 $isSingle = false;
                 $clz = substr($clz, 0, -2);
             }
-            // @var $clz MondocAbstractSubModel
+            /* @var $clz MondocAbstractSubModel */
             $data = $this->__get($k);
             if (true === $isSingle) {
                 if (is_object($data) && $data instanceof BSONDocument) {

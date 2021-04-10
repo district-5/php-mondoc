@@ -155,7 +155,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
                     $subModelClassName = substr($subModelClassName, 0, -2);
                 }
                 if (class_exists($subModelClassName)) {
-                    // @var $subModelClassName MondocAbstractSubModel
+                    /* @var $subModelClassName MondocAbstractSubModel */
                     if ($isMulti) {
                         $v = $subModelClassName::inflateMultipleArrays($v);
                     } else {

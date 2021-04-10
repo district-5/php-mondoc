@@ -47,10 +47,12 @@ trait AverageFieldTrait
             ]
         ];
         if (!empty($criteria)) {
-            $query[1] = array_merge([], $query[0]);
-            $query[0] = [
-                '$match' => $criteria
-            ];
+            array_unshift(
+                $query,
+                [
+                    '$match' => $criteria
+                ]
+            );
         }
         $cursor = $collection->aggregate(
             array_values($query)

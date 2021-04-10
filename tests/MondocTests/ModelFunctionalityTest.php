@@ -298,4 +298,49 @@ class ModelFunctionalityTest extends MondocBaseTest
 
         unset($multi);
     }
+
+    public function testPercentile()
+    {
+        $this->initMongo();
+        // drop the collection
+        $this->mondoc->getCollection('test_model')->drop();
+
+        $i = 0;
+        $models = [];
+        while ($i < 10) {
+            $i++;
+            $m = new MyModel();
+            $m->setName(uniqid());
+            $m->setAge($i);
+            $models[] = $m;
+        }
+        MyService::insertMulti($models);
+        foreach ($models as $model) {
+            /* @var $model MyModel */
+            $this->assertTrue($model->hasMongoId());
+        }
+
+        $this->assertEquals(1, MyService::getPercentile('age', .0));
+        $this->assertEquals(2, MyService::getPercentile('age', .1));
+        $this->assertEquals(3, MyService::getPercentile('age', .2));
+        $this->assertEquals(4, MyService::getPercentile('age', .3));
+        $this->assertEquals(5, MyService::getPercentile('age', .4));
+        $this->assertEquals(6, MyService::getPercentile('age', .5));
+        $this->assertEquals(7, MyService::getPercentile('age', .6));
+        $this->assertEquals(8, MyService::getPercentile('age', .7));
+        $this->assertEquals(9, MyService::getPercentile('age', .8));
+        $this->assertEquals(10, MyService::getPercentile('age', .9));
+        $this->assertNull(MyService::getPercentile('age', 1));
+
+        $this->assertEquals(10, MyService::getPercentile('age', .0, -1));
+        $this->assertEquals(9, MyService::getPercentile('age', .1, -1));
+        $this->assertEquals(8, MyService::getPercentile('age', .2, -1));
+        $this->assertEquals(7, MyService::getPercentile('age', .3, -1));
+        $this->assertEquals(6, MyService::getPercentile('age', .4, -1));
+        $this->assertEquals(5, MyService::getPercentile('age', .5, -1));
+        $this->assertEquals(4, MyService::getPercentile('age', .6, -1));
+        $this->assertEquals(3, MyService::getPercentile('age', .7, -1));
+        $this->assertEquals(2, MyService::getPercentile('age', .8, -1));
+        $this->assertEquals(1, MyService::getPercentile('age', .9, -1));
+    }
 }

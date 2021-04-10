@@ -20,6 +20,7 @@ namespace District5\Mondoc\Service;
 
 use District5\Mondoc\MondocConnections;
 use District5\Mondoc\Traits\Aggregation\AverageFieldTrait;
+use District5\Mondoc\Traits\Aggregation\PercentileOfNumberFieldTrait;
 use District5\Mondoc\Traits\Aggregation\SumFieldTrait;
 use District5\Mondoc\Traits\AtomicTrait;
 use District5\Mondoc\Traits\CountableTrait;
@@ -41,16 +42,17 @@ use MongoDB\Database;
  */
 abstract class MondocAbstractService
 {
-    use GetSingleTrait;
-    use GetMultiTrait;
-    use CountableTrait;
     use AtomicTrait;
-    use PersistenceTrait;
-    use DeletionTrait;
-    use KeyOperationsTrait;
-    use SumFieldTrait;
     use AverageFieldTrait;
+    use CountableTrait;
+    use DeletionTrait;
     use DistinctValuesTrait;
+    use GetMultiTrait;
+    use GetSingleTrait;
+    use KeyOperationsTrait;
+    use PercentileOfNumberFieldTrait;
+    use PersistenceTrait;
+    use SumFieldTrait;
 
     /**
      * @var string

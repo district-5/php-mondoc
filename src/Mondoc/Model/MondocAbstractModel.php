@@ -24,6 +24,8 @@ use District5\Mondoc\Model\Traits\DirtyAttributesTrait;
 use District5\Mondoc\Model\Traits\MondocMongoIdTrait;
 use District5\Mondoc\Model\Traits\MondocMongoTypeTrait;
 use District5\Mondoc\Model\Traits\PresetMongoIdTrait;
+use District5\Mondoc\MondocConfig;
+use District5\Mondoc\Service\MondocAbstractService;
 use Exception;
 use MongoDB\BSON\ObjectId;
 use MongoDB\Collection;
@@ -72,6 +74,10 @@ class MondocAbstractModel extends MondocAbstractSubModel
      */
     public function save(): bool
     {
+        if (null !== $serviceFQCN = MondocConfig::getInstance()->getServiceForModel(get_called_class())) {
+            /* @var $serviceFQCN MondocAbstractService (it's not, it's actually a string) */
+            return $serviceFQCN::saveModel($this);
+        }
         return false;
     }
 
@@ -85,6 +91,11 @@ class MondocAbstractModel extends MondocAbstractSubModel
     {
         if (false === $this->hasMongoId()) {
             return false;
+        }
+
+        if (null !== $serviceFQCN = MondocConfig::getInstance()->getServiceForModel(get_called_class())) {
+            /* @var $serviceFQCN MondocAbstractService (it's not, it's actually a string) */
+            return $serviceFQCN::delete($this->getMongoId());
         }
 
         try {

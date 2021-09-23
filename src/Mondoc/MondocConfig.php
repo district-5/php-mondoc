@@ -22,16 +22,16 @@ use MongoDB\Collection;
 use MongoDB\Database;
 
 /**
- * Class MondocConnections.
+ * Class MondocConfig.
  *
  * @package District5\Mondoc
  */
-class MondocConnections
+class MondocConfig
 {
     /**
      * Static variable, holding the instance of this Singleton.
      *
-     * @var MondocConnections
+     * @var MondocConfig
      */
     protected static $_instance = null;
 
@@ -41,7 +41,12 @@ class MondocConnections
     protected $databases = [];
 
     /**
-     * MondocConnections constructor. Protected to avoid direct construction.
+     * @var string[]
+     */
+    protected $serviceMap = [];
+
+    /**
+     * MondocConfig constructor. Protected to avoid direct construction.
      */
     protected function __construct()
     {
@@ -54,7 +59,7 @@ class MondocConnections
      * @return $this
      * @noinspection PhpUnused
      */
-    public function setDatabase(Database $database, $key = 'default'): MondocConnections
+    public function setDatabase(Database $database, $key = 'default'): MondocConfig
     {
         $this->databases[$key] = $database;
 
@@ -93,14 +98,49 @@ class MondocConnections
     /**
      * Retrieve an instance of this object.
      *
-     * @return MondocConnections
+     * @return MondocConfig
      */
-    public static function getInstance(): MondocConnections
+    public static function getInstance(): MondocConfig
     {
         if (null === self::$_instance) {
             self::$_instance = new self();
         }
 
         return self::$_instance;
+    }
+
+    /**
+     * Set the whole service map. This replaces the existing service map.
+     *
+     * @param array $serviceMap
+     * @return $this
+     */
+    public function setServiceMap(array $serviceMap): MondocConfig
+    {
+        $this->serviceMap = $serviceMap;
+        return $this;
+    }
+
+    /**
+     * @param string $modelFQCN
+     * @param string $serviceFQCN
+     * @return $this
+     */
+    public function addServiceMapping(string $modelFQCN, string $serviceFQCN)
+    {
+        $this->serviceMap[$modelFQCN] = $serviceFQCN;
+        return $this;
+    }
+
+    /**
+     * @param string $modelFQCN
+     * @return string|null
+     */
+    public function getServiceForModel(string $modelFQCN): ?string
+    {
+        if (array_key_exists($modelFQCN, $this->serviceMap)) {
+            return $this->serviceMap[$modelFQCN];
+        }
+        return null;
     }
 }

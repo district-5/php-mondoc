@@ -80,14 +80,6 @@ class MyModel extends MondocAbstractModel
     }
 
     /**
-     * @return bool
-     */
-    public function save(): bool
-    {
-        return MyService::saveModel($this);
-    }
-
-    /**
      * This method must return the array to insert into Mongo.
      *
      * @return array

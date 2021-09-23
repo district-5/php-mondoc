@@ -38,17 +38,30 @@ identifier for the relevant model.
 
 ```php
 <?php
-use District5\Mondoc\MondocConnections;
+use District5\Mondoc\MondocConfig;
 use MongoDB\Client;
 
 $connection = new Client('< mongo connection string >');
 $database = $connection->selectDatabase('< database name >');
 
 /** @noinspection PhpRedundantOptionalArgumentInspection */
-MondocConnections::getInstance()->setDatabase(
+$config = MondocConfig::getInstance();
+$config->setDatabase(
     $database,
     'default' // a connection identifier ('default' is the default value).
 );
+$config->addServiceMapping(
+    MyModel::class, // You can also just use a string like '\MyNamespace\Model\MyModel'
+    MyService::class // You can also just use a string like '\MyNamespace\Service\MyService'
+);
+// Or you can use...
+// $config->setServiceMap(
+//     [
+//         MyModel::class => MyService::class, // Also replaceable by strings
+//         AnotherModel::class => AnotherService::class,
+//     ]
+// );
+
 ```
 
 #### The data model
@@ -91,24 +104,6 @@ class MyModel extends MondocAbstractModel
         $this->name = trim($val);
         $this->addDirty('name', trim($val));
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function save(): bool
-    {
-        /** @noinspection PhpUndefinedClassInspection */
-        return MyService::saveModel($this);
-    }
-    
-    /**
-     * @return bool
-     */
-    public function delete(): bool
-    {
-        /** @noinspection PhpUndefinedClassInspection */
-        return MyService::deleteModel($this);
     }
     
     /**

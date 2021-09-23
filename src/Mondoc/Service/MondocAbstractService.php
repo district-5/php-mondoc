@@ -18,7 +18,7 @@
 
 namespace District5\Mondoc\Service;
 
-use District5\Mondoc\MondocConnections;
+use District5\Mondoc\MondocConfig;
 use District5\Mondoc\Service\ServiceSub\AggregateSubService;
 use District5\Mondoc\Traits\AtomicTrait;
 use District5\Mondoc\Traits\CountableTrait;
@@ -62,7 +62,7 @@ abstract class MondocAbstractService
      */
     public static function getMongo(): ?Database
     {
-        return MondocConnections::getInstance()->getDatabase(
+        return MondocConfig::getInstance()->getDatabase(
             self::getConnectionId()
         );
     }
@@ -78,7 +78,7 @@ abstract class MondocAbstractService
     public static function getCollection($clz): Collection
     {
         /* @var $clz MondocAbstractService - it's not. It's actually a string. */
-        return MondocConnections::getInstance()->getCollection(
+        return MondocConfig::getInstance()->getCollection(
             $clz::getCollectionName(),
             $clz::getConnectionId()
         );
@@ -110,7 +110,7 @@ abstract class MondocAbstractService
     abstract protected static function getCollectionName(): string;
 
     /**
-     * Get the connection ID to use from the MondocConnection manager. Defaults to 'default'.
+     * Get the connection ID to use from the MondocConfig manager. Defaults to 'default'.
      *
      * @return string
      */

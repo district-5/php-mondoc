@@ -58,22 +58,6 @@ class DateModel extends MondocAbstractModel
     }
 
     /**
-     * @return bool
-     */
-    public function delete(): bool
-    {
-        return DateService::deleteModel($this);
-    }
-
-    /**
-     * @return bool
-     */
-    public function save(): bool
-    {
-        return DateService::saveModel($this);
-    }
-
-    /**
      * Called to assign any default variables. You should always check for presence as
      * this method is called at both before save, and after retrieval. This avoids overwriting
      * your set values.

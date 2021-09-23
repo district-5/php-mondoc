@@ -114,22 +114,6 @@ class MyModelWithSub extends MondocAbstractModel
     }
 
     /**
-     * @return bool
-     */
-    public function save(): bool
-    {
-        return MySubService::saveModel($this);
-    }
-
-    /**
-     * @return bool
-     */
-    public function delete(): bool
-    {
-        return MySubService::deleteModel($this);
-    }
-
-    /**
      * Called to assign any default variables. You should always check for presence as
      * this method is called at both before save, and after retrieval. This avoids overwriting
      * your set values.

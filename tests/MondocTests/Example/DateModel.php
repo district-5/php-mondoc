@@ -62,7 +62,15 @@ class DateModel extends MondocAbstractModel
      */
     public function delete(): bool
     {
-        return false;
+        return DateService::deleteModel($this);
+    }
+
+    /**
+     * @return bool
+     */
+    public function save(): bool
+    {
+        return DateService::saveModel($this);
     }
 
     /**

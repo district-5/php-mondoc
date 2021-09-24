@@ -57,10 +57,12 @@ trait UpdateTrait
                 $changeSet[$key] = null;
             }
         }
-        $bsonValues = $model->getOriginalBsonDocument()->getArrayCopy();
-        foreach ($data as $k => $v) {
-            if (!array_key_exists($k, $bsonValues) && !in_array($k, $dirty)) {
-                $changeSet[$k] = $v;
+        if ($model->getOriginalBsonDocument() !== null) {
+            $bsonValues = $model->getOriginalBsonDocument()->getArrayCopy();
+            foreach ($data as $k => $v) {
+                if (!array_key_exists($k, $bsonValues) && !in_array($k, $dirty)) {
+                    $changeSet[$k] = $v;
+                }
             }
         }
         if (array_key_exists('_mondocMongoId', $changeSet)) {

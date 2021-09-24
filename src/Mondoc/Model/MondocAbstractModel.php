@@ -272,13 +272,17 @@ class MondocAbstractModel extends MondocAbstractSubModel
     {
         $allSetVariables = $this->getMondocObjectVars();
         $ignore = $this->getPropertyExclusions();
-        $bsonArray = array_keys($this->getOriginalBsonDocument()->getArrayCopy());
-        foreach ($allSetVariables as $objVar => $objVal) {
-            if (in_array($objVar, $ignore)) {
-                unset($allSetVariables[$objVar]);
+        if ($this->getOriginalBsonDocument() !== null) {
+            $bsonArray = array_keys($this->getOriginalBsonDocument()->getArrayCopy());
+            foreach ($allSetVariables as $objVar => $objVal) {
+                if (in_array($objVar, $ignore)) {
+                    unset($allSetVariables[$objVar]);
 
-                continue;
+                    continue;
+                }
             }
+        } else {
+            $bsonArray = [];
         }
         $allSetVariables = array_keys($allSetVariables);
 

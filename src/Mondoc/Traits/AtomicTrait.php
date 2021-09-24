@@ -44,19 +44,9 @@ trait AtomicTrait
      */
     protected static function atomic(ObjectId $id, array $query): bool
     {
-        $collection = self::getCollection(
-            get_called_class()
-        );
-        /* @var $collection Collection */
-        $perform = $collection->updateOne(
+        return self::updateOne(
             ['_id' => $id],
             $query
         );
-        /* @var UpdateResult */
-        if (1 === $perform->getModifiedCount()) {
-            return true;
-        }
-
-        return false;
     }
 }

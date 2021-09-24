@@ -20,6 +20,7 @@ namespace District5\Mondoc\Traits\Persistence;
 
 use District5\Mondoc\Model\MondocAbstractModel;
 use MongoDB\Collection;
+use MongoDB\UpdateResult;
 
 /**
  * Trait UpdateTrait.
@@ -83,6 +84,43 @@ trait UpdateTrait
             $model->clearDirty();
             $model->setMongoCollection($collection);
 
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Update a single document by applying a filter and an update query. Any references to
+     * this model, held in the code are not updated.
+     *
+     * @example
+     *     MyService::updateOne(
+     *          [
+     *              '_id' => new ObjectId()
+     *          ],
+     *          [
+     *              '$set' => ['age' => 2]
+     *          ]
+     *      );
+     *
+     * @param array $filter
+     * @param array $query
+     *
+     * @return bool
+     */
+    public static function updateOne(array $filter, array $query): bool
+    {
+        $collection = self::getCollection(
+            get_called_class()
+        );
+        /* @var $collection Collection */
+        $perform = $collection->updateOne(
+            $filter,
+            $query
+        );
+        /* @var UpdateResult */
+        if (1 === $perform->getModifiedCount()) {
             return true;
         }
 

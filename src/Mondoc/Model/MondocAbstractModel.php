@@ -277,7 +277,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
             foreach ($allSetVariables as $objVar => $objVal) {
                 if (in_array($objVar, $ignore)) {
                     unset($allSetVariables[$objVar]);
-
                     continue;
                 }
             }

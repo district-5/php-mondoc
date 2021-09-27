@@ -18,33 +18,16 @@
 
 namespace District5\Mondoc\Traits;
 
-use District5\Mondoc\Traits\Atomic\DecrementTrait;
-use District5\Mondoc\Traits\Atomic\IncrementTrait;
-use MongoDB\BSON\ObjectId;
+use District5\Mondoc\Traits\Operators\PullTrait;
+use District5\Mondoc\Traits\Operators\PushTrait;
 
 /**
- * Trait AtomicTrait.
+ * Trait OperatorsTrait.
  *
  * @package District5\Mondoc\Traits
  */
-trait AtomicTrait
+trait OperatorsTrait
 {
-    use IncrementTrait;
-    use DecrementTrait;
-
-    /**
-     * Perform an atomic operation.
-     *
-     * @param ObjectId $id
-     * @param array    $query
-     *
-     * @return bool
-     */
-    protected static function atomic(ObjectId $id, array $query): bool
-    {
-        return self::updateOne(
-            ['_id' => $id],
-            $query
-        );
-    }
+    use PullTrait;
+    use PushTrait;
 }

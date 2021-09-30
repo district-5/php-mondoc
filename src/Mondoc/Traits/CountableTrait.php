@@ -28,13 +28,7 @@ use District5\MondocBuilder\QueryBuilder;
 trait CountableTrait
 {
     /**
-     * Count all matching documents in a collection using a given filter, using given options.
-     *
-     * @param array $query   (optional)
-     * @param array $options (optional)
-     *
-     * @return int
-     *
+     * @deprecated
      * @see CountableTrait::countAll()
      */
     public static function countInCollection(array $query = [], array $options = []): int
@@ -53,7 +47,7 @@ trait CountableTrait
      */
     public static function countWhereKeyEqualsValue(string $key, $value): int
     {
-        return self::countInCollection([
+        return self::countAll([
             $key => $value
         ]);
     }

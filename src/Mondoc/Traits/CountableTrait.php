@@ -18,7 +18,7 @@
 
 namespace District5\Mondoc\Traits;
 
-use MongoDB\Collection;
+use District5\MondocBuilder\QueryBuilder;
 
 /**
  * Trait CountableTrait.
@@ -37,7 +37,7 @@ trait CountableTrait
      *
      * @see CountableTrait::countAll()
      */
-    public static function countInCollection($query = [], $options = []): int
+    public static function countInCollection(array $query = [], array $options = []): int
     {
         return self::countAll($query, $options);
     }
@@ -48,10 +48,10 @@ trait CountableTrait
      * @param string $key
      * @param mixed  $value
      *
-     * @return bool|int|mixed
+     * @return int
      * @noinspection PhpUnused
      */
-    public static function countWhereKeyEqualsValue(string $key, $value)
+    public static function countWhereKeyEqualsValue(string $key, $value): int
     {
         return self::countInCollection([
             $key => $value
@@ -67,15 +67,35 @@ trait CountableTrait
      * @return int
      * @noinspection PhpUnused
      */
-    public static function countAll($query = [], $options = []): int
+    public static function countAll(array $query = [], array $options = []): int
     {
         $collection = self::getCollection(
             get_called_class()
         );
-        /* @var $collection Collection */
         return $collection->countDocuments(
             $query,
             $options
+        );
+    }
+
+    /**
+     * Count all matching documents in a collection using a QueryBuilder
+     *
+     * @param QueryBuilder $builder
+     *
+     * @return int
+     * @noinspection PhpUnused
+     */
+    public static function countAllByQueryBuilder(QueryBuilder $builder): int
+    {
+        $builder = clone $builder;
+        $builder->getOptions()->setSortBy([]);
+        $collection = self::getCollection(
+            get_called_class()
+        );
+        return $collection->countDocuments(
+            $builder->getArrayCopy(),
+            $builder->getOptions()->getArrayCopy()
         );
     }
 
@@ -87,12 +107,11 @@ trait CountableTrait
      * @return int
      * @noinspection PhpUnused
      */
-    public static function estimateDocumentCount($options = []): int
+    public static function estimateDocumentCount(array $options = []): int
     {
         $collection = self::getCollection(
             get_called_class()
         );
-        /* @var $collection Collection */
         return $collection->estimatedDocumentCount(
             $options
         );

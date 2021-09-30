@@ -28,6 +28,7 @@ use District5\Mondoc\Traits\GetMultiTrait;
 use District5\Mondoc\Traits\GetSingleTrait;
 use District5\Mondoc\Traits\KeyOperationsTrait;
 use District5\Mondoc\Traits\OperatorsTrait;
+use District5\Mondoc\Traits\PaginationTrait;
 use District5\Mondoc\Traits\PersistenceTrait;
 use District5\MondocBuilder\QueryBuilder;
 use MongoDB\Collection;
@@ -49,6 +50,7 @@ abstract class MondocAbstractService
     use GetSingleTrait;
     use KeyOperationsTrait;
     use OperatorsTrait;
+    use PaginationTrait;
     use PersistenceTrait;
 
     /**

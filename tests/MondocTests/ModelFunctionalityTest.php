@@ -19,6 +19,8 @@
 namespace District5Tests\MondocTests;
 
 use DateTime;
+use District5\MondocBuilder\QueryBuilder;
+use District5\MondocBuilder\QueryTypes\ValueEqualTo;
 use District5Tests\MondocTests\Example\DateModel;
 use District5Tests\MondocTests\Example\DateService;
 use District5Tests\MondocTests\Example\MyModel;
@@ -270,6 +272,11 @@ class ModelFunctionalityTest extends MondocBaseTest
         unset($m);
 
         $this->assertEquals(1, MyService::countAll(['name' => $name]));
+        $builder = MyService::getQueryBuilder();
+        $equal = ValueEqualTo::get();
+        $equal->string('name', $name);
+        $builder->addQueryPart($equal);
+        $this->assertEquals(1, MyService::countAllByQueryBuilder($builder));
 
         $find = MyService::getOneByCriteria(['name' => $name]);
         /* @var $find MyModel */
@@ -319,6 +326,94 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertTrue($multi[0]->delete());
 
         unset($multi);
+    }
+
+    public function testAverageSumCeilWorkCorrectly()
+    {
+        $this->initMongo();
+        // drop the collection
+        $this->mondoc->getCollection('test_model')->drop();
+
+        $this->assertEquals(0, MyService::countAll([]));
+        $this->assertEquals(0, MyService::countInCollection([]));
+
+        $ages = [2 => 'Joe', 4 => 'Joe', 6 => 'Jane'];
+        foreach ($ages as $age => $name) {
+            $m = new MyModel();
+            $m->setAge($age);
+            $m->setName($name);
+            $this->assertTrue($m->save());
+        }
+        $this->assertEquals(4, MyService::aggregate()->getAverage('age'));
+        $this->assertEquals(12, MyService::aggregate()->getSum('age'));
+        $this->assertEquals(3, MyService::aggregate()->getAverage('age', ['name' => 'Joe']));
+        $this->assertEquals(3, MyService::aggregate()->getAverage('age', ['name' => ['$eq' => 'Joe']]));
+        $this->assertEquals(6, MyService::aggregate()->getSum('age', ['name' => 'Joe']));
+        $this->assertEquals(6, MyService::aggregate()->getSum('age', ['name' => ['$eq' => 'Joe']]));
+
+        $tmpPaginator = MyService::getPaginationQueryHelper(1, 10, []);
+        $this->assertEquals(1, $tmpPaginator->getTotalPages());
+        $this->assertEquals(1, $tmpPaginator->getCurrentPage());
+        $this->assertEquals(10, $tmpPaginator->getLimit());
+        $this->assertEquals(0, $tmpPaginator->getSkip());
+    }
+
+    public function testPagination()
+    {
+        $this->initMongo();
+        // drop the collection
+        $this->mondoc->getCollection('test_model')->drop();
+
+        $builder = new QueryBuilder();
+
+        $this->assertEquals(0, MyService::countAll([]));
+        $this->assertEquals(0, MyService::countAllByQueryBuilder($builder));
+        $this->assertEquals(0, MyService::countInCollection([]));
+
+        $ages = [2 => 'Joe', 4 => 'Joe', 6 => 'Jane'];
+        foreach ($ages as $age => $name) {
+            $m = new MyModel();
+            $m->setAge($age);
+            $m->setName($name);
+            $this->assertTrue($m->save());
+        }
+
+        $paginator = MyService::getPaginationQueryHelper(1, 1, []);
+        $this->assertEquals(3, $paginator->getTotalPages());
+
+        $ids = [];
+        $results = MyService::getPage($paginator, [], 'name', 1);
+        $this->assertCount(1, $results);
+        $this->assertFalse(in_array($results[0]->getMongoIdString(), $ids));
+        $ids[] = $results[0]->getMongoIdString();
+
+        $paginator = MyService::getPaginationQueryHelper(2, 1, []);
+        $this->assertEquals(3, $paginator->getTotalPages());
+        $results = MyService::getPage($paginator, [], 'name', 1);
+        $this->assertCount(1, $results);
+        $this->assertFalse(in_array($results[0]->getMongoIdString(), $ids));
+        $ids[] = $results[0]->getMongoIdString();
+
+        $paginator = MyService::getPaginationQueryHelper(3, 1, []);
+        $this->assertEquals(3, $paginator->getTotalPages());
+        $results = MyService::getPage($paginator, [], 'name', 1);
+        $this->assertCount(1, $results);
+        $this->assertFalse(in_array($results[0]->getMongoIdString(), $ids));
+
+        $paginator = MyService::getPaginationQueryHelper(1, 1, ['name' => 'Joe']);
+        $this->assertEquals(2, $paginator->getTotalPages());
+
+        $ids = [];
+        $results = MyService::getPage($paginator, ['name' => 'Joe'], 'name', 1);
+        $this->assertCount(1, $results);
+        $this->assertFalse(in_array($results[0]->getMongoIdString(), $ids));
+        $ids[] = $results[0]->getMongoIdString();
+
+        $paginator = MyService::getPaginationQueryHelper(2, 1, ['name' => 'Joe']);
+        $this->assertEquals(2, $paginator->getTotalPages());
+        $results = MyService::getPage($paginator, ['name' => 'Joe'], 'name', 1);
+        $this->assertCount(1, $results);
+        $this->assertFalse(in_array($results[0]->getMongoIdString(), $ids));
     }
 
     public function testPercentile()

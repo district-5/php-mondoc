@@ -53,13 +53,22 @@ class MondocConfig
     }
 
     /**
+     * @deprecated
+     * @see MondocConfig::addDatabase()
+     */
+    public function setDatabase(Database $database, string $key = 'default'): MondocConfig
+    {
+        return $this->addDatabase($database, $key);
+    }
+
+    /**
      * @param Database $database
-     * @param string   $key
+     * @param string $key
      *
      * @return $this
      * @noinspection PhpUnused
      */
-    public function setDatabase(Database $database, $key = 'default'): MondocConfig
+    public function addDatabase(Database $database, string $key = 'default'): MondocConfig
     {
         $this->databases[$key] = $database;
 

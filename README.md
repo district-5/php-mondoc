@@ -11,13 +11,18 @@ In your `composer.json` file include:
         {
             "type": "vcs",
             "url": "git@github.com:district-5/php-mondoc.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:district-5/php-mondoc-builder.git"
         }
     ],
     "require": {
-        "php": ">=7.1",
-        "district5/mondoc": ">=0.0.1",
+        "php": ">=7.4",
         "mongodb/mongodb": "^1.5",
-        "ext-mongodb": "*"
+        "ext-mongodb": "*",
+        "district5/mondoc": ">=0.0.1",
+        "district5/mondoc-builder": ">=0.0.1"
     },
     "autoload" : {
         "psr-0" : {
@@ -46,7 +51,7 @@ $database = $connection->selectDatabase('< database name >');
 
 /** @noinspection PhpRedundantOptionalArgumentInspection */
 $config = MondocConfig::getInstance();
-$config->setDatabase(
+$config->addDatabase(
     $database,
     'default' // a connection identifier ('default' is the default value).
 );
@@ -105,7 +110,7 @@ class MyModel extends MondocAbstractModel
         $this->addDirty('name', trim($val));
         return $this;
     }
-    
+
     /**
      * Called to assign any default variables. You should always check for presence as
      * this method is called at both before save, and after retrieval. This avoids overwriting
@@ -118,7 +123,7 @@ class MyModel extends MondocAbstractModel
 
 
     /**
-     * This method must return the array to insert into Mongo.
+     * Not required, but if provided this method must return the array to insert into Mongo.
      *
      * @return array
      */
@@ -248,6 +253,12 @@ Finding documents..
 /** @noinspection PhpUndefinedClassInspection */
 /** @noinspection PhpUndefinedNamespaceInspection */
 
+// count documents matching a filter
+\District5Tests\MondocTests\Example\MyService::countAll([], []);
+// count documents using a query builder
+$builder = \District5Tests\MondocTests\Example\MyService::getQueryBuilder();
+\District5Tests\MondocTests\Example\MyService::countAllByQueryBuilder($builder);
+
 // get single model by id, accepts a string or ObjectId
 \District5Tests\MondocTests\Example\MyService::getById('the-mongo-id');
 
@@ -259,6 +270,14 @@ Finding documents..
 
 // get multiple models with options
 \District5Tests\MondocTests\Example\MyService::getMultiByCriteria(['foo' => 'bar'], ['sort' => ['foo' => -1]]);
+
+// paginating results
+$currentPage = 1;
+$perPage = 10;
+$sortByField = 'foo';
+$sortDirection = -1;
+$pagination = \District5Tests\MondocTests\Example\MyService::getPaginationQueryHelper($currentPage, $perPage, ['foo' => 'bar'])
+$results = \District5Tests\MondocTests\Example\MyService::getPage($pagination, $perPage, ['foo' => 'bar'], $sortByField, $sortDirection);
 
 // get the distinct values for 'age' with a filter and options
 \District5Tests\MondocTests\Example\MyService::getDistinctValuesForKey('age', ['foo' => 'bar'], ['sort' => ['age' => 1]]);

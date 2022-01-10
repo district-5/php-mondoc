@@ -19,6 +19,7 @@
 namespace District5\Mondoc\Helper;
 
 use DateTime;
+use District5\Date\Date;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Model\BSONArray;
@@ -40,14 +41,14 @@ class MondocMongoTypeConverter
      */
     public static function dateToPHPDateTime($provided): ?DateTime
     {
-        if (!is_object($provided)) {
+        if ($provided instanceof UTCDateTime) {
+            if (false !== $converted = Date::mongo()->convertFrom($provided)) {
+                return $converted;
+            }
             return null;
         }
         if ($provided instanceof DateTime) {
             return $provided;
-        }
-        if ($provided instanceof UTCDateTime) {
-            return $provided->toDateTime();
         }
 
         return null;
@@ -65,11 +66,14 @@ class MondocMongoTypeConverter
         if (!is_object($provided)) {
             return null;
         }
+        if ($provided instanceof DateTime) {
+            if (false !== $converted = Date::mongo()->convertTo($provided)) {
+                return $converted;
+            }
+            return null;
+        }
         if ($provided instanceof UTCDateTime) {
             return $provided;
-        }
-        if ($provided instanceof DateTime) {
-            return new UTCDateTime(($provided->format('Uv')));
         }
 
         return null;

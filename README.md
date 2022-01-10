@@ -112,7 +112,7 @@ class MyModel extends MondocAbstractModel
     public function setName(string $val)
     {
         $this->name = trim($val);
-        $this->addDirty('name', trim($val));
+        $this->addDirty('name');
         return $this;
     }
 

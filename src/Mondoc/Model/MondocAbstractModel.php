@@ -193,7 +193,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
                 }
             }
             $this->__set($k, $v);
-            $this->addDirty($k, $v);
+            $this->addDirty($k);
         }
 
         return $this;

@@ -42,7 +42,7 @@ class DateModel extends MondocAbstractModel
     public function setDate(DateTime $date)
     {
         $this->date = $date;
-        $this->addDirty('date', $this->date);
+        $this->addDirty('date');
 
         return $this;
     }

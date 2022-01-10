@@ -45,7 +45,7 @@ class MyModel extends MondocAbstractModel
     public function setAge(int $age)
     {
         $this->age = $age;
-        $this->addDirty('age', $this->age);
+        $this->addDirty('age');
 
         return $this;
     }
@@ -74,7 +74,7 @@ class MyModel extends MondocAbstractModel
     public function setName(string $val)
     {
         $this->name = trim($val);
-        $this->addDirty('name', trim($val));
+        $this->addDirty('name');
 
         return $this;
     }

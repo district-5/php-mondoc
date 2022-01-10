@@ -26,8 +26,8 @@ namespace District5\Mondoc\Model\Traits;
 trait DirtyAttributesTrait
 {
     /**
-     * Holds any dirty values. As called with `$this->addDirty('foo', 'bar');` Dirty values aren't referenced for new
-     * objects.
+     * Holds any dirty values. As called with `$this->addDirty('foo');` Dirty values aren't referenced for new
+     * objects. New documents are established by the presence of an `_id` field.
      *
      * @var array
      */

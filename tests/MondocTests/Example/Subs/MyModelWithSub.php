@@ -71,7 +71,7 @@ class MyModelWithSub extends MondocAbstractModel
     public function setAge(AgeSubModel $age)
     {
         $this->age = $age;
-        $this->addDirty('age', $this->age);
+        $this->addDirty('age');
 
         return $this;
     }
@@ -108,7 +108,7 @@ class MyModelWithSub extends MondocAbstractModel
     public function setName(string $val)
     {
         $this->name = trim($val);
-        $this->addDirty('name', trim($val));
+        $this->addDirty('name');
 
         return $this;
     }

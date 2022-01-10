@@ -23,7 +23,6 @@ use District5\Mondoc\Model\MondocAbstractModel;
 use District5\Mondoc\Service\MondocAbstractService;
 use District5\MondocBuilder\QueryBuilder;
 use MongoDB\BSON\ObjectId;
-use MongoDB\Collection;
 use MongoDB\Model\BSONDocument;
 
 /**
@@ -33,36 +32,6 @@ use MongoDB\Model\BSONDocument;
  */
 trait GetSingleTrait
 {
-    /**
-     * Get a single model by a given filter, using given options.
-     *
-     * @param array $filter
-     * @param array $options
-     *
-     * @return MondocAbstractModel
-     */
-    public static function getOneByCriteria(array $filter = [], array $options = []): ?MondocAbstractModel
-    {
-        $calledClass = get_called_class();
-        /* @var $calledClass MondocAbstractService */
-        $collection = self::getCollection(
-            $calledClass
-        );
-        /* @var $collection Collection */
-        $match = $collection->findOne($filter, $options);
-        if ($match) {
-            /* @var $match BSONDocument */
-            $clz = $calledClass::$modelClassName;
-            /* @var $clz MondocAbstractModel - it's not. It's actually a string. */
-            $m = $clz::inflateSingleBsonDocument($match);
-            $m->setMongoCollection($collection);
-
-            return $m;
-        }
-
-        return null;
-    }
-
     /**
      * Get a single model by passing in an instance of QueryBuilder.
      *
@@ -79,7 +48,40 @@ trait GetSingleTrait
     }
 
     /**
-     * Get a single model by by an ID.
+     * Get a single model by a given filter, using given options.
+     *
+     * @param array $filter
+     * @param array $options
+     *
+     * @return MondocAbstractModel
+     */
+    public static function getOneByCriteria(array $filter = [], array $options = []): ?MondocAbstractModel
+    {
+        $opts = array_merge([], $options);
+        if (in_array('sort', $opts)) {
+            unset($opts['sort']);
+        }
+        $calledClass = get_called_class();
+        $collection = self::getCollection(
+            $calledClass
+        );
+        $match = $collection->findOne($filter, $opts);
+        if ($match) {
+            /* @var $match BSONDocument */
+            /* @var $calledClass MondocAbstractService */
+            $clz = $calledClass::$modelClassName;
+            /* @var $clz MondocAbstractModel - it's not. It's actually a string. */
+            $m = $clz::inflateSingleBsonDocument($match);
+            $m->setMongoCollection($collection);
+
+            return $m;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get a single model by an ID.
      *
      * @param ObjectId|string $id
      *

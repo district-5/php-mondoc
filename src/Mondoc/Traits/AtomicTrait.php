@@ -36,7 +36,7 @@ trait AtomicTrait
      * Perform an atomic operation.
      *
      * @param ObjectId $id
-     * @param array    $query
+     * @param array $query
      *
      * @return bool
      */

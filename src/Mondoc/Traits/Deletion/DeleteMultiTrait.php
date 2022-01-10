@@ -18,7 +18,6 @@
 
 namespace District5\Mondoc\Traits\Deletion;
 
-use MongoDB\Collection;
 use MongoDB\DeleteResult;
 
 /**
@@ -42,12 +41,11 @@ trait DeleteMultiTrait
         $collection = self::getCollection(
             get_called_class()
         );
-        /* @var $collection Collection */
         $delete = $collection->deleteMany(
             $query,
             $options
         );
-        if (is_object($delete) && $delete instanceof DeleteResult) {
+        if ($delete instanceof DeleteResult) {
             return $delete->getDeletedCount();
         }
 

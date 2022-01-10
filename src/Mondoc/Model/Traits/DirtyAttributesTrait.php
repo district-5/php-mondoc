@@ -31,7 +31,7 @@ trait DirtyAttributesTrait
      *
      * @var array
      */
-    protected $_mondocDirty = [];
+    protected array $_mondocDirty = [];
 
     /**
      * Clear the dirty parameter array. Dirty values aren't referenced for new objects.
@@ -50,9 +50,8 @@ trait DirtyAttributesTrait
      * Get the array of dirty values (values that need to be updated). Dirty values aren't referenced for new objects.
      *
      * @return array
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function getDirty()
+    public function getDirty(): array
     {
         return $this->_mondocDirty;
     }
@@ -61,7 +60,7 @@ trait DirtyAttributesTrait
      * Add a dirty value, indicating it should be saved upon updating. Dirty values aren't referenced for new objects.
      *
      * @param string $key
-     * @param null   $value - ignored. @deprecated
+     * @param null $value - ignored. @deprecated
      *
      * @return $this
      * @noinspection PhpMissingReturnTypeInspection

@@ -19,7 +19,6 @@
 namespace District5\Mondoc\Traits;
 
 use District5\Mondoc\Model\MondocAbstractModel;
-use MongoDB\Collection;
 
 /**
  * Trait KeyOperationsTrait.
@@ -31,7 +30,7 @@ trait KeyOperationsTrait
     /**
      * Remove a key from a single document.
      *
-     * @param string              $key
+     * @param string $key
      * @param MondocAbstractModel $model
      *
      * @return bool
@@ -46,7 +45,6 @@ trait KeyOperationsTrait
         $collection = self::getCollection(
             get_called_class()
         );
-        /* @var $collection Collection */
         $result = $collection->updateOne(
             ['_id' => $model->getMongoId()],
             ['$unset' => [$key => 1]]

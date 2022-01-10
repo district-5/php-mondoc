@@ -19,7 +19,6 @@
 namespace District5\Mondoc\Traits\Persistence;
 
 use District5\Mondoc\Model\MondocAbstractModel;
-use MongoDB\Collection;
 
 /**
  * Trait InsertSingleTrait.
@@ -51,7 +50,6 @@ trait InsertSingleTrait
         if ($model->hasPresetMongoId()) {
             $data['_id'] = $model->getPresetMongoId();
         }
-        /* @var $collection Collection */
         $insert = $collection->insertOne(
             $data
         );

@@ -96,6 +96,10 @@ trait UpdateTrait
      * Update a single document by applying a filter and an update query. Any references to
      * this model, held in the code are not updated.
      *
+     * @param array $filter
+     * @param array $query
+     *
+     * @return bool
      * @example
      *     MyService::updateOne(
      *          [
@@ -106,17 +110,12 @@ trait UpdateTrait
      *          ]
      *      );
      *
-     * @param array $filter
-     * @param array $query
-     *
-     * @return bool
      */
     public static function updateOne(array $filter, array $query): bool
     {
         $collection = self::getCollection(
             get_called_class()
         );
-        /* @var $collection Collection */
         $perform = $collection->updateOne(
             $filter,
             $query

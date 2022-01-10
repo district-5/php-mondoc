@@ -34,6 +34,7 @@ trait PushTrait
      * @param string $field
      * @param string $value
      * @return bool
+     * @noinspection PhpUnused
      */
     protected static function pushIntoArrayWithFilter(array $filter, string $field, string $value): bool
     {
@@ -54,6 +55,7 @@ trait PushTrait
      * @param string $value
      * @param bool $distinct
      * @return bool
+     * @noinspection PhpUnused
      */
     protected static function pushIntoArrayById(ObjectId $id, string $field, string $value, bool $distinct = true): bool
     {

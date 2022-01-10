@@ -33,7 +33,7 @@ trait SumFieldTrait
      * Get the sum of a $fieldName by a given filter.
      *
      * @param string $fieldName
-     * @param array  $filter
+     * @param array $filter
      *
      * @return float|int
      * @noinspection PhpUnused
@@ -49,7 +49,7 @@ trait SumFieldTrait
                 '$group' => [
                     '_id' => null,
                     $fieldName => [
-                        '$sum' => '$'.$fieldName
+                        '$sum' => '$' . $fieldName
                     ]
                 ]
             ]

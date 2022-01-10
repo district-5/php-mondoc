@@ -30,13 +30,13 @@ use MongoDB\Model\BSONDocument;
 trait PercentileOfNumberFieldTrait
 {
     /**
-     * Get the value of the X percentile of a $fieldName by a given filter. By default the ordering is ascending (1),
+     * Get the value of the X percentile of a $fieldName by a given filter. By default, the ordering is ascending (1),
      * but you can provide -1 to sort descending.
      *
      * @param string $fieldName
-     * @param float  $percentile
-     * @param int    $sortDirection (1 or -1)
-     * @param array  $filter
+     * @param float $percentile
+     * @param int $sortDirection (1 or -1)
+     * @param array $filter
      *
      * @return null|float|int
      * @noinspection PhpUnused
@@ -58,13 +58,13 @@ trait PercentileOfNumberFieldTrait
                         '$first' => '$$ROOT'
                     ],
                     'values' => [
-                        '$push' => '$'.$fieldName
+                        '$push' => '$' . $fieldName
                     ]
                 ]
             ],
             [
                 '$project' => [
-                    $fieldName.'Percentile' => [
+                    $fieldName . 'Percentile' => [
                         '$arrayElemAt' => [
                             '$values',
                             [
@@ -98,8 +98,8 @@ trait PercentileOfNumberFieldTrait
         /* @var $records BSONDocument[] */
         if (1 === count($records)) {
             $array = $records[0]->getArrayCopy();
-            if (array_key_exists($fieldName.'Percentile', $array)) {
-                return $array[$fieldName.'Percentile'];
+            if (array_key_exists($fieldName . 'Percentile', $array)) {
+                return $array[$fieldName . 'Percentile'];
             }
         }
 

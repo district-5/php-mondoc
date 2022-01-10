@@ -30,6 +30,15 @@ use MongoDB\Model\BSONDocument;
 trait KeyToClassMapInflationTrait
 {
     /**
+     * @param array $data
+     *
+     * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
+     * @noinspection PhpUnused
+     */
+    abstract public static function inflateSingleArray(array $data);
+
+    /**
      * @param string $name
      *
      * @return null|mixed
@@ -37,15 +46,8 @@ trait KeyToClassMapInflationTrait
     abstract public function __get(string $name);
 
     /**
-     * @param array $data
-     *
-     * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
-     */
-    abstract public static function inflateSingleArray(array $data);
-
-    /**
      * @return array
+     * @noinspection PhpUnused
      */
     abstract protected function getKeyToClassMap(): array;
 
@@ -75,7 +77,7 @@ trait KeyToClassMapInflationTrait
             /* @var $clz MondocAbstractSubModel */
             $data = $this->__get($k);
             if (true === $isSingle) {
-                if (is_object($data) && $data instanceof BSONDocument) {
+                if ($data instanceof BSONDocument) {
                     $data = $data->getArrayCopy();
                     $anM = $clz::inflateSingleArray($data);
                     $anM->inflateKeyToClassMaps();
@@ -84,9 +86,10 @@ trait KeyToClassMapInflationTrait
                     $this->{$k} = $data;
                 }
             } else {
-                if (is_object($data) && $data instanceof BSONArray) {
+                if ($data instanceof BSONArray) {
                     $data = $data->getArrayCopy();
                     $final = [];
+                    /** @noinspection PhpUnusedLocalVariableInspection */
                     foreach ($data as $_ => $v) {
                         if ($v instanceof BSONDocument || $v instanceof BSONArray) {
                             $v = $v->getArrayCopy();

@@ -46,7 +46,7 @@ class MyModelWithSub extends MondocAbstractModel
     /**
      * @var string[]
      */
-    protected $keyToClassMap = [
+    protected array $keyToClassMap = [
         'age' => AgeSubModel::class,
         'foods' => FoodSubModel::class.'[]'
     ];

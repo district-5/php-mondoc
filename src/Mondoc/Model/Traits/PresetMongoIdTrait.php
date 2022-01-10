@@ -32,7 +32,7 @@ trait PresetMongoIdTrait
      *
      * @var null|ObjectId
      */
-    protected $_mondocPresetMongoId;
+    protected ?ObjectId $_mondocPresetMongoId = null;
 
     /**
      * Set the preset Mongo ID (which is used for setting the _id on insertion).
@@ -51,16 +51,6 @@ trait PresetMongoIdTrait
     }
 
     /**
-     * Get the preset Mongo ID (which is used for setting the _id on insertion).
-     *
-     * @return null|ObjectId
-     */
-    public function getPresetMongoId(): ?ObjectId
-    {
-        return $this->_mondocPresetMongoId;
-    }
-
-    /**
      * Does this model have a preset Mongo ID (which is used for setting the _id on insertion).
      *
      * @return bool
@@ -68,6 +58,16 @@ trait PresetMongoIdTrait
     public function hasPresetMongoId(): bool
     {
         return null !== $this->getPresetMongoId();
+    }
+
+    /**
+     * Get the preset Mongo ID (which is used for setting the _id on insertion).
+     *
+     * @return null|ObjectId
+     */
+    public function getPresetMongoId(): ?ObjectId
+    {
+        return $this->_mondocPresetMongoId;
     }
 
     /**

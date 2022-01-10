@@ -32,8 +32,8 @@ trait DecrementTrait
      * number by 1.
      *
      * @param ObjectId $id
-     * @param string   $field
-     * @param int      $delta
+     * @param string $field
+     * @param int $delta
      *
      * @return bool
      * @noinspection PhpUnused

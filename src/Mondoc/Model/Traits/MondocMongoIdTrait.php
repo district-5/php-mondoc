@@ -33,19 +33,7 @@ trait MondocMongoIdTrait
      *
      * @var null|ObjectId
      */
-    protected $_mondocMongoId;
-
-    /**
-     * Get the ObjectId of the persisted model.
-     *
-     * @return null|ObjectId
-     */
-    public function getMongoId(): ?ObjectId
-    {
-        return MondocMongoTypeConverter::convertToMongoId(
-            $this->_mondocMongoId
-        );
-    }
+    protected ?ObjectId $_mondocMongoId = null;
 
     /**
      * Get the string value for the ObjectId of the persisted model.
@@ -70,6 +58,18 @@ trait MondocMongoIdTrait
     public function hasMongoId(): bool
     {
         return is_object($this->getMongoId()) && $this->getMongoId() instanceof ObjectId;
+    }
+
+    /**
+     * Get the ObjectId of the persisted model.
+     *
+     * @return null|ObjectId
+     */
+    public function getMongoId(): ?ObjectId
+    {
+        return MondocMongoTypeConverter::convertToMongoId(
+            $this->_mondocMongoId
+        );
     }
 
     /**

@@ -37,12 +37,12 @@ trait MondocMongoTypeTrait
      * or as a Mongo UTCDateTime (by passing $asMongo=true).
      *
      * @param DateTime|UTCDateTime $date
-     * @param bool                 $asMongo
+     * @param bool $asMongo
      *
      * @return null|DateTime|UTCDateTime
      * @noinspection PhpUnused
      */
-    protected function convertDateObject($date, $asMongo = false)
+    protected function convertDateObject($date, bool $asMongo = false)
     {
         if (is_array($date) && array_key_exists('$date', $date)) {
             $date = new UTCDateTime($date['$date']['$numberLong']);
@@ -84,18 +84,6 @@ trait MondocMongoTypeTrait
     }
 
     /**
-     * Convert an ObjectId to a MongoId.
-     *
-     * @param null|array|ObjectId|string $id
-     *
-     * @return null|ObjectId
-     */
-    protected function convertToMongoId($id): ?ObjectId
-    {
-        return MondocMongoTypeConverter::convertToMongoId($id);
-    }
-
-    /**
      * Iterate through an array of ObjectIds to deduplicate them.
      *
      * @param ObjectId[] $ids
@@ -116,5 +104,17 @@ trait MondocMongoTypeTrait
         }
 
         return $final;
+    }
+
+    /**
+     * Convert an ObjectId to a MongoId.
+     *
+     * @param null|array|ObjectId|string $id
+     *
+     * @return null|ObjectId
+     */
+    protected function convertToMongoId($id): ?ObjectId
+    {
+        return MondocMongoTypeConverter::convertToMongoId($id);
     }
 }

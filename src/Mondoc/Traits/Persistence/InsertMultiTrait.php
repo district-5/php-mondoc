@@ -19,7 +19,6 @@
 namespace District5\Mondoc\Traits\Persistence;
 
 use District5\Mondoc\Model\MondocAbstractModel;
-use MongoDB\Collection;
 
 /**
  * Trait InsertMultiTrait.
@@ -55,7 +54,6 @@ trait InsertMultiTrait
         $collection = self::getCollection(
             get_called_class()
         );
-        /* @var $collection Collection */
         $insert = $collection->insertMany(
             $data
         );

@@ -80,7 +80,7 @@ class MondocMongoTypeConverter
      *
      * @param array|BSONArray|BSONDocument $item
      *
-     * @return array
+     * @return array|mixed
      */
     public static function arrayToPhp($item)
     {
@@ -107,7 +107,7 @@ class MondocMongoTypeConverter
         if (null === $id) {
             return $id;
         }
-        if (is_object($id) && $id instanceof ObjectId) {
+        if ($id instanceof ObjectId) {
             return $id;
         }
         // if (is_array($id)) {

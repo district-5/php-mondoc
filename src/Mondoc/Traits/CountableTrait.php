@@ -37,25 +37,9 @@ trait CountableTrait
     }
 
     /**
-     * Count all documents in the collection where a $key = $value.
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return int
-     * @noinspection PhpUnused
-     */
-    public static function countWhereKeyEqualsValue(string $key, $value): int
-    {
-        return self::countAll([
-            $key => $value
-        ]);
-    }
-
-    /**
      * Count all matching documents in a collection using a given filter, using given options.
      *
-     * @param array $query   (optional)
+     * @param array $query (optional)
      * @param array $options (optional)
      *
      * @return int
@@ -70,6 +54,22 @@ trait CountableTrait
             $query,
             $options
         );
+    }
+
+    /**
+     * Count all documents in the collection where a $key = $value.
+     *
+     * @param string $key
+     * @param mixed $value
+     *
+     * @return int
+     * @noinspection PhpUnused
+     */
+    public static function countWhereKeyEqualsValue(string $key, $value): int
+    {
+        return self::countAll([
+            $key => $value
+        ]);
     }
 
     /**

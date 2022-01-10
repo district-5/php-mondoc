@@ -33,7 +33,7 @@ trait AverageFieldTrait
      * Get the average of a $fieldName by a given filter.
      *
      * @param string $fieldName
-     * @param array  $filter
+     * @param array $filter
      *
      * @return float|int
      * @noinspection PhpUnused

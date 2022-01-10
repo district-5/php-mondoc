@@ -31,8 +31,8 @@ trait IncrementTrait
      * Increment a field by a given delta. Can also handle negative numbers to decrement.
      *
      * @param ObjectId $id
-     * @param string   $field
-     * @param int      $delta
+     * @param string $field
+     * @param int $delta
      *
      * @return bool
      * @noinspection PhpUnused

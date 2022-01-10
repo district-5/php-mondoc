@@ -28,34 +28,34 @@ class PaginatedQueryHelper
     /**
      * @var int
      */
-    protected $currentPage = 1;
+    protected int $currentPage = 1;
 
     /**
      * @var int
      */
-    protected $perPage = 10;
+    protected int $perPage = 10;
 
     /**
      * @var int
      */
-    protected $totalPages = 1;
+    protected int $totalPages = 1;
 
     /**
      * @var int
      */
-    protected $totalResults = 0;
+    protected int $totalResults = 0;
 
     /**
      * @var int
      */
-    protected $skip = 0;
+    protected int $skip = 0;
 
     /**
      * PaginatedQueryHelper constructor.
      *
      * @param int $totalResults
      * @param int $currentPage
-     * @param int $perPage      (optional) default 10
+     * @param int $perPage (optional) default 10
      */
     public function __construct(int $totalResults, int $currentPage, int $perPage = 10)
     {
@@ -67,11 +67,76 @@ class PaginatedQueryHelper
     }
 
     /**
+     * Clean the per page.
+     *
+     * @param int $perPage
+     */
+    private function cleanPerPage(int $perPage)
+    {
+        $this->perPage = $perPage;
+        if (!is_numeric($this->perPage) || $this->perPage < 1) {
+            $this->perPage = 10;
+        }
+        $this->perPage = intval($this->perPage);
+    }
+
+    /**
+     * Clean the current page.
+     *
+     * @param int $currentPage
+     */
+    private function cleanCurrentPage(int $currentPage)
+    {
+        $this->currentPage = $currentPage;
+        if (!is_numeric($this->currentPage) || $this->currentPage < 1) {
+            $this->currentPage = 1;
+        }
+        $this->currentPage = intval($this->currentPage);
+    }
+
+    /**
+     * Clean the total results.
+     *
+     * @param int $totalResults
+     */
+    private function cleanTotalResults(int $totalResults)
+    {
+        $this->totalResults = $totalResults;
+        if (!is_numeric($this->totalResults) || $this->totalResults < 1) {
+            $this->totalResults = 0;
+        }
+        $this->totalResults = intval($this->totalResults);
+    }
+
+    /**
+     * Establish the total number of pages.
+     */
+    private function establishTotalPages()
+    {
+        $this->totalPages = intval(ceil($this->totalResults / $this->perPage));
+        if ($this->currentPage > $this->totalPages) {
+            $this->currentPage = $this->totalPages;
+        }
+    }
+
+    /**
+     * Establish the number of results to skip, or the offset.
+     */
+    private function establishSkip()
+    {
+        $this->skip = (($this->currentPage * $this->perPage) - $this->perPage);
+        if ($this->skip < 0) {
+            $this->skip = 0;
+        }
+    }
+
+    /**
      * @param int $totalResults
      * @param int $currentPage
-     * @param int $perPage      (optional) default 10
+     * @param int $perPage (optional) default 10
      *
      * @return PaginatedQueryHelper
+     * @noinspection PhpUnused
      */
     public static function init(int $totalResults, int $currentPage, int $perPage = 10): PaginatedQueryHelper
     {
@@ -79,9 +144,39 @@ class PaginatedQueryHelper
     }
 
     /**
+     * @return bool
+     * @noinspection PhpUnused
+     */
+    public function isFirstPage(): bool
+    {
+        return 1 === $this->getCurrentPage();
+    }
+
+    /**
+     * Get the current page.
+     *
+     * @return int
+     * @noinspection PhpUnused
+     */
+    public function getCurrentPage(): int
+    {
+        return $this->currentPage;
+    }
+
+    /**
+     * @return bool
+     * @noinspection PhpUnused
+     */
+    public function isLastPage(): bool
+    {
+        return $this->getCurrentPage() === $this->getTotalPages();
+    }
+
+    /**
      * Get the total number of pages.
      *
      * @return int
+     * @noinspection PhpUnused
      */
     public function getTotalPages(): int
     {
@@ -90,36 +185,11 @@ class PaginatedQueryHelper
 
     /**
      * @return bool
-     */
-    public function isFirstPage(): bool
-    {
-        return 1 === $this->getCurrentPage();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isLastPage(): bool
-    {
-        return $this->getCurrentPage() === $this->getTotalPages();
-    }
-
-    /**
-     * @return bool
+     * @noinspection PhpUnused
      */
     public function hasMultiplePages(): bool
     {
         return $this->getTotalPages() > 1;
-    }
-
-    /**
-     * Get the current page.
-     *
-     * @return int
-     */
-    public function getCurrentPage(): int
-    {
-        return $this->currentPage;
     }
 
     /**
@@ -171,10 +241,11 @@ class PaginatedQueryHelper
     /**
      * Should a specific page number be shown on the UI?
      *
-     * @param int  $proposed
+     * @param int $proposed
      * @param ?int $howManyPagesEachSide
      *
      * @return bool
+     * @noinspection PhpUnused
      */
     public function shouldShowPageOnUi(int $proposed, ?int $howManyPagesEachSide): bool
     {
@@ -201,69 +272,5 @@ class PaginatedQueryHelper
         }
 
         return $proposed >= $paginationStartCounter && $proposed <= $paginationEndCounter;
-    }
-
-    /**
-     * Establish the number of results to skip, or the offset.
-     */
-    private function establishSkip()
-    {
-        $this->skip = (($this->currentPage * $this->perPage) - $this->perPage);
-        if ($this->skip < 0) {
-            $this->skip = 0;
-        }
-    }
-
-    /**
-     * Establish the total number of pages.
-     */
-    private function establishTotalPages()
-    {
-        $this->totalPages = intval(ceil($this->totalResults / $this->perPage));
-        if ($this->currentPage > $this->totalPages) {
-            $this->currentPage = $this->totalPages;
-        }
-    }
-
-    /**
-     * Clean the total results.
-     *
-     * @param int $totalResults
-     */
-    private function cleanTotalResults(int $totalResults)
-    {
-        $this->totalResults = $totalResults;
-        if (!is_numeric($this->totalResults) || $this->totalResults < 1) {
-            $this->totalResults = 0;
-        }
-        $this->totalResults = intval($this->totalResults);
-    }
-
-    /**
-     * Clean the per page.
-     *
-     * @param int $perPage
-     */
-    private function cleanPerPage(int $perPage)
-    {
-        $this->perPage = $perPage;
-        if (!is_numeric($this->perPage) || $this->perPage < 1) {
-            $this->perPage = 10;
-        }
-        $this->perPage = intval($this->perPage);
-    }
-
-    /**
-     * Clean the current page.
-     *
-     * @param int $currentPage
-     */
-    private function cleanCurrentPage(int $currentPage)
-    {
-        $this->currentPage = $currentPage;
-        if (!is_numeric($this->currentPage) || $this->currentPage < 1) {
-            $this->currentPage = 1;
-        }
-        $this->currentPage = intval($this->currentPage);
     }
 }

@@ -31,19 +31,19 @@ class MondocConfig
     /**
      * Static variable, holding the instance of this Singleton.
      *
-     * @var MondocConfig
+     * @var MondocConfig|null
      */
-    protected static $_instance = null;
+    protected static ?MondocConfig $_instance = null;
 
     /**
      * @var Database[]
      */
-    protected $databases = [];
+    protected array $databases = [];
 
     /**
      * @var string[]
      */
-    protected $serviceMap = [];
+    protected array $serviceMap = [];
 
     /**
      * MondocConfig constructor. Protected to avoid direct construction.
@@ -53,8 +53,23 @@ class MondocConfig
     }
 
     /**
+     * Retrieve an instance of this object.
+     *
+     * @return MondocConfig
+     */
+    public static function getInstance(): MondocConfig
+    {
+        if (null === self::$_instance) {
+            self::$_instance = new self();
+        }
+
+        return self::$_instance;
+    }
+
+    /**
      * @deprecated
      * @see MondocConfig::addDatabase()
+     * @noinspection PhpUnused
      */
     public function setDatabase(Database $database, string $key = 'default'): MondocConfig
     {
@@ -76,20 +91,6 @@ class MondocConfig
     }
 
     /**
-     * @param string $key
-     *
-     * @return null|Database
-     */
-    public function getDatabase(string $key = 'default'): ?Database
-    {
-        if (array_key_exists($key, $this->databases)) {
-            return $this->databases[$key];
-        }
-
-        return null;
-    }
-
-    /**
      * @param string $name
      * @param string $key
      *
@@ -105,17 +106,18 @@ class MondocConfig
     }
 
     /**
-     * Retrieve an instance of this object.
+     * @param string $key
      *
-     * @return MondocConfig
+     * @return null|Database
+     * @noinspection PhpUnused
      */
-    public static function getInstance(): MondocConfig
+    public function getDatabase(string $key = 'default'): ?Database
     {
-        if (null === self::$_instance) {
-            self::$_instance = new self();
+        if (array_key_exists($key, $this->databases)) {
+            return $this->databases[$key];
         }
 
-        return self::$_instance;
+        return null;
     }
 
     /**
@@ -123,6 +125,7 @@ class MondocConfig
      *
      * @param array $serviceMap
      * @return $this
+     * @noinspection PhpUnused
      */
     public function setServiceMap(array $serviceMap): MondocConfig
     {
@@ -135,7 +138,7 @@ class MondocConfig
      * @param string $serviceFQCN
      * @return $this
      */
-    public function addServiceMapping(string $modelFQCN, string $serviceFQCN)
+    public function addServiceMapping(string $modelFQCN, string $serviceFQCN): MondocConfig
     {
         $this->serviceMap[$modelFQCN] = $serviceFQCN;
         return $this;

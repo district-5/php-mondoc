@@ -34,31 +34,33 @@ abstract class MondocAbstractSubModel
     /**
      * An array holding data on which keys need to be coerced into sub DTOs.
      *
-     * @example [
+     * @example
+     *      [
      *      'property' => '\Full\Class\Name'
-     * ]
+     *      ]
      *
      * @var string[]
      */
-    protected $keyToClassMap = [];
+    protected array $keyToClassMap = [];
 
     /**
-     * An array holding all keys to values that weren't found in the object.
+     * An array holding all key/value pairs that weren't found in the object.
      *
      * @var array
      */
-    protected $unmappedFields = [];
+    protected array $unmappedFields = [];
 
     /**
      * An array holding original key to new keys.
      *
-     * @example [
+     * @example
+     *      [
      *      'some_underscore_key' => 'someCamelCaseKey'
-     * ]
+     *      ]
      *
      * @var string[]
      */
-    protected $fieldToFieldMap = [];
+    protected array $fieldToFieldMap = [];
 
     /**
      * MondocAbstractSubModel constructor.
@@ -74,87 +76,6 @@ abstract class MondocAbstractSubModel
                 }
             }
         }
-    }
-
-    /**
-     * Set a value via magic method.
-     *
-     * @param string $name
-     * @param mixed  $value
-     */
-    public function __set(string $name, $value)
-    {
-        if (property_exists($this, $name)) {
-            $this->{$name} = $value;
-
-            return;
-        }
-        $this->unmappedFields[$name] = $value;
-    }
-
-    /**
-     * Get a value via magic method.
-     *
-     * @param string $name
-     *
-     * @return null|mixed
-     */
-    public function __get(string $name)
-    {
-        if (property_exists($this, $name)) {
-            return $this->{$name};
-        }
-        if (array_key_exists($name, $this->unmappedFields)) {
-            return $this->unmappedFields[$name];
-        }
-
-        return null;
-    }
-
-    /**
-     * Magic method to echo the class name if accidentally used as a string.
-     *
-     * @return false|string
-     */
-    public function __toString()
-    {
-        return strval(get_class($this));
-    }
-
-    /**
-     * Get an array export representation of this model and all child models.
-     *
-     * @return array
-     */
-    public function asArray(): array
-    {
-        $data = [];
-        foreach ($this->getMondocObjectVars() as $k => $v) {
-            if (in_array($k, $this->getPropertyExclusions())) {
-                continue;
-            }
-            if (array_key_exists($k, $this->getKeyToClassMap())) {
-                if ('[]' === substr($this->getKeyToClassMap()[$k], -2)) {
-                    /* @var $v MondocAbstractSubModel[] */
-                    $subs = [];
-                    foreach ($v as $datum) {
-                        $subs[] = $datum->asArray();
-                    }
-                    $v = $subs;
-                } else {
-                    /* @var $v MondocAbstractSubModel */
-                    $v = $v->asArray();
-                }
-            } elseif ($v instanceof DateTime) {
-                $v = MondocMongoTypeConverter::phpDateToMongoDateTime($v);
-            }
-            $data[$k] = $v;
-        }
-        if (!empty($this->unmappedFields)) {
-            $data = array_merge_recursive($this->unmappedFields, $data);
-        }
-
-        return $data;
     }
 
     /**
@@ -190,6 +111,7 @@ abstract class MondocAbstractSubModel
             return [];
         }
         $final = [];
+        /** @noinspection PhpUnusedLocalVariableInspection */
         foreach ($data as $_ => $datum) {
             $final[] = $cl::inflateSingleArray($datum);
         }
@@ -256,24 +178,6 @@ abstract class MondocAbstractSubModel
     }
 
     /**
-     * Get any unmapped fields.
-     *
-     * @return array
-     */
-    public function getUnmappedFields(): array
-    {
-        return $this->unmappedFields;
-    }
-
-    /**
-     * @return array
-     */
-    public function getMondocObjectVars(): array
-    {
-        return get_object_vars($this);
-    }
-
-    /**
      * @return string[]
      */
     protected function getFieldToFieldMap(): array
@@ -282,32 +186,12 @@ abstract class MondocAbstractSubModel
     }
 
     /**
-     * @return array
-     */
-    protected function getKeyToClassMap(): array
-    {
-        return $this->keyToClassMap;
-    }
-
-    /**
-     * Holds an array of protected variable names.
-     *
-     * @return array
-     */
-    protected function getPropertyExclusions(): array
-    {
-        return [
-            'keyToClassMap', 'unmappedFields', 'fieldToFieldMap', '_mongoCollection',
-            '_mondocDirty', '_mondocPresetMongoId', '_mondocMongoId', '_mondocBson'
-        ];
-    }
-
-    /**
      * Helper method to convert an object (with potential arrays or objects inside) into a normal array.
      *
      * @param object $obj
      *
      * @return array
+     * @noinspection PhpMissingParamTypeInspection
      */
     protected static function objectToArray($obj): array
     {
@@ -357,5 +241,125 @@ abstract class MondocAbstractSubModel
         }
 
         return $data;
+    }
+
+    /**
+     * Get a value via magic method.
+     *
+     * @param string $name
+     *
+     * @return null|mixed
+     */
+    public function __get(string $name)
+    {
+        if (property_exists($this, $name)) {
+            return $this->{$name};
+        }
+        if (array_key_exists($name, $this->unmappedFields)) {
+            return $this->unmappedFields[$name];
+        }
+
+        return null;
+    }
+
+    /**
+     * Set a value via magic method.
+     *
+     * @param string $name
+     * @param mixed $value
+     */
+    public function __set(string $name, $value)
+    {
+        if (property_exists($this, $name)) {
+            $this->{$name} = $value;
+
+            return;
+        }
+        $this->unmappedFields[$name] = $value;
+    }
+
+    /**
+     * Magic method to echo the class name if accidentally used as a string.
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return get_class($this);
+    }
+
+    /**
+     * Get an array export representation of this model and all child models.
+     *
+     * @return array
+     */
+    public function asArray(): array
+    {
+        $data = [];
+        foreach ($this->getMondocObjectVars() as $k => $v) {
+            if (in_array($k, $this->getPropertyExclusions())) {
+                continue;
+            }
+            if (array_key_exists($k, $this->getKeyToClassMap())) {
+                if ('[]' === substr($this->getKeyToClassMap()[$k], -2)) {
+                    /* @var $v MondocAbstractSubModel[] */
+                    $subs = [];
+                    foreach ($v as $datum) {
+                        $subs[] = $datum->asArray();
+                    }
+                    $v = $subs;
+                } else {
+                    /* @var $v MondocAbstractSubModel */
+                    $v = $v->asArray();
+                }
+            } elseif ($v instanceof DateTime) {
+                $v = MondocMongoTypeConverter::phpDateToMongoDateTime($v);
+            }
+            $data[$k] = $v;
+        }
+        if (!empty($this->unmappedFields)) {
+            $data = array_merge_recursive($this->unmappedFields, $data);
+        }
+
+        return $data;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMondocObjectVars(): array
+    {
+        return get_object_vars($this);
+    }
+
+    /**
+     * Holds an array of protected variable names.
+     *
+     * @return array
+     */
+    protected function getPropertyExclusions(): array
+    {
+        return [
+            'keyToClassMap', 'unmappedFields', 'fieldToFieldMap', '_mongoCollection',
+            '_mondocDirty', '_mondocPresetMongoId', '_mondocMongoId', '_mondocBson'
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected function getKeyToClassMap(): array
+    {
+        return $this->keyToClassMap;
+    }
+
+    /**
+     * Get any unmapped fields.
+     *
+     * @return array
+     */
+    public function getUnmappedFields(): array
+    {
+        return $this->unmappedFields;
     }
 }

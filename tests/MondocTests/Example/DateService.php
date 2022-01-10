@@ -30,7 +30,7 @@ class DateService extends MondocAbstractService
     /**
      * @var string
      */
-    protected static $modelClassName = DateModel::class;
+    protected static string $modelClassName = DateModel::class;
 
     /**
      * @return string

@@ -18,8 +18,6 @@
 
 namespace District5\Mondoc\Traits;
 
-use MongoDB\Collection;
-
 /**
  * Trait DistinctValuesTrait.
  *
@@ -31,17 +29,17 @@ trait DistinctValuesTrait
      * Get an array of all distinct values for a given key in a collection, optionally providing a filter and options.
      *
      * @param string $key
-     * @param array  $filter  (optional)
-     * @param array  $options (optional)
+     * @param array $filter (optional)
+     * @param array $options (optional)
      *
      * @return array
+     * @noinspection PhpUnused
      */
     public static function getDistinctValuesForKey(string $key, array $filter = [], array $options = []): array
     {
         $collection = self::getCollection(
             get_called_class()
         );
-        /* @var $collection Collection */
         return $collection->distinct($key, $filter, $options);
     }
 }

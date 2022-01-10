@@ -46,12 +46,40 @@ class MondocAbstractModel extends MondocAbstractSubModel
     /**
      * @var null|Collection
      */
-    private $_mongoCollection;
+    private ?Collection $_mongoCollection = null;
 
     /**
      * @var null|BSONDocument
      */
-    private $_mondocBson;
+    private ?BSONDocument $_mondocBson = null;
+
+    /**
+     * @param BSONDocument $document
+     *
+     * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
+     */
+    public static function inflateSingleBsonDocument(BSONDocument $document)
+    {
+        $m = self::inflateSingleArray(
+            $document->getArrayCopy()
+        );
+        $m->setOriginalBsonDocument($document);
+
+        return $m;
+    }
+
+    /**
+     * @param BSONDocument $document
+     *
+     * @return $this
+     */
+    private function setOriginalBsonDocument(BSONDocument $document): MondocAbstractModel
+    {
+        $this->_mondocBson = $document;
+
+        return $this;
+    }
 
     /**
      * @param null|Collection $collection
@@ -110,22 +138,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
         }
 
         return false;
-    }
-
-    /**
-     * Set the ObjectId for this model. Primarily used by the service.
-     *
-     * @param ObjectId $objectId
-     *
-     * @return $this
-     * @noinspection PhpUnused
-     * @noinspection PhpMissingReturnTypeInspection
-     */
-    final public function setMongoId(ObjectId $objectId)
-    {
-        $this->_mondocMongoId = $objectId;
-
-        return $this;
     }
 
     /**
@@ -188,41 +200,13 @@ class MondocAbstractModel extends MondocAbstractSubModel
     }
 
     /**
-     * @param BSONDocument $document
-     *
-     * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
+     * @return string[]
      */
-    public static function inflateSingleBsonDocument(BSONDocument $document)
+    protected function getFieldToFieldMap(): array
     {
-        $m = self::inflateSingleArray(
-            $document->getArrayCopy()
-        );
-        $m->setOriginalBsonDocument($document);
+        $this->fieldToFieldMap['_id'] = '_mondocMongoId';
 
-        return $m;
-    }
-
-    /**
-     * Inflate an array of data into the called model.
-     *
-     * @param array $data
-     *
-     * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
-     */
-    public static function inflateSingleArray(array $data)
-    {
-        $done = parent::inflateSingleArray($data);
-        if ($done) {
-            if (array_key_exists('_id', $data)) {
-                $done->setMongoId($data['_id']);
-            }
-            $done->inflateKeyToClassMaps();
-            $done->assignDefaultVars();
-        }
-
-        return $done;
+        return $this->fieldToFieldMap;
     }
 
     /**
@@ -248,19 +232,56 @@ class MondocAbstractModel extends MondocAbstractSubModel
     }
 
     /**
+     * Assign any default variables to this model.
+     */
+    protected function assignDefaultVars()
+    {
+    }
+
+    /**
+     * Inflate an array of data into the called model.
+     *
+     * @param array $data
+     *
+     * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
+     */
+    public static function inflateSingleArray(array $data)
+    {
+        $done = parent::inflateSingleArray($data);
+        if ($done) {
+            if (array_key_exists('_id', $data)) {
+                $done->setMongoId($data['_id']);
+            }
+            $done->inflateKeyToClassMaps();
+            $done->assignDefaultVars();
+        }
+
+        return $done;
+    }
+
+    /**
+     * Set the ObjectId for this model. Primarily used by the service.
+     *
+     * @param ObjectId $objectId
+     *
+     * @return $this
+     * @noinspection PhpUnused
+     * @noinspection PhpMissingReturnTypeInspection
+     */
+    final public function setMongoId(ObjectId $objectId)
+    {
+        $this->_mondocMongoId = $objectId;
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     final public function isMondocModel(): bool
     {
         return true;
-    }
-
-    /**
-     * @return null|BSONDocument
-     */
-    public function getOriginalBsonDocument(): ?BSONDocument
-    {
-        return $this->_mondocBson;
     }
 
     /**
@@ -277,7 +298,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
             foreach ($allSetVariables as $objVar => $objVal) {
                 if (in_array($objVar, $ignore)) {
                     unset($allSetVariables[$objVar]);
-                    continue;
                 }
             }
         } else {
@@ -293,6 +313,14 @@ class MondocAbstractModel extends MondocAbstractSubModel
         }
 
         return $toUnset;
+    }
+
+    /**
+     * @return null|BSONDocument
+     */
+    public function getOriginalBsonDocument(): ?BSONDocument
+    {
+        return $this->_mondocBson;
     }
 
     /**
@@ -313,34 +341,5 @@ class MondocAbstractModel extends MondocAbstractSubModel
         }
 
         return array_values($n);
-    }
-
-    /**
-     * Assign any default variables to this model.
-     */
-    protected function assignDefaultVars()
-    {
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getFieldToFieldMap(): array
-    {
-        $this->fieldToFieldMap['_id'] = '_mondocMongoId';
-
-        return $this->fieldToFieldMap;
-    }
-
-    /**
-     * @param BSONDocument $document
-     *
-     * @return $this
-     */
-    private function setOriginalBsonDocument(BSONDocument $document): MondocAbstractModel
-    {
-        $this->_mondocBson = $document;
-
-        return $this;
     }
 }

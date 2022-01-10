@@ -222,7 +222,7 @@ class Person extends MondocAbstractModel
     /**
      * @var string[] 
      */
-    protected $keyToClassMap = [
+    protected array $keyToClassMap = [
         'favouriteFood' => FavouriteFood::class,
         'car' => Car::class
     ];

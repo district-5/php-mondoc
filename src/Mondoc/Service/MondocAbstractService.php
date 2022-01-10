@@ -56,7 +56,7 @@ abstract class MondocAbstractService
     /**
      * @var string
      */
-    protected static $modelClassName = '';
+    protected static string $modelClassName = '';
 
     /**
      * Retrieve the Database instance.
@@ -69,6 +69,16 @@ abstract class MondocAbstractService
         return MondocConfig::getInstance()->getDatabase(
             self::getConnectionId()
         );
+    }
+
+    /**
+     * Get the connection ID to use from the MondocConfig manager. Defaults to 'default'.
+     *
+     * @return string
+     */
+    protected static function getConnectionId(): string
+    {
+        return 'default';
     }
 
     /**
@@ -89,6 +99,13 @@ abstract class MondocAbstractService
     }
 
     /**
+     * Get the collection name.
+     *
+     * @return string
+     */
+    abstract protected static function getCollectionName(): string;
+
+    /**
      * @return AggregateSubService
      */
     public static function aggregate(): AggregateSubService
@@ -104,22 +121,5 @@ abstract class MondocAbstractService
     public static function getQueryBuilder(): QueryBuilder
     {
         return new QueryBuilder();
-    }
-
-    /**
-     * Get the collection name.
-     *
-     * @return string
-     */
-    abstract protected static function getCollectionName(): string;
-
-    /**
-     * Get the connection ID to use from the MondocConfig manager. Defaults to 'default'.
-     *
-     * @return string
-     */
-    protected static function getConnectionId(): string
-    {
-        return 'default';
     }
 }

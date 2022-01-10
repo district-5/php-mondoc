@@ -20,7 +20,6 @@ namespace District5\Mondoc\Traits\Deletion;
 
 use District5\Mondoc\Helper\MondocMongoTypeConverter;
 use MongoDB\BSON\ObjectId;
-use MongoDB\Collection;
 
 /**
  * Trait DeleteSingleTrait.
@@ -42,7 +41,6 @@ trait DeleteSingleTrait
         $collection = self::getCollection(
             get_called_class()
         );
-        /* @var $collection Collection */
         return $collection->deleteOne(
             ['_id' => $id]
         )->isAcknowledged();

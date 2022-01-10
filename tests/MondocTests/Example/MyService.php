@@ -30,7 +30,7 @@ class MyService extends MondocAbstractService
     /**
      * @var string
      */
-    protected static $modelClassName = MyModel::class;
+    protected static string $modelClassName = MyModel::class;
 
     /**
      * @return string

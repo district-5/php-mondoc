@@ -22,7 +22,6 @@ use District5\Mondoc\Helper\MondocMongoTypeConverter;
 use District5\Mondoc\Model\MondocAbstractModel;
 use District5\Mondoc\Service\MondocAbstractService;
 use District5\MondocBuilder\QueryBuilder;
-use MongoDB\Collection;
 use MongoDB\Model\BSONDocument;
 
 /**
@@ -32,41 +31,6 @@ use MongoDB\Model\BSONDocument;
  */
 trait GetMultiTrait
 {
-    /**
-     * Get multiple models by a given filter, using given options.
-     *
-     * @param array $filter
-     * @param array $options
-     *
-     * @return MondocAbstractModel[]
-     * @noinspection PhpUnused
-     */
-    public static function getMultiByCriteria(array $filter = [], array $options = []): array
-    {
-        $calledClass = get_called_class();
-        /* @var $calledClass MondocAbstractService */
-        $collection = self::getCollection(
-            $calledClass
-        );
-        /* @var $collection Collection */
-        $cursor = $collection->find($filter, $options);
-        if ($cursor) {
-            $objs = [];
-            $clz = $calledClass::$modelClassName;
-            /* @var $clz MondocAbstractModel - it's not. It's actually a string. */
-            foreach ($cursor as $k => $v) {
-                /* @var $v BSONDocument */
-                $m = $clz::inflateSingleBsonDocument($v);
-                $m->setMongoCollection($collection);
-                $objs[] = $m;
-            }
-
-            return $objs;
-        }
-
-        return [];
-    }
-
     /**
      * Get multiple models by passing in an instance of QueryBuilder.
      *
@@ -80,6 +44,41 @@ trait GetMultiTrait
             $builder->getArrayCopy(),
             $builder->getOptions()->getArrayCopy()
         );
+    }
+
+    /**
+     * Get multiple models by a given filter, using given options.
+     *
+     * @param array $filter
+     * @param array $options
+     *
+     * @return MondocAbstractModel[]
+     * @noinspection PhpUnused
+     */
+    public static function getMultiByCriteria(array $filter = [], array $options = []): array
+    {
+        $calledClass = get_called_class();
+        $collection = self::getCollection(
+            $calledClass
+        );
+        $cursor = $collection->find($filter, $options);
+        if ($cursor) {
+            $objs = [];
+            /* @var $calledClass MondocAbstractService */
+            $clz = $calledClass::$modelClassName;
+            /* @var $clz MondocAbstractModel - it's not. It's actually a string. */
+            /** @noinspection PhpUnusedLocalVariableInspection */
+            foreach ($cursor as $k => $v) {
+                /* @var $v BSONDocument */
+                $m = $clz::inflateSingleBsonDocument($v);
+                $m->setMongoCollection($collection);
+                $objs[] = $m;
+            }
+
+            return $objs;
+        }
+
+        return [];
     }
 
     /**

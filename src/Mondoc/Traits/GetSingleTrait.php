@@ -57,7 +57,7 @@ trait GetSingleTrait
      */
     public static function getOneByCriteria(array $filter = [], array $options = []): ?MondocAbstractModel
     {
-        if (in_array('sort', $options)) {
+        if (array_key_exists('sort', $options)) {
             $opts = array_merge($options, ['limit' => 1]);
             $results = self::getMultiByCriteria($filter, $opts);
             if (count($results) === 1) {

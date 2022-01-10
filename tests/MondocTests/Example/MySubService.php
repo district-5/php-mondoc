@@ -29,11 +29,6 @@ use District5Tests\MondocTests\Example\Subs\MyModelWithSub;
 class MySubService extends MondocAbstractService
 {
     /**
-     * @var string
-     */
-    protected static string $modelClassName = MyModelWithSub::class;
-
-    /**
      * @return string
      */
     protected static function getCollectionName(): string

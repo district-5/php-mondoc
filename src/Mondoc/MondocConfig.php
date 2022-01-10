@@ -46,6 +46,11 @@ class MondocConfig
     protected array $serviceMap = [];
 
     /**
+     * @var string[]
+     */
+    private array $establishedModels = [];
+
+    /**
      * MondocConfig constructor. Protected to avoid direct construction.
      */
     protected function __construct()
@@ -152,6 +157,25 @@ class MondocConfig
     {
         if (array_key_exists($modelFQCN, $this->serviceMap)) {
             return $this->serviceMap[$modelFQCN];
+        }
+        return null;
+    }
+
+    /**
+     * @param string $serviceFQCN
+     * @return string|null
+     */
+    public function getModelForService(string $serviceFQCN): ?string
+    {
+        if (array_key_exists($serviceFQCN, $this->establishedModels)) {
+            return $this->establishedModels[$serviceFQCN];
+        }
+
+        foreach ($this->serviceMap as $modelFQCN => $serviceFQCN2) {
+            if ($serviceFQCN === $serviceFQCN2) {
+                $this->establishedModels[$serviceFQCN] = $modelFQCN;
+                return $modelFQCN;
+            }
         }
         return null;
     }

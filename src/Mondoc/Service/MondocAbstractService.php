@@ -54,11 +54,6 @@ abstract class MondocAbstractService
     use PersistenceTrait;
 
     /**
-     * @var string
-     */
-    protected static string $modelClassName = '';
-
-    /**
      * Retrieve the Database instance.
      *
      * @return null|Database
@@ -121,5 +116,15 @@ abstract class MondocAbstractService
     public static function getQueryBuilder(): QueryBuilder
     {
         return new QueryBuilder();
+    }
+
+    /**
+     * @return string
+     */
+    public static function getModelClass(): string
+    {
+        return MondocConfig::getInstance()->getModelForService(
+            get_called_class()
+        );
     }
 }

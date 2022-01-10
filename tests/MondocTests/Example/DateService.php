@@ -28,11 +28,6 @@ use District5\Mondoc\Service\MondocAbstractService;
 class DateService extends MondocAbstractService
 {
     /**
-     * @var string
-     */
-    protected static string $modelClassName = DateModel::class;
-
-    /**
      * @return string
      */
     protected static function getCollectionName(): string

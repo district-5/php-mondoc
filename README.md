@@ -78,9 +78,6 @@ $config->addServiceMapping(
 
 ```php
 <?php
-/** @noinspection PhpUndefinedClassInspection */
-/** @noinspection PhpUndefinedNamespaceInspection */
-
 namespace MyNs\Model;
 
 use District5\Mondoc\Model\MondocAbstractModel;
@@ -115,37 +112,13 @@ class MyModel extends MondocAbstractModel
         $this->addDirty('name');
         return $this;
     }
-
-    /**
-     * Called to assign any default variables. You should always check for presence as
-     * this method is called at both before save, and after retrieval. This avoids overwriting
-     * your set values.
-     */
-    protected function assignDefaultVars()
-    {
-        // TODO: Implement
-    }
-
-
-    /**
-     * Not required, but if provided this method must return the array to insert into Mongo.
-     *
-     * @return array
-     */
-    public function asArray(): array
-    {
-        $this->assignDefaultVars();
-        return [
-            'name' => $this->getName()
-        ];
-    }
 }
 ```
 
 #### The service layer
 
 ```php
-<?php/** @noinspection PhpUndefinedClassInspection *//** @noinspection PhpUndefinedNamespaceInspection */
+<?php
 namespace Myns\Service;
 
 use MyNs\Model\MyModel;
@@ -156,11 +129,6 @@ use MyNs\Model\MyModel;
  */
 class MyService extends AbstractService
 {
-    /**
-     * @var string
-     */
-    protected static $modelClassName = MyModel::class;
-
     /**
      * @return string
      */

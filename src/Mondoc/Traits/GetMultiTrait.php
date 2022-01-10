@@ -65,7 +65,7 @@ trait GetMultiTrait
         if ($cursor) {
             $objs = [];
             /* @var $calledClass MondocAbstractService */
-            $clz = $calledClass::$modelClassName;
+            $clz = $calledClass::getModelClass();
             /* @var $clz MondocAbstractModel - it's not. It's actually a string. */
             /** @noinspection PhpUnusedLocalVariableInspection */
             foreach ($cursor as $k => $v) {

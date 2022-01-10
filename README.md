@@ -15,6 +15,10 @@ In your `composer.json` file include:
         {
             "type": "vcs",
             "url": "git@github.com:district-5/php-mondoc-builder.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:district-5/php-date.git"
         }
     ],
     "require": {
@@ -22,7 +26,8 @@ In your `composer.json` file include:
         "mongodb/mongodb": "^1.5",
         "ext-mongodb": "*",
         "district5/mondoc": ">=3.0.0",
-        "district5/mondoc-builder": ">=0.0.1"
+        "district5/mondoc-builder": ">=1.0.0",
+        "district5/date": ">=2.0.0"
     },
     "autoload" : {
         "psr-0" : {

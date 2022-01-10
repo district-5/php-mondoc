@@ -57,15 +57,19 @@ trait GetSingleTrait
      */
     public static function getOneByCriteria(array $filter = [], array $options = []): ?MondocAbstractModel
     {
-        $opts = array_merge([], $options);
-        if (in_array('sort', $opts)) {
-            unset($opts['sort']);
+        if (in_array('sort', $options)) {
+            $opts = array_merge($options, ['limit' => 1]);
+            $results = self::getMultiByCriteria($filter, $opts);
+            if (count($results) === 1) {
+                return $results[0];
+            }
+            return null;
         }
         $calledClass = get_called_class();
         $collection = self::getCollection(
             $calledClass
         );
-        $match = $collection->findOne($filter, $opts);
+        $match = $collection->findOne($filter, $options);
         if ($match) {
             /* @var $match BSONDocument */
             /* @var $calledClass MondocAbstractService */

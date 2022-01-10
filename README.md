@@ -21,7 +21,7 @@ In your `composer.json` file include:
         "php": ">=7.4",
         "mongodb/mongodb": "^1.5",
         "ext-mongodb": "*",
-        "district5/mondoc": ">=0.0.1",
+        "district5/mondoc": ">=3.0.0",
         "district5/mondoc-builder": ">=0.0.1"
     },
     "autoload" : {

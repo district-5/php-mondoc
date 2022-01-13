@@ -24,7 +24,7 @@
         "php": ">=7.4",
         "mongodb/mongodb": "^1.8",
         "ext-mongodb": "*",
-        "district5/mondoc-builder": ">=0.0.1",
+        "district5/mondoc-builder": "*",
         "district5/date": ">=2.0.0"
     },
     "require-dev": {

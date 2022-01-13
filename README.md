@@ -7,25 +7,11 @@ In your `composer.json` file include:
 
 ```json
 {
-    "repositories":[
-        {
-            "type": "vcs",
-            "url": "git@github.com:district-5/php-mondoc.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:district-5/php-mondoc-builder.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:district-5/php-date.git"
-        }
-    ],
     "require": {
         "php": ">=7.4",
         "mongodb/mongodb": "^1.5",
         "ext-mongodb": "*",
-        "district5/mondoc": ">=3.1.0",
+        "district5/mondoc": ">=3.0.3",
         "district5/mondoc-builder": ">=1.0.0",
         "district5/date": ">=2.0.0"
     },

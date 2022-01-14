@@ -35,6 +35,7 @@ use District5Tests\MondocTests\Example\SingleAndMultiNestedModel;
 use District5Tests\MondocTests\Example\SingleAndMultiNestedService;
 use District5Tests\MondocTests\Example\Subs\AgeSubModel;
 use District5Tests\MondocTests\Example\Subs\AgeWordSubModel;
+use District5Tests\MondocTests\Example\Subs\FoodAttributesSubModel;
 use District5Tests\MondocTests\Example\Subs\FoodSubModel;
 use District5Tests\MondocTests\Example\Subs\MyModelWithSub;
 
@@ -56,13 +57,29 @@ class SingleAndNestedTest extends MondocBaseTest
         $m->setName('foo');
         $food = new FoodSubModel();
         $food->setFood('bread');
+
+        $attributes1 = new FoodAttributesSubModel();
+        $attributes1->setColour('white');
+        $attributes1->setSmell('wheat');
+        $food->setAttributes([$attributes1]);
+
         $m->setFood($food);
 
         $food2 = new FoodSubModel();
         $food2->setFood('beef');
 
+        $attributes2 = new FoodAttributesSubModel();
+        $attributes2->setColour('red');
+        $attributes2->setSmell('rich');
+        $food2->setAttributes([$attributes2]);
+
         $food3 = new FoodSubModel();
         $food3->setFood('chicken');
+
+        $attributes3 = new FoodAttributesSubModel();
+        $attributes3->setColour('pink');
+        $attributes3->setSmell('chicken-like');
+        $food3->setAttributes([$attributes3]);
 
         $m->setFoods([$food2, $food3]);
 
@@ -73,8 +90,14 @@ class SingleAndNestedTest extends MondocBaseTest
         $record = SingleAndMultiNestedService::getById($m->getMongoId());
         $this->assertEquals('foo', $record->getName());
         $this->assertEquals('bread', $record->getFood()->getFood());
+        $this->assertEquals('white', $record->getFood()->getAttributes()[0]->getColour());
+        $this->assertEquals('wheat', $record->getFood()->getAttributes()[0]->getSmell());
         $this->assertEquals('beef', $record->getFoods()[0]->getFood());
+        $this->assertEquals('red', $record->getFoods()[0]->getAttributes()[0]->getColour());
+        $this->assertEquals('rich', $record->getFoods()[0]->getAttributes()[0]->getSmell());
         $this->assertEquals('chicken', $record->getFoods()[1]->getFood());
+        $this->assertEquals('pink', $record->getFoods()[1]->getAttributes()[0]->getColour());
+        $this->assertEquals('chicken-like', $record->getFoods()[1]->getAttributes()[0]->getSmell());
         $this->assertEquals('Joe', $record->getFriends()[0]);
         $this->assertEquals('Jane', $record->getFriends()[1]);
 

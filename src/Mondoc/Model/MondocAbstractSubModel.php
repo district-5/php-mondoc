@@ -62,7 +62,7 @@ abstract class MondocAbstractSubModel
      *
      * @var array
      */
-    protected array $unmappedFields = [];
+    protected array $_mondocUnmapped = [];
 
     /**
      * An array holding all established single nested objects (IE, BSONDocument not BSONArray).
@@ -204,7 +204,7 @@ abstract class MondocAbstractSubModel
                     }
                 } else {
                     // Class didn't exist, so adding to unmapped.
-                    $inst->unmappedFields[$k] = $v;
+                    $inst->_mondocUnmapped[$k] = $v;
                 }
             }
             if ($isInClassMap === false && ($v instanceof BSONDocument || $v instanceof BSONArray)) {
@@ -295,8 +295,8 @@ abstract class MondocAbstractSubModel
         if (property_exists($this, $name)) {
             return $this->{$name};
         }
-        if (array_key_exists($name, $this->unmappedFields)) {
-            return $this->unmappedFields[$name];
+        if (array_key_exists($name, $this->_mondocUnmapped)) {
+            return $this->_mondocUnmapped[$name];
         }
 
         return null;
@@ -315,7 +315,7 @@ abstract class MondocAbstractSubModel
 
             return;
         }
-        $this->unmappedFields[$name] = $value;
+        $this->_mondocUnmapped[$name] = $value;
     }
 
     /**
@@ -357,8 +357,8 @@ abstract class MondocAbstractSubModel
             }
             $data[$k] = $v;
         }
-        if (!empty($this->unmappedFields)) {
-            $data = array_merge_recursive($this->unmappedFields, $data);
+        if (!empty($this->_mondocUnmapped)) {
+            $data = array_merge_recursive($this->_mondocUnmapped, $data);
         }
 
         return $data;
@@ -380,8 +380,8 @@ abstract class MondocAbstractSubModel
     protected function getPropertyExclusions(): array
     {
         return [
-            'keyToClassMap', 'unmappedFields', 'fieldToFieldMap', '_mongoCollection',
-            '_mondocDirty', '_mondocPresetMongoId', '_mondocMongoId', '_mondocBson',
+            'keyToClassMap', 'fieldToFieldMap', '_mondocCollection',
+            '_mondocUnmapped', '_mondocDirty', '_mondocPresetMongoId', '_mondocMongoId', '_mondocBson',
             '_mondocNestedSingle', '_mondocNestedMulti'
         ];
     }
@@ -401,7 +401,7 @@ abstract class MondocAbstractSubModel
      */
     public function getUnmappedFields(): array
     {
-        return $this->unmappedFields;
+        return $this->_mondocUnmapped;
     }
 
     /**

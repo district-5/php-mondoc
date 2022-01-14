@@ -33,59 +33,51 @@ namespace District5Tests\MondocTests\Example\Subs;
 use District5\Mondoc\Model\MondocAbstractSubModel;
 
 /**
- * Class FoodSubModel.
+ * Class FoodAttributesSubModel.
  *
  * @package District5Tests\MondocTests\Example\Subs
  */
-class FoodSubModel extends MondocAbstractSubModel
+class FoodAttributesSubModel extends MondocAbstractSubModel
 {
     /**
      * @var string
      */
-    protected $type;
+    protected $colour;
 
     /**
-     * @var FoodAttributesSubModel[]
+     * @var string
      */
-    protected $attributes = [];
-
-    protected array $keyToClassMap = [
-        'attributes' => FoodAttributesSubModel::class . '[]',
-    ];
+    protected $smell;
 
     /**
-     * @param string $type
-     *
-     * @return $this
+     * @param string $colour
      */
-    public function setFood(string $type)
+    public function setColour(string $colour): void
     {
-        $this->type = $type;
-
-        return $this;
+        $this->colour = $colour;
     }
 
     /**
      * @return string
      */
-    public function getFood(): string
+    public function getColour(): string
     {
-        return $this->type;
+        return $this->colour;
     }
 
     /**
-     * @param FoodAttributesSubModel[] $attributes
+     * @param string $smell
      */
-    public function setAttributes(array $attributes): void
+    public function setSmell(string $smell): void
     {
-        $this->attributes = $attributes;
+        $this->smell = $smell;
     }
 
     /**
-     * @return FoodAttributesSubModel[]
+     * @return string
      */
-    public function getAttributes(): array
+    public function getSmell(): string
     {
-        return $this->attributes;
+        return $this->smell;
     }
 }

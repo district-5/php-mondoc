@@ -71,8 +71,8 @@ trait KeyToClassMapInflationTrait
         $keyToClassMap = $this->getKeyToClassMap();
         foreach ($keyToClassMap as $key => $classMap) {
             $this->{$key} = $this->__get($key);
-            if (array_key_exists($key, $this->unmappedFields)) {
-                unset($this->unmappedFields[$key]);
+            if (array_key_exists($key, $this->_mondocUnmapped)) {
+                unset($this->_mondocUnmapped[$key]);
                 if (property_exists($this, $key)) {
                     unset($this->{$key});
                 }

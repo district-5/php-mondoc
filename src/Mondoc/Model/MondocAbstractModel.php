@@ -58,7 +58,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
     /**
      * @var null|Collection
      */
-    private ?Collection $_mongoCollection = null;
+    private ?Collection $_mondocCollection = null;
 
     /**
      * @var null|BSONDocument
@@ -101,7 +101,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
      */
     public function setMongoCollection(?Collection $collection)
     {
-        $this->_mongoCollection = $collection;
+        $this->_mondocCollection = $collection;
 
         return $this;
     }
@@ -139,7 +139,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
         }
 
         try {
-            $delete = $this->_mongoCollection->deleteOne(
+            $delete = $this->_mondocCollection->deleteOne(
                 [
                     '_id' => $this->getMongoId()
                 ]
@@ -199,7 +199,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
                     }
                 } else {
                     // Class didn't exist, so adding to unmapped.
-                    $this->unmappedFields[$k] = $v;
+                    $this->_mondocUnmapped[$k] = $v;
                 }
             }
             $this->__set($k, $v);

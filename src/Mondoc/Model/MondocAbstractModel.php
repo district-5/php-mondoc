@@ -336,6 +336,48 @@ class MondocAbstractModel extends MondocAbstractSubModel
     }
 
     /**
+     * Increment a field by a given delta.
+     * Can also handle negative numbers.
+     *
+     * @param string $field
+     * @param int $delta
+     * @return bool
+     * @noinspection PhpUnused
+     */
+    public function inc(string $field, int $delta = 1): bool
+    {
+        $service = MondocConfig::getInstance()->getServiceForModel(get_called_class());
+        if ($service === null) {
+            return false;
+        }
+        /* @var $service MondocAbstractService */
+        if ($this->hasMongoId() === false) {
+            $this->{$field} += $delta;
+            return false;
+        }
+
+        if (true === $service::inc($this->getMongoId(), $field, $delta)) {
+            $this->{$field} += $delta;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Decrement a field by a given delta.
+     * Internally this method uses `inc` with a negative representation of `$delta`
+     *
+     * @param string $field
+     * @param int $delta
+     * @return bool
+     * @noinspection PhpUnused
+     */
+    public function dec(string $field, int $delta = 1): bool
+    {
+        return $this->inc($field, ($delta - ($delta * 2)));
+    }
+
+    /**
      * Given an array of ObjectIds, this will ensure they are indeed ObjectIds.
      *
      * @param array $data

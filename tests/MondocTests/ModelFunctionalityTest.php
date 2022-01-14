@@ -255,6 +255,30 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertTrue($m->delete());
     }
 
+    public function testIncrementDecrementModelShortcuts()
+    {
+        $this->initMongo();
+
+        $m = new MyModel();
+        $m->setAge(90);
+        $m->setName($this->getUniqueKey());
+        $m->save();
+
+        $this->assertEquals(90, MyService::getById($m->getMongoId())->getAge());
+
+        $this->assertTrue($m->incrementAge());
+        $this->assertEquals(91, $m->getAge());
+        $this->assertEquals(91, MyService::getById($m->getMongoId())->getAge());
+
+        $this->assertTrue($m->decrementAge());
+        $this->assertTrue($m->decrementAge());
+        $this->assertEquals(89, $m->getAge());
+        $this->assertEquals(89, MyService::getById($m->getMongoId())->getAge());
+
+        // delete the model
+        $this->assertTrue($m->delete());
+    }
+
     public function testPersistAndQuery()
     {
         $this->initMongo();

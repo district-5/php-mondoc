@@ -63,6 +63,22 @@ class MyModel extends MondocAbstractModel
     }
 
     /**
+     * @return bool
+     */
+    public function incrementAge(): bool
+    {
+        return $this->inc('age', 1);
+    }
+
+    /**
+     * @return bool
+     */
+    public function decrementAge(): bool
+    {
+        return $this->dec('age', 1);
+    }
+
+    /**
      * @return int
      */
     public function getAge(): int

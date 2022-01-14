@@ -270,6 +270,18 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertFalse(MyService::exists(['age' => 9876]));
         $this->assertFalse(MyService::exists(['name' => 'nope']));
 
+        $queryBuilderCorrectAge = QueryBuilder::get()->addQueryPart(ValueEqualTo::get()->integer('age', 12345));
+        $queryBuilderCorrectName = QueryBuilder::get()->addQueryPart(ValueEqualTo::get()->string('name', 'existence'));
+
+        $queryBuilderIncorrectAge = QueryBuilder::get()->addQueryPart(ValueEqualTo::get()->integer('age', 9876));
+        $queryBuilderIncorrectName = QueryBuilder::get()->addQueryPart(ValueEqualTo::get()->string('name', 'nope'));
+
+        $this->assertTrue(MyService::existsWithQueryBuilder($queryBuilderCorrectAge));
+        $this->assertTrue(MyService::existsWithQueryBuilder($queryBuilderCorrectName));
+
+        $this->assertFalse(MyService::existsWithQueryBuilder($queryBuilderIncorrectAge));
+        $this->assertFalse(MyService::existsWithQueryBuilder($queryBuilderIncorrectName));
+
         // delete the model
         $this->assertTrue($m->delete());
     }

@@ -98,7 +98,7 @@ abstract class MondocAbstractSubModel
         foreach ($this->keyToClassMap as $k => $className) {
             if ('[]' === substr($className, -2, 2)) {
                 $this->{$k} = [];
-                if (class_exists(substr($className, 0, -2))) {
+                if (class_exists(substr($className, -2))) {
                     $this->{$k} = new $className();
                     $this->_mondocNestedMulti[$k] = true;
                     $this->_mondocNestedSingle[$k] = false;

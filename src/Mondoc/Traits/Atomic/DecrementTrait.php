@@ -57,4 +57,30 @@ trait DecrementTrait
             ['$inc' => [$field => ($delta - ($delta * 2))]]
         );
     }
+
+    /**
+     * Decrement multiple fields by a given delta, using a whole number as the delta. IE passing `1` would DECREASE a
+     * number by 1.
+     *
+     * @example
+     *      ->decMulti(
+     *          $model->getMongoId(),
+     *          ['age' => 1, 'logins' => 1]
+     *      )
+     *
+     * @param ObjectId $id
+     * @param array $fieldsToDeltas
+     * @return bool
+     * @noinspection PhpUnused
+     */
+    public static function decMulti(ObjectId $id, array $fieldsToDeltas): bool
+    {
+        foreach ($fieldsToDeltas as $field => $delta) {
+            $fieldsToDeltas[$field] = ($delta - ($delta * 2));
+        }
+        return self::atomic(
+            $id,
+            ['$inc' => $fieldsToDeltas]
+        );
+    }
 }

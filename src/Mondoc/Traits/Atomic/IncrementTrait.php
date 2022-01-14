@@ -56,4 +56,25 @@ trait IncrementTrait
             ['$inc' => [$field => $delta]]
         );
     }
+
+    /**
+     * Increment multiple fields. Can also handle negative numbers to decrement.
+     * @example
+     *      ->incMulti(
+     *          $model->getMongoId(),
+     *          ['age' => 1, 'logins' => 1]
+     *      )
+     *
+     * @param ObjectId $id
+     * @param array $fieldsToDeltas
+     * @return bool
+     * @noinspection PhpUnused
+     */
+    public static function incMulti(ObjectId $id, array $fieldsToDeltas): bool
+    {
+        return self::atomic(
+            $id,
+            ['$inc' => $fieldsToDeltas]
+        );
+    }
 }

@@ -310,6 +310,24 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertTrue($m->delete());
     }
 
+    public function testIncrementDecrementMulti()
+    {
+        $this->initMongo();
+
+        $m = new MyModel();
+        $m->setAge(101);
+        $m->setName($this->getUniqueKey());
+        $m->save();
+
+        MyService::decMulti($m->getMongoId(), ['age' => 2]);
+        $this->assertEquals(99, MyService::getById($m->getMongoId())->getAge());
+        MyService::incMulti($m->getMongoId(), ['age' => 4]);
+        $this->assertEquals(103, MyService::getById($m->getMongoId())->getAge());
+
+        // delete the model
+        $this->assertTrue($m->delete());
+    }
+
     public function testPersistAndQuery()
     {
         $this->initMongo();

@@ -30,7 +30,7 @@
 
 namespace District5\Mondoc\Traits;
 
-use District5\Mondoc\Helper\MondocMongoTypeConverter;
+use District5\Mondoc\Helper\MondocTypes;
 use District5\Mondoc\Model\MondocAbstractModel;
 use District5\Mondoc\Service\MondocAbstractService;
 use District5\MondocBuilder\QueryBuilder;
@@ -107,7 +107,7 @@ trait GetMultiTrait
         }
         $cleansed = [];
         foreach ($ids as $id) {
-            if (null !== $clean = MondocMongoTypeConverter::convertToMongoId($id)) {
+            if (null !== $clean = MondocTypes::convertToMongoId($id)) {
                 $cleansed[] = $clean;
             }
         }

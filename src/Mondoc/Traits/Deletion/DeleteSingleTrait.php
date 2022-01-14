@@ -30,7 +30,7 @@
 
 namespace District5\Mondoc\Traits\Deletion;
 
-use District5\Mondoc\Helper\MondocMongoTypeConverter;
+use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\BSON\ObjectId;
 
 /**
@@ -49,7 +49,7 @@ trait DeleteSingleTrait
      */
     public static function delete($id): bool
     {
-        $id = MondocMongoTypeConverter::convertToMongoId($id);
+        $id = MondocTypes::convertToMongoId($id);
         $collection = self::getCollection(
             get_called_class()
         );

@@ -31,7 +31,7 @@
 namespace District5\Mondoc\Model\Traits;
 
 use DateTime;
-use District5\Mondoc\Helper\MondocMongoTypeConverter;
+use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Model\BSONArray;
@@ -62,10 +62,10 @@ trait MondocMongoTypeTrait
             $date = new UTCDateTime($date['milliseconds']);
         }
         if ($asMongo) {
-            return MondocMongoTypeConverter::phpDateToMongoDateTime($date);
+            return MondocTypes::phpDateToMongoDateTime($date);
         }
 
-        return MondocMongoTypeConverter::dateToPHPDateTime($date);
+        return MondocTypes::dateToPHPDateTime($date);
     }
 
     /**
@@ -127,6 +127,6 @@ trait MondocMongoTypeTrait
      */
     protected function convertToMongoId($id): ?ObjectId
     {
-        return MondocMongoTypeConverter::convertToMongoId($id);
+        return MondocTypes::convertToMongoId($id);
     }
 }

@@ -251,6 +251,35 @@ $results = \District5Tests\MondocTests\Example\MyService::getPage($pagination, $
 \District5Tests\MondocTests\Example\MyService::aggregate()->getSum('age', ['foo' => 'bar']);
 ```
 
+#### Converting between types
+
+MongoDB uses BSON types for data. This library holds a `MondocTypes` helper, which can assist in the conversion of these
+native types.
+
+```php
+<?php
+use \District5\Mondoc\Helper\MondocTypes;
+
+// Dates
+$mongoDateTime = MondocTypes::phpDateToMongoDateTime(new \DateTime());
+$phpDateTime = MondocTypes::dateToPHPDateTime($mongoDateTime);
+
+// BSON documents
+$bsonDocument = new \MongoDB\Model\BSONDocument(['foo' => 'bar']);
+$phpArrayFromDoc = MondocTypes::arrayToPhp($bsonDocument);
+
+// BSON arrays
+$bsonArray = new \MongoDB\Model\BSONArray(['foo', 'bar']);
+$phpArrayFromArray = MondocTypes::arrayToPhp($bsonArray);
+
+// ObjectIds
+$anId = '61dfee5591efcf44e023d692';
+$mongoId = MondocTypes::convertToMongoId($anId);
+// You can also pass existing ObjectId's into the conversion and nothing happens.
+// MondocTypes::convertToMongoId(new \MongoDB\BSON\ObjectId());
+// MondocTypes::convertToMongoId($mongoId);
+```
+
 #### Query building
 
 Query building is handled by the `MondocBuilder` library [https://github.com/district-5/php-mondoc-builder](https://github.com/district-5/php-mondoc-builder).

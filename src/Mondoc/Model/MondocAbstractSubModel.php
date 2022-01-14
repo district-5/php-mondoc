@@ -31,7 +31,7 @@
 namespace District5\Mondoc\Model;
 
 use DateTime;
-use District5\Mondoc\Helper\MondocMongoTypeConverter;
+use District5\Mondoc\Helper\MondocTypes;
 use District5\Mondoc\Model\Traits\KeyToClassMapInflationTrait;
 
 /**
@@ -325,7 +325,7 @@ abstract class MondocAbstractSubModel
                     $v = $v->asArray();
                 }
             } elseif ($v instanceof DateTime) {
-                $v = MondocMongoTypeConverter::phpDateToMongoDateTime($v);
+                $v = MondocTypes::phpDateToMongoDateTime($v);
             }
             $data[$k] = $v;
         }

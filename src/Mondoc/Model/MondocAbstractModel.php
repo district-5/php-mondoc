@@ -31,7 +31,7 @@
 namespace District5\Mondoc\Model;
 
 use DateTime;
-use District5\Mondoc\Helper\MondocMongoTypeConverter;
+use District5\Mondoc\Helper\MondocTypes;
 use District5\Mondoc\Model\Traits\DirtyAttributesTrait;
 use District5\Mondoc\Model\Traits\MondocMongoIdTrait;
 use District5\Mondoc\Model\Traits\MondocMongoTypeTrait;
@@ -179,7 +179,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
                 $k = $fieldMap[$k];
             }
             if ($v instanceof DateTime) {
-                $v = MondocMongoTypeConverter::phpDateToMongoDateTime($v);
+                $v = MondocTypes::phpDateToMongoDateTime($v);
             }
 
             if (is_array($v) && array_key_exists($k, $subModelClassMap)) {

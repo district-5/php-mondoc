@@ -31,7 +31,7 @@
 namespace District5Tests\MondocTests;
 
 use DateTime;
-use District5\Mondoc\Helper\MondocMongoTypeConverter;
+use District5\Mondoc\Helper\MondocTypes;
 use District5\Mondoc\Helper\PaginatedQueryHelper;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Model\BSONArray;
@@ -51,35 +51,35 @@ class HelperTest extends MondocBaseTest
 
     public function testMongoDateToPhpDateTime()
     {
-        $this->assertEquals('1609927725871', rtrim(MondocMongoTypeConverter::dateToPHPDateTime($this->getMongoDate())->format('Uu'), '0'));
-        $this->assertEquals('1609927725871', rtrim(MondocMongoTypeConverter::dateToPHPDateTime($this->getPhpDate())->format('Uu'), '0'));
+        $this->assertEquals('1609927725871', rtrim(MondocTypes::dateToPHPDateTime($this->getMongoDate())->format('Uu'), '0'));
+        $this->assertEquals('1609927725871', rtrim(MondocTypes::dateToPHPDateTime($this->getPhpDate())->format('Uu'), '0'));
     }
 
     public function testPhpDateTimeToMongoDate()
     {
-        $this->assertEquals('1609927725871', rtrim(MondocMongoTypeConverter::phpDateToMongoDateTime($this->getMongoDate())->toDateTime()->format('Uu'), '0'));
-        $this->assertEquals('1609927725871', rtrim(MondocMongoTypeConverter::phpDateToMongoDateTime($this->getPhpDate())->toDateTime()->format('Uu'), '0'));
+        $this->assertEquals('1609927725871', rtrim(MondocTypes::phpDateToMongoDateTime($this->getMongoDate())->toDateTime()->format('Uu'), '0'));
+        $this->assertEquals('1609927725871', rtrim(MondocTypes::phpDateToMongoDateTime($this->getPhpDate())->toDateTime()->format('Uu'), '0'));
     }
 
     public function testArrayIsArray()
     {
         $d = ['foo' => 'bar'];
-        $this->assertIsArray(MondocMongoTypeConverter::arrayToPhp($d));
-        $this->assertArrayHasKey('foo', MondocMongoTypeConverter::arrayToPhp($d));
+        $this->assertIsArray(MondocTypes::arrayToPhp($d));
+        $this->assertArrayHasKey('foo', MondocTypes::arrayToPhp($d));
     }
 
     public function testBsonDocumentIsArray()
     {
         $d = new BSONDocument(['foo' => 'bar']);
-        $this->assertIsArray(MondocMongoTypeConverter::arrayToPhp($d));
-        $this->assertArrayHasKey('foo', MondocMongoTypeConverter::arrayToPhp($d));
+        $this->assertIsArray(MondocTypes::arrayToPhp($d));
+        $this->assertArrayHasKey('foo', MondocTypes::arrayToPhp($d));
     }
 
     public function testBsonArrayIsArray()
     {
         $d = new BSONArray(['foo' => 'bar']);
-        $this->assertIsArray(MondocMongoTypeConverter::arrayToPhp($d));
-        $this->assertArrayHasKey('foo', MondocMongoTypeConverter::arrayToPhp($d));
+        $this->assertIsArray(MondocTypes::arrayToPhp($d));
+        $this->assertArrayHasKey('foo', MondocTypes::arrayToPhp($d));
     }
 
     public function testPagination()

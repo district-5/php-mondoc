@@ -30,7 +30,7 @@
 
 namespace District5\Mondoc\Traits;
 
-use District5\Mondoc\Helper\MondocMongoTypeConverter;
+use District5\Mondoc\Helper\MondocTypes;
 use District5\Mondoc\Model\MondocAbstractModel;
 use District5\Mondoc\Service\MondocAbstractService;
 use District5\MondocBuilder\QueryBuilder;
@@ -106,7 +106,7 @@ trait GetSingleTrait
      */
     public static function getById($id): ?MondocAbstractModel
     {
-        if (null === $converted = MondocMongoTypeConverter::convertToMongoId($id)) {
+        if (null === $converted = MondocTypes::convertToMongoId($id)) {
             return null;
         }
         $service = get_called_class();

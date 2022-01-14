@@ -30,7 +30,7 @@
 
 namespace District5\Mondoc\Model\Traits;
 
-use District5\Mondoc\Helper\MondocMongoTypeConverter;
+use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\BSON\ObjectId;
 
 /**
@@ -79,7 +79,7 @@ trait MondocMongoIdTrait
      */
     public function getMongoId(): ?ObjectId
     {
-        return MondocMongoTypeConverter::convertToMongoId(
+        return MondocTypes::convertToMongoId(
             $this->_mondocMongoId
         );
     }

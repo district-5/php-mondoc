@@ -38,11 +38,11 @@ use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
 
 /**
- * Class MondocMongoTypeConverter.
+ * Class MondocTypes.
  *
  * @package District5\Mondoc\Helper
  */
-class MondocMongoTypeConverter
+class MondocTypes
 {
     /**
      * Convert a Mongo UTCDateTime to a PHP DateTime. It doesn't matter which you pass in.

@@ -303,6 +303,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
     {
         $allSetVariables = $this->getMondocObjectVars();
         $ignore = $this->getPropertyExclusions();
+        $bsonArray = [];
         if ($this->getOriginalBsonDocument() !== null) {
             $bsonArray = array_keys($this->getOriginalBsonDocument()->getArrayCopy());
             foreach ($allSetVariables as $objVar => $objVal) {
@@ -310,8 +311,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
                     unset($allSetVariables[$objVar]);
                 }
             }
-        } else {
-            $bsonArray = [];
         }
         $allSetVariables = array_keys($allSetVariables);
 
@@ -344,8 +343,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
      */
     public function inc(string $field, int $delta = 1): bool
     {
-        $service = MondocConfig::getInstance()->getServiceForModel(get_called_class());
-        if ($service === null) {
+        if (null === $service = MondocConfig::getInstance()->getServiceForModel(get_called_class())) {
             return false;
         }
         /* @var $service MondocAbstractService */

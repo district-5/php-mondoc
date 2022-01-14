@@ -68,8 +68,8 @@ trait KeyToClassMapInflationTrait
      */
     protected function inflateKeyToClassMaps()
     {
-        $keyToClassMap = $this->getKeyToClassMap();
-        foreach ($keyToClassMap as $key => $classMap) {
+        $nestedMap = $this->getKeyToClassMap();
+        foreach ($nestedMap as $key => $classMap) {
             $this->{$key} = $this->__get($key);
             if (array_key_exists($key, $this->_mondocUnmapped)) {
                 unset($this->_mondocUnmapped[$key]);
@@ -78,8 +78,8 @@ trait KeyToClassMapInflationTrait
                 }
             }
         }
-        $keyToClassMap = $this->keyToClassMap;
-        foreach ($keyToClassMap as $k => $className) {
+        $nestedMap = $this->mondocNested;
+        foreach ($nestedMap as $k => $className) {
             $clz = $className;
             $isSingle = true;
             if ('[]' === substr($clz, -2)) {

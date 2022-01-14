@@ -58,7 +58,7 @@ class MyModelWithSub extends MondocAbstractModel
     /**
      * @var string[]
      */
-    protected array $keyToClassMap = [
+    protected array $mondocNested = [
         'age' => AgeSubModel::class,
         'foods' => FoodSubModel::class.'[]'
     ];

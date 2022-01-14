@@ -52,7 +52,7 @@ class AgeSubModel extends MondocAbstractSubModel
     /**
      * @var string[]
      */
-    protected array $keyToClassMap = [
+    protected array $mondocNested = [
         'wordModel' => AgeWordSubModel::class
     ];
 

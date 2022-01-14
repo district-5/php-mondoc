@@ -65,7 +65,7 @@ class SingleAndMultiNestedModel extends MondocAbstractModel
     /**
      * @var array|string[]
      */
-    protected array $keyToClassMap = [
+    protected array $mondocNested = [
         'food' => FoodSubModel::class,
         'foods' => FoodSubModel::class . '[]'
     ];

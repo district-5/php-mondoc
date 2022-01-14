@@ -50,12 +50,12 @@ abstract class MondocAbstractSubModel
      *
      * @example
      *      [
-     *      'property' => '\Full\Class\Name'
+     *          'property' => '\Full\Class\Name'
      *      ]
      *
      * @var string[]
      */
-    protected array $keyToClassMap = [];
+    protected array $mondocNested = [];
 
     /**
      * An array holding all key/value pairs that weren't found in the object.
@@ -97,7 +97,7 @@ abstract class MondocAbstractSubModel
      */
     public function __construct()
     {
-        foreach ($this->keyToClassMap as $k => $className) {
+        foreach ($this->mondocNested as $k => $className) {
             if ('[]' === substr($className, -2, 2)) {
                 $this->{$k} = [];
                 if (class_exists(substr($className, -2))) {
@@ -380,7 +380,7 @@ abstract class MondocAbstractSubModel
     protected function getPropertyExclusions(): array
     {
         return [
-            'keyToClassMap', 'fieldToFieldMap', '_mondocCollection',
+            'mondocNested', 'fieldToFieldMap', '_mondocCollection',
             '_mondocUnmapped', '_mondocDirty', '_mondocPresetMongoId', '_mondocMongoId', '_mondocBson',
             '_mondocNestedSingle', '_mondocNestedMulti'
         ];
@@ -391,7 +391,7 @@ abstract class MondocAbstractSubModel
      */
     protected function getKeyToClassMap(): array
     {
-        return $this->keyToClassMap;
+        return $this->mondocNested;
     }
 
     /**

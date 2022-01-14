@@ -130,7 +130,7 @@ The logic for querying the database etc, is always performed in the service laye
 #### Nesting objects
 
 You can nest objects in each other. The main model must extend `\District5\Mondoc\Model\MondocAbstractModel` and have the sub
-models defined in the `$keyToClassMap` array.
+models defined in the `$mondocNested` array.
 
 Sub models must extend `\District5\Mondoc\Model\MondocAbstractSubModel`.
 
@@ -181,7 +181,7 @@ class Person extends MondocAbstractModel
     /**
      * @var string[] 
      */
-    protected array $keyToClassMap = [
+    protected array $mondocNested = [
         'favouriteFood' => FavouriteFood::class,
         'car' => Car::class
     ];

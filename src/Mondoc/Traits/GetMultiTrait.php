@@ -121,4 +121,34 @@ trait GetMultiTrait
             ]
         ]);
     }
+
+    /**
+     * Get multiple documents, where $key equals $value. Utilises the '$eq' operator.
+     *
+     * @param string $key
+     * @param mixed $value
+     *
+     * @return MondocAbstractModel[]
+     */
+    public static function getMultiWhereKeyEqualsValue(string $key, $value): array
+    {
+        return self::getMultiByCriteria([
+            $key => ['$eq' => $value]
+        ]);
+    }
+
+    /**
+     * Get multiple documents, where $key does not equal $value. Utilises the '$ne' operator.
+     *
+     * @param string $key
+     * @param mixed $value
+     *
+     * @return MondocAbstractModel[]
+     */
+    public static function getMultiWhereKeyDoesNotEqualValue(string $key, $value): array
+    {
+        return self::getMultiByCriteria([
+            $key => ['$ne' => $value]
+        ]);
+    }
 }

@@ -115,4 +115,34 @@ trait GetSingleTrait
             ['_id' => $converted]
         );
     }
+
+    /**
+     * Get a single document, where $key equals $value. Utilises the '$eq' operator.
+     *
+     * @param string $key
+     * @param mixed $value
+     *
+     * @return MondocAbstractModel
+     */
+    public static function getOneWhereKeyEqualsValue(string $key, $value): ?MondocAbstractModel
+    {
+        return self::getOneByCriteria([
+            $key => ['$eq' => $value]
+        ]);
+    }
+
+    /**
+     * Get a single document, where $key does not equal $value. Utilises the '$ne' operator.
+     *
+     * @param string $key
+     * @param mixed $value
+     *
+     * @return MondocAbstractModel
+     */
+    public static function getOneWhereKeyDoesNotEqualValue(string $key, $value): ?MondocAbstractModel
+    {
+        return self::getOneByCriteria([
+            $key => ['$ne' => $value]
+        ]);
+    }
 }

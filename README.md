@@ -3,24 +3,10 @@ District5 - Mondoc
 
 ### Composer...
 
-In your `composer.json` file include:
+Use composer to add this library as a dependency onto your project.
 
-```json
-{
-    "require": {
-        "php": ">=7.4",
-        "mongodb/mongodb": "^1.5",
-        "ext-mongodb": "*",
-        "district5/mondoc": ">=3.0.3",
-        "district5/mondoc-builder": ">=1.0.0",
-        "district5/date": ">=2.0.0"
-    },
-    "autoload" : {
-        "psr-0" : {
-            "MyNs" : "lib/"
-        }
-    }
-}
+```
+composer require district5/mondoc
 ```
 
 Usage...

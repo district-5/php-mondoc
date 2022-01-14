@@ -237,6 +237,24 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertTrue($m->delete());
     }
 
+    public function testGetWhereEqualOrNotEqual()
+    {
+        $this->initMongo();
+
+        $m = new MyModel();
+        $m->setAge(2);
+        $m->setName($this->getUniqueKey());
+        $m->save();
+        $this->assertCount(1, MyService::getMultiWhereKeyEqualsValue('age', 2));
+        $this->assertCount(0, MyService::getMultiWhereKeyDoesNotEqualValue('age', 2));
+
+        $this->assertEquals($m->getMongoIdString(), MyService::getOneWhereKeyEqualsValue('age', 2)->getMongoIdString());
+        $this->assertNull(MyService::getOneWhereKeyDoesNotEqualValue('age', 2));
+
+        // delete the model
+        $this->assertTrue($m->delete());
+    }
+
     public function testPersistAndQuery()
     {
         $this->initMongo();

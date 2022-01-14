@@ -40,15 +40,6 @@ use District5\MondocBuilder\QueryBuilder;
 trait CountableTrait
 {
     /**
-     * @deprecated
-     * @see CountableTrait::countAll()
-     */
-    public static function countInCollection(array $query = [], array $options = []): int
-    {
-        return self::countAll($query, $options);
-    }
-
-    /**
      * Count all matching documents in a collection using a given filter, using given options.
      *
      * @param array $query (optional)

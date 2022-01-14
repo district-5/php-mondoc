@@ -286,7 +286,6 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->mondoc->getCollection('test_model')->drop();
 
         $this->assertEquals(0, MyService::countAll([]));
-        $this->assertEquals(0, MyService::countInCollection([]));
 
         $name = 'Joe '.$this->getUniqueKey();
         $m = new MyModel();
@@ -389,7 +388,6 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->mondoc->getCollection('test_model')->drop();
 
         $this->assertEquals(0, MyService::countAll([]));
-        $this->assertEquals(0, MyService::countInCollection([]));
 
         $ages = [2 => 'Joe', 4 => 'Joe', 6 => 'Jane'];
         foreach ($ages as $age => $name) {
@@ -422,7 +420,6 @@ class ModelFunctionalityTest extends MondocBaseTest
 
         $this->assertEquals(0, MyService::countAll([]));
         $this->assertEquals(0, MyService::countAllByQueryBuilder($builder));
-        $this->assertEquals(0, MyService::countInCollection([]));
 
         $ages = [2 => 'Joe', 4 => 'Joe', 6 => 'Jane'];
         foreach ($ages as $age => $name) {

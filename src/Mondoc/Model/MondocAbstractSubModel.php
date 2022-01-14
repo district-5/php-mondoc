@@ -70,7 +70,7 @@ abstract class MondocAbstractSubModel
      *
      * @var array
      */
-    protected array $_mondocNestedSingle = [];
+    protected array $_mondocEstablishedSingleInternal = [];
 
     /**
      * An array holding all established multiple nested objects (IE, BSONArray not BSONDocument).
@@ -78,7 +78,7 @@ abstract class MondocAbstractSubModel
      *
      * @var array
      */
-    protected array $_mondocNestedMulti = [];
+    protected array $_mondocEstablishedMultiInternal = [];
 
     /**
      * An array holding original key to new keys.
@@ -102,13 +102,13 @@ abstract class MondocAbstractSubModel
                 $this->{$k} = [];
                 if (class_exists(substr($className, -2))) {
                     $this->{$k} = new $className();
-                    $this->_mondocNestedMulti[$k] = true;
-                    $this->_mondocNestedSingle[$k] = false;
+                    $this->_mondocEstablishedMultiInternal[$k] = true;
+                    $this->_mondocEstablishedSingleInternal[$k] = false;
                 }
             } else if (class_exists($className)) {
                 $this->{$k} = new $className();
-                $this->_mondocNestedSingle[$k] = true;
-                $this->_mondocNestedMulti[$k] = false;
+                $this->_mondocEstablishedSingleInternal[$k] = true;
+                $this->_mondocEstablishedMultiInternal[$k] = false;
             }
         }
     }
@@ -382,7 +382,7 @@ abstract class MondocAbstractSubModel
         return [
             'mondocNested', 'fieldToFieldMap', '_mondocCollection',
             '_mondocUnmapped', '_mondocDirty', '_mondocPresetMongoId', '_mondocMongoId', '_mondocBson',
-            '_mondocNestedSingle', '_mondocNestedMulti'
+            '_mondocEstablishedSingleInternal', '_mondocEstablishedMultiInternal'
         ];
     }
 
@@ -410,12 +410,12 @@ abstract class MondocAbstractSubModel
      */
     protected function isMondocNestedSingleObject(string $field): bool
     {
-        if (array_key_exists($field, $this->_mondocNestedSingle)) {
-            return $this->_mondocNestedSingle[$field];
+        if (array_key_exists($field, $this->_mondocEstablishedSingleInternal)) {
+            return $this->_mondocEstablishedSingleInternal[$field];
         }
-        $this->_mondocNestedSingle[$field] = (array_key_exists($field, $this->getKeyToClassMap()) && '[]' !== substr($this->getKeyToClassMap()[$field], -2));
+        $this->_mondocEstablishedSingleInternal[$field] = (array_key_exists($field, $this->getKeyToClassMap()) && '[]' !== substr($this->getKeyToClassMap()[$field], -2));
 
-        return $this->_mondocNestedSingle[$field];
+        return $this->_mondocEstablishedSingleInternal[$field];
     }
 
     /**
@@ -424,11 +424,11 @@ abstract class MondocAbstractSubModel
      */
     protected function isMondocNestedMultipleObjects(string $field): bool
     {
-        if (array_key_exists($field, $this->_mondocNestedMulti)) {
-            return $this->_mondocNestedMulti[$field];
+        if (array_key_exists($field, $this->_mondocEstablishedMultiInternal)) {
+            return $this->_mondocEstablishedMultiInternal[$field];
         }
-        $this->_mondocNestedMulti[$field] = (array_key_exists($field, $this->getKeyToClassMap()) && '[]' === substr($this->getKeyToClassMap()[$field], -2));
-        return $this->_mondocNestedMulti[$field];
+        $this->_mondocEstablishedMultiInternal[$field] = (array_key_exists($field, $this->getKeyToClassMap()) && '[]' === substr($this->getKeyToClassMap()[$field], -2));
+        return $this->_mondocEstablishedMultiInternal[$field];
     }
 
     /**

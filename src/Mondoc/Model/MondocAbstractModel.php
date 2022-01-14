@@ -182,16 +182,14 @@ class MondocAbstractModel extends MondocAbstractSubModel
                 $v = MondocTypes::phpDateToMongoDateTime($v);
             }
 
-            if (is_array($v) && array_key_exists($k, $subModelClassMap)) {
+            if (is_array($v) && true === $this->isMondocNestedAnyType($k)) {
                 $subModelClassName = $subModelClassMap[$k];
-                $isMulti = false;
-                if ('[]' === substr($subModelClassName, -2)) {
-                    $isMulti = true;
+                if ($this->isMondocNestedMultipleObjects($k) === true) {
                     $subModelClassName = substr($subModelClassName, 0, -2);
                 }
                 if (class_exists($subModelClassName)) {
                     /* @var $subModelClassName MondocAbstractSubModel */
-                    if ($isMulti) {
+                    if ($this->isMondocNestedMultipleObjects($k)) {
                         $v = $subModelClassName::inflateMultipleArrays($v);
                     } else {
                         $v = $subModelClassName::inflateSingleArray($v);

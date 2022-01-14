@@ -63,6 +63,22 @@ abstract class MondocAbstractSubModel
     protected array $unmappedFields = [];
 
     /**
+     * An array holding all established single nested objects (IE, BSONDocument not BSONArray).
+     * @example [ 'theField' => <bool> ]
+     *
+     * @var array
+     */
+    protected array $_mondocNestedSingle = [];
+
+    /**
+     * An array holding all established multiple nested objects (IE, BSONArray not BSONDocument).
+     * @example [ 'theField' => <bool> ]
+     *
+     * @var array
+     */
+    protected array $_mondocNestedMulti = [];
+
+    /**
      * An array holding original key to new keys.
      *
      * @example
@@ -82,10 +98,15 @@ abstract class MondocAbstractSubModel
         foreach ($this->keyToClassMap as $k => $className) {
             if ('[]' === substr($className, -2, 2)) {
                 $this->{$k} = [];
-            } else {
-                if (class_exists($className)) {
+                if (class_exists(substr($className, 0, -2))) {
                     $this->{$k} = new $className();
+                    $this->_mondocNestedMulti[$k] = true;
+                    $this->_mondocNestedSingle[$k] = false;
                 }
+            } else if (class_exists($className)) {
+                $this->{$k} = new $className();
+                $this->_mondocNestedSingle[$k] = true;
+                $this->_mondocNestedMulti[$k] = false;
             }
         }
     }
@@ -353,7 +374,8 @@ abstract class MondocAbstractSubModel
     {
         return [
             'keyToClassMap', 'unmappedFields', 'fieldToFieldMap', '_mongoCollection',
-            '_mondocDirty', '_mondocPresetMongoId', '_mondocMongoId', '_mondocBson'
+            '_mondocDirty', '_mondocPresetMongoId', '_mondocMongoId', '_mondocBson',
+            '_mondocNestedSingle', '_mondocNestedMulti'
         ];
     }
 
@@ -373,5 +395,41 @@ abstract class MondocAbstractSubModel
     public function getUnmappedFields(): array
     {
         return $this->unmappedFields;
+    }
+
+    /**
+     * @param string $field
+     * @return bool
+     */
+    protected function isMondocNestedSingleObject(string $field): bool
+    {
+        if (array_key_exists($field, $this->_mondocNestedSingle)) {
+            return $this->_mondocNestedSingle[$field];
+        }
+        $this->_mondocNestedSingle[$field] = (array_key_exists($field, $this->getKeyToClassMap()) && '[]' !== substr($this->getKeyToClassMap()[$field], -2));
+
+        return $this->_mondocNestedSingle[$field];
+    }
+
+    /**
+     * @param string $field
+     * @return bool
+     */
+    protected function isMondocNestedMultipleObjects(string $field): bool
+    {
+        if (array_key_exists($field, $this->_mondocNestedMulti)) {
+            return $this->_mondocNestedMulti[$field];
+        }
+        $this->_mondocNestedMulti[$field] = (array_key_exists($field, $this->getKeyToClassMap()) && '[]' === substr($this->getKeyToClassMap()[$field], -2));
+        return $this->_mondocNestedMulti[$field];
+    }
+
+    /**
+     * @param string $field
+     * @return bool
+     */
+    protected function isMondocNestedAnyType(string $field): bool
+    {
+        return $this->isMondocNestedSingleObject($field) === true || $this->isMondocNestedMultipleObjects($field) === true;
     }
 }

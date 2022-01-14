@@ -254,3 +254,8 @@ $results = \District5Tests\MondocTests\Example\MyService::getPage($pagination, $
 #### Query building
 
 Query building is handled by the `MondocBuilder` library [https://github.com/district-5/php-mondoc-builder](https://github.com/district-5/php-mondoc-builder).
+
+#### Testing
+
+You can run PHPUnit against the library by running `composer install` and then running `phpunit`. Before doing so,
+you'll need to copy the `example.phpunit.xml` to `phpunit.xml` and change the environment variables contained within.

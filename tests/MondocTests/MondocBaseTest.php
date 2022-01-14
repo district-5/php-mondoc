@@ -71,13 +71,10 @@ abstract class MondocBaseTest extends TestCase
 
     protected function initMongo()
     {
-        $connectionString = 'mongodb+srv://';
-        throw new \Exception('Please add the connection above!');
-
-        $connection = new Client($connectionString);
+        $connection = new Client(getenv('MONGO_CONNECTION_STRING'));
         $this->mondoc = MondocConfig::getInstance();
         $this->mondoc->addDatabase(
-            $connection->selectDatabase('tests'),
+            $connection->selectDatabase(getenv('MONGO_DATABASE')),
             'default'
         );
         $this->mondoc->addServiceMapping(

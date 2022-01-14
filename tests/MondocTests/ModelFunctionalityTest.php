@@ -255,6 +255,25 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertTrue($m->delete());
     }
 
+    public function testModelExistence()
+    {
+        $this->initMongo();
+
+        $m = new MyModel();
+        $m->setAge(12345);
+        $m->setName('existence');
+        $this->assertTrue($m->save());
+
+        $this->assertTrue(MyService::exists(['age' => 12345]));
+        $this->assertTrue(MyService::exists(['name' => 'existence']));
+
+        $this->assertFalse(MyService::exists(['age' => 9876]));
+        $this->assertFalse(MyService::exists(['name' => 'nope']));
+
+        // delete the model
+        $this->assertTrue($m->delete());
+    }
+
     public function testIncrementDecrementModelShortcuts()
     {
         $this->initMongo();

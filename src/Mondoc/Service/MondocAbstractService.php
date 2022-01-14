@@ -38,6 +38,7 @@ use District5\Mondoc\Traits\DeletionTrait;
 use District5\Mondoc\Traits\DistinctValuesTrait;
 use District5\Mondoc\Traits\GetMultiTrait;
 use District5\Mondoc\Traits\GetSingleTrait;
+use District5\Mondoc\Traits\ExistenceTrait;
 use District5\Mondoc\Traits\KeyOperationsTrait;
 use District5\Mondoc\Traits\OperatorsTrait;
 use District5\Mondoc\Traits\PaginationTrait;
@@ -60,6 +61,7 @@ abstract class MondocAbstractService
     use DistinctValuesTrait;
     use GetMultiTrait;
     use GetSingleTrait;
+    use ExistenceTrait;
     use KeyOperationsTrait;
     use OperatorsTrait;
     use PaginationTrait;

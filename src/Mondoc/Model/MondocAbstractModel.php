@@ -138,6 +138,10 @@ class MondocAbstractModel extends MondocAbstractSubModel
             return $serviceFQCN::delete($this->getMongoId());
         }
 
+        if ($this->_mondocCollection === null) {
+            return false;
+        }
+
         try {
             $delete = $this->_mondocCollection->deleteOne(
                 [

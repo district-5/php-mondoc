@@ -251,6 +251,24 @@ $results = \District5Tests\MondocTests\Example\MyService::getPage($pagination, $
 \District5Tests\MondocTests\Example\MyService::aggregate()->getSum('age', ['foo' => 'bar']);
 ```
 
+
+#### Useful information...
+
+To use a pre-determined ObjectId as the document `_id`, you can call `setPresetMongoId` against the model. For example:
+
+```php
+<?php
+$theId = new \MongoDB\BSON\ObjectId('61dfee5591efcf44e023d692');
+
+$person = new Person();
+$person->setPresetMongoId(new ObjectId());
+$person->save();
+
+echo $person->getMongoIdString(); // 61dfee5591efcf44e023d692
+```
+
+This will force the model to absorb this ObjectId and not generate a new one upon insertion.
+
 #### Converting between types
 
 MongoDB uses BSON types for data. This library holds a `MondocTypes` helper, which can assist in the conversion of these

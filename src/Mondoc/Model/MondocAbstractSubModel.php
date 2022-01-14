@@ -33,6 +33,8 @@ namespace District5\Mondoc\Model;
 use DateTime;
 use District5\Mondoc\Helper\MondocTypes;
 use District5\Mondoc\Model\Traits\KeyToClassMapInflationTrait;
+use MongoDB\Model\BSONArray;
+use MongoDB\Model\BSONDocument;
 
 /**
  * Trait MondocAbstractSubModel.
@@ -182,7 +184,8 @@ abstract class MondocAbstractSubModel
                 $k = $fieldMap[$k];
             }
 
-            if (is_array($v) && array_key_exists($k, $classMap)) {
+            $isInClassMap = array_key_exists($k, $classMap);
+            if (is_array($v) && $isInClassMap === true) {
                 $subClassName = $classMap[$k];
                 $isMulti = false;
                 if ('[]' === substr($subClassName, -2)) {
@@ -204,6 +207,10 @@ abstract class MondocAbstractSubModel
                     $inst->unmappedFields[$k] = $v;
                 }
             }
+            if ($isInClassMap === false && ($v instanceof BSONDocument || $v instanceof BSONArray)) {
+                $v = $v->getArrayCopy();
+            }
+
             $inst->__set($k, $v);
         }
 

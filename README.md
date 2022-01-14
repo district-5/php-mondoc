@@ -32,6 +32,13 @@ $config->addDatabase(
     $database,
     'default' // a connection identifier ('default' is the default value).
 );
+// Add another one for something else...
+// $config->addDatabase(
+//     $database,
+//     'authentication'
+// );
+
+
 $config->addServiceMapping(
     MyModel::class, // You can also just use a string like '\MyNamespace\Model\MyModel'
     MyService::class // You can also just use a string like '\MyNamespace\Service\MyService'

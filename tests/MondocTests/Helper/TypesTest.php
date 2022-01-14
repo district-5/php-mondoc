@@ -37,6 +37,7 @@ use District5Tests\MondocTests\MondocBaseTest;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
+use stdClass;
 
 /**
  * Class TypesTest.
@@ -47,6 +48,7 @@ use MongoDB\Model\BSONDocument;
  */
 class TypesTest extends MondocBaseTest
 {
+    /** @noinspection PhpParamsInspection */
     public function testDateConversions()
     {
         $dateTime = new DateTime();
@@ -58,8 +60,14 @@ class TypesTest extends MondocBaseTest
             $dateTime->format(DateTimeInterface::ISO8601),
             $backToPhp->format(DateTimeInterface::ISO8601)
         );
+
+        $this->assertNull(MondocTypes::dateToPHPDateTime(1));
+        $this->assertNull(MondocTypes::dateToPHPDateTime('1'));
+        $this->assertNull(MondocTypes::dateToPHPDateTime(1.01));
+        $this->assertNull(MondocTypes::dateToPHPDateTime(new stdClass()));
     }
 
+    /** @noinspection PhpParamsInspection */
     public function testBsonDocumentConversion()
     {
         $php = ['foo' => 'bar'];
@@ -68,6 +76,11 @@ class TypesTest extends MondocBaseTest
         $phpRepresentation = MondocTypes::arrayToPhp($bson);
         $this->assertArrayHasKey('foo', $phpRepresentation);
         $this->assertEquals('bar', $phpRepresentation['foo']);
+
+        $this->assertEquals(1, MondocTypes::arrayToPhp(1));
+        $this->assertEquals('1', MondocTypes::arrayToPhp('1'));
+        $this->assertEquals(1.01, MondocTypes::arrayToPhp(1.01));
+        $this->assertEquals(new stdClass(), MondocTypes::arrayToPhp(new stdClass()));
     }
 
     public function testBsonArrayConversion()

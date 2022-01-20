@@ -81,6 +81,14 @@ class AgeSubModel extends MondocAbstractSubModel
     }
 
     /**
+     * @return int
+     */
+    public function getAge(): int
+    {
+        return $this->age;
+    }
+
+    /**
      * @param int $age
      *
      * @return $this
@@ -91,13 +99,5 @@ class AgeSubModel extends MondocAbstractSubModel
         $this->age = $age;
 
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAge(): int
-    {
-        return $this->age;
     }
 }

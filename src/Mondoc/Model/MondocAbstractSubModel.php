@@ -218,11 +218,33 @@ abstract class MondocAbstractSubModel
     }
 
     /**
+     * @return array
+     */
+    protected function getKeyToClassMap(): array
+    {
+        return $this->mondocNested;
+    }
+
+    /**
      * @return string[]
      */
     protected function getFieldToFieldMap(): array
     {
         return $this->fieldToFieldMap;
+    }
+
+    /**
+     * Holds an array of protected variable names.
+     *
+     * @return array
+     */
+    protected function getPropertyExclusions(): array
+    {
+        return [
+            'mondocNested', 'fieldToFieldMap', '_mondocCollection',
+            '_mondocUnmapped', '_mondocDirty', '_mondocPresetMongoId', '_mondocMongoId', '_mondocBson',
+            '_mondocEstablishedSingleInternal', '_mondocEstablishedMultiInternal'
+        ];
     }
 
     /**
@@ -373,28 +395,6 @@ abstract class MondocAbstractSubModel
     }
 
     /**
-     * Holds an array of protected variable names.
-     *
-     * @return array
-     */
-    protected function getPropertyExclusions(): array
-    {
-        return [
-            'mondocNested', 'fieldToFieldMap', '_mondocCollection',
-            '_mondocUnmapped', '_mondocDirty', '_mondocPresetMongoId', '_mondocMongoId', '_mondocBson',
-            '_mondocEstablishedSingleInternal', '_mondocEstablishedMultiInternal'
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    protected function getKeyToClassMap(): array
-    {
-        return $this->mondocNested;
-    }
-
-    /**
      * Get any unmapped fields.
      *
      * @return array
@@ -402,6 +402,15 @@ abstract class MondocAbstractSubModel
     public function getUnmappedFields(): array
     {
         return $this->_mondocUnmapped;
+    }
+
+    /**
+     * @param string $field
+     * @return bool
+     */
+    protected function isMondocNestedAnyType(string $field): bool
+    {
+        return $this->isMondocNestedSingleObject($field) === true || $this->isMondocNestedMultipleObjects($field) === true;
     }
 
     /**
@@ -429,14 +438,5 @@ abstract class MondocAbstractSubModel
         }
         $this->_mondocEstablishedMultiInternal[$field] = (array_key_exists($field, $this->getKeyToClassMap()) && '[]' === substr($this->getKeyToClassMap()[$field], -2));
         return $this->_mondocEstablishedMultiInternal[$field];
-    }
-
-    /**
-     * @param string $field
-     * @return bool
-     */
-    protected function isMondocNestedAnyType(string $field): bool
-    {
-        return $this->isMondocNestedSingleObject($field) === true || $this->isMondocNestedMultipleObjects($field) === true;
     }
 }

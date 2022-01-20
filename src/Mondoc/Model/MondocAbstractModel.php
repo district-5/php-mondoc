@@ -82,6 +82,51 @@ class MondocAbstractModel extends MondocAbstractSubModel
     }
 
     /**
+     * Inflate an array of data into the called model.
+     *
+     * @param array $data
+     *
+     * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
+     */
+    public static function inflateSingleArray(array $data)
+    {
+        $done = parent::inflateSingleArray($data);
+        if ($done) {
+            if (array_key_exists('_id', $data)) {
+                $done->setMongoId($data['_id']);
+            }
+            $done->inflateKeyToClassMaps();
+            $done->assignDefaultVars();
+        }
+
+        return $done;
+    }
+
+    /**
+     * Set the ObjectId for this model. Primarily used by the service.
+     *
+     * @param ObjectId $objectId
+     *
+     * @return $this
+     * @noinspection PhpUnused
+     * @noinspection PhpMissingReturnTypeInspection
+     */
+    final public function setMongoId(ObjectId $objectId)
+    {
+        $this->_mondocMongoId = $objectId;
+
+        return $this;
+    }
+
+    /**
+     * Assign any default variables to this model.
+     */
+    protected function assignDefaultVars()
+    {
+    }
+
+    /**
      * @param BSONDocument $document
      *
      * @return $this
@@ -246,51 +291,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
     }
 
     /**
-     * Assign any default variables to this model.
-     */
-    protected function assignDefaultVars()
-    {
-    }
-
-    /**
-     * Inflate an array of data into the called model.
-     *
-     * @param array $data
-     *
-     * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
-     */
-    public static function inflateSingleArray(array $data)
-    {
-        $done = parent::inflateSingleArray($data);
-        if ($done) {
-            if (array_key_exists('_id', $data)) {
-                $done->setMongoId($data['_id']);
-            }
-            $done->inflateKeyToClassMaps();
-            $done->assignDefaultVars();
-        }
-
-        return $done;
-    }
-
-    /**
-     * Set the ObjectId for this model. Primarily used by the service.
-     *
-     * @param ObjectId $objectId
-     *
-     * @return $this
-     * @noinspection PhpUnused
-     * @noinspection PhpMissingReturnTypeInspection
-     */
-    final public function setMongoId(ObjectId $objectId)
-    {
-        $this->_mondocMongoId = $objectId;
-
-        return $this;
-    }
-
-    /**
      * @return bool
      */
     final public function isMondocModel(): bool
@@ -337,6 +337,20 @@ class MondocAbstractModel extends MondocAbstractSubModel
     }
 
     /**
+     * Decrement a field by a given delta.
+     * Internally this method uses `inc` with a negative representation of `$delta`
+     *
+     * @param string $field
+     * @param int $delta
+     * @return bool
+     * @noinspection PhpUnused
+     */
+    public function dec(string $field, int $delta = 1): bool
+    {
+        return $this->inc($field, ($delta - ($delta * 2)));
+    }
+
+    /**
      * Increment a field by a given delta.
      * Can also handle negative numbers.
      *
@@ -361,20 +375,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
             return true;
         }
         return false;
-    }
-
-    /**
-     * Decrement a field by a given delta.
-     * Internally this method uses `inc` with a negative representation of `$delta`
-     *
-     * @param string $field
-     * @param int $delta
-     * @return bool
-     * @noinspection PhpUnused
-     */
-    public function dec(string $field, int $delta = 1): bool
-    {
-        return $this->inc($field, ($delta - ($delta * 2)));
     }
 
     /**

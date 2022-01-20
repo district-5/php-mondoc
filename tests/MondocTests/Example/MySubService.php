@@ -31,7 +31,6 @@
 namespace District5Tests\MondocTests\Example;
 
 use District5\Mondoc\Service\MondocAbstractService;
-use District5Tests\MondocTests\Example\Subs\MyModelWithSub;
 
 /**
  * Class MySubService.

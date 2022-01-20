@@ -74,18 +74,18 @@ class FoodSubModel extends MondocAbstractSubModel
     }
 
     /**
-     * @param FoodAttributesSubModel[] $attributes
-     */
-    public function setAttributes(array $attributes): void
-    {
-        $this->attributes = $attributes;
-    }
-
-    /**
      * @return FoodAttributesSubModel[]
      */
     public function getAttributes(): array
     {
         return $this->attributes;
+    }
+
+    /**
+     * @param FoodAttributesSubModel[] $attributes
+     */
+    public function setAttributes(array $attributes): void
+    {
+        $this->attributes = $attributes;
     }
 }

@@ -50,6 +50,14 @@ class FoodAttributesSubModel extends MondocAbstractSubModel
     protected $smell;
 
     /**
+     * @return string
+     */
+    public function getColour(): string
+    {
+        return $this->colour;
+    }
+
+    /**
      * @param string $colour
      */
     public function setColour(string $colour): void
@@ -60,9 +68,9 @@ class FoodAttributesSubModel extends MondocAbstractSubModel
     /**
      * @return string
      */
-    public function getColour(): string
+    public function getSmell(): string
     {
-        return $this->colour;
+        return $this->smell;
     }
 
     /**
@@ -71,13 +79,5 @@ class FoodAttributesSubModel extends MondocAbstractSubModel
     public function setSmell(string $smell): void
     {
         $this->smell = $smell;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSmell(): string
-    {
-        return $this->smell;
     }
 }

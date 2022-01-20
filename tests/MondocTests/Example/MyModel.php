@@ -50,19 +50,6 @@ class MyModel extends MondocAbstractModel
     protected $age = 0;
 
     /**
-     * @param int $age
-     *
-     * @return $this
-     */
-    public function setAge(int $age)
-    {
-        $this->age = $age;
-        $this->addDirty('age');
-
-        return $this;
-    }
-
-    /**
      * @return bool
      */
     public function incrementAge(): bool
@@ -76,35 +63,6 @@ class MyModel extends MondocAbstractModel
     public function decrementAge(): bool
     {
         return $this->dec('age', 1);
-    }
-
-    /**
-     * @return int
-     */
-    public function getAge(): int
-    {
-        return $this->age;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return trim($this->name);
-    }
-
-    /**
-     * @param string $val
-     *
-     * @return $this
-     */
-    public function setName(string $val)
-    {
-        $this->name = trim($val);
-        $this->addDirty('name');
-
-        return $this;
     }
 
     /**
@@ -130,5 +88,47 @@ class MyModel extends MondocAbstractModel
     protected function assignDefaultVars()
     {
         // TODO: Implement
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return trim($this->name);
+    }
+
+    /**
+     * @param string $val
+     *
+     * @return $this
+     */
+    public function setName(string $val)
+    {
+        $this->name = trim($val);
+        $this->addDirty('name');
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAge(): int
+    {
+        return $this->age;
+    }
+
+    /**
+     * @param int $age
+     *
+     * @return $this
+     */
+    public function setAge(int $age)
+    {
+        $this->age = $age;
+        $this->addDirty('age');
+
+        return $this;
     }
 }

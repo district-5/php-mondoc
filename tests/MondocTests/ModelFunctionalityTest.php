@@ -1,4 +1,5 @@
 <?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+
 /**
  * District5 Mondoc Library
  *
@@ -346,7 +347,7 @@ class ModelFunctionalityTest extends MondocBaseTest
 
         $this->assertEquals(0, MyService::countAll([]));
 
-        $name = 'Joe '.$this->getUniqueKey();
+        $name = 'Joe ' . $this->getUniqueKey();
         $m = new MyModel();
         $m->setAge(2);
         $m->setName($name);
@@ -426,11 +427,11 @@ class ModelFunctionalityTest extends MondocBaseTest
         /* @var $multi MyModel[] */
         $this->assertCount(1, $multi);
         $time = microtime(false);
-        $multi[0]->setName('joe-bloggs '.$time);
+        $multi[0]->setName('joe-bloggs ' . $time);
         $this->assertTrue($multi[0]->save());
         unset($multi);
 
-        $multi = MyService::getMultiByCriteria(['name' => 'joe-bloggs '.$time]);
+        $multi = MyService::getMultiByCriteria(['name' => 'joe-bloggs ' . $time]);
         /* @var $multi MyModel[] */
         $this->assertCount(1, $multi);
 

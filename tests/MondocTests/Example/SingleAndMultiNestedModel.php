@@ -30,10 +30,8 @@
 
 namespace District5Tests\MondocTests\Example;
 
-use DateTime;
 use District5\Mondoc\Model\MondocAbstractModel;
 use District5Tests\MondocTests\Example\Subs\FoodSubModel;
-use MongoDB\BSON\UTCDateTime;
 
 /**
  * Class DateModel.
@@ -71,6 +69,14 @@ class SingleAndMultiNestedModel extends MondocAbstractModel
     ];
 
     /**
+     * @return array
+     */
+    public function getFriends(): array
+    {
+        return $this->friends;
+    }
+
+    /**
      * @param array $friends
      */
     public function setFriends(array $friends): void
@@ -80,11 +86,11 @@ class SingleAndMultiNestedModel extends MondocAbstractModel
     }
 
     /**
-     * @return array
+     * @return FoodSubModel|null
      */
-    public function getFriends(): array
+    public function getFood(): ?FoodSubModel
     {
-        return $this->friends;
+        return $this->food;
     }
 
     /**
@@ -97,6 +103,14 @@ class SingleAndMultiNestedModel extends MondocAbstractModel
     }
 
     /**
+     * @return FoodSubModel[]
+     */
+    public function getFoods(): array
+    {
+        return $this->foods;
+    }
+
+    /**
      * @param FoodSubModel[] $foods
      */
     public function setFoods(array $foods): void
@@ -106,19 +120,11 @@ class SingleAndMultiNestedModel extends MondocAbstractModel
     }
 
     /**
-     * @return FoodSubModel|null
+     * @return string
      */
-    public function getFood(): ?FoodSubModel
+    public function getName(): string
     {
-        return $this->food;
-    }
-
-    /**
-     * @return FoodSubModel[]
-     */
-    public function getFoods(): array
-    {
-        return $this->foods;
+        return $this->name;
     }
 
     /**
@@ -128,14 +134,6 @@ class SingleAndMultiNestedModel extends MondocAbstractModel
     {
         $this->name = $name;
         $this->addDirty('name');
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     /**

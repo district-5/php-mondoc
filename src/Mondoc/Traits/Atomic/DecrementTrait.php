@@ -62,16 +62,16 @@ trait DecrementTrait
      * Decrement multiple fields by a given delta, using a whole number as the delta. IE passing `1` would DECREASE a
      * number by 1.
      *
+     * @param ObjectId $id
+     * @param array $fieldsToDeltas
+     * @return bool
+     * @noinspection PhpUnused
      * @example
      *      ->decMulti(
      *          $model->getMongoId(),
      *          ['age' => 1, 'logins' => 1]
      *      )
      *
-     * @param ObjectId $id
-     * @param array $fieldsToDeltas
-     * @return bool
-     * @noinspection PhpUnused
      */
     public static function decMulti(ObjectId $id, array $fieldsToDeltas): bool
     {

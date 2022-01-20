@@ -47,6 +47,16 @@ class DateModel extends MondocAbstractModel
     protected $date;
 
     /**
+     * @param bool $asMongo
+     *
+     * @return DateTime|UTCDateTime
+     */
+    public function getDate($asMongo = false)
+    {
+        return $this->convertDateObject($this->date, $asMongo);
+    }
+
+    /**
      * @param DateTime $date
      *
      * @return $this
@@ -57,16 +67,6 @@ class DateModel extends MondocAbstractModel
         $this->addDirty('date');
 
         return $this;
-    }
-
-    /**
-     * @param bool $asMongo
-     *
-     * @return DateTime|UTCDateTime
-     */
-    public function getDate($asMongo = false)
-    {
-        return $this->convertDateObject($this->date, $asMongo);
     }
 
     /**

@@ -31,7 +31,6 @@
 namespace District5Tests\MondocTests\Example\Subs;
 
 use District5\Mondoc\Model\MondocAbstractModel;
-use District5Tests\MondocTests\Example\MySubService;
 
 /**
  * Class MyModelWithSub.
@@ -60,7 +59,7 @@ class MyModelWithSub extends MondocAbstractModel
      */
     protected array $mondocNested = [
         'age' => AgeSubModel::class,
-        'foods' => FoodSubModel::class.'[]'
+        'foods' => FoodSubModel::class . '[]'
     ];
 
     /**
@@ -73,6 +72,14 @@ class MyModelWithSub extends MondocAbstractModel
         $this->foods[] = $food;
 
         return $this;
+    }
+
+    /**
+     * @return AgeSubModel
+     */
+    public function getAge(): AgeSubModel
+    {
+        return $this->age;
     }
 
     /**
@@ -89,27 +96,11 @@ class MyModelWithSub extends MondocAbstractModel
     }
 
     /**
-     * @return AgeSubModel
-     */
-    public function getAge(): AgeSubModel
-    {
-        return $this->age;
-    }
-
-    /**
      * @return string
      */
     public function getName()
     {
         return trim($this->name);
-    }
-
-    /**
-     * @return FoodSubModel[]
-     */
-    public function getFoods()
-    {
-        return $this->foods;
     }
 
     /**
@@ -123,6 +114,14 @@ class MyModelWithSub extends MondocAbstractModel
         $this->addDirty('name');
 
         return $this;
+    }
+
+    /**
+     * @return FoodSubModel[]
+     */
+    public function getFoods()
+    {
+        return $this->foods;
     }
 
     /**

@@ -30,10 +30,7 @@
 
 namespace District5\Mondoc\Traits;
 
-use District5\Mondoc\Model\MondocAbstractModel;
-use District5\Mondoc\Service\MondocAbstractService;
 use District5\MondocBuilder\QueryBuilder;
-use MongoDB\Model\BSONDocument;
 
 /**
  * Trait ExistenceTrait.
@@ -42,6 +39,21 @@ use MongoDB\Model\BSONDocument;
  */
 trait ExistenceTrait
 {
+    /**
+     * Does a document exist? This is likely not a method you need to use, although if you're simply checking
+     * for existence, you can call it.
+     *
+     * @param QueryBuilder $builder
+     * @return bool
+     */
+    public static function existsWithQueryBuilder(QueryBuilder $builder): bool
+    {
+        return self::exists(
+            $builder->getArrayCopy(),
+            $builder->getOptions()->getArrayCopy()
+        );
+    }
+
     /**
      * Does a document exist? This is likely not a method you need to use, although if you're simply checking
      * for existence, you can call it.
@@ -72,20 +84,5 @@ trait ExistenceTrait
             return true;
         }
         return false;
-    }
-
-    /**
-     * Does a document exist? This is likely not a method you need to use, although if you're simply checking
-     * for existence, you can call it.
-     *
-     * @param QueryBuilder $builder
-     * @return bool
-     */
-    public static function existsWithQueryBuilder(QueryBuilder $builder): bool
-    {
-        return self::exists(
-            $builder->getArrayCopy(),
-            $builder->getOptions()->getArrayCopy()
-        );
     }
 }

@@ -45,6 +45,14 @@ class AgeWordSubModel extends MondocAbstractSubModel
     protected $word;
 
     /**
+     * @return string
+     */
+    public function getWord(): string
+    {
+        return $this->word;
+    }
+
+    /**
      * @param string $word
      *
      * @return $this
@@ -54,13 +62,5 @@ class AgeWordSubModel extends MondocAbstractSubModel
         $this->word = $word;
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getWord(): string
-    {
-        return $this->word;
     }
 }

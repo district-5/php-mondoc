@@ -65,10 +65,18 @@ abstract class MondocBaseTest extends TestCase
     public function getUniqueKey(): ?string
     {
         if (null === $this->uniqueKey) {
-            $this->uniqueKey = uniqid().microtime(false);
+            $this->uniqueKey = uniqid() . microtime(false);
         }
 
         return $this->uniqueKey;
+    }
+
+    protected function tearDown()
+    {
+        $this->initMongo();
+        $this->mondoc->getDatabase()->dropCollection('test_model');
+        $this->mondoc->getDatabase()->dropCollection('date_model');
+        $this->mondoc->getDatabase()->dropCollection('single_and_nested_model');
     }
 
     protected function initMongo()
@@ -94,13 +102,5 @@ abstract class MondocBaseTest extends TestCase
         );
 
         return $this->mondoc->getDatabase();
-    }
-
-    protected function tearDown()
-    {
-        $this->initMongo();
-        $this->mondoc->getDatabase()->dropCollection('test_model');
-        $this->mondoc->getDatabase()->dropCollection('date_model');
-        $this->mondoc->getDatabase()->dropCollection('single_and_nested_model');
     }
 }

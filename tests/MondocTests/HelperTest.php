@@ -49,6 +49,22 @@ class HelperTest extends MondocBaseTest
         $this->assertEquals('1609927725871', $this->getPhpDate()->format('Uv'));
     }
 
+    /**
+     * @return UTCDateTime
+     */
+    private function getMongoDate()
+    {
+        return new UTCDateTime(1609927725871);
+    }
+
+    /**
+     * @return DateTime
+     */
+    private function getPhpDate()
+    {
+        return new DateTime('2021-01-06 10:08:45.871000');
+    }
+
     public function testMongoDateToPhpDateTime()
     {
         $this->assertEquals('1609927725871', rtrim(MondocTypes::dateToPHPDateTime($this->getMongoDate())->format('Uu'), '0'));
@@ -111,21 +127,5 @@ class HelperTest extends MondocBaseTest
         $this->assertFalse($paginator->hasNextPage());
         $this->assertFalse($paginator->isFirstPage());
         $this->assertTrue($paginator->isLastPage());
-    }
-
-    /**
-     * @return DateTime
-     */
-    private function getPhpDate()
-    {
-        return new DateTime('2021-01-06 10:08:45.871000');
-    }
-
-    /**
-     * @return UTCDateTime
-     */
-    private function getMongoDate()
-    {
-        return new UTCDateTime(1609927725871);
     }
 }

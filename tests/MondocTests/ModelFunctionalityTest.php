@@ -48,6 +48,16 @@ use MongoDB\BSON\ObjectId;
  */
 class ModelFunctionalityTest extends MondocBaseTest
 {
+    public function testGetCollection()
+    {
+        $collection = MyService::getCollection(MyService::class);
+        $otherCollection = MyService::getCollection();
+        $this->assertEquals(
+            $collection->getCollectionName(),
+            $otherCollection->getCollectionName()
+        );
+    }
+
     public function testInflationDeflation()
     {
         $data = [

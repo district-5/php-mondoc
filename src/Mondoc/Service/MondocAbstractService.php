@@ -93,13 +93,16 @@ abstract class MondocAbstractService
     /**
      * Retrieve the Collection instance.
      *
-     * @param string $clz
+     * @param string|null $clz
      *
      * @return Collection
      * @noinspection PhpMissingParamTypeInspection
      */
-    public static function getCollection($clz): Collection
+    public static function getCollection($clz = null): Collection
     {
+        if (null === $clz) {
+            $clz = get_called_class();
+        }
         /* @var $clz MondocAbstractService - it's not. It's actually a string. */
         return MondocConfig::getInstance()->getCollection(
             $clz::getCollectionName(),

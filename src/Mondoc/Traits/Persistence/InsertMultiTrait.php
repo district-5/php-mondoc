@@ -31,6 +31,7 @@
 namespace District5\Mondoc\Traits\Persistence;
 
 use District5\Mondoc\Model\MondocAbstractModel;
+use District5\Mondoc\MondocConfig;
 
 /**
  * Trait InsertMultiTrait.
@@ -46,14 +47,44 @@ trait InsertMultiTrait
      *
      * @return bool
      * @noinspection PhpUnused
+     * @noinspection PhpFullyQualifiedNameUsageInspection
      */
     public static function insertMulti(array $models): bool
     {
         if (empty($models)) {
             return true;
         }
+
+        $configInstance = MondocConfig::getInstance();
+        $serviceName = get_called_class();
+        $modelsForThisService = [];
+        $otherServiceModels = [];
+        foreach ($models as $k => $model) {
+            $modelService = $configInstance->getServiceForModel(get_class($model));
+            if ($modelService !== $serviceName) {
+                // This model belongs to a different service.
+                if (!array_key_exists($modelService, $otherServiceModels)) {
+                    $otherServiceModels[$modelService] = [];
+                }
+
+                $otherServiceModels[$modelService][$k] = $model;
+            } else {
+                $modelsForThisService[$k] = $model;
+            }
+        }
+
+        $hadOtherModels = false;
+        $otherServiceInsertionSucceeded = true;
+        foreach ($otherServiceModels as $srv => $others) {
+            $hadOtherModels = true;
+            /* @var $srv \District5\Mondoc\Service\MondocAbstractService */
+            if ($srv::insertMulti($others) !== true) {
+                $otherServiceInsertionSucceeded = false;
+            }
+        }
+
         $data = [];
-        foreach ($models as $model) {
+        foreach ($modelsForThisService as $model) {
             $asArray = $model->asArray();
             if (array_key_exists('_mondocMongoId', $asArray)) {
                 unset($asArray['_mondocMongoId']);
@@ -63,21 +94,34 @@ trait InsertMultiTrait
             }
             $data[] = $asArray;
         }
-        $collection = self::getCollection(
-            get_called_class()
-        );
-        $insert = $collection->insertMany(
-            $data
-        );
-        if ($insert->getInsertedCount() === count($data)) {
-            $ids = $insert->getInsertedIds();
-            foreach ($ids as $k => $id) {
-                $models[$k]->setMongoId($id);
-                $models[$k]->clearPresetMongoId();
-                $models[$k]->setMongoCollection($collection);
-            }
 
-            return true;
+        if (!empty($modelsForThisService)) {
+            $collection = self::getCollection(
+                get_called_class()
+            );
+            $insert = $collection->insertMany(
+                $data
+            );
+            if ($insert->getInsertedCount() === count($data)) {
+                $ids = $insert->getInsertedIds();
+                $insertedKey = 0;
+                foreach ($modelsForThisService as $k => $v) {
+                    if (array_key_exists($insertedKey, $ids)) {
+                        $v->setMongoId($ids[$insertedKey]);
+                        $v->clearPresetMongoId();
+                        $v->setMongoCollection($collection);
+                    }
+                    $insertedKey++;
+                }
+
+                if ($otherServiceInsertionSucceeded === true) {
+                    return true;
+                }
+            }
+        }
+
+        if ($hadOtherModels) {
+            return $otherServiceInsertionSucceeded;
         }
 
         return false;

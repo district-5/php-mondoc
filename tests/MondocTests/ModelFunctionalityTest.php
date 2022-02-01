@@ -148,6 +148,50 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertTrue($mT->delete());
     }
 
+    public function testInsertMultiWithMultipleModelsAcrossTwoServices()
+    {
+        $this->initMongo();
+
+        $mStart = new MyModel();
+        $mStart->setAge(1);
+        $mStart->setName(uniqid());
+
+        $this->assertTrue(MyService::insertMulti([$mStart]));
+        $this->assertTrue(MyService::deleteModel($mStart));
+
+        $mTStart = new DateModel();
+        $mTStart->setDate(DateTime::createFromFormat('Y-m-d H:i:s', '2016-01-01 00:00:00'));
+
+        $this->assertTrue(MyService::insertMulti([$mTStart]));
+        $this->assertTrue(DateService::deleteModel($mTStart));
+
+
+        $m = new MyModel();
+        $m->setAge(1);
+        $m->setName(uniqid());
+
+        $mT = new DateModel();
+        $mT->setDate(DateTime::createFromFormat('Y-m-d H:i:s', '2016-01-01 00:00:00'));
+
+        $this->assertFalse($m->hasMongoId());
+        $this->assertFalse($mT->hasMongoId());
+        $this->assertFalse($m->hasPresetMongoId());
+        $this->assertFalse($mT->hasPresetMongoId());
+
+        $this->assertTrue(MyService::insertMulti([$m, $mT]));
+
+        $this->assertTrue($m->hasMongoId());
+        $this->assertTrue($mT->hasMongoId());
+        $this->assertFalse($m->hasPresetMongoId());
+        $this->assertFalse($mT->hasPresetMongoId());
+
+        $this->assertEquals($m->getMongoIdString(), MyService::getOneByCriteria([])->getMongoIdString());
+        $this->assertEquals($mT->getMongoIdString(), DateService::getOneByCriteria([])->getMongoIdString());
+
+        $this->assertTrue($m->delete());
+        $this->assertTrue($mT->delete());
+    }
+
     public function testInsertMultiWithOneModel()
     {
         $this->initMongo();

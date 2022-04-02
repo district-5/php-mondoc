@@ -53,7 +53,7 @@ trait FinancialCandlesTrait
      * @param string $dateField
      * @param int $sortDirection
      * @param int $minuteGranularity
-     * @param int $limitNumber
+     * @param int|null $limitNumber
      * @return AggregateFinancialCandleDto[]
      * @noinspection PhpUnused
      * @noinspection DuplicatedCode
@@ -73,7 +73,7 @@ trait FinancialCandlesTrait
      *      100
      * );
      */
-    public function getFinancialXMinuteCandles(array $filter, array $group, string $priceField, string $dateField, int $minuteGranularity, int $sortDirection, int $limitNumber): array
+    public function getFinancialXMinuteCandles(array $filter, array $group, string $priceField, string $dateField, int $minuteGranularity, int $sortDirection, ?int $limitNumber = null): array
     {
         if (!in_array($sortDirection, [1, -1])) {
             throw new InvalidArgumentException(
@@ -119,11 +119,13 @@ trait FinancialCandlesTrait
                 '$sort' => [
                     '_id' . $dateField => $sortDirection
                 ],
-            ],
-            [
-                '$limit' => $limitNumber
             ]
         ];
+        if ($limitNumber !== null) {
+            $query[] = [
+                '$limit' => $limitNumber
+            ];
+        }
 
         $cursor = $collection->aggregate(
             $query

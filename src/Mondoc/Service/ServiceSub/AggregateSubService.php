@@ -32,6 +32,7 @@ namespace District5\Mondoc\Service\ServiceSub;
 
 use District5\Mondoc\Service\MondocAbstractService;
 use District5\Mondoc\Traits\Aggregation\AverageFieldTrait;
+use District5\Mondoc\Traits\Aggregation\FinancialCandlesTrait;
 use District5\Mondoc\Traits\Aggregation\PercentileOfNumberFieldTrait;
 use District5\Mondoc\Traits\Aggregation\SumFieldTrait;
 
@@ -46,6 +47,7 @@ class AggregateSubService
     use AverageFieldTrait;
     use PercentileOfNumberFieldTrait;
     use SumFieldTrait;
+    use FinancialCandlesTrait;
 
     /**
      * @var MondocAbstractService|string

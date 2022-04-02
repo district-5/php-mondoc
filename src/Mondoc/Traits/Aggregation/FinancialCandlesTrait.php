@@ -142,6 +142,22 @@ trait FinancialCandlesTrait
             );
         }
 
+        if (!empty($candles)) {
+            if ($sortDirection === -1) {
+                usort($candles, function ($first, $second) {
+                    /* @var $first AggregateFinancialCandleDto */
+                    /* @var $second AggregateFinancialCandleDto */
+                    return $first->getDate() < $second->getDate();
+                });
+            } else {
+                usort($candles, function ($first, $second) {
+                    /* @var $first AggregateFinancialCandleDto */
+                    /* @var $second AggregateFinancialCandleDto */
+                    return $first->getDate() > $second->getDate();
+                });
+            }
+        }
+
         return $candles;
     }
 }

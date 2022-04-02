@@ -147,13 +147,19 @@ trait FinancialCandlesTrait
                 usort($candles, function ($first, $second) {
                     /* @var $first AggregateFinancialCandleDto */
                     /* @var $second AggregateFinancialCandleDto */
-                    return $first->getDate() < $second->getDate();
+                    if ($first->getDate() < $second->getDate()) {
+                        return -1;
+                    }
+                    return 1;
                 });
             } else {
                 usort($candles, function ($first, $second) {
                     /* @var $first AggregateFinancialCandleDto */
                     /* @var $second AggregateFinancialCandleDto */
-                    return $first->getDate() > $second->getDate();
+                    if ($first->getDate() < $second->getDate()) {
+                        return 1;
+                    }
+                    return -1;
                 });
             }
         }

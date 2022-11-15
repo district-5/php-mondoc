@@ -28,18 +28,19 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Model;
+namespace District5\Mondoc\DbModel;
 
 use DateTime;
 use District5\Mondoc\Helper\MondocTypes;
-use District5\Mondoc\Model\Traits\KeyToClassMapInflationTrait;
+use District5\Mondoc\DbModel\Traits\KeyToClassMapInflationTrait;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
+use UnexpectedValueException;
 
 /**
  * Trait MondocAbstractSubModel.
  *
- * @package District5\Mondoc\Model
+ * @package District5\Mondoc\DbModel
  */
 abstract class MondocAbstractSubModel
 {
@@ -98,7 +99,7 @@ abstract class MondocAbstractSubModel
     public function __construct()
     {
         foreach ($this->mondocNested as $k => $className) {
-            if ('[]' === substr($className, -2, 2)) {
+            if (str_ends_with($className, '[]')) {
                 $this->{$k} = [];
                 if (class_exists(substr($className, -2))) {
                     $this->{$k} = new $className();
@@ -160,15 +161,15 @@ abstract class MondocAbstractSubModel
      * @param array $data
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
-     * @noinspection DuplicatedCode
      */
-    public static function inflateSingleArray(array $data)
+    public static function inflateSingleArray(array $data): static
     {
         $cl = get_called_class();
         $inst = new $cl();
         if (!$inst instanceof MondocAbstractSubModel) {
-            return null;
+            throw new UnexpectedValueException(
+                'Class ' . $cl . ' does not extend ' . MondocAbstractSubModel::class
+            );
         }
         $classMap = $inst->getKeyToClassMap();
 
@@ -188,7 +189,7 @@ abstract class MondocAbstractSubModel
             if (is_array($v) && $isInClassMap === true) {
                 $subClassName = $classMap[$k];
                 $isMulti = false;
-                if ('[]' === substr($subClassName, -2)) {
+                if (str_ends_with($subClassName, '[]')) {
                     $isMulti = true;
                     $subClassName = substr($subClassName, 0, -2);
                 }
@@ -198,9 +199,6 @@ abstract class MondocAbstractSubModel
                         $v = $subClassName::inflateMultipleArrays($v);
                     } else {
                         $v = $subClassName::inflateSingleArray($v);
-                        if (null === $v) {
-                            continue;
-                        }
                     }
                 } else {
                     // Class didn't exist, so adding to unmapped.
@@ -329,8 +327,9 @@ abstract class MondocAbstractSubModel
      *
      * @param string $name
      * @param mixed $value
+     * @return void
      */
-    public function __set(string $name, $value)
+    public function __set(string $name, mixed $value): void
     {
         if (property_exists($this, $name)) {
             $this->{$name} = $value;
@@ -363,7 +362,7 @@ abstract class MondocAbstractSubModel
                 continue;
             }
             if (array_key_exists($k, $this->getKeyToClassMap())) {
-                if ('[]' === substr($this->getKeyToClassMap()[$k], -2)) {
+                if (str_ends_with($this->getKeyToClassMap()[$k], '[]')) {
                     /* @var $v MondocAbstractSubModel[] */
                     $subs = [];
                     foreach ($v as $datum) {
@@ -422,7 +421,7 @@ abstract class MondocAbstractSubModel
         if (array_key_exists($field, $this->_mondocEstablishedSingleInternal)) {
             return $this->_mondocEstablishedSingleInternal[$field];
         }
-        $this->_mondocEstablishedSingleInternal[$field] = (array_key_exists($field, $this->getKeyToClassMap()) && '[]' !== substr($this->getKeyToClassMap()[$field], -2));
+        $this->_mondocEstablishedSingleInternal[$field] = (array_key_exists($field, $this->getKeyToClassMap()) && !str_ends_with($this->getKeyToClassMap()[$field], '[]'));
 
         return $this->_mondocEstablishedSingleInternal[$field];
     }
@@ -436,7 +435,7 @@ abstract class MondocAbstractSubModel
         if (array_key_exists($field, $this->_mondocEstablishedMultiInternal)) {
             return $this->_mondocEstablishedMultiInternal[$field];
         }
-        $this->_mondocEstablishedMultiInternal[$field] = (array_key_exists($field, $this->getKeyToClassMap()) && '[]' === substr($this->getKeyToClassMap()[$field], -2));
+        $this->_mondocEstablishedMultiInternal[$field] = (array_key_exists($field, $this->getKeyToClassMap()) && str_ends_with($this->getKeyToClassMap()[$field], '[]'));
         return $this->_mondocEstablishedMultiInternal[$field];
     }
 }

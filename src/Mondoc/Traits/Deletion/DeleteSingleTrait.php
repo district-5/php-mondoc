@@ -43,11 +43,11 @@ trait DeleteSingleTrait
     /**
      * Delete a single document from the collection by a given ID.
      *
-     * @param ObjectId|string $id
+     * @param string|ObjectId $id
      *
      * @return bool
      */
-    public static function delete($id): bool
+    public static function delete(ObjectId|string $id): bool
     {
         $id = MondocTypes::convertToMongoId($id);
         $collection = self::getCollection(

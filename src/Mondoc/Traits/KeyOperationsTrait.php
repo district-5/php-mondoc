@@ -30,7 +30,7 @@
 
 namespace District5\Mondoc\Traits;
 
-use District5\Mondoc\Model\MondocAbstractModel;
+use District5\Mondoc\DbModel\MondocAbstractModel;
 
 /**
  * Trait KeyOperationsTrait.

@@ -48,7 +48,7 @@ trait CountableTrait
      * @return int
      * @noinspection PhpUnused
      */
-    public static function countWhereKeyEqualsValue(string $key, $value): int
+    public static function countWhereKeyEqualsValue(string $key, mixed $value): int
     {
         return self::countAll([
             $key => $value

@@ -51,7 +51,7 @@ class MondocTypes
      *
      * @return null|DateTime
      */
-    public static function dateToPHPDateTime($provided): ?DateTime
+    public static function dateToPHPDateTime(mixed $provided): ?DateTime
     {
         if ($provided instanceof UTCDateTime) {
             if (false !== $converted = Date::mongo()->convertFrom($provided)) {
@@ -73,7 +73,7 @@ class MondocTypes
      *
      * @return null|UTCDateTime
      */
-    public static function phpDateToMongoDateTime($provided): ?UTCDateTime
+    public static function phpDateToMongoDateTime(mixed $provided): ?UTCDateTime
     {
         if (!is_object($provided)) {
             return null;
@@ -98,7 +98,7 @@ class MondocTypes
      *
      * @return array|mixed
      */
-    public static function arrayToPhp($item)
+    public static function arrayToPhp(mixed $item): mixed
     {
         if (is_array($item)) {
             return $item;
@@ -113,29 +113,32 @@ class MondocTypes
     /**
      * Convert an ObjectId to a MongoId.
      *
-     * @param null|array|ObjectId|string $id
+     * @param array|string|ObjectId|null $id
      *
      * @return null|ObjectId
      */
-    public static function convertToMongoId($id): ?ObjectId
+    public static function convertToMongoId(ObjectId|array|string|null $id): ?ObjectId
     {
         /* @var $id array|null|string|ObjectId */
         if (null === $id) {
             return $id;
         }
+
         if ($id instanceof ObjectId) {
             return $id;
         }
-        // if (is_array($id)) {
-        //     if (array_key_exists('oid', $id)) {
-        //         return new ObjectId($id['oid']);
-        //     }
-        //     if (array_key_exists('$oid', $id)) {
-        //         return new ObjectId($id['$oid']);
-        //     }
-        // }
+
         if (is_string($id) && 24 === strlen($id)) {
             return new ObjectId($id);
+        }
+
+        if (is_array($id)) {
+            if (array_key_exists('oid', $id)) {
+                return new ObjectId($id['oid']);
+            }
+            if (array_key_exists('$oid', $id)) {
+                return new ObjectId($id['$oid']);
+            }
         }
 
         return null;

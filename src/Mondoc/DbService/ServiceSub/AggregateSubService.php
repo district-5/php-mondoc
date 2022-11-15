@@ -28,9 +28,9 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Service\ServiceSub;
+namespace District5\Mondoc\DbService\ServiceSub;
 
-use District5\Mondoc\Service\MondocAbstractService;
+use District5\Mondoc\DbService\MondocAbstractService;
 use District5\Mondoc\Traits\Aggregation\AverageFieldTrait;
 use District5\Mondoc\Traits\Aggregation\FinancialCandlesTrait;
 use District5\Mondoc\Traits\Aggregation\PercentileOfNumberFieldTrait;
@@ -39,7 +39,7 @@ use District5\Mondoc\Traits\Aggregation\SumFieldTrait;
 /**
  * Class AggregateSubService.
  *
- * @package District5\Mondoc\Service\ServiceSub
+ * @package District5\Mondoc\DbService\ServiceSub
  * @noinspection PhpUnused
  */
 class AggregateSubService
@@ -52,14 +52,14 @@ class AggregateSubService
     /**
      * @var MondocAbstractService|string
      */
-    protected $service;
+    protected string|MondocAbstractService $service;
 
     /**
      * AggregateSubService constructor.
      *
-     * @param MondocAbstractService|string $serviceClass
+     * @param string|MondocAbstractService $serviceClass
      */
-    public function __construct($serviceClass)
+    public function __construct(MondocAbstractService|string $serviceClass)
     {
         $this->service = $serviceClass;
     }

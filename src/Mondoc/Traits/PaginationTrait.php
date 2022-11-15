@@ -32,7 +32,7 @@ namespace District5\Mondoc\Traits;
 
 use District5\Mondoc\Helper\MondocTypes;
 use District5\Mondoc\Helper\PaginatedQueryHelper;
-use District5\Mondoc\Model\MondocAbstractModel;
+use District5\Mondoc\DbModel\MondocAbstractModel;
 use InvalidArgumentException;
 use MongoDB\BSON\ObjectId;
 
@@ -65,7 +65,6 @@ trait PaginationTrait
     /**
      * Get a paginator for a specific query filter. This method is to be used for _id based pagination.
      *
-     * @param int $currentPageNumber
      * @param int $perPage
      * @param array $filter
      *
@@ -111,13 +110,13 @@ trait PaginationTrait
      *
      * @param PaginatedQueryHelper $paginator
      * @param array $filter
-     * @param ObjectId|string|null $currentId
+     * @param string|ObjectId|null $currentId
      * @param int $sortDirection
      * @return MondocAbstractModel[]
      * @throws InvalidArgumentException
      * @noinspection PhpUnused
      */
-    public static function getPageByByObjectIdPagination(PaginatedQueryHelper $paginator, $currentId, int $sortDirection = -1, array $filter = []): array
+    public static function getPageByByObjectIdPagination(PaginatedQueryHelper $paginator, ObjectId|string|null $currentId, int $sortDirection = -1, array $filter = []): array
     {
         $options = [
             'limit' => $paginator->getLimit(),

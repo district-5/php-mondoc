@@ -51,7 +51,7 @@ trait AverageFieldTrait
      * @noinspection PhpUnused
      * @noinspection DuplicatedCode
      */
-    public function getAverage(string $fieldName, array $filter = [])
+    public function getAverage(string $fieldName, array $filter = []): float|int
     {
         $collection = $this->service::getCollection($this->service);
         /* @var $collection Collection */

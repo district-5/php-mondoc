@@ -89,6 +89,7 @@ class ModelFunctionalityTest extends MondocBaseTest
         $nowDate = new DateTime();
         $m = new DateModel();
         $m->setDate($nowDate);
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
         $this->assertEquals($nowDate->format('Y-m-d H:i:s'), $m->getDate(false)->format('Y-m-d H:i:s'));
         $this->assertEquals($nowDate->format('Y-m-d H:i:s'), $m->getDate(true)->toDateTime()->format('Y-m-d H:i:s'));
         $this->assertFalse($m->hasMongoId());
@@ -97,6 +98,7 @@ class ModelFunctionalityTest extends MondocBaseTest
         $found = DateService::getById($m->getMongoId());
         /* @var $found DateModel */
         $this->assertEquals($m->getMongoIdString(), $found->getMongoIdString());
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
         $this->assertEquals($m->getDate(false)->format('Y-m-d H:i:s'), $found->getDate(false)->format('Y-m-d H:i:s'));
         $this->assertTrue($found->delete());
     }
@@ -470,6 +472,7 @@ class ModelFunctionalityTest extends MondocBaseTest
         $multi = MyService::getMultiByCriteria(['name' => $name]);
         /* @var $multi MyModel[] */
         $this->assertCount(1, $multi);
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
         $time = microtime(false);
         $multi[0]->setName('joe-bloggs ' . $time);
         $this->assertTrue($multi[0]->save());

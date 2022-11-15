@@ -30,7 +30,7 @@
 
 namespace District5Tests\MondocTests\Example\Subs;
 
-use District5\Mondoc\Model\MondocAbstractSubModel;
+use District5\Mondoc\DbModel\MondocAbstractSubModel;
 
 /**
  * Class FoodAttributesSubModel.
@@ -42,15 +42,16 @@ class FoodAttributesSubModel extends MondocAbstractSubModel
     /**
      * @var string
      */
-    protected $colour;
+    protected string $colour;
 
     /**
      * @var string
      */
-    protected $smell;
+    protected string $smell;
 
     /**
      * @return string
+     * @noinspection PhpUnused
      */
     public function getColour(): string
     {
@@ -67,6 +68,7 @@ class FoodAttributesSubModel extends MondocAbstractSubModel
 
     /**
      * @return string
+     * @noinspection PhpUnused
      */
     public function getSmell(): string
     {

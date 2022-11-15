@@ -145,6 +145,7 @@ trait FinancialCandlesTrait
         }
 
         if (!empty($candles)) {
+            /** @noinspection PhpConditionAlreadyCheckedInspection */
             if ($sortDirection === -1) {
                 usort($candles, function ($first, $second) {
                     /* @var $first AggregateFinancialCandleDto */

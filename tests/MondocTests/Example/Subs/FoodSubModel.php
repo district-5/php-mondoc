@@ -30,7 +30,8 @@
 
 namespace District5Tests\MondocTests\Example\Subs;
 
-use District5\Mondoc\Model\MondocAbstractSubModel;
+use District5\Mondoc\DbModel\MondocAbstractSubModel;
+use MongoDB\Model\BSONArray;
 
 /**
  * Class FoodSubModel.
@@ -42,12 +43,12 @@ class FoodSubModel extends MondocAbstractSubModel
     /**
      * @var string
      */
-    protected $type;
+    protected string $type;
 
     /**
      * @var FoodAttributesSubModel[]
      */
-    protected $attributes = [];
+    protected BSONArray|array $attributes = [];
 
     protected array $mondocNested = [
         'attributes' => FoodAttributesSubModel::class . '[]',
@@ -58,7 +59,7 @@ class FoodSubModel extends MondocAbstractSubModel
      *
      * @return $this
      */
-    public function setFood(string $type)
+    public function setFood(string $type): static
     {
         $this->type = $type;
 

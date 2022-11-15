@@ -31,8 +31,8 @@
 namespace District5\Mondoc\Traits;
 
 use District5\Mondoc\Helper\MondocTypes;
-use District5\Mondoc\Model\MondocAbstractModel;
-use District5\Mondoc\Service\MondocAbstractService;
+use District5\Mondoc\DbModel\MondocAbstractModel;
+use District5\Mondoc\DbService\MondocAbstractService;
 use District5\MondocBuilder\QueryBuilder;
 use MongoDB\Model\BSONDocument;
 
@@ -130,7 +130,7 @@ trait GetMultiTrait
      *
      * @return MondocAbstractModel[]
      */
-    public static function getMultiWhereKeyEqualsValue(string $key, $value): array
+    public static function getMultiWhereKeyEqualsValue(string $key, mixed $value): array
     {
         return self::getMultiByCriteria([
             $key => ['$eq' => $value]
@@ -145,7 +145,7 @@ trait GetMultiTrait
      *
      * @return MondocAbstractModel[]
      */
-    public static function getMultiWhereKeyDoesNotEqualValue(string $key, $value): array
+    public static function getMultiWhereKeyDoesNotEqualValue(string $key, mixed $value): array
     {
         return self::getMultiByCriteria([
             $key => ['$ne' => $value]

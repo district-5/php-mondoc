@@ -28,16 +28,16 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Model;
+namespace District5\Mondoc\DbModel;
 
 use DateTime;
 use District5\Mondoc\Helper\MondocTypes;
-use District5\Mondoc\Model\Traits\DirtyAttributesTrait;
-use District5\Mondoc\Model\Traits\MondocMongoIdTrait;
-use District5\Mondoc\Model\Traits\MondocMongoTypeTrait;
-use District5\Mondoc\Model\Traits\PresetMongoIdTrait;
+use District5\Mondoc\DbModel\Traits\DirtyAttributesTrait;
+use District5\Mondoc\DbModel\Traits\MondocMongoIdTrait;
+use District5\Mondoc\DbModel\Traits\MondocMongoTypeTrait;
+use District5\Mondoc\DbModel\Traits\PresetMongoIdTrait;
 use District5\Mondoc\MondocConfig;
-use District5\Mondoc\Service\MondocAbstractService;
+use District5\Mondoc\DbService\MondocAbstractService;
 use Exception;
 use MongoDB\BSON\ObjectId;
 use MongoDB\Collection;
@@ -46,7 +46,7 @@ use MongoDB\Model\BSONDocument;
 /**
  * Class MondocAbstractModel.
  *
- * @package District5\Mondoc\Model
+ * @package District5\Mondoc\DbModel
  */
 class MondocAbstractModel extends MondocAbstractSubModel
 {
@@ -89,7 +89,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
      * @return $this
      * @noinspection PhpMissingReturnTypeInspection
      */
-    public static function inflateSingleArray(array $data)
+    public static function inflateSingleArray(array $data): static
     {
         $done = parent::inflateSingleArray($data);
         if ($done) {
@@ -122,7 +122,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
     /**
      * Assign any default variables to this model.
      */
-    protected function assignDefaultVars()
+    protected function assignDefaultVars(): void
     {
     }
 
@@ -195,7 +195,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
             );
 
             return 1 === $delete->getDeletedCount();
-        } catch (Exception $e) {
+        } catch (Exception) {
         }
 
         return false;

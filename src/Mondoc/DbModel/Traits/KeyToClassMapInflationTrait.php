@@ -28,16 +28,16 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Model\Traits;
+namespace District5\Mondoc\DbModel\Traits;
 
-use District5\Mondoc\Model\MondocAbstractSubModel;
+use District5\Mondoc\DbModel\MondocAbstractSubModel;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
 
 /**
  * Trait KeyToClassMapInflationTrait.
  *
- * @package District5\Mondoc\Model\Traits
+ * @package District5\Mondoc\DbModel\Traits
  */
 trait KeyToClassMapInflationTrait
 {
@@ -45,10 +45,9 @@ trait KeyToClassMapInflationTrait
      * @param array $data
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      * @noinspection PhpUnused
      */
-    abstract public static function inflateSingleArray(array $data);
+    abstract public static function inflateSingleArray(array $data): static;
 
     /**
      * @param string $name
@@ -66,7 +65,7 @@ trait KeyToClassMapInflationTrait
     /**
      * Inflate any key to class map values.
      */
-    protected function inflateKeyToClassMaps()
+    protected function inflateKeyToClassMaps(): void
     {
         $nestedMap = $this->getKeyToClassMap();
         foreach ($nestedMap as $key => $classMap) {
@@ -82,7 +81,7 @@ trait KeyToClassMapInflationTrait
         foreach ($nestedMap as $k => $className) {
             $clz = $className;
             $isSingle = true;
-            if ('[]' === substr($clz, -2)) {
+            if (str_ends_with($clz, '[]')) {
                 $isSingle = false;
                 $clz = substr($clz, 0, -2);
             }

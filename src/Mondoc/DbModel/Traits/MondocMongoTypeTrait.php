@@ -28,7 +28,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Model\Traits;
+namespace District5\Mondoc\DbModel\Traits;
 
 use DateTime;
 use District5\Mondoc\Helper\MondocTypes;
@@ -40,7 +40,7 @@ use MongoDB\Model\BSONDocument;
 /**
  * Trait MondocMongoTypeTrait.
  *
- * @package District5\Mondoc\Model\Traits
+ * @package District5\Mondoc\DbModel\Traits
  */
 trait MondocMongoTypeTrait
 {
@@ -54,13 +54,8 @@ trait MondocMongoTypeTrait
      * @return null|DateTime|UTCDateTime
      * @noinspection PhpUnused
      */
-    protected function convertDateObject($date, bool $asMongo = false)
+    protected function convertDateObject(UTCDateTime|DateTime $date, bool $asMongo = false): UTCDateTime|DateTime|null
     {
-        if (is_array($date) && array_key_exists('$date', $date)) {
-            $date = new UTCDateTime($date['$date']['$numberLong']);
-        } elseif (is_array($date) && array_key_exists('milliseconds', $date)) {
-            $date = new UTCDateTime($date['milliseconds']);
-        }
         if ($asMongo) {
             return MondocTypes::phpDateToMongoDateTime($date);
         }
@@ -71,12 +66,12 @@ trait MondocMongoTypeTrait
     /**
      * Convert any array type to a PHP Array.
      *
-     * @param array|BSONArray $provided
+     * @param BSONDocument|BSONArray|array $provided
      *
      * @return array
      * @noinspection PhpUnused
      */
-    protected function arrayToPhpArray($provided)
+    protected function arrayToPhpArray(BSONDocument|BSONArray|array $provided): mixed
     {
         if (!is_object($provided)) {
             if (!is_array($provided)) {
@@ -121,11 +116,11 @@ trait MondocMongoTypeTrait
     /**
      * Convert an ObjectId to a MongoId.
      *
-     * @param null|array|ObjectId|string $id
+     * @param array|string|ObjectId|null $id
      *
      * @return null|ObjectId
      */
-    protected function convertToMongoId($id): ?ObjectId
+    protected function convertToMongoId(ObjectId|array|string|null $id): ?ObjectId
     {
         return MondocTypes::convertToMongoId($id);
     }

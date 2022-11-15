@@ -48,7 +48,7 @@ trait PullTrait
      * @return bool
      * @noinspection PhpUnused
      */
-    protected static function pullFromArrayWithFilter(array $filter, string $field, $value): bool
+    protected static function pullFromArrayWithFilter(array $filter, string $field, mixed $value): bool
     {
         return self::updateOne(
             $filter,
@@ -68,7 +68,7 @@ trait PullTrait
      * @return bool
      * @noinspection PhpUnused
      */
-    protected static function pullFromArrayById(ObjectId $id, string $field, $value): bool
+    protected static function pullFromArrayById(ObjectId $id, string $field, mixed $value): bool
     {
         $query = [
             '_id' => $id

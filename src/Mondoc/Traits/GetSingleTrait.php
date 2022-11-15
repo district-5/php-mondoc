@@ -31,8 +31,8 @@
 namespace District5\Mondoc\Traits;
 
 use District5\Mondoc\Helper\MondocTypes;
-use District5\Mondoc\Model\MondocAbstractModel;
-use District5\Mondoc\Service\MondocAbstractService;
+use District5\Mondoc\DbModel\MondocAbstractModel;
+use District5\Mondoc\DbService\MondocAbstractService;
 use District5\MondocBuilder\QueryBuilder;
 use MongoDB\BSON\ObjectId;
 use MongoDB\Model\BSONDocument;
@@ -49,7 +49,7 @@ trait GetSingleTrait
      *
      * @param QueryBuilder $builder
      *
-     * @return MondocAbstractModel
+     * @return MondocAbstractModel|null
      */
     public static function getOneByQueryBuilder(QueryBuilder $builder): ?MondocAbstractModel
     {
@@ -65,7 +65,7 @@ trait GetSingleTrait
      * @param array $filter
      * @param array $options
      *
-     * @return MondocAbstractModel
+     * @return MondocAbstractModel|null
      */
     public static function getOneByCriteria(array $filter = [], array $options = []): ?MondocAbstractModel
     {
@@ -99,12 +99,12 @@ trait GetSingleTrait
     /**
      * Get a single model by an ID.
      *
-     * @param ObjectId|string $id
+     * @param string|ObjectId $id
      *
      * @return null|MondocAbstractModel
      * @noinspection PhpUnused
      */
-    public static function getById($id): ?MondocAbstractModel
+    public static function getById(ObjectId|string $id): ?MondocAbstractModel
     {
         if (null === $converted = MondocTypes::convertToMongoId($id)) {
             return null;
@@ -122,9 +122,9 @@ trait GetSingleTrait
      * @param string $key
      * @param mixed $value
      *
-     * @return MondocAbstractModel
+     * @return MondocAbstractModel|null
      */
-    public static function getOneWhereKeyEqualsValue(string $key, $value): ?MondocAbstractModel
+    public static function getOneWhereKeyEqualsValue(string $key, mixed $value): ?MondocAbstractModel
     {
         return self::getOneByCriteria([
             $key => ['$eq' => $value]
@@ -137,9 +137,9 @@ trait GetSingleTrait
      * @param string $key
      * @param mixed $value
      *
-     * @return MondocAbstractModel
+     * @return MondocAbstractModel|null
      */
-    public static function getOneWhereKeyDoesNotEqualValue(string $key, $value): ?MondocAbstractModel
+    public static function getOneWhereKeyDoesNotEqualValue(string $key, mixed $value): ?MondocAbstractModel
     {
         return self::getOneByCriteria([
             $key => ['$ne' => $value]

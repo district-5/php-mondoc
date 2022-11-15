@@ -30,7 +30,9 @@
 
 namespace District5Tests\MondocTests\Example\Subs;
 
-use District5\Mondoc\Model\MondocAbstractSubModel;
+use District5\Mondoc\DbModel\MondocAbstractSubModel;
+use MongoDB\Model\BSONArray;
+use MongoDB\Model\BSONDocument;
 
 /**
  * Class AgeSubModel.
@@ -42,12 +44,12 @@ class AgeSubModel extends MondocAbstractSubModel
     /**
      * @var int
      */
-    protected $age = 0;
+    protected int $age = 0;
 
     /**
-     * @var AgeWordSubModel
+     * @var AgeWordSubModel|BSONArray|BSONDocument|null
      */
-    protected $wordModel;
+    protected BSONDocument|BSONArray|AgeWordSubModel|null $wordModel = null;
 
     /**
      * @var string[]

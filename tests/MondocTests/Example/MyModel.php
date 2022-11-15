@@ -30,7 +30,7 @@
 
 namespace District5Tests\MondocTests\Example;
 
-use District5\Mondoc\Model\MondocAbstractModel;
+use District5\Mondoc\DbModel\MondocAbstractModel;
 
 /**
  * Class MyModel.
@@ -42,18 +42,19 @@ class MyModel extends MondocAbstractModel
     /**
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var int
      */
-    protected $age = 0;
+    protected int $age = 0;
 
     /**
      * @return bool
      */
     public function incrementAge(): bool
     {
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
         return $this->inc('age', 1);
     }
 
@@ -62,6 +63,7 @@ class MyModel extends MondocAbstractModel
      */
     public function decrementAge(): bool
     {
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
         return $this->dec('age', 1);
     }
 
@@ -85,7 +87,7 @@ class MyModel extends MondocAbstractModel
      * this method is called at both before save, and after retrieval. This avoids overwriting
      * your set values.
      */
-    protected function assignDefaultVars()
+    protected function assignDefaultVars(): void
     {
         // TODO: Implement
     }
@@ -93,7 +95,7 @@ class MyModel extends MondocAbstractModel
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return trim($this->name);
     }
@@ -103,7 +105,7 @@ class MyModel extends MondocAbstractModel
      *
      * @return $this
      */
-    public function setName(string $val)
+    public function setName(string $val): static
     {
         $this->name = trim($val);
         $this->addDirty('name');
@@ -124,7 +126,7 @@ class MyModel extends MondocAbstractModel
      *
      * @return $this
      */
-    public function setAge(int $age)
+    public function setAge(int $age): static
     {
         $this->age = $age;
         $this->addDirty('age');

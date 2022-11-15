@@ -30,7 +30,9 @@
 
 namespace District5Tests\MondocTests\Example\Subs;
 
-use District5\Mondoc\Model\MondocAbstractModel;
+use District5\Mondoc\DbModel\MondocAbstractModel;
+use MongoDB\Model\BSONArray;
+use MongoDB\Model\BSONDocument;
 
 /**
  * Class MyModelWithSub.
@@ -42,17 +44,17 @@ class MyModelWithSub extends MondocAbstractModel
     /**
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var AgeSubModel
+     * @var AgeSubModel|BSONDocument
      */
-    protected $age;
+    protected BSONDocument|AgeSubModel $age;
 
     /**
      * @var FoodSubModel[]
      */
-    protected $foods = [];
+    protected BSONArray|array $foods = [];
 
     /**
      * @var string[]
@@ -67,7 +69,7 @@ class MyModelWithSub extends MondocAbstractModel
      *
      * @return $this
      */
-    public function addFood(FoodSubModel $food)
+    public function addFood(FoodSubModel $food): static
     {
         $this->foods[] = $food;
 
@@ -87,7 +89,7 @@ class MyModelWithSub extends MondocAbstractModel
      *
      * @return $this
      */
-    public function setAge(AgeSubModel $age)
+    public function setAge(AgeSubModel $age): static
     {
         $this->age = $age;
         $this->addDirty('age');
@@ -98,7 +100,7 @@ class MyModelWithSub extends MondocAbstractModel
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return trim($this->name);
     }
@@ -108,7 +110,7 @@ class MyModelWithSub extends MondocAbstractModel
      *
      * @return $this
      */
-    public function setName(string $val)
+    public function setName(string $val): static
     {
         $this->name = trim($val);
         $this->addDirty('name');
@@ -119,7 +121,7 @@ class MyModelWithSub extends MondocAbstractModel
     /**
      * @return FoodSubModel[]
      */
-    public function getFoods()
+    public function getFoods(): array
     {
         return $this->foods;
     }
@@ -129,7 +131,7 @@ class MyModelWithSub extends MondocAbstractModel
      * this method is called at both before save, and after retrieval. This avoids overwriting
      * your set values.
      */
-    protected function assignDefaultVars()
+    protected function assignDefaultVars(): void
     {
         // TODO: Implement
     }

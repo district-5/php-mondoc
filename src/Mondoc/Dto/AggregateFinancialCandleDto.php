@@ -86,6 +86,7 @@ class AggregateFinancialCandleDto
      * Get the high value.
      *
      * @return float
+     * @noinspection PhpUnused
      */
     public function getHigh(): float
     {
@@ -96,6 +97,7 @@ class AggregateFinancialCandleDto
      * Get the low value.
      *
      * @return float
+     * @noinspection PhpUnused
      */
     public function getLow(): float
     {
@@ -106,6 +108,7 @@ class AggregateFinancialCandleDto
      * Get the open value.
      *
      * @return float
+     * @noinspection PhpUnused
      */
     public function getOpen(): float
     {
@@ -116,6 +119,7 @@ class AggregateFinancialCandleDto
      * Get the close value.
      *
      * @return float
+     * @noinspection PhpUnused
      */
     public function getClose(): float
     {

@@ -30,9 +30,8 @@
 
 namespace District5\Mondoc\Traits\Persistence;
 
-use District5\Mondoc\Model\MondocAbstractModel;
+use District5\Mondoc\DbModel\MondocAbstractModel;
 use MongoDB\Collection;
-use MongoDB\UpdateResult;
 
 /**
  * Trait UpdateTrait.
@@ -132,7 +131,7 @@ trait UpdateTrait
             $filter,
             $query
         );
-        /* @var UpdateResult */
+
         if (1 === $perform->getModifiedCount()) {
             return true;
         }

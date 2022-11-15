@@ -30,8 +30,10 @@
 
 namespace District5Tests\MondocTests\Example;
 
-use District5\Mondoc\Model\MondocAbstractModel;
+use District5\Mondoc\DbModel\MondocAbstractModel;
 use District5Tests\MondocTests\Example\Subs\FoodSubModel;
+use MongoDB\Model\BSONArray;
+use MongoDB\Model\BSONDocument;
 
 /**
  * Class DateModel.
@@ -43,22 +45,22 @@ class SingleAndMultiNestedModel extends MondocAbstractModel
     /**
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var ?FoodSubModel
+     * @var BSONDocument|FoodSubModel|null
      */
-    protected $food = null;
+    protected BSONDocument|FoodSubModel|null $food = null;
 
     /**
      * @var FoodSubModel[]
      */
-    protected $foods = [];
+    protected BSONArray|array $foods = [];
 
     /**
      * @var array
      */
-    protected $friends = [];
+    protected array $friends = [];
 
     /**
      * @var array|string[]
@@ -141,7 +143,7 @@ class SingleAndMultiNestedModel extends MondocAbstractModel
      * this method is called at both before save, and after retrieval. This avoids overwriting
      * your set values.
      */
-    protected function assignDefaultVars()
+    protected function assignDefaultVars(): void
     {
         // TODO: Implement
     }

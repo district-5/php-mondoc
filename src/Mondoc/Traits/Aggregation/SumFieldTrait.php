@@ -51,7 +51,7 @@ trait SumFieldTrait
      * @noinspection PhpUnused
      * @noinspection DuplicatedCode
      */
-    public function getSum(string $fieldName, array $filter = [])
+    public function getSum(string $fieldName, array $filter = []): float|int
     {
         $collection = $this->service::getCollection($this->service);
         /* @var $collection Collection */

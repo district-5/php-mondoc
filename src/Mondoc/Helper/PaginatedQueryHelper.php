@@ -83,7 +83,7 @@ class PaginatedQueryHelper
      *
      * @param int $perPage
      */
-    private function cleanPerPage(int $perPage)
+    private function cleanPerPage(int $perPage): void
     {
         $this->perPage = $perPage;
         if (!is_numeric($this->perPage) || $this->perPage < 1) {
@@ -97,7 +97,7 @@ class PaginatedQueryHelper
      *
      * @param int $currentPage
      */
-    private function cleanCurrentPage(int $currentPage)
+    private function cleanCurrentPage(int $currentPage): void
     {
         $this->currentPage = $currentPage;
         if (!is_numeric($this->currentPage) || $this->currentPage < 1) {
@@ -111,7 +111,7 @@ class PaginatedQueryHelper
      *
      * @param int $totalResults
      */
-    private function cleanTotalResults(int $totalResults)
+    private function cleanTotalResults(int $totalResults): void
     {
         $this->totalResults = $totalResults;
         if (!is_numeric($this->totalResults) || $this->totalResults < 1) {
@@ -123,7 +123,7 @@ class PaginatedQueryHelper
     /**
      * Establish the total number of pages.
      */
-    private function establishTotalPages()
+    private function establishTotalPages(): void
     {
         $this->totalPages = intval(ceil($this->totalResults / $this->perPage));
         if ($this->currentPage > $this->totalPages) {
@@ -134,7 +134,7 @@ class PaginatedQueryHelper
     /**
      * Establish the number of results to skip, or the offset.
      */
-    private function establishSkip()
+    private function establishSkip(): void
     {
         $this->skip = (($this->currentPage * $this->perPage) - $this->perPage);
         if ($this->skip < 0) {

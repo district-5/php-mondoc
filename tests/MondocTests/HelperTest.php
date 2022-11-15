@@ -52,7 +52,7 @@ class HelperTest extends MondocBaseTest
     /**
      * @return UTCDateTime
      */
-    private function getMongoDate()
+    private function getMongoDate(): UTCDateTime
     {
         return new UTCDateTime(1609927725871);
     }
@@ -60,7 +60,7 @@ class HelperTest extends MondocBaseTest
     /**
      * @return DateTime
      */
-    private function getPhpDate()
+    private function getPhpDate(): DateTime
     {
         return new DateTime('2021-01-06 10:08:45.871000');
     }
@@ -100,6 +100,7 @@ class HelperTest extends MondocBaseTest
 
     public function testPagination()
     {
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
         $paginator = PaginatedQueryHelper::init(101, 2, 10);
         $this->assertEquals(101, $paginator->getTotalResults());
         $this->assertEquals(11, $paginator->getTotalPages());
@@ -111,6 +112,7 @@ class HelperTest extends MondocBaseTest
 
     public function testPaginationFirstPage()
     {
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
         $paginator = PaginatedQueryHelper::init(100, 1, 10);
         $this->assertEquals(10, $paginator->getTotalPages());
         $this->assertFalse($paginator->hasPreviousPage());
@@ -121,6 +123,7 @@ class HelperTest extends MondocBaseTest
 
     public function testPaginationLastPage()
     {
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
         $paginator = PaginatedQueryHelper::init(100, 10, 10);
         $this->assertEquals(10, $paginator->getTotalPages());
         $this->assertTrue($paginator->hasPreviousPage());

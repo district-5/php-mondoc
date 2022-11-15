@@ -30,7 +30,7 @@
 
 namespace District5Tests\MondocTests\Example\Subs;
 
-use District5\Mondoc\Model\MondocAbstractSubModel;
+use District5\Mondoc\DbModel\MondocAbstractSubModel;
 
 /**
  * Class AgeWordSubModel.
@@ -42,7 +42,7 @@ class AgeWordSubModel extends MondocAbstractSubModel
     /**
      * @var string
      */
-    protected $word;
+    protected string $word;
 
     /**
      * @return string
@@ -57,7 +57,7 @@ class AgeWordSubModel extends MondocAbstractSubModel
      *
      * @return $this
      */
-    public function setWord(string $word)
+    public function setWord(string $word): static
     {
         $this->word = $word;
 

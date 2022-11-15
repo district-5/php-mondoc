@@ -31,7 +31,7 @@
 namespace District5Tests\MondocTests\Example;
 
 use DateTime;
-use District5\Mondoc\Model\MondocAbstractModel;
+use District5\Mondoc\DbModel\MondocAbstractModel;
 use MongoDB\BSON\UTCDateTime;
 
 /**
@@ -44,14 +44,14 @@ class DateModel extends MondocAbstractModel
     /**
      * @var DateTime|UTCDateTime
      */
-    protected $date;
+    protected DateTime|UTCDateTime $date;
 
     /**
      * @param bool $asMongo
      *
      * @return DateTime|UTCDateTime
      */
-    public function getDate($asMongo = false)
+    public function getDate(bool $asMongo = false): UTCDateTime|DateTime
     {
         return $this->convertDateObject($this->date, $asMongo);
     }
@@ -61,7 +61,7 @@ class DateModel extends MondocAbstractModel
      *
      * @return $this
      */
-    public function setDate(DateTime $date)
+    public function setDate(DateTime $date): static
     {
         $this->date = $date;
         $this->addDirty('date');
@@ -74,7 +74,7 @@ class DateModel extends MondocAbstractModel
      * this method is called at both before save, and after retrieval. This avoids overwriting
      * your set values.
      */
-    protected function assignDefaultVars()
+    protected function assignDefaultVars(): void
     {
         // TODO: Implement
     }

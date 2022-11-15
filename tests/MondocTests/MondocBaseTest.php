@@ -40,6 +40,7 @@ use District5Tests\MondocTests\Example\SingleAndMultiNestedModel;
 use District5Tests\MondocTests\Example\SingleAndMultiNestedService;
 use District5Tests\MondocTests\Example\Subs\MyModelWithSub;
 use MongoDB\Client;
+use MongoDB\Database;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -52,12 +53,12 @@ abstract class MondocBaseTest extends TestCase
     /**
      * @var null|string
      */
-    protected $uniqueKey;
+    protected string|null $uniqueKey = null;
 
     /**
      * @var null|MondocConfig
      */
-    protected $mondoc;
+    protected MondocConfig|null $mondoc = null;
 
     /**
      * @return null|string
@@ -65,13 +66,14 @@ abstract class MondocBaseTest extends TestCase
     public function getUniqueKey(): ?string
     {
         if (null === $this->uniqueKey) {
+            /** @noinspection PhpRedundantOptionalArgumentInspection */
             $this->uniqueKey = uniqid() . microtime(false);
         }
 
         return $this->uniqueKey;
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->initMongo();
         $this->mondoc->getDatabase()->dropCollection('test_model');
@@ -79,10 +81,11 @@ abstract class MondocBaseTest extends TestCase
         $this->mondoc->getDatabase()->dropCollection('single_and_nested_model');
     }
 
-    protected function initMongo()
+    protected function initMongo(): Database
     {
         $connection = new Client(getenv('MONGO_CONNECTION_STRING'));
         $this->mondoc = MondocConfig::getInstance();
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
         $this->mondoc->addDatabase(
             $connection->selectDatabase(getenv('MONGO_DATABASE')),
             'default'

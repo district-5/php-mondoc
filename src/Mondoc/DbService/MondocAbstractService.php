@@ -28,10 +28,10 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Service;
+namespace District5\Mondoc\DbService;
 
 use District5\Mondoc\MondocConfig;
-use District5\Mondoc\Service\ServiceSub\AggregateSubService;
+use District5\Mondoc\DbService\ServiceSub\AggregateSubService;
 use District5\Mondoc\Traits\AtomicTrait;
 use District5\Mondoc\Traits\CountableTrait;
 use District5\Mondoc\Traits\DeletionTrait;
@@ -50,7 +50,7 @@ use MongoDB\Database;
 /**
  * Class MondocAbstractService.
  *
- * @package District5\Mondoc\Service
+ * @package District5\Mondoc\DbService
  * @noinspection PhpUnused
  */
 abstract class MondocAbstractService

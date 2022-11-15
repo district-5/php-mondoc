@@ -30,7 +30,7 @@
 
 namespace District5\Mondoc\Traits\Persistence;
 
-use District5\Mondoc\Model\MondocAbstractModel;
+use District5\Mondoc\DbModel\MondocAbstractModel;
 use District5\Mondoc\MondocConfig;
 
 /**
@@ -77,7 +77,7 @@ trait InsertMultiTrait
         $otherServiceInsertionSucceeded = true;
         foreach ($otherServiceModels as $srv => $others) {
             $hadOtherModels = true;
-            /* @var $srv \District5\Mondoc\Service\MondocAbstractService */
+            /* @var $srv \District5\Mondoc\DbService\MondocAbstractService */
             if ($srv::insertMulti($others) !== true) {
                 $otherServiceInsertionSucceeded = false;
             }
@@ -105,7 +105,7 @@ trait InsertMultiTrait
             if ($insert->getInsertedCount() === count($data)) {
                 $ids = $insert->getInsertedIds();
                 $insertedKey = 0;
-                foreach ($modelsForThisService as $k => $v) {
+                foreach ($modelsForThisService as $v) {
                     if (array_key_exists($insertedKey, $ids)) {
                         $v->setMongoId($ids[$insertedKey]);
                         $v->clearPresetMongoId();

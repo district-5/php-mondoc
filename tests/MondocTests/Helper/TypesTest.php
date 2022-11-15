@@ -49,7 +49,6 @@ use stdClass;
  */
 class TypesTest extends MondocBaseTest
 {
-    /** @noinspection PhpParamsInspection */
     public function testDateConversions()
     {
         $dateTime = new DateTime();
@@ -58,8 +57,8 @@ class TypesTest extends MondocBaseTest
 
         $backToPhp = MondocTypes::dateToPHPDateTime($mongoRepresentation);
         $this->assertEquals(
-            $dateTime->format(DateTimeInterface::ISO8601),
-            $backToPhp->format(DateTimeInterface::ISO8601)
+            $dateTime->format(DateTimeInterface::ATOM),
+            $backToPhp->format(DateTimeInterface::ATOM)
         );
 
         $this->assertNull(MondocTypes::dateToPHPDateTime(1));
@@ -68,7 +67,6 @@ class TypesTest extends MondocBaseTest
         $this->assertNull(MondocTypes::dateToPHPDateTime(new stdClass()));
     }
 
-    /** @noinspection PhpParamsInspection */
     public function testBsonDocumentConversion()
     {
         $php = ['foo' => 'bar'];

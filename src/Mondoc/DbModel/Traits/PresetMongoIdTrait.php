@@ -28,14 +28,14 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Model\Traits;
+namespace District5\Mondoc\DbModel\Traits;
 
 use MongoDB\BSON\ObjectId;
 
 /**
  * Trait PresetMongoIdTrait.
  *
- * @package District5\Mondoc\Model\Traits
+ * @package District5\Mondoc\DbModel\Traits
  */
 trait PresetMongoIdTrait
 {
@@ -55,7 +55,7 @@ trait PresetMongoIdTrait
      * @noinspection PhpMissingReturnTypeInspection
      * @noinspection PhpUnused
      */
-    public function setPresetMongoId(ObjectId $presetMongoId)
+    public function setPresetMongoId(ObjectId|null $presetMongoId)
     {
         $this->_mondocPresetMongoId = $presetMongoId;
 
@@ -85,7 +85,7 @@ trait PresetMongoIdTrait
     /**
      * Remove the preset Mongo ID (which is used for setting the _id on insertion).
      */
-    public function clearPresetMongoId()
+    public function clearPresetMongoId(): void
     {
         $this->_mondocPresetMongoId = null;
     }

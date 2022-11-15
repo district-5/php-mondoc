@@ -31,6 +31,7 @@
 namespace District5\Mondoc\Db\Service\Traits\Persistence;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\MondocBuilder\QueryBuilder;
 use MongoDB\Collection;
 
 /**
@@ -109,7 +110,7 @@ trait UpdateTrait
      *
      * @param array $filter
      * @param array $query
-     *
+     * @param bool $upsert
      * @return bool
      * @example
      *     MyService::updateOne(
@@ -120,22 +121,88 @@ trait UpdateTrait
      *              '$set' => ['age' => 2]
      *          ]
      *      );
-     *
      */
-    public static function updateOne(array $filter, array $query): bool
+    public static function updateOne(array $filter, array $query, bool $upsert = false): bool
     {
         $collection = self::getCollection(
             get_called_class()
         );
+
         $perform = $collection->updateOne(
             $filter,
-            $query
+            $query,
+            [
+                'upsert' => $upsert
+            ]
         );
 
-        if (1 === $perform->getModifiedCount()) {
-            return true;
-        }
+        return $perform->isAcknowledged();
+    }
 
-        return false;
+    /**
+     * Update a single document by using the QueryBuilder for the filter and options and specying the update
+     * query to use. Any references to this model, held in the code are not updated.
+     *
+     * @param QueryBuilder $queryBuilder
+     * @param array $query
+     * @return bool
+     * @noinspection PhpUnused
+     */
+    public static function updateOneByQueryBuilder(QueryBuilder $queryBuilder, array $query): bool
+    {
+        $collection = self::getCollection(
+            get_called_class()
+        );
+
+        $perform = $collection->updateOne(
+            $queryBuilder->getArrayCopy(),
+            $query,
+            $queryBuilder->getOptions()->getArrayCopy()
+        );
+
+        return $perform->isAcknowledged();
+    }
+
+    /**
+     * @param array $filter
+     * @param array $update
+     * @param bool $upsert
+     * @return bool
+     */
+    public static function updateMany(array $filter, array $update, bool $upsert = false): bool
+    {
+        $collection = self::getCollection(
+            get_called_class()
+        );
+        $perform = $collection->updateMany(
+            $filter,
+            $update,
+            [
+                'upsert' => $upsert
+            ]
+        );
+
+        return $perform->isAcknowledged();
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param array $update
+     * @return bool
+     * @noinspection PhpUnused
+     */
+    public static function updateManyByQueryBuilder(QueryBuilder $queryBuilder, array $update): bool
+    {
+        $collection = self::getCollection(
+            get_called_class()
+        );
+
+        $perform = $collection->updateMany(
+            $queryBuilder->getArrayCopy(),
+            $update,
+            $queryBuilder->getOptions()->getArrayCopy()
+        );
+
+        return $perform->isAcknowledged();
     }
 }

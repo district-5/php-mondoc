@@ -30,8 +30,11 @@
 
 namespace District5\Mondoc\Traits;
 
+use District5\Mondoc\Helper\MondocTypes;
 use District5\Mondoc\Helper\PaginatedQueryHelper;
 use District5\Mondoc\Model\MondocAbstractModel;
+use InvalidArgumentException;
+use MongoDB\BSON\ObjectId;
 
 /**
  * Trait PaginationTrait.
@@ -60,6 +63,25 @@ trait PaginationTrait
     }
 
     /**
+     * Get a paginator for a specific query filter. This method is to be used for _id based pagination.
+     *
+     * @param int $currentPageNumber
+     * @param int $perPage
+     * @param array $filter
+     *
+     * @return PaginatedQueryHelper
+     * @noinspection PhpUnused
+     */
+    public static function getPaginationQueryHelperForObjectIdPagination(int $perPage, array $filter = []): PaginatedQueryHelper
+    {
+        return new PaginatedQueryHelper(
+            self::countAll($filter),
+            1,
+            $perPage
+        );
+    }
+
+    /**
      * Get a page of results for a specific query filter.
      *
      * @param PaginatedQueryHelper $paginator
@@ -78,6 +100,41 @@ trait PaginationTrait
         if ($sortByField !== null) {
             $options['sort'] = [$sortByField => $sortDirection];
         }
+        return self::getMultiByCriteria(
+            $filter,
+            $options
+        );
+    }
+
+    /**
+     * Get a page of results for a specific query filter. This method is to be used for _id based pagination.
+     *
+     * @param PaginatedQueryHelper $paginator
+     * @param array $filter
+     * @param ObjectId|string|null $currentId
+     * @param int $sortDirection
+     * @return MondocAbstractModel[]
+     * @throws InvalidArgumentException
+     * @noinspection PhpUnused
+     */
+    public static function getPageByByObjectIdPagination(PaginatedQueryHelper $paginator, $currentId, int $sortDirection = -1, array $filter = []): array
+    {
+        $options = [
+            'limit' => $paginator->getLimit(),
+            'sort' => ['_id' => $sortDirection]
+        ];
+        if ($currentId !== null) {
+            if ($sortDirection === -1) {
+                $filter['_id'] = ['$lt' => MondocTypes::convertToMongoId($currentId)];
+            } else if ($sortDirection === 1) {
+                $filter['_id'] = ['$gt' => MondocTypes::convertToMongoId($currentId)];
+            } else {
+                throw new InvalidArgumentException(
+                    'Invalid sort direction. Expected int(1) or int(-1)'
+                );
+            }
+        }
+
         return self::getMultiByCriteria(
             $filter,
             $options

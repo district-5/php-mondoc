@@ -223,13 +223,34 @@ $builder = \District5Tests\MondocTests\Example\MyService::getQueryBuilder();
 // get multiple models with options
 \District5Tests\MondocTests\Example\MyService::getMultiByCriteria(['foo' => 'bar'], ['sort' => ['foo' => -1]]);
 
-// paginating results
+// paginating results by page number
 $currentPage = 1;
 $perPage = 10;
 $sortByField = 'foo';
 $sortDirection = -1;
 $pagination = \District5Tests\MondocTests\Example\MyService::getPaginationQueryHelper($currentPage, $perPage, ['foo' => 'bar'])
 $results = \District5Tests\MondocTests\Example\MyService::getPage($pagination, $perPage, ['foo' => 'bar'], $sortByField, $sortDirection);
+
+// paginating results by ID number descending (first page)
+$currentId = null;
+$perPage = 10;
+$sortDirection = -1;
+$pagination = \District5Tests\MondocTests\Example\MyService::getPaginationQueryHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
+$results = \District5Tests\MondocTests\Example\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection, ['foo' => 'bar']);
+
+// paginating results by ID number descending
+$currentId = '5f7deca120c41f29827c0c60'; // or new ObjectId('5f7deca120c41f29827c0c60');
+$perPage = 10;
+$sortDirection = -1;
+$pagination = \District5Tests\MondocTests\Example\MyService::getPaginationQueryHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
+$results = \District5Tests\MondocTests\Example\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection, ['foo' => 'bar']);
+
+// paginating results by ID number ascending
+$currentId = '5f7deca120c41f29827c0c60'; // or new ObjectId('5f7deca120c41f29827c0c60');
+$perPage = 10;
+$sortDirection = 1;
+$pagination = \District5Tests\MondocTests\Example\MyService::getPaginationQueryHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
+$results = \District5Tests\MondocTests\Example\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection, ['foo' => 'bar']);
 
 // get the distinct values for 'age' with a filter and options
 \District5Tests\MondocTests\Example\MyService::getDistinctValuesForKey('age', ['foo' => 'bar'], ['sort' => ['age' => 1]]);

@@ -28,56 +28,59 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Traits\Operators;
+namespace District5\Mondoc\Db\Service\Traits\Atomic;
 
 use MongoDB\BSON\ObjectId;
 
 /**
- * Trait PullTrait.
+ * Trait DecrementTrait.
  *
- * @package District5\Mondoc\Traits\Operators
+ * @package District5\Mondoc\Db\Service\Traits\Atomic
  */
-trait PullTrait
+trait DecrementTrait
 {
     /**
-     * Remove a normalised (not object or array) value from an array on via an atomic operation.
+     * Decrement a field by a given delta, using a whole number as the delta. IE passing `1` would DECREASE a
+     * number by 1.
      *
-     * @param array $filter
+     * @param ObjectId $id
      * @param string $field
-     * @param string|int|bool $value
+     * @param int $delta
+     *
      * @return bool
      * @noinspection PhpUnused
      */
-    protected static function pullFromArrayWithFilter(array $filter, string $field, mixed $value): bool
+    public static function dec(ObjectId $id, string $field, int $delta = 1): bool
     {
-        return self::updateOne(
-            $filter,
-            [
-                '$pull' => [$field => $value]
-            ]
+        return self::atomic(
+            $id,
+            ['$inc' => [$field => ($delta - ($delta * 2))]]
         );
     }
 
     /**
-     * Remove a single normalised (not object or array) value from an array on a single document via an atomic
-     * operation.
+     * Decrement multiple fields by a given delta, using a whole number as the delta. IE passing `1` would DECREASE a
+     * number by 1.
      *
      * @param ObjectId $id
-     * @param string $field
-     * @param string|int|bool $value
+     * @param array $fieldsToDeltas
      * @return bool
      * @noinspection PhpUnused
+     * @example
+     *      ->decMulti(
+     *          $model->getMongoId(),
+     *          ['age' => 1, 'logins' => 1]
+     *      )
+     *
      */
-    protected static function pullFromArrayById(ObjectId $id, string $field, mixed $value): bool
+    public static function decMulti(ObjectId $id, array $fieldsToDeltas): bool
     {
-        $query = [
-            '_id' => $id
-        ];
-        return self::updateOne(
-            $query,
-            [
-                '$pull' => [$field => $value]
-            ]
+        foreach ($fieldsToDeltas as $field => $delta) {
+            $fieldsToDeltas[$field] = ($delta - ($delta * 2));
+        }
+        return self::atomic(
+            $id,
+            ['$inc' => $fieldsToDeltas]
         );
     }
 }

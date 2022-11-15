@@ -28,30 +28,40 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Traits;
+namespace District5\Mondoc\Db\Service\Traits;
+
+use District5\Mondoc\Db\Model\MondocAbstractModel;
 
 /**
- * Trait DistinctValuesTrait.
+ * Trait KeyOperationsTrait.
  *
- * @package District5\Mondoc\Traits
+ * @package District5\Mondoc\Db\Service\Traits
  */
-trait DistinctValuesTrait
+trait KeyOperationsTrait
 {
     /**
-     * Get an array of all distinct values for a given key in a collection, optionally providing a filter and options.
+     * Remove a key from a single document.
      *
      * @param string $key
-     * @param array $filter (optional)
-     * @param array $options (optional)
+     * @param MondocAbstractModel $model
      *
-     * @return array
+     * @return bool
      * @noinspection PhpUnused
      */
-    public static function getDistinctValuesForKey(string $key, array $filter = [], array $options = []): array
+    public static function removeKey(string $key, MondocAbstractModel $model): bool
     {
+        $fields = $model->getUnmappedFields();
+        if (!array_key_exists($key, $fields)) {
+            return false;
+        }
         $collection = self::getCollection(
             get_called_class()
         );
-        return $collection->distinct($key, $filter, $options);
+        $result = $collection->updateOne(
+            ['_id' => $model->getMongoId()],
+            ['$unset' => [$key => 1]]
+        );
+
+        return 1 === $result->getModifiedCount();
     }
 }

@@ -28,7 +28,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Traits\Persistence;
+namespace District5\Mondoc\Db\Service\Traits\Persistence;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use MongoDB\Collection;
@@ -36,7 +36,7 @@ use MongoDB\Collection;
 /**
  * Trait UpdateTrait.
  *
- * @package District5\Mondoc\Traits\Persistence
+ * @package District5\Mondoc\Db\Service\Traits\Persistence
  */
 trait UpdateTrait
 {

@@ -31,10 +31,10 @@
 namespace District5\Mondoc\Db\Service\ServiceSub;
 
 use District5\Mondoc\Db\Service\MondocAbstractService;
-use District5\Mondoc\Traits\Aggregation\AverageFieldTrait;
-use District5\Mondoc\Traits\Aggregation\FinancialCandlesTrait;
-use District5\Mondoc\Traits\Aggregation\PercentileOfNumberFieldTrait;
-use District5\Mondoc\Traits\Aggregation\SumFieldTrait;
+use District5\Mondoc\Db\Service\Traits\Aggregation\AverageFieldTrait;
+use District5\Mondoc\Db\Service\Traits\Aggregation\FinancialCandlesTrait;
+use District5\Mondoc\Db\Service\Traits\Aggregation\PercentileOfNumberFieldTrait;
+use District5\Mondoc\Db\Service\Traits\Aggregation\SumFieldTrait;
 
 /**
  * Class AggregateSubService.

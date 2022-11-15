@@ -28,53 +28,60 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Traits\Atomic;
+namespace District5\Mondoc\Db\Service\Traits\Operators;
 
 use MongoDB\BSON\ObjectId;
 
 /**
- * Trait IncrementTrait.
+ * Trait PushTrait.
  *
- * @package District5\Mondoc\Traits\Atomic
+ * @package District5\Mondoc\Db\Service\Traits\Operators
  */
-trait IncrementTrait
+trait PushTrait
 {
     /**
-     * Increment a field by a given delta. Can also handle negative numbers to decrement.
+     * Push a single normalised (not object or array) value into an array via an atomic operation.
      *
-     * @param ObjectId $id
+     * @param array $filter
      * @param string $field
-     * @param int $delta
-     *
+     * @param string $value
      * @return bool
      * @noinspection PhpUnused
      */
-    public static function inc(ObjectId $id, string $field, int $delta = 1): bool
+    protected static function pushIntoArrayWithFilter(array $filter, string $field, string $value): bool
     {
-        return self::atomic(
-            $id,
-            ['$inc' => [$field => $delta]]
+        return self::updateOne(
+            $filter,
+            [
+                '$push' => [$field => $value]
+            ]
         );
     }
 
     /**
-     * Increment multiple fields. Can also handle negative numbers to decrement.
+     * Push a normalised (not object or array) value into an array on a single document via an atomic operation.
+     * The value will only appear if it doesn't already exist. Otherwise, specify `$distinct = false`
+     *
      * @param ObjectId $id
-     * @param array $fieldsToDeltas
+     * @param string $field
+     * @param string $value
+     * @param bool $distinct
      * @return bool
      * @noinspection PhpUnused
-     * @example
-     *      ->incMulti(
-     *          $model->getMongoId(),
-     *          ['age' => 1, 'logins' => 1]
-     *      )
-     *
      */
-    public static function incMulti(ObjectId $id, array $fieldsToDeltas): bool
+    protected static function pushIntoArrayById(ObjectId $id, string $field, string $value, bool $distinct = true): bool
     {
-        return self::atomic(
-            $id,
-            ['$inc' => $fieldsToDeltas]
+        $query = [
+            '_id' => $id
+        ];
+        if ($distinct === true) {
+            $query[$field] = ['$ne' => $value];
+        }
+        return self::updateOne(
+            $query,
+            [
+                '$push' => [$field => $value]
+            ]
         );
     }
 }

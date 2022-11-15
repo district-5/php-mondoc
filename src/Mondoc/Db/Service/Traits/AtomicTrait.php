@@ -28,16 +28,16 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Traits;
+namespace District5\Mondoc\Db\Service\Traits;
 
-use District5\Mondoc\Traits\Atomic\DecrementTrait;
-use District5\Mondoc\Traits\Atomic\IncrementTrait;
+use District5\Mondoc\Db\Service\Traits\Atomic\DecrementTrait;
+use District5\Mondoc\Db\Service\Traits\Atomic\IncrementTrait;
 use MongoDB\BSON\ObjectId;
 
 /**
  * Trait AtomicTrait.
  *
- * @package District5\Mondoc\Traits
+ * @package District5\Mondoc\Db\Service\Traits
  */
 trait AtomicTrait
 {

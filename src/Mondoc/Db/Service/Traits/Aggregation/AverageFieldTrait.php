@@ -28,21 +28,21 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Traits\Aggregation;
+namespace District5\Mondoc\Db\Service\Traits\Aggregation;
 
 use MongoDB\Collection;
 use MongoDB\Driver\Cursor;
 use MongoDB\Model\BSONDocument;
 
 /**
- * Trait SumFieldTrait.
+ * Trait AverageFieldTrait.
  *
- * @package District5\Mondoc\Traits\Aggregation
+ * @package District5\Mondoc\Db\Service\Traits\Aggregation
  */
-trait SumFieldTrait
+trait AverageFieldTrait
 {
     /**
-     * Get the sum of a $fieldName by a given filter.
+     * Get the average of a $fieldName by a given filter.
      *
      * @param string $fieldName
      * @param array $filter
@@ -51,18 +51,15 @@ trait SumFieldTrait
      * @noinspection PhpUnused
      * @noinspection DuplicatedCode
      */
-    public function getSum(string $fieldName, array $filter = []): float|int
+    public function getAverage(string $fieldName, array $filter = []): float|int
     {
         $collection = $this->service::getCollection($this->service);
         /* @var $collection Collection */
-
         $query = [
             [
                 '$group' => [
                     '_id' => null,
-                    $fieldName => [
-                        '$sum' => '$' . $fieldName
-                    ]
+                    $fieldName => ['$avg' => sprintf('$%s', $fieldName)]
                 ]
             ]
         ];

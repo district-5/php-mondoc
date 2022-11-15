@@ -28,40 +28,18 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Traits;
+namespace District5\Mondoc\Db\Service\Traits;
 
-use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Service\Traits\Operators\PullTrait;
+use District5\Mondoc\Db\Service\Traits\Operators\PushTrait;
 
 /**
- * Trait KeyOperationsTrait.
+ * Trait OperatorsTrait.
  *
- * @package District5\Mondoc\Traits
+ * @package District5\Mondoc\Db\Service\Traits
  */
-trait KeyOperationsTrait
+trait OperatorsTrait
 {
-    /**
-     * Remove a key from a single document.
-     *
-     * @param string $key
-     * @param MondocAbstractModel $model
-     *
-     * @return bool
-     * @noinspection PhpUnused
-     */
-    public static function removeKey(string $key, MondocAbstractModel $model): bool
-    {
-        $fields = $model->getUnmappedFields();
-        if (!array_key_exists($key, $fields)) {
-            return false;
-        }
-        $collection = self::getCollection(
-            get_called_class()
-        );
-        $result = $collection->updateOne(
-            ['_id' => $model->getMongoId()],
-            ['$unset' => [$key => 1]]
-        );
-
-        return 1 === $result->getModifiedCount();
-    }
+    use PullTrait;
+    use PushTrait;
 }

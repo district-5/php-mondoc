@@ -28,7 +28,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Traits;
+namespace District5\Mondoc\Db\Service\Traits;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Helper\MondocTypes;
@@ -39,7 +39,7 @@ use MongoDB\BSON\ObjectId;
 /**
  * Trait PaginationTrait.
  *
- * @package District5\Mondoc\Traits
+ * @package District5\Mondoc\Db\Service\Traits
  */
 trait PaginationTrait
 {

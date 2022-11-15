@@ -28,33 +28,39 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Traits\Deletion;
+namespace District5\Mondoc\Db\Service\Traits\Deletion;
 
-use District5\Mondoc\Helper\MondocTypes;
-use MongoDB\BSON\ObjectId;
+use MongoDB\DeleteResult;
 
 /**
- * Trait DeleteSingleTrait.
+ * Trait DeleteMultiTrait.
  *
- * @package District5\Mondoc\Traits\Deletion
+ * @package District5\Mondoc\Db\Service\Traits\Deletion
  */
-trait DeleteSingleTrait
+trait DeleteMultiTrait
 {
     /**
-     * Delete a single document from the collection by a given ID.
+     * Delete multiple documents based on a given query and options.
      *
-     * @param string|ObjectId $id
+     * @param array $query
+     * @param array $options (optional)
      *
-     * @return bool
+     * @return null|int
+     * @noinspection PhpUnused
      */
-    public static function delete(ObjectId|string $id): bool
+    public static function deleteMulti(array $query, array $options = []): ?int
     {
-        $id = MondocTypes::convertToMongoId($id);
         $collection = self::getCollection(
             get_called_class()
         );
-        return $collection->deleteOne(
-            ['_id' => $id]
-        )->isAcknowledged();
+        $delete = $collection->deleteMany(
+            $query,
+            $options
+        );
+        if ($delete instanceof DeleteResult) {
+            return $delete->getDeletedCount();
+        }
+
+        return null;
     }
 }

@@ -28,7 +28,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Traits\Aggregation;
+namespace District5\Mondoc\Db\Service\Traits\Aggregation;
 
 use District5\Mondoc\Dto\AggregateFinancialCandleDto;
 use District5\Mondoc\Helper\MondocTypes;
@@ -40,7 +40,7 @@ use MongoDB\Model\BSONDocument;
 /**
  * Trait FinancialCandlesTrait.
  *
- * @package District5\Mondoc\Traits\Aggregation
+ * @package District5\Mondoc\Db\Service\Traits\Aggregation
  */
 trait FinancialCandlesTrait
 {

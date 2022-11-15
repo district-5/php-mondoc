@@ -26,7 +26,6 @@ use MongoDB\Client;
 $connection = new Client('< mongo connection string >');
 $database = $connection->selectDatabase('< database name >');
 
-/** @noinspection PhpRedundantOptionalArgumentInspection */
 $config = MondocConfig::getInstance();
 $config->addDatabase(
     $database,
@@ -199,9 +198,6 @@ Finding documents..
 
 ```php
 <?php
-/** @noinspection PhpFullyQualifiedNameUsageInspection */
-/** @noinspection PhpUndefinedClassInspection */
-/** @noinspection PhpUndefinedNamespaceInspection */
 
 // count documents matching a filter
 \District5Tests\MondocTests\Example\MyService::countAll([], []);

@@ -28,24 +28,26 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Traits;
+namespace District5\Mondoc\Db\Service\Traits;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
-use District5\Mondoc\Traits\Deletion\DeleteMultiTrait;
-use District5\Mondoc\Traits\Deletion\DeleteSingleTrait;
+use District5\Mondoc\Db\Service\Traits\Persistence\InsertMultiTrait;
+use District5\Mondoc\Db\Service\Traits\Persistence\InsertSingleTrait;
+use District5\Mondoc\Db\Service\Traits\Persistence\UpdateTrait;
 
 /**
- * Trait DeletionTrait.
+ * Trait PersistenceTrait.
  *
- * @package District5\Mondoc\Traits
+ * @package District5\Mondoc\Db\Service\Traits
  */
-trait DeletionTrait
+trait PersistenceTrait
 {
-    use DeleteSingleTrait;
-    use DeleteMultiTrait;
+    use InsertSingleTrait;
+    use InsertMultiTrait;
+    use UpdateTrait;
 
     /**
-     * Delete a model from the collection.
+     * Save a model into the collection.
      *
      * @param MondocAbstractModel $model
      *
@@ -53,18 +55,15 @@ trait DeletionTrait
      * @noinspection PhpUnused
      * @noinspection PhpMissingParamTypeInspection
      */
-    public static function deleteModel($model): bool
+    public static function saveModel($model): bool
     {
         if (!is_object($model) || false === method_exists($model, 'isMondocModel')) {
             return false;
         }
-        if (self::delete($model->getMongoId())) {
-            $model->setMongoCollection(null);
-            $model->unsetMongoId();
-
-            return true;
+        if (null === $model->getMongoId()) {
+            return self::insert($model);
         }
 
-        return false;
+        return self::update($model);
     }
 }

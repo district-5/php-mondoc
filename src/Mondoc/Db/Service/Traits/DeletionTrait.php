@@ -28,59 +28,43 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Traits\Atomic;
+namespace District5\Mondoc\Db\Service\Traits;
 
-use MongoDB\BSON\ObjectId;
+use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Service\Traits\Deletion\DeleteMultiTrait;
+use District5\Mondoc\Db\Service\Traits\Deletion\DeleteSingleTrait;
 
 /**
- * Trait DecrementTrait.
+ * Trait DeletionTrait.
  *
- * @package District5\Mondoc\Traits\Atomic
+ * @package District5\Mondoc\Db\Service\Traits
  */
-trait DecrementTrait
+trait DeletionTrait
 {
-    /**
-     * Decrement a field by a given delta, using a whole number as the delta. IE passing `1` would DECREASE a
-     * number by 1.
-     *
-     * @param ObjectId $id
-     * @param string $field
-     * @param int $delta
-     *
-     * @return bool
-     * @noinspection PhpUnused
-     */
-    public static function dec(ObjectId $id, string $field, int $delta = 1): bool
-    {
-        return self::atomic(
-            $id,
-            ['$inc' => [$field => ($delta - ($delta * 2))]]
-        );
-    }
+    use DeleteSingleTrait;
+    use DeleteMultiTrait;
 
     /**
-     * Decrement multiple fields by a given delta, using a whole number as the delta. IE passing `1` would DECREASE a
-     * number by 1.
+     * Delete a model from the collection.
      *
-     * @param ObjectId $id
-     * @param array $fieldsToDeltas
+     * @param MondocAbstractModel $model
+     *
      * @return bool
      * @noinspection PhpUnused
-     * @example
-     *      ->decMulti(
-     *          $model->getMongoId(),
-     *          ['age' => 1, 'logins' => 1]
-     *      )
-     *
+     * @noinspection PhpMissingParamTypeInspection
      */
-    public static function decMulti(ObjectId $id, array $fieldsToDeltas): bool
+    public static function deleteModel($model): bool
     {
-        foreach ($fieldsToDeltas as $field => $delta) {
-            $fieldsToDeltas[$field] = ($delta - ($delta * 2));
+        if (!is_object($model) || false === method_exists($model, 'isMondocModel')) {
+            return false;
         }
-        return self::atomic(
-            $id,
-            ['$inc' => $fieldsToDeltas]
-        );
+        if (self::delete($model->getMongoId())) {
+            $model->setMongoCollection(null);
+            $model->unsetMongoId();
+
+            return true;
+        }
+
+        return false;
     }
 }

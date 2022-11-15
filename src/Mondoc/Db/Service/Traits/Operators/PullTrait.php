@@ -28,42 +28,56 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Traits;
+namespace District5\Mondoc\Db\Service\Traits\Operators;
 
-use District5\Mondoc\Db\Model\MondocAbstractModel;
-use District5\Mondoc\Traits\Persistence\InsertMultiTrait;
-use District5\Mondoc\Traits\Persistence\InsertSingleTrait;
-use District5\Mondoc\Traits\Persistence\UpdateTrait;
+use MongoDB\BSON\ObjectId;
 
 /**
- * Trait PersistenceTrait.
+ * Trait PullTrait.
  *
- * @package District5\Mondoc\Traits
+ * @package District5\Mondoc\Db\Service\Traits\Operators
  */
-trait PersistenceTrait
+trait PullTrait
 {
-    use InsertSingleTrait;
-    use InsertMultiTrait;
-    use UpdateTrait;
-
     /**
-     * Save a model into the collection.
+     * Remove a normalised (not object or array) value from an array on via an atomic operation.
      *
-     * @param MondocAbstractModel $model
-     *
+     * @param array $filter
+     * @param string $field
+     * @param string|int|bool $value
      * @return bool
      * @noinspection PhpUnused
-     * @noinspection PhpMissingParamTypeInspection
      */
-    public static function saveModel($model): bool
+    protected static function pullFromArrayWithFilter(array $filter, string $field, mixed $value): bool
     {
-        if (!is_object($model) || false === method_exists($model, 'isMondocModel')) {
-            return false;
-        }
-        if (null === $model->getMongoId()) {
-            return self::insert($model);
-        }
+        return self::updateOne(
+            $filter,
+            [
+                '$pull' => [$field => $value]
+            ]
+        );
+    }
 
-        return self::update($model);
+    /**
+     * Remove a single normalised (not object or array) value from an array on a single document via an atomic
+     * operation.
+     *
+     * @param ObjectId $id
+     * @param string $field
+     * @param string|int|bool $value
+     * @return bool
+     * @noinspection PhpUnused
+     */
+    protected static function pullFromArrayById(ObjectId $id, string $field, mixed $value): bool
+    {
+        $query = [
+            '_id' => $id
+        ];
+        return self::updateOne(
+            $query,
+            [
+                '$pull' => [$field => $value]
+            ]
+        );
     }
 }

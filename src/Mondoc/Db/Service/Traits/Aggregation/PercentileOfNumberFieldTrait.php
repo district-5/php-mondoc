@@ -28,38 +28,69 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Traits\Aggregation;
+namespace District5\Mondoc\Db\Service\Traits\Aggregation;
 
 use MongoDB\Collection;
 use MongoDB\Driver\Cursor;
 use MongoDB\Model\BSONDocument;
 
 /**
- * Trait AverageFieldTrait.
+ * Trait PercentileOfNumberFieldTrait.
  *
- * @package District5\Mondoc\Traits\Aggregation
+ * @package District5\Mondoc\Db\Service\Traits\Aggregation
  */
-trait AverageFieldTrait
+trait PercentileOfNumberFieldTrait
 {
     /**
-     * Get the average of a $fieldName by a given filter.
+     * Get the value of the X percentile of a $fieldName by a given filter. By default, the ordering is ascending (1),
+     * but you can provide -1 to sort descending.
      *
      * @param string $fieldName
+     * @param float $percentile
+     * @param int $sortDirection (1 or -1)
      * @param array $filter
      *
-     * @return float|int
+     * @return null|float|int
      * @noinspection PhpUnused
-     * @noinspection DuplicatedCode
      */
-    public function getAverage(string $fieldName, array $filter = []): float|int
+    public function getPercentile(string $fieldName, float $percentile, int $sortDirection = 1, array $filter = []): float|int|null
     {
         $collection = $this->service::getCollection($this->service);
         /* @var $collection Collection */
         $query = [
             [
+                '$sort' => [
+                    $fieldName => $sortDirection
+                ]
+            ],
+            [
                 '$group' => [
                     '_id' => null,
-                    $fieldName => ['$avg' => sprintf('$%s', $fieldName)]
+                    'doc' => [
+                        '$first' => '$$ROOT'
+                    ],
+                    'values' => [
+                        '$push' => '$' . $fieldName
+                    ]
+                ]
+            ],
+            [
+                '$project' => [
+                    $fieldName . 'Percentile' => [
+                        '$arrayElemAt' => [
+                            '$values',
+                            [
+                                '$floor' => [
+                                    '$multiply' => [
+                                        $percentile,
+                                        [
+                                            '$size' => '$values'
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
                 ]
             ]
         ];
@@ -79,11 +110,11 @@ trait AverageFieldTrait
         /* @var $records BSONDocument[] */
         if (1 === count($records)) {
             $array = $records[0]->getArrayCopy();
-            if (array_key_exists($fieldName, $array)) {
-                return $array[$fieldName];
+            if (array_key_exists($fieldName . 'Percentile', $array)) {
+                return $array[$fieldName . 'Percentile'];
             }
         }
 
-        return 0;
+        return null;
     }
 }

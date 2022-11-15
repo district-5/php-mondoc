@@ -425,6 +425,19 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertEquals(2, MyService::aggregate()->getAverage('age', ['name' => $m->getName()]));
         $this->assertEquals(2, MyService::aggregate()->getSum('age'));
 
+        $this->assertTrue(MyService::updateMany(['age' => 2], ['$set' => ['age' => 123]]));
+        $this->assertEquals(123, MyService::getById($m->getMongoId())->getAge());
+
+        $queryBuilder = MyService::getQueryBuilder();
+        $queryBuilder->addQueryPart(ValueEqualTo::get()->integer('age', 123));
+        $this->assertTrue(MyService::updateManyByQueryBuilder($queryBuilder, ['$set' => ['age' => 456]]));
+        $this->assertEquals(456, MyService::getById($m->getMongoId())->getAge());
+
+        $queryBuilderTwo = MyService::getQueryBuilder();
+        $queryBuilderTwo->addQueryPart(ValueEqualTo::get()->integer('age', 456));
+        $this->assertTrue(MyService::updateOneByQueryBuilder($queryBuilderTwo, ['$set' => ['age' => 789]]));
+        $this->assertEquals(789, MyService::getById($m->getMongoId())->getAge());
+
         // Get the ID
         $theId = $m->getMongoIdString();
 

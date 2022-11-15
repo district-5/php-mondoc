@@ -28,11 +28,11 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\DbModel;
+namespace District5\Mondoc\Db\Model;
 
 use DateTime;
+use District5\Mondoc\Db\Model\Traits\KeyToClassMapInflationTrait;
 use District5\Mondoc\Helper\MondocTypes;
-use District5\Mondoc\DbModel\Traits\KeyToClassMapInflationTrait;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
 use UnexpectedValueException;
@@ -40,7 +40,7 @@ use UnexpectedValueException;
 /**
  * Trait MondocAbstractSubModel.
  *
- * @package District5\Mondoc\DbModel
+ * @package District5\Mondoc\Db\Model
  */
 abstract class MondocAbstractSubModel
 {

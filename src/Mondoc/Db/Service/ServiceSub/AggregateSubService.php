@@ -28,9 +28,9 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\DbService\ServiceSub;
+namespace District5\Mondoc\Db\Service\ServiceSub;
 
-use District5\Mondoc\DbService\MondocAbstractService;
+use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Traits\Aggregation\AverageFieldTrait;
 use District5\Mondoc\Traits\Aggregation\FinancialCandlesTrait;
 use District5\Mondoc\Traits\Aggregation\PercentileOfNumberFieldTrait;
@@ -39,7 +39,7 @@ use District5\Mondoc\Traits\Aggregation\SumFieldTrait;
 /**
  * Class AggregateSubService.
  *
- * @package District5\Mondoc\DbService\ServiceSub
+ * @package District5\Mondoc\Db\Service\ServiceSub
  * @noinspection PhpUnused
  */
 class AggregateSubService

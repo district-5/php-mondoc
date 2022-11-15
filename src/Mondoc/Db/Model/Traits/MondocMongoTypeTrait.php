@@ -28,7 +28,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\DbModel\Traits;
+namespace District5\Mondoc\Db\Model\Traits;
 
 use DateTime;
 use District5\Mondoc\Helper\MondocTypes;
@@ -40,7 +40,7 @@ use MongoDB\Model\BSONDocument;
 /**
  * Trait MondocMongoTypeTrait.
  *
- * @package District5\Mondoc\DbModel\Traits
+ * @package District5\Mondoc\Db\Model\Traits
  */
 trait MondocMongoTypeTrait
 {

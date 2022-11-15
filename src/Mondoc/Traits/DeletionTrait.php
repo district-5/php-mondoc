@@ -30,7 +30,7 @@
 
 namespace District5\Mondoc\Traits;
 
-use District5\Mondoc\DbModel\MondocAbstractModel;
+use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Traits\Deletion\DeleteMultiTrait;
 use District5\Mondoc\Traits\Deletion\DeleteSingleTrait;
 

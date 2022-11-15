@@ -30,7 +30,7 @@
 
 namespace District5Tests\MondocTests\Example;
 
-use District5\Mondoc\DbService\MondocAbstractService;
+use District5\Mondoc\Db\Service\MondocAbstractService;
 
 /**
  * Class MyService.

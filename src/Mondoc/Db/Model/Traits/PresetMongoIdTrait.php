@@ -28,14 +28,14 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\DbModel\Traits;
+namespace District5\Mondoc\Db\Model\Traits;
 
 use MongoDB\BSON\ObjectId;
 
 /**
  * Trait PresetMongoIdTrait.
  *
- * @package District5\Mondoc\DbModel\Traits
+ * @package District5\Mondoc\Db\Model\Traits
  */
 trait PresetMongoIdTrait
 {

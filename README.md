@@ -40,7 +40,7 @@ $config->addDatabase(
 
 
 $config->addServiceMapping(
-    MyModel::class, // You can also just use a string like '\MyNamespace\DbModel\MyModel'
+    MyModel::class, // You can also just use a string like '\MyNamespace\Model\MyModel'
     MyService::class // You can also just use a string like '\MyNamespace\Service\MyService'
 );
 // Or you can use...
@@ -59,8 +59,7 @@ $config->addServiceMapping(
 <?php
 namespace MyNs\Model;
 
-use District5\Mondoc\DbModel\MondocAbstractModel;
-use MyNs\Service\MyService;
+use District5\Mondoc\Db\Model\MondocAbstractModel;use MyNs\Service\MyService;
 
 /**
  * Class MyModel
@@ -122,14 +121,13 @@ The logic for querying the database etc, is always performed in the service laye
 
 #### Nesting objects
 
-You can nest objects in each other. The main model must extend `\District5\Mondoc\DbModel\MondocAbstractModel` and have the sub
+You can nest objects in each other. The main model must extend `\District5\Mondoc\Db\Model\MondocAbstractModel` and have the sub
 models defined in the `$mondocNested` array.
 
-Sub models must extend `\District5\Mondoc\DbModel\MondocAbstractSubModel`.
+Sub models must extend `\District5\Mondoc\Db\Model\MondocAbstractSubModel`.
 
 ```php
-use District5\Mondoc\DbModel\MondocAbstractModel;
-use District5\Mondoc\DbModel\MondocAbstractSubModel;
+use District5\Mondoc\Db\Model\MondocAbstractModel;use District5\Mondoc\Db\Model\MondocAbstractSubModel;
 
 class FavouriteFood extends MondocAbstractSubModel
 {

@@ -28,16 +28,16 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\DbModel;
+namespace District5\Mondoc\Db\Model;
 
 use DateTime;
+use District5\Mondoc\Db\Model\Traits\DirtyAttributesTrait;
+use District5\Mondoc\Db\Model\Traits\MondocMongoIdTrait;
+use District5\Mondoc\Db\Model\Traits\MondocMongoTypeTrait;
+use District5\Mondoc\Db\Model\Traits\PresetMongoIdTrait;
+use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Helper\MondocTypes;
-use District5\Mondoc\DbModel\Traits\DirtyAttributesTrait;
-use District5\Mondoc\DbModel\Traits\MondocMongoIdTrait;
-use District5\Mondoc\DbModel\Traits\MondocMongoTypeTrait;
-use District5\Mondoc\DbModel\Traits\PresetMongoIdTrait;
 use District5\Mondoc\MondocConfig;
-use District5\Mondoc\DbService\MondocAbstractService;
 use Exception;
 use MongoDB\BSON\ObjectId;
 use MongoDB\Collection;
@@ -46,7 +46,7 @@ use MongoDB\Model\BSONDocument;
 /**
  * Class MondocAbstractModel.
  *
- * @package District5\Mondoc\DbModel
+ * @package District5\Mondoc\Db\Model
  */
 class MondocAbstractModel extends MondocAbstractSubModel
 {

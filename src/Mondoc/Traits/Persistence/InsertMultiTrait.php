@@ -30,7 +30,7 @@
 
 namespace District5\Mondoc\Traits\Persistence;
 
-use District5\Mondoc\DbModel\MondocAbstractModel;
+use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\MondocConfig;
 
 /**
@@ -77,7 +77,7 @@ trait InsertMultiTrait
         $otherServiceInsertionSucceeded = true;
         foreach ($otherServiceModels as $srv => $others) {
             $hadOtherModels = true;
-            /* @var $srv \District5\Mondoc\DbService\MondocAbstractService */
+            /* @var $srv \District5\Mondoc\Db\Service\MondocAbstractService */
             if ($srv::insertMulti($others) !== true) {
                 $otherServiceInsertionSucceeded = false;
             }

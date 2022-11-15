@@ -28,16 +28,16 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\DbModel\Traits;
+namespace District5\Mondoc\Db\Model\Traits;
 
-use District5\Mondoc\DbModel\MondocAbstractSubModel;
+use District5\Mondoc\Db\Model\MondocAbstractSubModel;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
 
 /**
  * Trait KeyToClassMapInflationTrait.
  *
- * @package District5\Mondoc\DbModel\Traits
+ * @package District5\Mondoc\Db\Model\Traits
  */
 trait KeyToClassMapInflationTrait
 {

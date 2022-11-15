@@ -30,7 +30,7 @@
 
 namespace District5Tests\MondocTests\Example;
 
-use District5\Mondoc\DbModel\MondocAbstractModel;
+use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5Tests\MondocTests\Example\Subs\FoodSubModel;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;

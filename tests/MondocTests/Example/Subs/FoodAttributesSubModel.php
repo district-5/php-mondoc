@@ -30,7 +30,7 @@
 
 namespace District5Tests\MondocTests\Example\Subs;
 
-use District5\Mondoc\DbModel\MondocAbstractSubModel;
+use District5\Mondoc\Db\Model\MondocAbstractSubModel;
 
 /**
  * Class FoodAttributesSubModel.

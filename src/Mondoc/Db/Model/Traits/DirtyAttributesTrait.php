@@ -28,72 +28,59 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\DbModel\Traits;
-
-use District5\Mondoc\Helper\MondocTypes;
-use MongoDB\BSON\ObjectId;
+namespace District5\Mondoc\Db\Model\Traits;
 
 /**
- * Trait MondocMongoIdTrait.
+ * Trait DirtyAttributesTrait.
  *
- * @package District5\Mondoc\DbModel\Traits
+ * @package District5\Mondoc\Db\Model\Traits
  */
-trait MondocMongoIdTrait
+trait DirtyAttributesTrait
 {
     /**
-     * The ObjectId once the model has been saved for the first time.
+     * Holds any dirty values. As called with `$this->addDirty('foo');` Dirty values aren't referenced for new
+     * objects. New documents are established by the presence of an `_id` field.
      *
-     * @var null|ObjectId
+     * @var array
      */
-    protected ?ObjectId $_mondocMongoId = null;
+    protected array $_mondocDirty = [];
 
     /**
-     * Get the string value for the ObjectId of the persisted model.
-     *
-     * @return null|string
-     * @noinspection PhpUnused
-     */
-    public function getMongoIdString(): ?string
-    {
-        if ($this->hasMongoId()) {
-            return $this->getMongoId()->__toString();
-        }
-
-        return null;
-    }
-
-    /**
-     * Does this model have an ObjectId? IE, has it been saved before?
-     *
-     * @return bool
-     */
-    public function hasMongoId(): bool
-    {
-        return is_object($this->getMongoId()) && $this->getMongoId() instanceof ObjectId;
-    }
-
-    /**
-     * Get the ObjectId of the persisted model.
-     *
-     * @return null|ObjectId
-     */
-    public function getMongoId(): ?ObjectId
-    {
-        return MondocTypes::convertToMongoId(
-            $this->_mondocMongoId
-        );
-    }
-
-    /**
-     * Remove the ObjectId from this model. Ideal for cloning a document.
+     * Clear the dirty parameter array. Dirty values aren't referenced for new objects.
      *
      * @return $this
      * @noinspection PhpMissingReturnTypeInspection
-     * @noinspection PhpUnused
      */
-    public function unsetMongoId()
+    public function clearDirty()
     {
-        $this->_mondocMongoId = null;
+        $this->_mondocDirty = [];
+
+        return $this;
+    }
+
+    /**
+     * Get the array of dirty values (values that need to be updated). Dirty values aren't referenced for new objects.
+     *
+     * @return array
+     */
+    public function getDirty(): array
+    {
+        return $this->_mondocDirty;
+    }
+
+    /**
+     * Add a dirty value, indicating it should be saved upon updating. Dirty values aren't referenced for new objects.
+     *
+     * @param string $key
+     * @param null $value - ignored. @deprecated
+     *
+     * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
+     * @noinspection PhpUnusedParameterInspection
+     */
+    protected function addDirty(string $key, $value = null)
+    {
+        $this->_mondocDirty[] = $key;
 
         return $this;
     }

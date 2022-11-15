@@ -31,7 +31,7 @@
 namespace District5Tests\MondocTests\Example;
 
 use DateTime;
-use District5\Mondoc\DbModel\MondocAbstractModel;
+use District5\Mondoc\Db\Model\MondocAbstractModel;
 use MongoDB\BSON\UTCDateTime;
 
 /**

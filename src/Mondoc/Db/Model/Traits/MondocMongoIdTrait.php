@@ -79,7 +79,7 @@ trait MondocMongoIdTrait
      */
     public function getMongoId(): ?ObjectId
     {
-        return MondocTypes::convertToMongoId(
+        return MondocTypes::toObjectId(
             $this->_mondocMongoId
         );
     }

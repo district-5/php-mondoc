@@ -106,7 +106,7 @@ trait GetSingleTrait
      */
     public static function getById(ObjectId|string $id): ?MondocAbstractModel
     {
-        if (null === $converted = MondocTypes::convertToMongoId($id)) {
+        if (null === $converted = MondocTypes::toObjectId($id)) {
             return null;
         }
         $service = get_called_class();

@@ -103,7 +103,7 @@ trait MondocMongoTypeTrait
         $tmp = [];
         $final = [];
         foreach ($ids as $id) {
-            $newId = $this->convertToMongoId($id);
+            $newId = $this->toObjectId($id);
             if (null !== $newId && !in_array($newId->__toString(), $tmp)) {
                 $final[] = $newId;
                 $tmp[] = $newId->__toString();
@@ -114,14 +114,22 @@ trait MondocMongoTypeTrait
     }
 
     /**
-     * Convert an ObjectId to a MongoId.
+     * @deprecated Use toObjectId instead
+     */
+    protected function convertToMongoId(ObjectId|array|string|null $id): ?ObjectId
+    {
+        return self::toObjectId($id);
+    }
+
+    /**
+     * Convert a string or ObjectId to an ObjectId.
      *
      * @param array|string|ObjectId|null $id
      *
      * @return null|ObjectId
      */
-    protected function convertToMongoId(ObjectId|array|string|null $id): ?ObjectId
+    protected function toObjectId(ObjectId|array|string|null $id): ?ObjectId
     {
-        return MondocTypes::convertToMongoId($id);
+        return MondocTypes::toObjectId($id);
     }
 }

@@ -107,7 +107,7 @@ trait GetMultiTrait
         }
         $cleansed = [];
         foreach ($ids as $id) {
-            if (null !== $clean = MondocTypes::convertToMongoId($id)) {
+            if (null !== $clean = MondocTypes::toObjectId($id)) {
                 $cleansed[] = $clean;
             }
         }

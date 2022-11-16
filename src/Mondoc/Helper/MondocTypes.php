@@ -111,13 +111,21 @@ class MondocTypes
     }
 
     /**
-     * Convert an ObjectId to a MongoId.
+     * @deprecated Use MondocTypes::toObjectId instead.
+     */
+    public static function convertToMongoId(ObjectId|array|string|null $id): ?ObjectId
+    {
+        return self::toObjectId($id);
+    }
+
+    /**
+     * Convert a string or ObjectId to an ObjectId.
      *
      * @param array|string|ObjectId|null $id
      *
      * @return null|ObjectId
      */
-    public static function convertToMongoId(ObjectId|array|string|null $id): ?ObjectId
+    public static function toObjectId(ObjectId|array|string|null $id): ?ObjectId
     {
         /* @var $id array|null|string|ObjectId */
         if (null === $id) {

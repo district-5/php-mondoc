@@ -300,10 +300,10 @@ $phpArrayFromArray = MondocTypes::arrayToPhp($bsonArray);
 
 // ObjectIds
 $anId = '61dfee5591efcf44e023d692';
-$mongoId = MondocTypes::convertToMongoId($anId);
+$mongoId = MondocTypes::toObjectId($anId);
 // You can also pass existing ObjectId's into the conversion and nothing happens.
-// MondocTypes::convertToMongoId(new \MongoDB\BSON\ObjectId());
-// MondocTypes::convertToMongoId($mongoId);
+// MondocTypes::toObjectId(new \MongoDB\BSON\ObjectId());
+// MondocTypes::toObjectId($mongoId);
 ```
 
 #### Query building

@@ -49,12 +49,13 @@ trait DeleteSingleTrait
      */
     public static function delete(ObjectId|string $id): bool
     {
-        $id = MondocTypes::convertToMongoId($id);
         $collection = self::getCollection(
             get_called_class()
         );
         return $collection->deleteOne(
-            ['_id' => $id]
+            [
+                '_id' => MondocTypes::toObjectId($id)
+            ]
         )->isAcknowledged();
     }
 }

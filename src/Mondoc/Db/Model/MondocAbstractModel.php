@@ -389,7 +389,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
     {
         $n = [];
         foreach ($data as $i) {
-            if (null !== $id = $this->convertToMongoId($i)) {
+            if (null !== $id = $this->toObjectId($i)) {
                 $n[] = $id;
             }
         }

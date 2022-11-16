@@ -124,9 +124,9 @@ trait PaginationTrait
         ];
         if ($currentId !== null) {
             if ($sortDirection === -1) {
-                $filter['_id'] = ['$lt' => MondocTypes::convertToMongoId($currentId)];
+                $filter['_id'] = ['$lt' => MondocTypes::toObjectId($currentId)];
             } else if ($sortDirection === 1) {
-                $filter['_id'] = ['$gt' => MondocTypes::convertToMongoId($currentId)];
+                $filter['_id'] = ['$gt' => MondocTypes::toObjectId($currentId)];
             } else {
                 throw new InvalidArgumentException(
                     'Invalid sort direction. Expected int(1) or int(-1)'

@@ -97,6 +97,8 @@ class MyModel extends MondocAbstractModel
 You can easily version data within a model by using the `\District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait`
 trait. This trait introduces a `_v` variable in the model, which you can choose to increment when you choose.
 
+You can detect if a model has a version by calling `isVersionableModel()` on the model.
+
 **For example...**
 
 ```php

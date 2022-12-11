@@ -48,14 +48,17 @@ trait MondocMongoTypeTrait
      * Convert a date object to either a PHP DateTime (by passing $asMongo=false)
      * or as a Mongo UTCDateTime (by passing $asMongo=true).
      *
-     * @param DateTime|UTCDateTime $date
+     * @param UTCDateTime|DateTime|null $date
      * @param bool $asMongo
      *
      * @return null|DateTime|UTCDateTime
-     * @noinspection PhpUnused
      */
-    protected function convertDateObject(UTCDateTime|DateTime $date, bool $asMongo = false): UTCDateTime|DateTime|null
+    protected function convertDateObject(UTCDateTime|DateTime|null $date, bool $asMongo = false): UTCDateTime|DateTime|null
     {
+        if (null === $date) {
+            return null;
+        }
+
         if ($asMongo) {
             return MondocTypes::phpDateToMongoDateTime($date);
         }
@@ -69,7 +72,6 @@ trait MondocMongoTypeTrait
      * @param BSONDocument|BSONArray|array $provided
      *
      * @return array
-     * @noinspection PhpUnused
      */
     protected function arrayToPhpArray(BSONDocument|BSONArray|array $provided): mixed
     {
@@ -111,14 +113,6 @@ trait MondocMongoTypeTrait
         }
 
         return $final;
-    }
-
-    /**
-     * @deprecated Use toObjectId instead
-     */
-    protected function convertToMongoId(ObjectId|array|string|null $id): ?ObjectId
-    {
-        return self::toObjectId($id);
     }
 
     /**

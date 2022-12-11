@@ -147,8 +147,7 @@ abstract class MondocAbstractSubModel
             return [];
         }
         $final = [];
-        /** @noinspection PhpUnusedLocalVariableInspection */
-        foreach ($data as $_ => $datum) {
+        foreach ($data as $datum) {
             $final[] = $cl::inflateSingleArray($datum);
         }
 

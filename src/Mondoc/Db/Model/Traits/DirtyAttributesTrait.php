@@ -72,13 +72,11 @@ trait DirtyAttributesTrait
      * Add a dirty value, indicating it should be saved upon updating. Dirty values aren't referenced for new objects.
      *
      * @param string $key
-     * @param null $value - ignored. @deprecated
      *
      * @return $this
      * @noinspection PhpMissingReturnTypeInspection
-     * @noinspection PhpUnusedParameterInspection
      */
-    protected function addDirty(string $key, $value = null)
+    protected function addDirty(string $key)
     {
         $this->_mondocDirty[] = $key;
 

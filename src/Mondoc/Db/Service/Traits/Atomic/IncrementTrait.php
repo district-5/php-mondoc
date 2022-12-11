@@ -47,7 +47,6 @@ trait IncrementTrait
      * @param int $delta
      *
      * @return bool
-     * @noinspection PhpUnused
      */
     public static function inc(ObjectId $id, string $field, int $delta = 1): bool
     {

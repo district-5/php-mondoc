@@ -84,21 +84,10 @@ class MondocConfig
     }
 
     /**
-     * @deprecated
-     * @see MondocConfig::addDatabase()
-     * @noinspection PhpUnused
-     */
-    public function setDatabase(Database $database, string $key = 'default'): MondocConfig
-    {
-        return $this->addDatabase($database, $key);
-    }
-
-    /**
      * @param Database $database
      * @param string $key
      *
      * @return $this
-     * @noinspection PhpUnused
      */
     public function addDatabase(Database $database, string $key = 'default'): MondocConfig
     {
@@ -126,7 +115,6 @@ class MondocConfig
      * @param string $key
      *
      * @return null|Database
-     * @noinspection PhpUnused
      */
     public function getDatabase(string $key = 'default'): ?Database
     {
@@ -148,6 +136,14 @@ class MondocConfig
     {
         $this->serviceMap = $serviceMap;
         return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getServiceMap(): array
+    {
+        return $this->serviceMap;
     }
 
     /**

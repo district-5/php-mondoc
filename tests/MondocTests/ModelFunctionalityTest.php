@@ -32,6 +32,7 @@
 namespace District5Tests\MondocTests;
 
 use DateTime;
+use District5\Mondoc\MondocConfig;
 use District5\MondocBuilder\QueryBuilder;
 use District5\MondocBuilder\QueryTypes\ValueEqualTo;
 use District5Tests\MondocTests\Example\DateModel;
@@ -39,6 +40,8 @@ use District5Tests\MondocTests\Example\DateService;
 use District5Tests\MondocTests\Example\MyModel;
 use District5Tests\MondocTests\Example\MyService;
 use MongoDB\BSON\ObjectId;
+use MongoDB\Model\BSONArray;
+use MongoDB\Model\BSONDocument;
 
 /**
  * Class ModelFunctionalityTest.
@@ -115,6 +118,18 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertArrayHasKey('age', $array);
         $this->assertArrayHasKey('name', $array);
 
+        $bsonArray = new BSONArray(['foo' => 'bar']);
+        $cleanArray = $m->getArrayFromBson($bsonArray);
+        $this->assertIsArray($cleanArray);
+        $this->assertArrayHasKey('foo', $cleanArray);
+        $this->assertEquals('bar', $cleanArray['foo']);
+
+        $bsonDocument = new BSONDocument(['foo' => 'bar']);
+        $cleanArray = $m->getArrayFromBson($bsonDocument);
+        $this->assertIsArray($cleanArray);
+        $this->assertArrayHasKey('foo', $cleanArray);
+        $this->assertEquals('bar', $cleanArray['foo']);
+
         $dirty = $m->getDirty();
         $this->assertTrue(in_array('age', $dirty));
         $this->assertTrue(in_array('name', $dirty));
@@ -148,6 +163,18 @@ class ModelFunctionalityTest extends MondocBaseTest
 
         $this->assertTrue($m->delete());
         $this->assertTrue($mT->delete());
+    }
+
+    public function testServiceMap()
+    {
+        $this->initMongo();
+
+        $map = MondocConfig::getInstance()->getServiceMap();
+        $this->assertIsArray($map);
+        $this->assertArrayHasKey(MyModel::class, $map);
+        $this->assertArrayHasKey(DateModel::class, $map);
+        $this->assertEquals(MyService::class, $map[MyModel::class]);
+        $this->assertEquals(DateService::class, $map[DateModel::class]);
     }
 
     public function testInsertMultiWithMultipleModelsAcrossTwoServices()

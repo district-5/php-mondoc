@@ -40,7 +40,6 @@ use District5\Mondoc\Db\Service\Traits\Aggregation\SumFieldTrait;
  * Class AggregateSubService.
  *
  * @package District5\Mondoc\Db\Service\ServiceSub
- * @noinspection PhpUnused
  */
 class AggregateSubService
 {

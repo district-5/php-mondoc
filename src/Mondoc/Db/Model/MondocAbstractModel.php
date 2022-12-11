@@ -92,13 +92,11 @@ class MondocAbstractModel extends MondocAbstractSubModel
     public static function inflateSingleArray(array $data): static
     {
         $done = parent::inflateSingleArray($data);
-        if ($done) {
-            if (array_key_exists('_id', $data)) {
-                $done->setMongoId($data['_id']);
-            }
-            $done->inflateKeyToClassMaps();
-            $done->assignDefaultVars();
+        if (array_key_exists('_id', $data)) {
+            $done->setMongoId($data['_id']);
         }
+        $done->inflateKeyToClassMaps();
+        $done->assignDefaultVars();
 
         return $done;
     }
@@ -109,7 +107,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
      * @param ObjectId $objectId
      *
      * @return $this
-     * @noinspection PhpUnused
      * @noinspection PhpMissingReturnTypeInspection
      */
     final public function setMongoId(ObjectId $objectId)
@@ -155,7 +152,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
      * Save this model. Must be overridden in your code. Inner logic might be `return MyService::saveModel($model);`.
      *
      * @return bool
-     * @noinspection PhpUnused
      */
     public function save(): bool
     {
@@ -170,7 +166,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
      * Delete this model. Must be overridden in your code. Inner logic might be `return MyService::deleteModel($model);`.
      *
      * @return bool
-     * @noinspection PhpUnused
      */
     public function delete(): bool
     {
@@ -242,9 +237,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
                         $v = $subModelClassName::inflateMultipleArrays($v);
                     } else {
                         $v = $subModelClassName::inflateSingleArray($v);
-                        if (null === $v) {
-                            continue;
-                        }
                     }
                 } else {
                     // Class didn't exist, so adding to unmapped.
@@ -343,7 +335,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
      * @param string $field
      * @param int $delta
      * @return bool
-     * @noinspection PhpUnused
      */
     public function dec(string $field, int $delta = 1): bool
     {
@@ -357,7 +348,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
      * @param string $field
      * @param int $delta
      * @return bool
-     * @noinspection PhpUnused
      */
     public function inc(string $field, int $delta = 1): bool
     {

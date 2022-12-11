@@ -51,7 +51,6 @@ trait MondocMongoIdTrait
      * Get the string value for the ObjectId of the persisted model.
      *
      * @return null|string
-     * @noinspection PhpUnused
      */
     public function getMongoIdString(): ?string
     {
@@ -89,7 +88,6 @@ trait MondocMongoIdTrait
      *
      * @return $this
      * @noinspection PhpMissingReturnTypeInspection
-     * @noinspection PhpUnused
      */
     public function unsetMongoId()
     {

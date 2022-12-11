@@ -45,7 +45,6 @@ trait KeyToClassMapInflationTrait
      * @param array $data
      *
      * @return $this
-     * @noinspection PhpUnused
      */
     abstract public static function inflateSingleArray(array $data): static;
 
@@ -58,7 +57,6 @@ trait KeyToClassMapInflationTrait
 
     /**
      * @return array
-     * @noinspection PhpUnused
      */
     abstract protected function getKeyToClassMap(): array;
 
@@ -100,8 +98,7 @@ trait KeyToClassMapInflationTrait
                 if ($data instanceof BSONArray) {
                     $data = $data->getArrayCopy();
                     $final = [];
-                    /** @noinspection PhpUnusedLocalVariableInspection */
-                    foreach ($data as $_ => $v) {
+                    foreach ($data as $v) {
                         if ($v instanceof BSONDocument || $v instanceof BSONArray) {
                             $v = $v->getArrayCopy();
                         }

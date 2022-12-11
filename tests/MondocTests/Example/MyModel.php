@@ -31,6 +31,8 @@
 namespace District5Tests\MondocTests\Example;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
+use MongoDB\Model\BSONArray;
+use MongoDB\Model\BSONDocument;
 
 /**
  * Class MyModel.
@@ -132,5 +134,14 @@ class MyModel extends MondocAbstractModel
         $this->addDirty('age');
 
         return $this;
+    }
+
+    /**
+     * @param BSONArray|BSONDocument $bson
+     * @return array
+     */
+    public function getArrayFromBson(BSONArray|BSONDocument $bson): array
+    {
+        return $this->arrayToPhpArray($bson);
     }
 }

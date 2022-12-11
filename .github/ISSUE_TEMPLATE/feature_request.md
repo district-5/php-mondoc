@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: Got an idea? Let us know!
-title: ''
+title: 'Feature: '
 labels: 'enhancement'
 assignees: ['rogerthomas84', 'mark-morgan']
 
@@ -11,10 +11,7 @@ assignees: ['rogerthomas84', 'mark-morgan']
 
 A clear and concise description of what you'd like to see added
 
-### Describe alternatives you've considered
+### Would you be willing to help out?
 
-Please provide a clear description of the feature you're requesting
-
-### Additional context
-
-Add any other context or screenshots about the feature request here
+We're always looking for contributors to help out with the project. If you're interested in helping out, please let us
+know here.

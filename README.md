@@ -92,6 +92,23 @@ class MyModel extends MondocAbstractModel
 }
 ```
 
+##### Optional traits...
+
+You can easily version data within a model by using the `\District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait`
+trait. This trait introduces a `_v` variable in the model, which you can choose to increment when you choose.
+
+**For example...**
+
+```php
+<?php
+class MyModel extends \District5\Mondoc\Db\Model\MondocAbstractModel
+{
+    use \District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
+    
+    // Rest of your model code...
+}
+```
+
 #### The service layer
 
 ```php

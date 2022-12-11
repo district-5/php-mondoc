@@ -39,6 +39,8 @@ use District5Tests\MondocTests\Example\MySubService;
 use District5Tests\MondocTests\Example\SingleAndMultiNestedModel;
 use District5Tests\MondocTests\Example\SingleAndMultiNestedService;
 use District5Tests\MondocTests\Example\Subs\MyModelWithSub;
+use District5Tests\MondocTests\Example\VersionedModel;
+use District5Tests\MondocTests\Example\VersionedService;
 use MongoDB\Client;
 use MongoDB\Database;
 use PHPUnit\Framework\TestCase;
@@ -79,6 +81,7 @@ abstract class MondocBaseTest extends TestCase
         $this->mondoc->getDatabase()->dropCollection('test_model');
         $this->mondoc->getDatabase()->dropCollection('date_model');
         $this->mondoc->getDatabase()->dropCollection('single_and_nested_model');
+        $this->mondoc->getDatabase()->dropCollection('versioned_model');
     }
 
     protected function initMongo(): Database
@@ -102,6 +105,9 @@ abstract class MondocBaseTest extends TestCase
         )->addServiceMapping(
             SingleAndMultiNestedModel::class,
             SingleAndMultiNestedService::class
+        )->addServiceMapping(
+            VersionedModel::class,
+            VersionedService::class
         );
 
         return $this->mondoc->getDatabase();

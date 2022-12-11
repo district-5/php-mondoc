@@ -28,60 +28,43 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Model\Traits;
+namespace District5Tests\MondocTests\Example;
+
+use DateTime;
+use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
+use MongoDB\BSON\UTCDateTime;
 
 /**
- * Trait DirtyAttributesTrait.
+ * Class VersionedModel.
  *
- * @package District5\Mondoc\Db\Model\Traits
+ * @package MyNs\Model
  */
-trait DirtyAttributesTrait
+class VersionedModel extends MondocAbstractModel
 {
-    /**
-     * Holds any dirty values. As called with `$this->addDirty('foo');`
-     * Dirty values aren't referenced for new objects. New documents
-     * are established by the presence of an `_id` field. Which results
-     * in a full insertion.
-     *
-     * @var array
-     */
-    protected array $_mondocDirty = [];
+    use MondocVersionedModelTrait;
 
     /**
-     * Clear the dirty parameter array. Dirty values aren't referenced for new objects.
-     *
+     * @var string|null
+     */
+    protected string|null $name = null;
+
+    /**
+     * @param string $name
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function clearDirty()
+    public function setName(string $name): self
     {
-        $this->_mondocDirty = [];
-
+        $this->name = $name;
+        $this->addDirty('name');
         return $this;
     }
 
     /**
-     * Get the array of dirty values (values that need to be updated). Dirty values aren't referenced for new objects.
-     *
-     * @return array
+     * @return string|null
      */
-    public function getDirty(): array
+    public function getName(): ?string
     {
-        return $this->_mondocDirty;
-    }
-
-    /**
-     * Add a dirty value, indicating it should be saved upon updating. Dirty values aren't referenced for new objects.
-     *
-     * @param string $key
-     *
-     * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
-     */
-    protected function addDirty(string $key)
-    {
-        $this->_mondocDirty[] = $key;
-
-        return $this;
+        return $this->name;
     }
 }

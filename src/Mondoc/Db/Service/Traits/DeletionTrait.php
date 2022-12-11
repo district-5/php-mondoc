@@ -58,9 +58,9 @@ trait DeletionTrait
         if (!is_object($model) || false === method_exists($model, 'isMondocModel')) {
             return false;
         }
-        if (self::delete($model->getMongoId())) {
+        if (self::delete($model->getObjectId())) {
             $model->setMongoCollection(null);
-            $model->unsetMongoId();
+            $model->unsetObjectId();
 
             return true;
         }

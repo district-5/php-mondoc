@@ -83,7 +83,7 @@ class SingleAndNestedTest extends MondocBaseTest
 
         $this->assertTrue($m->save());
 
-        $record = SingleAndMultiNestedService::getById($m->getMongoId());
+        $record = SingleAndMultiNestedService::getById($m->getObjectId());
         $this->assertEquals('foo', $record->getName());
         $this->assertEquals('bread', $record->getFood()->getFood());
         $this->assertEquals('white', $record->getFood()->getAttributes()[0]->getColour());

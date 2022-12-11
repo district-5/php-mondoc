@@ -64,7 +64,7 @@ trait IncrementTrait
      * @noinspection PhpUnused
      * @example
      *      ->incMulti(
-     *          $model->getMongoId(),
+     *          $model->getObjectId(),
      *          ['age' => 1, 'logins' => 1]
      *      )
      *

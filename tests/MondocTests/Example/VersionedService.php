@@ -28,51 +28,22 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Service\Traits\Persistence;
+namespace District5Tests\MondocTests\Example;
 
-use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Service\MondocAbstractService;
 
 /**
- * Trait InsertSingleTrait.
+ * Class VersionedService.
  *
- * @package District5\Mondoc\Db\Service\Traits\Persistence
+ * @package District5Tests\MondocTests\Service
  */
-trait InsertSingleTrait
+class VersionedService extends MondocAbstractService
 {
     /**
-     * Insert a model in the collection. Called automatically when using saveModel() in the AbstractService.
-     *
-     * @param MondocAbstractModel $model
-     *
-     * @return bool
-     * @noinspection PhpMissingParamTypeInspection
+     * @return string
      */
-    public static function insert($model): bool
+    protected static function getCollectionName(): string
     {
-        if (!is_object($model) || false === method_exists($model, 'isMondocModel')) {
-            return false;
-        }
-        $collection = self::getCollection(
-            get_called_class()
-        );
-        $data = $model->asArray();
-        if (array_key_exists('_mondocObjectId', $data)) {
-            unset($data['_mondocObjectId']);
-        }
-        if ($model->hasPresetObjectId()) {
-            $data['_id'] = $model->getPresetObjectId();
-        }
-        $insert = $collection->insertOne(
-            $data
-        );
-        if (1 === $insert->getInsertedCount()) {
-            $model->clearPresetObjectId();
-            $model->setMongoId($insert->getInsertedId());
-            $model->setMongoCollection($collection);
-
-            return true;
-        }
-
-        return false;
+        return 'versioned_model';
     }
 }

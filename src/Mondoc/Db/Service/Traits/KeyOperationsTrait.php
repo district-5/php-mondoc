@@ -58,7 +58,7 @@ trait KeyOperationsTrait
             get_called_class()
         );
         $result = $collection->updateOne(
-            ['_id' => $model->getMongoId()],
+            ['_id' => $model->getObjectId()],
             ['$unset' => [$key => 1]]
         );
 

@@ -28,51 +28,43 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Service\Traits\Persistence;
+namespace District5Tests\MondocTests\Example;
 
+use DateTime;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
+use MongoDB\BSON\UTCDateTime;
 
 /**
- * Trait InsertSingleTrait.
+ * Class VersionedModel.
  *
- * @package District5\Mondoc\Db\Service\Traits\Persistence
+ * @package MyNs\Model
  */
-trait InsertSingleTrait
+class VersionedModel extends MondocAbstractModel
 {
+    use MondocVersionedModelTrait;
+
     /**
-     * Insert a model in the collection. Called automatically when using saveModel() in the AbstractService.
-     *
-     * @param MondocAbstractModel $model
-     *
-     * @return bool
-     * @noinspection PhpMissingParamTypeInspection
+     * @var string|null
      */
-    public static function insert($model): bool
+    protected string|null $name = null;
+
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName(string $name): self
     {
-        if (!is_object($model) || false === method_exists($model, 'isMondocModel')) {
-            return false;
-        }
-        $collection = self::getCollection(
-            get_called_class()
-        );
-        $data = $model->asArray();
-        if (array_key_exists('_mondocObjectId', $data)) {
-            unset($data['_mondocObjectId']);
-        }
-        if ($model->hasPresetObjectId()) {
-            $data['_id'] = $model->getPresetObjectId();
-        }
-        $insert = $collection->insertOne(
-            $data
-        );
-        if (1 === $insert->getInsertedCount()) {
-            $model->clearPresetObjectId();
-            $model->setMongoId($insert->getInsertedId());
-            $model->setMongoCollection($collection);
+        $this->name = $name;
+        $this->addDirty('name');
+        return $this;
+    }
 
-            return true;
-        }
-
-        return false;
+    /**
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
     }
 }

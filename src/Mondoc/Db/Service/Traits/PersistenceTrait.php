@@ -60,7 +60,7 @@ trait PersistenceTrait
         if (!is_object($model) || false === method_exists($model, 'isMondocModel')) {
             return false;
         }
-        if (null === $model->getMongoId()) {
+        if (null === $model->getObjectId()) {
             return self::insert($model);
         }
 

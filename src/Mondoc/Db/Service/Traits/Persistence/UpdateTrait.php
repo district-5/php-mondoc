@@ -77,8 +77,8 @@ trait UpdateTrait
                 }
             }
         }
-        if (array_key_exists('_mondocMongoId', $changeSet)) {
-            unset($changeSet['_mondocMongoId']);
+        if (array_key_exists('_mondocObjectId', $changeSet)) {
+            unset($changeSet['_mondocObjectId']);
         }
         $unsetValues = $model->getMondocKeysToRemove();
 
@@ -91,7 +91,7 @@ trait UpdateTrait
             $query['$unset'] = $unsetValues;
         }
         $performed = $collection->updateOne(
-            ['_id' => $model->getMongoId()],
+            ['_id' => $model->getObjectId()],
             $query
         );
         if ($performed->isAcknowledged()) {

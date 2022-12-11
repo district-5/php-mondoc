@@ -56,9 +56,9 @@ class BuilderTest extends MondocBaseTest
         $m = new MyModel();
         $m->setName('Foo');
         $m->setAge(1);
-        $m->setPresetMongoId($objectId);
+        $m->setPresetObjectId($objectId);
         $this->assertTrue($m->save());
-        $this->assertEquals($objectId->__toString(), $m->getMongoIdString());
+        $this->assertEquals($objectId->__toString(), $m->getObjectIdString());
 
         $queryBuilderStringAndInt = new QueryBuilder();
         $equalsStringInt = new ValueEqualTo();
@@ -73,27 +73,27 @@ class BuilderTest extends MondocBaseTest
 
         $getModel = MyService::getOneByQueryBuilder($queryBuilderStringAndInt);
         /* @var $getModel MyModel */
-        $this->assertEquals($m->getMongoIdString(), $getModel->getMongoIdString());
+        $this->assertEquals($m->getObjectIdString(), $getModel->getObjectIdString());
         $this->assertEquals('Foo', $getModel->getName());
         $this->assertEquals(1, $getModel->getAge());
 
         $getModel = MyService::getOneByQueryBuilder($queryBuilderObjectId);
         /* @var $getModel MyModel */
-        $this->assertEquals($m->getMongoIdString(), $getModel->getMongoIdString());
+        $this->assertEquals($m->getObjectIdString(), $getModel->getObjectIdString());
         $this->assertEquals('Foo', $getModel->getName());
         $this->assertEquals(1, $getModel->getAge());
 
         $getModels = MyService::getMultiByQueryBuilder($queryBuilderStringAndInt);
         /* @var $getModels MyModel[] */
         $this->assertCount(1, $getModels);
-        $this->assertEquals($m->getMongoIdString(), $getModels[0]->getMongoIdString());
+        $this->assertEquals($m->getObjectIdString(), $getModels[0]->getObjectIdString());
         $this->assertEquals('Foo', $getModels[0]->getName());
         $this->assertEquals(1, $getModels[0]->getAge());
 
         $getModels = MyService::getMultiByQueryBuilder($queryBuilderObjectId);
         /* @var $getModels MyModel[] */
         $this->assertCount(1, $getModels);
-        $this->assertEquals($m->getMongoIdString(), $getModels[0]->getMongoIdString());
+        $this->assertEquals($m->getObjectIdString(), $getModels[0]->getObjectIdString());
         $this->assertEquals('Foo', $getModels[0]->getName());
         $this->assertEquals(1, $getModels[0]->getAge());
     }

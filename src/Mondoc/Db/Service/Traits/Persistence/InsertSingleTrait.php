@@ -56,17 +56,17 @@ trait InsertSingleTrait
             get_called_class()
         );
         $data = $model->asArray();
-        if (array_key_exists('_mondocMongoId', $data)) {
-            unset($data['_mondocMongoId']);
+        if (array_key_exists('_mondocObjectId', $data)) {
+            unset($data['_mondocObjectId']);
         }
-        if ($model->hasPresetMongoId()) {
-            $data['_id'] = $model->getPresetMongoId();
+        if ($model->hasPresetObjectId()) {
+            $data['_id'] = $model->getPresetObjectId();
         }
         $insert = $collection->insertOne(
             $data
         );
         if (1 === $insert->getInsertedCount()) {
-            $model->clearPresetMongoId();
+            $model->clearPresetObjectId();
             $model->setMongoId($insert->getInsertedId());
             $model->setMongoCollection($collection);
 

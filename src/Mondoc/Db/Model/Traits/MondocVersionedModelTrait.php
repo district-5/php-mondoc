@@ -28,59 +28,83 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Service\Traits\Atomic;
-
-use MongoDB\BSON\ObjectId;
+namespace District5\Mondoc\Db\Model\Traits;
 
 /**
- * Trait DecrementTrait.
+ * Trait MondocVersionedModelTrait.
  *
- * @package District5\Mondoc\Db\Service\Traits\Atomic
+ * @package District5\Mondoc\Db\Model\Traits
  */
-trait DecrementTrait
+trait MondocVersionedModelTrait
 {
     /**
-     * Decrement a field by a given delta, using a whole number as the delta. IE passing `1` would DECREASE a
-     * number by 1.
+     * The version of the model. Defaults to 1.
      *
-     * @param ObjectId $id
-     * @param string $field
-     * @param int $delta
-     *
-     * @return bool
-     * @noinspection PhpUnused
+     * @var int
      */
-    public static function dec(ObjectId $id, string $field, int $delta = 1): bool
+    protected int $_v = 1;
+
+    /**
+     * Get the version of this model
+     *
+     * @return int
+     */
+    public function getModelVersion(): int
     {
-        return self::atomic(
-            $id,
-            ['$inc' => [$field => ($delta - ($delta * 2))]]
+        return $this->_v;
+    }
+
+    /**
+     * Is this model version $x?
+     *
+     * @param int $x
+     * @return bool
+     */
+    public function isModelVersionX(int $x): bool
+    {
+        return $this->_v === $x;
+    }
+
+    /**
+     * Set the version of this model
+     *
+     * @param int $version
+     *
+     * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
+     */
+    public function setModelVersion(int $version)
+    {
+        $this->_v = $version;
+        if (method_exists($this, 'addDirty')) {
+            $this->addDirty('_v');
+        }
+        return $this;
+    }
+
+    /**
+     * Increment the version of this model
+     *
+     * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
+     */
+    public function incrementModelVersion()
+    {
+        return $this->setModelVersion(
+            ($this->_v + 1)
         );
     }
 
     /**
-     * Decrement multiple fields by a given delta, using a whole number as the delta. IE passing `1` would DECREASE a
-     * number by 1.
+     * Decrement the version of this model
      *
-     * @param ObjectId $id
-     * @param array $fieldsToDeltas
-     * @return bool
-     * @noinspection PhpUnused
-     * @example
-     *      ->decMulti(
-     *          $model->getObjectId(),
-     *          ['age' => 1, 'logins' => 1]
-     *      )
-     *
+     * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
      */
-    public static function decMulti(ObjectId $id, array $fieldsToDeltas): bool
+    public function decrementModelVersion()
     {
-        foreach ($fieldsToDeltas as $field => $delta) {
-            $fieldsToDeltas[$field] = ($delta - ($delta * 2));
-        }
-        return self::atomic(
-            $id,
-            ['$inc' => $fieldsToDeltas]
+        return $this->setModelVersion(
+            ($this->_v - 1)
         );
     }
 }

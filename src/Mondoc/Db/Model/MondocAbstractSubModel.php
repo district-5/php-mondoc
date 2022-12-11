@@ -238,9 +238,9 @@ abstract class MondocAbstractSubModel
     protected function getPropertyExclusions(): array
     {
         return [
-            'mondocNested', 'fieldToFieldMap', '_mondocCollection',
-            '_mondocUnmapped', '_mondocDirty', '_mondocPresetMongoId', '_mondocMongoId', '_mondocBson',
-            '_mondocEstablishedSingleInternal', '_mondocEstablishedMultiInternal'
+            'mondocNested', 'fieldToFieldMap', '_mondocCollection', '_mondocUnmapped', '_mondocDirty',
+            '_mondocPresetMongoId', '_mondocObjectId', '_mondocBson', '_mondocEstablishedSingleInternal',
+            '_mondocEstablishedMultiInternal'
         ];
     }
 

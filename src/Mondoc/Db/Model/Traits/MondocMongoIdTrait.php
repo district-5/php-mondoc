@@ -45,20 +45,29 @@ trait MondocMongoIdTrait
      *
      * @var null|ObjectId
      */
-    protected ?ObjectId $_mondocMongoId = null;
+    protected ?ObjectId $_mondocObjectId = null;
 
     /**
      * Get the string value for the ObjectId of the persisted model.
      *
      * @return null|string
      */
-    public function getMongoIdString(): ?string
+    public function getObjectIdString(): ?string
     {
-        if ($this->hasMongoId()) {
-            return $this->getMongoId()->__toString();
+        if ($this->hasObjectId()) {
+            return $this->getObjectId()->__toString();
         }
 
         return null;
+    }
+
+    /**
+     * @see MondocMongoIdTrait::getObjectIdString()
+     * @deprecated Use getObjectIdString() instead.
+     */
+    public function getMongoIdString(): ?string
+    {
+        return $this->getObjectIdString();
     }
 
     /**
@@ -66,9 +75,18 @@ trait MondocMongoIdTrait
      *
      * @return bool
      */
+    public function hasObjectId(): bool
+    {
+        return is_object($this->getObjectId()) && $this->getObjectId() instanceof ObjectId;
+    }
+
+    /**
+     * @see MondocMongoIdTrait::hasObjectId()
+     * @deprecated Use hasObjectId() instead.
+     */
     public function hasMongoId(): bool
     {
-        return is_object($this->getMongoId()) && $this->getMongoId() instanceof ObjectId;
+        return $this->hasObjectId();
     }
 
     /**
@@ -76,11 +94,20 @@ trait MondocMongoIdTrait
      *
      * @return null|ObjectId
      */
-    public function getMongoId(): ?ObjectId
+    public function getObjectId(): ?ObjectId
     {
         return MondocTypes::toObjectId(
-            $this->_mondocMongoId
+            $this->_mondocObjectId
         );
+    }
+
+    /**
+     * @see MondocMongoIdTrait::getObjectId()
+     * @deprecated Use getObjectId() instead.
+     */
+    public function getMongoId(): ?ObjectId
+    {
+        return $this->getObjectId();
     }
 
     /**
@@ -89,10 +116,20 @@ trait MondocMongoIdTrait
      * @return $this
      * @noinspection PhpMissingReturnTypeInspection
      */
-    public function unsetMongoId()
+    public function unsetObjectId()
     {
-        $this->_mondocMongoId = null;
+        $this->_mondocObjectId = null;
 
         return $this;
+    }
+
+    /**
+     * @see MondocMongoIdTrait::unsetObjectId()
+     * @deprecated Use unsetObjectId() instead.
+     * @noinspection PhpMissingReturnTypeInspection
+     */
+    public function unsetMongoId()
+    {
+        return $this->unsetObjectId();
     }
 }

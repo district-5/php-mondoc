@@ -81,7 +81,7 @@ class ModelFunctionalityTest extends MondocBaseTest
         $inflated = MyModel::inflateSingleArray($data);
         $this->assertEquals('Foo', $inflated->getName());
         $this->assertEquals(2, $inflated->getAge());
-        $this->assertEquals($anId->__toString(), $inflated->getMongoIdString());
+        $this->assertEquals($anId->__toString(), $inflated->getObjectIdString());
     }
 
     public function testDateMethods()
@@ -95,12 +95,12 @@ class ModelFunctionalityTest extends MondocBaseTest
         /** @noinspection PhpRedundantOptionalArgumentInspection */
         $this->assertEquals($nowDate->format('Y-m-d H:i:s'), $m->getDate(false)->format('Y-m-d H:i:s'));
         $this->assertEquals($nowDate->format('Y-m-d H:i:s'), $m->getDate(true)->toDateTime()->format('Y-m-d H:i:s'));
-        $this->assertFalse($m->hasMongoId());
+        $this->assertFalse($m->hasObjectId());
         $m->save();
-        $this->assertTrue($m->hasMongoId());
-        $found = DateService::getById($m->getMongoId());
+        $this->assertTrue($m->hasObjectId());
+        $found = DateService::getById($m->getObjectId());
         /* @var $found DateModel */
-        $this->assertEquals($m->getMongoIdString(), $found->getMongoIdString());
+        $this->assertEquals($m->getObjectIdString(), $found->getObjectIdString());
         /** @noinspection PhpRedundantOptionalArgumentInspection */
         $this->assertEquals($m->getDate(false)->format('Y-m-d H:i:s'), $found->getDate(false)->format('Y-m-d H:i:s'));
         $this->assertTrue($found->delete());
@@ -149,17 +149,17 @@ class ModelFunctionalityTest extends MondocBaseTest
         $mT->setAge(2);
         $mT->setName(uniqid());
 
-        $this->assertFalse($m->hasMongoId());
-        $this->assertFalse($mT->hasMongoId());
-        $this->assertFalse($m->hasPresetMongoId());
-        $this->assertFalse($mT->hasPresetMongoId());
+        $this->assertFalse($m->hasObjectId());
+        $this->assertFalse($mT->hasObjectId());
+        $this->assertFalse($m->hasPresetObjectId());
+        $this->assertFalse($mT->hasPresetObjectId());
 
         $this->assertTrue(MyService::insertMulti([$m, $mT]));
 
-        $this->assertTrue($m->hasMongoId());
-        $this->assertTrue($mT->hasMongoId());
-        $this->assertFalse($m->hasPresetMongoId());
-        $this->assertFalse($mT->hasPresetMongoId());
+        $this->assertTrue($m->hasObjectId());
+        $this->assertTrue($mT->hasObjectId());
+        $this->assertFalse($m->hasPresetObjectId());
+        $this->assertFalse($mT->hasPresetObjectId());
 
         $this->assertTrue($m->delete());
         $this->assertTrue($mT->delete());
@@ -202,20 +202,20 @@ class ModelFunctionalityTest extends MondocBaseTest
         $mT = new DateModel();
         $mT->setDate(DateTime::createFromFormat('Y-m-d H:i:s', '2016-01-01 00:00:00'));
 
-        $this->assertFalse($m->hasMongoId());
-        $this->assertFalse($mT->hasMongoId());
-        $this->assertFalse($m->hasPresetMongoId());
-        $this->assertFalse($mT->hasPresetMongoId());
+        $this->assertFalse($m->hasObjectId());
+        $this->assertFalse($mT->hasObjectId());
+        $this->assertFalse($m->hasPresetObjectId());
+        $this->assertFalse($mT->hasPresetObjectId());
 
         $this->assertTrue(MyService::insertMulti([$m, $mT]));
 
-        $this->assertTrue($m->hasMongoId());
-        $this->assertTrue($mT->hasMongoId());
-        $this->assertFalse($m->hasPresetMongoId());
-        $this->assertFalse($mT->hasPresetMongoId());
+        $this->assertTrue($m->hasObjectId());
+        $this->assertTrue($mT->hasObjectId());
+        $this->assertFalse($m->hasPresetObjectId());
+        $this->assertFalse($mT->hasPresetObjectId());
 
-        $this->assertEquals($m->getMongoIdString(), MyService::getOneByCriteria([])->getMongoIdString());
-        $this->assertEquals($mT->getMongoIdString(), DateService::getOneByCriteria([])->getMongoIdString());
+        $this->assertEquals($m->getObjectIdString(), MyService::getOneByCriteria([])->getObjectIdString());
+        $this->assertEquals($mT->getObjectIdString(), DateService::getOneByCriteria([])->getObjectIdString());
 
         $this->assertTrue($m->delete());
         $this->assertTrue($mT->delete());
@@ -229,13 +229,13 @@ class ModelFunctionalityTest extends MondocBaseTest
         $m->setAge(1);
         $m->setName(uniqid());
 
-        $this->assertFalse($m->hasMongoId());
-        $this->assertFalse($m->hasPresetMongoId());
+        $this->assertFalse($m->hasObjectId());
+        $this->assertFalse($m->hasPresetObjectId());
 
         $this->assertTrue(MyService::insertMulti([$m]));
 
-        $this->assertTrue($m->hasMongoId());
-        $this->assertFalse($m->hasPresetMongoId());
+        $this->assertTrue($m->hasObjectId());
+        $this->assertFalse($m->hasPresetObjectId());
 
         $this->assertTrue($m->delete());
     }
@@ -250,27 +250,27 @@ class ModelFunctionalityTest extends MondocBaseTest
         $m = new MyModel();
         $m->setAge(1);
         $m->setName(uniqid());
-        $m->setPresetMongoId($idOne);
+        $m->setPresetObjectId($idOne);
 
         $mT = new MyModel();
         $mT->setAge(2);
         $mT->setName(uniqid());
-        $mT->setPresetMongoId($idTwo);
+        $mT->setPresetObjectId($idTwo);
 
-        $this->assertFalse($m->hasMongoId());
-        $this->assertFalse($mT->hasMongoId());
-        $this->assertTrue($m->hasPresetMongoId());
-        $this->assertTrue($mT->hasPresetMongoId());
+        $this->assertFalse($m->hasObjectId());
+        $this->assertFalse($mT->hasObjectId());
+        $this->assertTrue($m->hasPresetObjectId());
+        $this->assertTrue($mT->hasPresetObjectId());
 
         $this->assertTrue(MyService::insertMulti([$m, $mT]));
 
-        $this->assertEquals($idOne->__toString(), $m->getMongoIdString());
-        $this->assertEquals($idTwo->__toString(), $mT->getMongoIdString());
+        $this->assertEquals($idOne->__toString(), $m->getObjectIdString());
+        $this->assertEquals($idTwo->__toString(), $mT->getObjectIdString());
 
-        $this->assertTrue($m->hasMongoId());
-        $this->assertTrue($mT->hasMongoId());
-        $this->assertFalse($m->hasPresetMongoId());
-        $this->assertFalse($mT->hasPresetMongoId());
+        $this->assertTrue($m->hasObjectId());
+        $this->assertTrue($mT->hasObjectId());
+        $this->assertFalse($m->hasPresetObjectId());
+        $this->assertFalse($mT->hasPresetObjectId());
 
         $this->assertTrue($m->delete());
         $this->assertTrue($mT->delete());
@@ -285,17 +285,17 @@ class ModelFunctionalityTest extends MondocBaseTest
         $m = new MyModel();
         $m->setAge(1);
         $m->setName(uniqid());
-        $m->setPresetMongoId($idOne);
+        $m->setPresetObjectId($idOne);
 
-        $this->assertFalse($m->hasMongoId());
-        $this->assertTrue($m->hasPresetMongoId());
+        $this->assertFalse($m->hasObjectId());
+        $this->assertTrue($m->hasPresetObjectId());
 
         $this->assertTrue(MyService::insertMulti([$m]));
 
-        $this->assertEquals($idOne->__toString(), $m->getMongoIdString());
+        $this->assertEquals($idOne->__toString(), $m->getObjectIdString());
 
-        $this->assertTrue($m->hasMongoId());
-        $this->assertFalse($m->hasPresetMongoId());
+        $this->assertTrue($m->hasObjectId());
+        $this->assertFalse($m->hasPresetObjectId());
 
         $this->assertTrue($m->delete());
     }
@@ -309,13 +309,13 @@ class ModelFunctionalityTest extends MondocBaseTest
         $m->setName($this->getUniqueKey());
 
         // not been saved yet
-        $this->assertFalse($m->hasMongoId());
+        $this->assertFalse($m->hasObjectId());
 
         // save the model
         $this->assertTrue($m->save());
 
         // ensure it has a mongo id now
-        $this->assertTrue($m->hasMongoId());
+        $this->assertTrue($m->hasObjectId());
 
         // delete the model
         $this->assertTrue($m->delete());
@@ -332,7 +332,7 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertCount(1, MyService::getMultiWhereKeyEqualsValue('age', 2));
         $this->assertCount(0, MyService::getMultiWhereKeyDoesNotEqualValue('age', 2));
 
-        $this->assertEquals($m->getMongoIdString(), MyService::getOneWhereKeyEqualsValue('age', 2)->getMongoIdString());
+        $this->assertEquals($m->getObjectIdString(), MyService::getOneWhereKeyEqualsValue('age', 2)->getObjectIdString());
         $this->assertNull(MyService::getOneWhereKeyDoesNotEqualValue('age', 2));
 
         // delete the model
@@ -379,16 +379,16 @@ class ModelFunctionalityTest extends MondocBaseTest
         $m->setName($this->getUniqueKey());
         $m->save();
 
-        $this->assertEquals(90, MyService::getById($m->getMongoId())->getAge());
+        $this->assertEquals(90, MyService::getById($m->getObjectId())->getAge());
 
         $this->assertTrue($m->incrementAge());
         $this->assertEquals(91, $m->getAge());
-        $this->assertEquals(91, MyService::getById($m->getMongoId())->getAge());
+        $this->assertEquals(91, MyService::getById($m->getObjectId())->getAge());
 
         $this->assertTrue($m->decrementAge());
         $this->assertTrue($m->decrementAge());
         $this->assertEquals(89, $m->getAge());
-        $this->assertEquals(89, MyService::getById($m->getMongoId())->getAge());
+        $this->assertEquals(89, MyService::getById($m->getObjectId())->getAge());
 
         // delete the model
         $this->assertTrue($m->delete());
@@ -403,10 +403,10 @@ class ModelFunctionalityTest extends MondocBaseTest
         $m->setName($this->getUniqueKey());
         $m->save();
 
-        MyService::decMulti($m->getMongoId(), ['age' => 2]);
-        $this->assertEquals(99, MyService::getById($m->getMongoId())->getAge());
-        MyService::incMulti($m->getMongoId(), ['age' => 4]);
-        $this->assertEquals(103, MyService::getById($m->getMongoId())->getAge());
+        MyService::decMulti($m->getObjectId(), ['age' => 2]);
+        $this->assertEquals(99, MyService::getById($m->getObjectId())->getAge());
+        MyService::incMulti($m->getObjectId(), ['age' => 4]);
+        $this->assertEquals(103, MyService::getById($m->getObjectId())->getAge());
 
         // delete the model
         $this->assertTrue($m->delete());
@@ -431,42 +431,42 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertEquals(2, MyService::aggregate()->getAverage('age'));
         $this->assertEquals(2, MyService::aggregate()->getSum('age'));
 
-        $this->assertTrue(MyService::inc($m->getMongoId(), 'age', 2));
-        $this->assertEquals(4, MyService::getById($m->getMongoId())->getAge());
+        $this->assertTrue(MyService::inc($m->getObjectId(), 'age', 2));
+        $this->assertEquals(4, MyService::getById($m->getObjectId())->getAge());
         $this->assertEquals(4, MyService::aggregate()->getAverage('age'));
         $this->assertEquals(4, MyService::aggregate()->getSum('age'));
 
-        $this->assertTrue(MyService::updateOne(['_id' => $m->getMongoId()], ['$set' => ['age' => 2]]));
-        $this->assertEquals(2, MyService::getById($m->getMongoId())->getAge());
+        $this->assertTrue(MyService::updateOne(['_id' => $m->getObjectId()], ['$set' => ['age' => 2]]));
+        $this->assertEquals(2, MyService::getById($m->getObjectId())->getAge());
         $this->assertEquals(2, MyService::aggregate()->getAverage('age'));
         $this->assertEquals(2, MyService::aggregate()->getSum('age'));
 
-        $this->assertTrue(MyService::updateOne(['_id' => $m->getMongoId()], ['$set' => ['age' => 4]]));
-        $this->assertEquals(4, MyService::getById($m->getMongoId())->getAge());
+        $this->assertTrue(MyService::updateOne(['_id' => $m->getObjectId()], ['$set' => ['age' => 4]]));
+        $this->assertEquals(4, MyService::getById($m->getObjectId())->getAge());
         $this->assertEquals(4, MyService::aggregate()->getAverage('age'));
         $this->assertEquals(4, MyService::aggregate()->getSum('age'));
 
-        $this->assertTrue(MyService::dec($m->getMongoId(), 'age', 2));
-        $this->assertEquals(2, MyService::getById($m->getMongoId())->getAge());
+        $this->assertTrue(MyService::dec($m->getObjectId(), 'age', 2));
+        $this->assertEquals(2, MyService::getById($m->getObjectId())->getAge());
         $this->assertEquals(2, MyService::aggregate()->getAverage('age'));
         $this->assertEquals(2, MyService::aggregate()->getAverage('age', ['name' => $m->getName()]));
         $this->assertEquals(2, MyService::aggregate()->getSum('age'));
 
         $this->assertTrue(MyService::updateMany(['age' => 2], ['$set' => ['age' => 123]]));
-        $this->assertEquals(123, MyService::getById($m->getMongoId())->getAge());
+        $this->assertEquals(123, MyService::getById($m->getObjectId())->getAge());
 
         $queryBuilder = MyService::getQueryBuilder();
         $queryBuilder->addQueryPart(ValueEqualTo::get()->integer('age', 123));
         $this->assertTrue(MyService::updateManyByQueryBuilder($queryBuilder, ['$set' => ['age' => 456]]));
-        $this->assertEquals(456, MyService::getById($m->getMongoId())->getAge());
+        $this->assertEquals(456, MyService::getById($m->getObjectId())->getAge());
 
         $queryBuilderTwo = MyService::getQueryBuilder();
         $queryBuilderTwo->addQueryPart(ValueEqualTo::get()->integer('age', 456));
         $this->assertTrue(MyService::updateOneByQueryBuilder($queryBuilderTwo, ['$set' => ['age' => 789]]));
-        $this->assertEquals(789, MyService::getById($m->getMongoId())->getAge());
+        $this->assertEquals(789, MyService::getById($m->getObjectId())->getAge());
 
         // Get the ID
-        $theId = $m->getMongoIdString();
+        $theId = $m->getObjectIdString();
 
         unset($m);
 
@@ -485,8 +485,8 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertEquals($name, $find->getName());
 
         // ensure it has a mongo id now
-        $this->assertTrue($find->hasMongoId());
-        $this->assertEquals($theId, $find->getMongoIdString());
+        $this->assertTrue($find->hasObjectId());
+        $this->assertEquals($theId, $find->getObjectIdString());
 
         unset($find);
 
@@ -504,8 +504,8 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertInstanceOf(MyModel::class, $multiByIds[0]);
 
         // ensure it has a mongo id now
-        $this->assertTrue($multi[0]->hasMongoId());
-        $this->assertEquals($theId, $multi[0]->getMongoIdString());
+        $this->assertTrue($multi[0]->hasObjectId());
+        $this->assertEquals($theId, $multi[0]->getObjectIdString());
 
         unset($multi);
 
@@ -582,21 +582,21 @@ class ModelFunctionalityTest extends MondocBaseTest
         $ids = [];
         $results = MyService::getPage($paginator, [], 'name', 1);
         $this->assertCount(1, $results);
-        $this->assertFalse(in_array($results[0]->getMongoIdString(), $ids));
-        $ids[] = $results[0]->getMongoIdString();
+        $this->assertFalse(in_array($results[0]->getObjectIdString(), $ids));
+        $ids[] = $results[0]->getObjectIdString();
 
         $paginator = MyService::getPaginationQueryHelper(2, 1, []);
         $this->assertEquals(3, $paginator->getTotalPages());
         $results = MyService::getPage($paginator, [], 'name', 1);
         $this->assertCount(1, $results);
-        $this->assertFalse(in_array($results[0]->getMongoIdString(), $ids));
-        $ids[] = $results[0]->getMongoIdString();
+        $this->assertFalse(in_array($results[0]->getObjectIdString(), $ids));
+        $ids[] = $results[0]->getObjectIdString();
 
         $paginator = MyService::getPaginationQueryHelper(3, 1, []);
         $this->assertEquals(3, $paginator->getTotalPages());
         $results = MyService::getPage($paginator, [], 'name', 1);
         $this->assertCount(1, $results);
-        $this->assertFalse(in_array($results[0]->getMongoIdString(), $ids));
+        $this->assertFalse(in_array($results[0]->getObjectIdString(), $ids));
 
         $paginator = MyService::getPaginationQueryHelper(1, 1, ['name' => 'Joe']);
         $this->assertEquals(2, $paginator->getTotalPages());
@@ -604,14 +604,14 @@ class ModelFunctionalityTest extends MondocBaseTest
         $ids = [];
         $results = MyService::getPage($paginator, ['name' => 'Joe'], 'name', 1);
         $this->assertCount(1, $results);
-        $this->assertFalse(in_array($results[0]->getMongoIdString(), $ids));
-        $ids[] = $results[0]->getMongoIdString();
+        $this->assertFalse(in_array($results[0]->getObjectIdString(), $ids));
+        $ids[] = $results[0]->getObjectIdString();
 
         $paginator = MyService::getPaginationQueryHelper(2, 1, ['name' => 'Joe']);
         $this->assertEquals(2, $paginator->getTotalPages());
         $results = MyService::getPage($paginator, ['name' => 'Joe'], 'name', 1);
         $this->assertCount(1, $results);
-        $this->assertFalse(in_array($results[0]->getMongoIdString(), $ids));
+        $this->assertFalse(in_array($results[0]->getObjectIdString(), $ids));
     }
 
     public function testPercentile()
@@ -631,7 +631,7 @@ class ModelFunctionalityTest extends MondocBaseTest
         }
         MyService::insertMulti($models);
         foreach ($models as $model) {
-            $this->assertTrue($model->hasMongoId());
+            $this->assertTrue($model->hasObjectId());
         }
 
         $this->assertEquals(1, MyService::aggregate()->getPercentile('age', .0));

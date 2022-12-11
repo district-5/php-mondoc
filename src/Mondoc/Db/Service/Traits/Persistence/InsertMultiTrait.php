@@ -86,11 +86,11 @@ trait InsertMultiTrait
         $data = [];
         foreach ($modelsForThisService as $model) {
             $asArray = $model->asArray();
-            if (array_key_exists('_mondocMongoId', $asArray)) {
-                unset($asArray['_mondocMongoId']);
+            if (array_key_exists('_mondocObjectId', $asArray)) {
+                unset($asArray['_mondocObjectId']);
             }
-            if ($model->hasPresetMongoId()) {
-                $asArray['_id'] = $model->getPresetMongoId();
+            if ($model->hasPresetObjectId()) {
+                $asArray['_id'] = $model->getPresetObjectId();
             }
             $data[] = $asArray;
         }
@@ -108,7 +108,7 @@ trait InsertMultiTrait
                 foreach ($modelsForThisService as $v) {
                     if (array_key_exists($insertedKey, $ids)) {
                         $v->setMongoId($ids[$insertedKey]);
-                        $v->clearPresetMongoId();
+                        $v->clearPresetObjectId();
                         $v->setMongoCollection($collection);
                     }
                     $insertedKey++;

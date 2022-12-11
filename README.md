@@ -262,17 +262,17 @@ $results = \District5Tests\MondocTests\Example\MyService::getPageByByObjectIdPag
 
 #### Useful information...
 
-To use a pre-determined ObjectId as the document `_id`, you can call `setPresetMongoId` against the model. For example:
+To use a pre-determined ObjectId as the document `_id`, you can call `setPresetObjectId` against the model. For example:
 
 ```php
 <?php
 $theId = new \MongoDB\BSON\ObjectId('61dfee5591efcf44e023d692');
 
 $person = new Person();
-$person->setPresetMongoId(new ObjectId());
+$person->setPresetObjectId(new ObjectId());
 $person->save();
 
-echo $person->getMongoIdString(); // 61dfee5591efcf44e023d692
+echo $person->getObjectIdString(); // 61dfee5591efcf44e023d692
 ```
 
 This will force the model to absorb this ObjectId and not generate a new one upon insertion.
@@ -300,10 +300,10 @@ $phpArrayFromArray = MondocTypes::arrayToPhp($bsonArray);
 
 // ObjectIds
 $anId = '61dfee5591efcf44e023d692';
-$mongoId = MondocTypes::toObjectId($anId);
+$objectId = MondocTypes::toObjectId($anId);
 // You can also pass existing ObjectId's into the conversion and nothing happens.
 // MondocTypes::toObjectId(new \MongoDB\BSON\ObjectId());
-// MondocTypes::toObjectId($mongoId);
+// MondocTypes::toObjectId($objectId);
 ```
 
 #### Query building

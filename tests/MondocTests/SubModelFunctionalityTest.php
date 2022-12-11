@@ -78,7 +78,7 @@ class SubModelFunctionalityTest extends MondocBaseTest
         $this->assertArrayHasKey('wordModel', $data['age']);
 
         $m->save();
-        $id = $m->getMongoId();
+        $id = $m->getObjectId();
 
         $newM = MySubService::getById($id);
         /* @var $newM MyModelWithSub */
@@ -95,7 +95,7 @@ class SubModelFunctionalityTest extends MondocBaseTest
         $this->assertEquals('pear', $newM->getFoods()[1]->getFood());
         $this->assertEquals('oranges', $newM->getFoods()[2]->getFood());
 
-        $this->assertEquals($id->__toString(), $newM->getMongoIdString());
+        $this->assertEquals($id->__toString(), $newM->getObjectIdString());
         MySubService::getCollection(MySubService::class)->drop();
     }
 
@@ -123,11 +123,11 @@ class SubModelFunctionalityTest extends MondocBaseTest
         $mOne->save();
         $mTwo->save();
 
-        $models = MySubService::getMultiByCriteria(['_id' => ['$in' => [$mOne->getMongoId(), $mTwo->getMongoId()]]]);
+        $models = MySubService::getMultiByCriteria(['_id' => ['$in' => [$mOne->getObjectId(), $mTwo->getObjectId()]]]);
         /* @var $models MyModelWithSub[] */
 
-        $this->assertEquals($mOne->getMongoIdString(), $models[0]->getMongoIdString());
-        $this->assertEquals($mTwo->getMongoIdString(), $models[1]->getMongoIdString());
+        $this->assertEquals($mOne->getObjectIdString(), $models[0]->getObjectIdString());
+        $this->assertEquals($mTwo->getObjectIdString(), $models[1]->getObjectIdString());
         $this->assertEquals($mOne->getAge()->getAge(), $models[0]->getAge()->getAge());
         $this->assertEquals($mTwo->getAge()->getAge(), $models[1]->getAge()->getAge());
 

@@ -111,7 +111,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
      */
     final public function setMongoId(ObjectId $objectId)
     {
-        $this->_mondocMongoId = $objectId;
+        $this->_mondocObjectId = $objectId;
 
         return $this;
     }
@@ -169,13 +169,13 @@ class MondocAbstractModel extends MondocAbstractSubModel
      */
     public function delete(): bool
     {
-        if (false === $this->hasMongoId()) {
+        if (false === $this->hasObjectId()) {
             return false;
         }
 
         if (null !== $serviceFQCN = MondocConfig::getInstance()->getServiceForModel(get_called_class())) {
             /* @var $serviceFQCN MondocAbstractService (it's not, it's actually a string) */
-            return $serviceFQCN::delete($this->getMongoId());
+            return $serviceFQCN::delete($this->getObjectId());
         }
 
         if ($this->_mondocCollection === null) {
@@ -185,7 +185,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
         try {
             $delete = $this->_mondocCollection->deleteOne(
                 [
-                    '_id' => $this->getMongoId()
+                    '_id' => $this->getObjectId()
                 ]
             );
 
@@ -255,7 +255,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
      */
     protected function getFieldToFieldMap(): array
     {
-        $this->fieldToFieldMap['_id'] = '_mondocMongoId';
+        $this->fieldToFieldMap['_id'] = '_mondocObjectId';
 
         return $this->fieldToFieldMap;
     }
@@ -355,12 +355,12 @@ class MondocAbstractModel extends MondocAbstractSubModel
             return false;
         }
         /* @var $service MondocAbstractService */
-        if ($this->hasMongoId() === false) {
+        if ($this->hasObjectId() === false) {
             $this->{$field} += $delta;
             return false;
         }
 
-        if (true === $service::inc($this->getMongoId(), $field, $delta)) {
+        if (true === $service::inc($this->getObjectId(), $field, $delta)) {
             $this->{$field} += $delta;
             return true;
         }

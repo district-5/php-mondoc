@@ -55,7 +55,7 @@ trait PresetMongoIdTrait
      * @noinspection PhpMissingReturnTypeInspection
      * @noinspection PhpUnused
      */
-    public function setPresetMongoId(ObjectId|null $presetMongoId)
+    public function setPresetObjectId(ObjectId|null $presetMongoId)
     {
         $this->_mondocPresetMongoId = $presetMongoId;
 
@@ -63,13 +63,31 @@ trait PresetMongoIdTrait
     }
 
     /**
+     * @noinspection PhpMissingReturnTypeInspection
+     * @deprecated Use getPresetObjectId() instead.
+     */
+    public function setPresetMongoId(ObjectId|null $presetMongoId)
+    {
+        return $this->setPresetObjectId($presetMongoId);
+    }
+
+    /**
      * Does this model have a preset Mongo ID (which is used for setting the _id on insertion).
      *
      * @return bool
      */
+    public function hasPresetObjectId(): bool
+    {
+        return null !== $this->getPresetObjectId();
+    }
+
+    /**
+     * @noinspection PhpMissingReturnTypeInspection
+     * @deprecated Use hasPresetObjectId() instead.
+     */
     public function hasPresetMongoId(): bool
     {
-        return null !== $this->getPresetMongoId();
+        return $this->hasPresetObjectId();
     }
 
     /**
@@ -77,16 +95,33 @@ trait PresetMongoIdTrait
      *
      * @return null|ObjectId
      */
-    public function getPresetMongoId(): ?ObjectId
+    public function getPresetObjectId(): ?ObjectId
     {
         return $this->_mondocPresetMongoId;
     }
 
     /**
+     * @noinspection PhpMissingReturnTypeInspection
+     * @deprecated Use getPresetObjectId() instead.
+     */
+    public function getPresetMongoId(): ?ObjectId
+    {
+        return $this->getPresetObjectId();
+    }
+
+    /**
      * Remove the preset Mongo ID (which is used for setting the _id on insertion).
+     */
+    public function clearPresetObjectId(): void
+    {
+        $this->_mondocPresetMongoId = null;
+    }
+
+    /**
+     * @deprecated Use clearPresetObjectId() instead.
      */
     public function clearPresetMongoId(): void
     {
-        $this->_mondocPresetMongoId = null;
+        $this->clearPresetObjectId();
     }
 }

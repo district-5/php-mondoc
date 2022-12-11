@@ -31,6 +31,7 @@
 
 namespace District5Tests\MondocTests;
 
+use District5Tests\MondocTests\Example\DateModel;
 use District5Tests\MondocTests\Example\VersionedModel;
 use District5Tests\MondocTests\Example\VersionedService;
 use MongoDB\BSON\ObjectId;
@@ -76,6 +77,15 @@ class VersionedModelTest extends MondocBaseTest
         $this->assertEquals($anId->__toString(), $inflated->getObjectIdString());
         $this->assertTrue($inflated->isModelVersionX(2));
         $this->assertFalse($inflated->isModelVersionX(1));
+    }
+
+    public function testIsOrIsNotVersionable()
+    {
+        $m = new DateModel();
+        $this->assertFalse($m->isVersionableModel());
+
+        $m = new VersionedModel();
+        $this->assertTrue($m->isVersionableModel());
     }
 
     public function testFullVersioningFunctionality()

@@ -437,4 +437,12 @@ abstract class MondocAbstractSubModel
         $this->_mondocEstablishedMultiInternal[$field] = (array_key_exists($field, $this->getKeyToClassMap()) && str_ends_with($this->getKeyToClassMap()[$field], '[]'));
         return $this->_mondocEstablishedMultiInternal[$field];
     }
+
+    /**
+     * @return bool
+     */
+    public function isVersionableModel(): bool
+    {
+        return false;
+    }
 }

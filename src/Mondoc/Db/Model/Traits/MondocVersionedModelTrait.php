@@ -107,4 +107,12 @@ trait MondocVersionedModelTrait
             ($this->_v - 1)
         );
     }
+
+    /**
+     * @return bool
+     */
+    public function isVersionableModel(): bool
+    {
+        return true;
+    }
 }

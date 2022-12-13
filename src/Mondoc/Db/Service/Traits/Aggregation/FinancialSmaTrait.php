@@ -171,7 +171,6 @@ trait FinancialSmaTrait
         $dataObjects = [];
         foreach ($records as $record) {
             $dataObjects[] = new AggregateSmaDto(
-                $record['_id'],
                 $record['price'],
                 $record['sma'],
                 MondocTypes::dateToPHPDateTime($record[$dateField])

@@ -31,7 +31,6 @@
 namespace District5\Mondoc\Dto;
 
 use DateTime;
-use MongoDB\BSON\ObjectId;
 
 /**
  * Class AggregateSmaDto.
@@ -40,11 +39,6 @@ use MongoDB\BSON\ObjectId;
  */
 class AggregateSmaDto
 {
-    /**
-     * @var ObjectId
-     */
-    private ObjectId $id;
-
     /**
      * @var float|int
      */
@@ -63,28 +57,15 @@ class AggregateSmaDto
     /**
      * Construct the DTO by passing the necessary data.
      *
-     * @param ObjectId $id
      * @param float|int $price
      * @param DateTime $dateTime
      * @param float|int $sma
      */
-    public function __construct(ObjectId $id, float|int $price, float|int $sma, DateTime $dateTime)
+    public function __construct(float|int $price, float|int $sma, DateTime $dateTime)
     {
-        $this->id = $id;
         $this->price = $price;
         $this->sma = $sma;
         $this->date = $dateTime;
-    }
-
-    /**
-     * Get the ID.
-     *
-     * @return ObjectId
-     * @noinspection PhpUnused
-     */
-    public function getId(): ObjectId
-    {
-        return $this->id;
     }
 
     /**

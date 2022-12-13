@@ -33,6 +33,7 @@ namespace District5\Mondoc\Db\Service\Traits\Aggregation;
 use DateTime;
 use District5\Mondoc\Dto\AggregateSmaDto;
 use District5\Mondoc\Helper\MondocTypes;
+use Exception;
 use MongoDB\Driver\Cursor;
 use MongoDB\Model\BSONDocument;
 
@@ -54,12 +55,13 @@ trait FinancialSmaTrait
      * @param string $priceField
      * @param int $numGroupMinutes The number of minutes to group by.
      * @param int $smaNumPeriods The number of periods to calculate the SMA for. 7 means average of 7 periods.
-     * @param int $sortDirection  (optional) default 1. 1 = ascending, -1 = descending
+     * @param int $sortDirection (optional) default 1. 1 = ascending, -1 = descending
      * @param array $additionalFilter (optional) default []. additional filter to apply to the aggregation
      * @return AggregateSmaDto[]
      * @noinspection PhpUnused
      * @noinspection DuplicatedCode
      *
+     * @throws Exception
      * @example $this->getFinancialSma(
      *      $symbolField = 'pair',
      *      $symbolValue = 'ETH-USD',
@@ -173,7 +175,7 @@ trait FinancialSmaTrait
             $dataObjects[] = new AggregateSmaDto(
                 $record['price'],
                 $record['sma'],
-                MondocTypes::dateToPHPDateTime($record[$dateField])
+                new DateTime($record[$dateField])
             );
         }
 

@@ -94,18 +94,24 @@ class MyModel extends MondocAbstractModel
 
 ##### Optional traits...
 
-You can easily version data within a model by using the `\District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait`
-trait. This trait introduces a `_v` variable in the model, which you can choose to increment when you choose.
+* `MondocVersionedModelTrait` - You can easily version data within a model by using the 
+  `\District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait` trait. This trait introduces a `_v` variable in the
+  model, which you can choose to increment when you choose. 
+  * You can detect if a model has a version by calling `isVersionableModel()` on the model.
+* `MondocCreatedDateTrait` - Adds a `cd` property to a model to utilise as a created date.
+  * You need to add all logic to update or set this value.
+* `MondocModifiedDateTrait` - Adds a `md` property to a model to utilise as an updated date.
+  * You need to add all logic to update or set this value.
 
-You can detect if a model has a version by calling `isVersionableModel()` on the model.
-
-**For example...**
+**Traits examples**
 
 ```php
 <?php
 class MyModel extends \District5\Mondoc\Db\Model\MondocAbstractModel
 {
     use \District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
+    use \District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
+    use \District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
     
     // Rest of your model code...
 }

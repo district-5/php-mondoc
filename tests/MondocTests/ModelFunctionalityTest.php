@@ -528,6 +528,38 @@ class ModelFunctionalityTest extends MondocBaseTest
         unset($multi);
     }
 
+    public function testMinNumber()
+    {
+        $this->initMongo();
+
+        // drop the collection
+        $this->mondoc->getCollection('test_model')->drop();
+
+        $this->assertEquals(0, MyService::countAll([]));
+
+        $name = 'Zorro';
+        $m = new MyModel();
+        $m->setAge(2);
+        $m->setName($name);
+        $this->assertTrue($m->save());
+
+        $this->assertEquals(2, MyService::aggregate()->getMin('age'));
+        $this->assertEquals(2, MyService::aggregate()->getMax('age'));
+        $this->assertEquals('Zorro', MyService::aggregate()->getMin('name'));
+        $this->assertEquals('Zorro', MyService::aggregate()->getMax('name'));
+
+        $name = 'Adrian';
+        $n = new MyModel();
+        $n->setAge(1);
+        $n->setName($name);
+        $this->assertTrue($n->save());
+
+        $this->assertEquals(1, MyService::aggregate()->getMin('age'));
+        $this->assertEquals(2, MyService::aggregate()->getMax('age'));
+        $this->assertEquals('Adrian', MyService::aggregate()->getMin('name'));
+        $this->assertEquals('Zorro', MyService::aggregate()->getMax('name'));
+    }
+
     public function testAverageSumCeilWorkCorrectly()
     {
         $this->initMongo();

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * District5 Mondoc Library
  *
@@ -26,46 +27,72 @@
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * @noinspection PhpUnused
  */
 
-namespace District5\Mondoc\Db\Service\ServiceSub;
+namespace District5\Mondoc\Db\Model\Traits;
 
-use District5\Mondoc\Db\Service\MondocAbstractService;
-use District5\Mondoc\Db\Service\Traits\Aggregation\AverageFieldTrait;
-use District5\Mondoc\Db\Service\Traits\Aggregation\FinancialCandlesTrait;
-use District5\Mondoc\Db\Service\Traits\Aggregation\FinancialSmaTrait;
-use District5\Mondoc\Db\Service\Traits\Aggregation\MaxFieldTrait;
-use District5\Mondoc\Db\Service\Traits\Aggregation\MinFieldTrait;
-use District5\Mondoc\Db\Service\Traits\Aggregation\PercentileOfNumberFieldTrait;
-use District5\Mondoc\Db\Service\Traits\Aggregation\SumFieldTrait;
+use DateTime;
+use District5\Date\Date;
+use MongoDB\BSON\UTCDateTime;
 
 /**
- * Class AggregateSubService.
+ * Trait MondocCreatedDateTrait.
  *
- * @package District5\Mondoc\Db\Service\ServiceSub
+ * @package District5\Mondoc\Db\Model\Traits
  */
-class AggregateSubService
+trait MondocCreatedDateTrait
 {
-    use AverageFieldTrait;
-    use PercentileOfNumberFieldTrait;
-    use SumFieldTrait;
-    use MinFieldTrait;
-    use MaxFieldTrait;
-    use FinancialCandlesTrait;
-    use FinancialSmaTrait;
+    use MondocMongoTypeTrait;
 
     /**
-     * @var MondocAbstractService|string
-     */
-    protected string|MondocAbstractService $service;
-
-    /**
-     * AggregateSubService constructor.
+     * The created date of the model
      *
-     * @param string|MondocAbstractService $serviceClass
+     * @var DateTime|UTCDateTime|null
      */
-    public function __construct(MondocAbstractService|string $serviceClass)
+    protected DateTime|UTCDateTime|null $cd = null;
+
+    /**
+     * Get the created date of this model
+     *
+     * @param bool $asMongo
+     * @return DateTime|UTCDateTime
+     */
+    public function getCreatedDate(bool $asMongo = false): DateTime|UTCDateTime
     {
-        $this->service = $serviceClass;
+        return $this->convertDateObject(
+            $this->cd,
+            $asMongo
+        );
+    }
+
+    /**
+     * Set the created date of this model
+     *
+     * @param DateTime $date
+     *
+     * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
+     */
+    public function setCreatedDate(DateTime $date)
+    {
+        $this->cd = $date;
+        if (method_exists($this, 'addDirty')) {
+            $this->addDirty('cd');
+        }
+        return $this;
+    }
+
+    /**
+     * Touch the created date
+     *
+     * @return $this
+     */
+    public function touchCreatedDate(): self
+    {
+        return $this->setCreatedDate(
+            Date::nowUtc()
+        );
     }
 }

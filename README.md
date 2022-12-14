@@ -58,7 +58,8 @@ $config->addServiceMapping(
 <?php
 namespace MyNs\Model;
 
-use District5\Mondoc\Db\Model\MondocAbstractModel;use MyNs\Service\MyService;
+use District5\Mondoc\Db\Model\MondocAbstractModel;
+use MyNs\Service\MyService;
 
 /**
  * Class MyModel
@@ -94,18 +95,24 @@ class MyModel extends MondocAbstractModel
 
 ##### Optional traits...
 
-You can easily version data within a model by using the `\District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait`
-trait. This trait introduces a `_v` variable in the model, which you can choose to increment when you choose.
+* `MondocVersionedModelTrait` - You can easily version data within a model by using the
+  `\District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait` trait. This trait introduces a `_v` variable in the
+  model, which you can choose to increment when you choose.
+  * You can detect if a model has a version by calling `isVersionableModel()` on the model.
+* `MondocCreatedDateTrait` - Adds a `cd` property to a model to utilise as a created date.
+  * You need to add all logic to update or set this value.
+* `MondocModifiedDateTrait` - Adds a `md` property to a model to utilise as an updated date.
+  * You need to add all logic to update or set this value.
 
-You can detect if a model has a version by calling `isVersionableModel()` on the model.
-
-**For example...**
+**Traits examples**
 
 ```php
 <?php
 class MyModel extends \District5\Mondoc\Db\Model\MondocAbstractModel
 {
     use \District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
+    use \District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
+    use \District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
     
     // Rest of your model code...
 }
@@ -135,7 +142,7 @@ class MyService extends AbstractService
 }
 ```
 
-The logic for querying the database etc, is always performed in the service layer.
+The logic for querying the database etc., is always performed in the service layer.
 
 #### Nesting objects
 
@@ -145,7 +152,8 @@ models defined in the `$mondocNested` array.
 Sub models must extend `\District5\Mondoc\Db\Model\MondocAbstractSubModel`.
 
 ```php
-use District5\Mondoc\Db\Model\MondocAbstractModel;use District5\Mondoc\Db\Model\MondocAbstractSubModel;
+use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Model\MondocAbstractSubModel;
 
 class FavouriteFood extends MondocAbstractSubModel
 {
@@ -276,6 +284,16 @@ $results = \District5Tests\MondocTests\Example\MyService::getPageByByObjectIdPag
 
 // get sum of a field with a given filter
 \District5Tests\MondocTests\Example\MyService::aggregate()->getSum('age', ['foo' => 'bar']);
+
+// get the min value of a field with a given filter
+\District5Tests\MondocTests\Example\MyService::aggregate()->getMin('age', ['foo' => 'bar']);
+// ...or with a string...
+// \District5Tests\MondocTests\Example\MyService::aggregate()->getMin('name', ['foo' => 'bar']);
+
+// get the max value of a field with a given filter
+\District5Tests\MondocTests\Example\MyService::aggregate()->getMax('age', ['foo' => 'bar']);
+// ...or with a string...
+// \District5Tests\MondocTests\Example\MyService::aggregate()->getMax('name', ['foo' => 'bar']);
 ```
 
 
@@ -285,6 +303,7 @@ To use a pre-determined ObjectId as the document `_id`, you can call `setPresetO
 
 ```php
 <?php
+/** @noinspection SpellCheckingInspection */
 $theId = new \MongoDB\BSON\ObjectId('61dfee5591efcf44e023d692');
 
 $person = new Person();
@@ -318,6 +337,7 @@ $bsonArray = new \MongoDB\Model\BSONArray(['foo', 'bar']);
 $phpArrayFromArray = MondocTypes::arrayToPhp($bsonArray);
 
 // ObjectIds
+/** @noinspection SpellCheckingInspection */
 $anId = '61dfee5591efcf44e023d692';
 $objectId = MondocTypes::toObjectId($anId);
 // You can also pass existing ObjectId's into the conversion and nothing happens.

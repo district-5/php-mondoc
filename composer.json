@@ -22,7 +22,7 @@
     },
     "autoload": {
         "psr-4": {
-            "District5\\Mondoc\\": "src/Mondoc/"
+            "District5\\Mondoc\\": "src/"
         }
     },
     "autoload-dev": {

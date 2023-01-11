@@ -100,11 +100,12 @@ class MyModel extends MondocAbstractModel
   a `_v` variable in the model, which you can choose to increment when you choose.
   * You can detect if a model has a version by calling `isVersionableModel()` on the model.
 * `MondocCreatedDateTrait` - Adds a `cd` property to a model to utilise as a created date.
-  * This value is automatically assigned, but you can override the default by assigning a
-    value to the `cd` property.
+  * This value is automatically assigned to the current UTC date upon initial save of a model,
+    or if an existing model is updated and the `cd` property has not been set. You can 
+    override this behaviour by assigning a value to the `cd` property.
 * `MondocModifiedDateTrait` - Adds a `md` property to a model to utilise as an updated date.
-  * This value is automatically assigned, but you can override the default by assigning a
-    value to the `md` property.
+  * This value is automatically assigned the current UTC date, but you can override this 
+    behaviour by assigning a value to the `md` property prior to saving.
 
 **Traits examples**
 

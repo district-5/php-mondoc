@@ -31,10 +31,13 @@
 
 namespace District5Tests\MondocTests;
 
+use DateTime;
+use District5\Date\Date;
 use District5Tests\MondocTests\Example\DateModel;
 use District5Tests\MondocTests\Example\VersionedModel;
 use District5Tests\MondocTests\Example\VersionedService;
 use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\UTCDateTime;
 
 /**
  * Class VersionedModelTest.
@@ -88,6 +91,7 @@ class VersionedModelTest extends MondocBaseTest
         $this->assertTrue($m->isVersionableModel());
     }
 
+    /** @noinspection PhpRedundantOptionalArgumentInspection */
     public function testFullVersioningFunctionality()
     {
         $this->initMongo();
@@ -107,6 +111,16 @@ class VersionedModelTest extends MondocBaseTest
         $this->assertTrue($model->save());
 
         $model = VersionedService::getById($m->getObjectId());
+        $this->assertInstanceOf(DateTime::class, $model->getCreatedDate(false));
+        $this->assertInstanceOf(UTCDateTime::class, $model->getCreatedDate(true));
+        $this->assertTrue(Date::validateObject($model->getCreatedDate(false))->isOlderThan(Date::modify(Date::nowUtc())->add()->seconds(5)));
+        $this->assertTrue(Date::validateObject($model->getCreatedDate(false))->isNewerThan(Date::modify(Date::nowUtc())->minus()->seconds(5)));
+
+        $this->assertInstanceOf(DateTime::class, $model->getModifiedDate(false));
+        $this->assertInstanceOf(UTCDateTime::class, $model->getModifiedDate(true));
+        $this->assertTrue(Date::validateObject($model->getModifiedDate(false))->isOlderThan(Date::modify(Date::nowUtc())->add()->seconds(5)));
+        $this->assertTrue(Date::validateObject($model->getModifiedDate(false))->isNewerThan(Date::modify(Date::nowUtc())->minus()->seconds(5)));
+
         /* @var $model VersionedModel */
         $this->assertEquals(2, $model->getModelVersion());
         $this->assertEquals('Foo', $model->getName());

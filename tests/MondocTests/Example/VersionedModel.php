@@ -32,6 +32,8 @@ namespace District5Tests\MondocTests\Example;
 
 use DateTime;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
+use District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
 use District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
 use MongoDB\BSON\UTCDateTime;
 
@@ -43,6 +45,8 @@ use MongoDB\BSON\UTCDateTime;
 class VersionedModel extends MondocAbstractModel
 {
     use MondocVersionedModelTrait;
+    use MondocCreatedDateTrait;
+    use MondocModifiedDateTrait;
 
     /**
      * @var string|null

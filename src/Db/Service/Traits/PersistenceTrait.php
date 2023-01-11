@@ -30,7 +30,10 @@
 
 namespace District5\Mondoc\Db\Service\Traits;
 
+use District5\Date\Date;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
+use District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
 use District5\Mondoc\Db\Service\Traits\Persistence\InsertMultiTrait;
 use District5\Mondoc\Db\Service\Traits\Persistence\InsertSingleTrait;
 use District5\Mondoc\Db\Service\Traits\Persistence\UpdateTrait;
@@ -60,10 +63,24 @@ trait PersistenceTrait
         if (!is_object($model) || false === method_exists($model, 'isMondocModel')) {
             return false;
         }
+        $uses = class_uses($model);
+        $hasModified = in_array(MondocModifiedDateTrait::class, $uses, true);
+        $hasCreated = in_array(MondocCreatedDateTrait::class, $uses, true);
         if (null === $model->getObjectId()) {
+            /* @var $model MondocCreatedDateTrait */
+            if ($hasCreated === true && $model->getCreatedDate(false) === null) {
+                $model->{'setCreatedDate'}(Date::nowUtc());
+            }
+            /* @var $model MondocModifiedDateTrait */
+            if ($hasModified === true && $model->getModifiedDate(false) === null) {
+                $model->{'setModifiedDate'}(Date::nowUtc());
+            }
             return self::insert($model);
         }
 
+        if ($hasModified === true && !in_array('md', $model->getDirty())) {
+            $model->{'setModifiedDate'}(Date::nowUtc());
+        }
         return self::update($model);
     }
 }

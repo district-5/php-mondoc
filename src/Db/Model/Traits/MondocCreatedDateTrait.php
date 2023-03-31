@@ -57,9 +57,9 @@ trait MondocCreatedDateTrait
      * Get the created date of this model
      *
      * @param bool $asMongo
-     * @return DateTime|UTCDateTime
+     * @return DateTime|UTCDateTime|null
      */
-    public function getCreatedDate(bool $asMongo = false): DateTime|UTCDateTime
+    public function getCreatedDate(bool $asMongo = false): DateTime|UTCDateTime|null
     {
         return $this->convertDateObject(
             $this->cd,

@@ -96,13 +96,16 @@ class MyModel extends MondocAbstractModel
 ##### Optional traits...
 
 * `MondocVersionedModelTrait` - You can easily version data within a model by using the
-  `\District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait` trait. This trait introduces a `_v` variable in the
-  model, which you can choose to increment when you choose.
+  `\District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait` trait. This trait introduces
+  a `_v` variable in the model, which you can choose to increment when you choose.
   * You can detect if a model has a version by calling `isVersionableModel()` on the model.
 * `MondocCreatedDateTrait` - Adds a `cd` property to a model to utilise as a created date.
-  * You need to add all logic to update or set this value.
+  * This value is automatically assigned to the current UTC date upon initial save of a model,
+    or if an existing model is updated and the `cd` property has not been set. You can 
+    override this behaviour by assigning a value to the `cd` property.
 * `MondocModifiedDateTrait` - Adds a `md` property to a model to utilise as an updated date.
-  * You need to add all logic to update or set this value.
+  * This value is automatically assigned the current UTC date, but you can override this 
+    behaviour by assigning a value to the `md` property prior to saving.
 
 **Traits examples**
 

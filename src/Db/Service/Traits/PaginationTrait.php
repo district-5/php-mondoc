@@ -32,7 +32,7 @@ namespace District5\Mondoc\Db\Service\Traits;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Helper\MondocTypes;
-use District5\Mondoc\Helper\PaginatedQueryHelper;
+use District5\Mondoc\Helper\MondocPaginationHelper;
 use InvalidArgumentException;
 use MongoDB\BSON\ObjectId;
 
@@ -50,12 +50,12 @@ trait PaginationTrait
      * @param int $perPage
      * @param array $filter
      *
-     * @return PaginatedQueryHelper
+     * @return MondocPaginationHelper
      * @noinspection PhpUnused
      */
-    public static function getPaginationQueryHelper(int $currentPageNumber, int $perPage, array $filter = []): PaginatedQueryHelper
+    public static function getPaginationHelper(int $currentPageNumber, int $perPage, array $filter = []): MondocPaginationHelper
     {
-        return new PaginatedQueryHelper(
+        return new MondocPaginationHelper(
             self::countAll($filter),
             $currentPageNumber,
             $perPage
@@ -68,12 +68,12 @@ trait PaginationTrait
      * @param int $perPage
      * @param array $filter
      *
-     * @return PaginatedQueryHelper
+     * @return MondocPaginationHelper
      * @noinspection PhpUnused
      */
-    public static function getPaginationQueryHelperForObjectIdPagination(int $perPage, array $filter = []): PaginatedQueryHelper
+    public static function getPaginationHelperForObjectIdPagination(int $perPage, array $filter = []): MondocPaginationHelper
     {
-        return new PaginatedQueryHelper(
+        return new MondocPaginationHelper(
             self::countAll($filter),
             1,
             $perPage
@@ -83,14 +83,14 @@ trait PaginationTrait
     /**
      * Get a page of results for a specific query filter.
      *
-     * @param PaginatedQueryHelper $paginator
+     * @param MondocPaginationHelper $paginator
      * @param array $filter
      * @param string|null $sortByField
      * @param int $sortDirection
      * @return MondocAbstractModel[]
      * @noinspection PhpUnused
      */
-    public static function getPage(PaginatedQueryHelper $paginator, array $filter = [], ?string $sortByField = null, int $sortDirection = -1): array
+    public static function getPage(MondocPaginationHelper $paginator, array $filter = [], ?string $sortByField = null, int $sortDirection = -1): array
     {
         $options = [
             'skip' => $paginator->getSkip(),
@@ -108,7 +108,7 @@ trait PaginationTrait
     /**
      * Get a page of results for a specific query filter. This method is to be used for _id based pagination.
      *
-     * @param PaginatedQueryHelper $paginator
+     * @param MondocPaginationHelper $paginator
      * @param array $filter
      * @param string|ObjectId|null $currentId
      * @param int $sortDirection
@@ -116,7 +116,7 @@ trait PaginationTrait
      * @throws InvalidArgumentException
      * @noinspection PhpUnused
      */
-    public static function getPageByByObjectIdPagination(PaginatedQueryHelper $paginator, ObjectId|string|null $currentId, int $sortDirection = -1, array $filter = []): array
+    public static function getPageByByObjectIdPagination(MondocPaginationHelper $paginator, ObjectId|string|null $currentId, int $sortDirection = -1, array $filter = []): array
     {
         $options = [
             'limit' => $paginator->getLimit(),

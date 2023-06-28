@@ -35,7 +35,7 @@ namespace District5\Mondoc\Helper;
  *
  * @package District5\Mondoc\Helper
  */
-class PaginatedQueryHelper
+class MondocPaginationHelper
 {
     /**
      * @var int
@@ -63,7 +63,7 @@ class PaginatedQueryHelper
     protected int $skip = 0;
 
     /**
-     * PaginatedQueryHelper constructor.
+     * MondocPaginationHelper constructor.
      *
      * @param int $totalResults
      * @param int $currentPage
@@ -147,12 +147,12 @@ class PaginatedQueryHelper
      * @param int $currentPage
      * @param int $perPage (optional) default 10
      *
-     * @return PaginatedQueryHelper
+     * @return MondocPaginationHelper
      * @noinspection PhpUnused
      */
-    public static function init(int $totalResults, int $currentPage, int $perPage = 10): PaginatedQueryHelper
+    public static function init(int $totalResults, int $currentPage, int $perPage = 10): MondocPaginationHelper
     {
-        return new PaginatedQueryHelper($totalResults, $currentPage, $perPage);
+        return new MondocPaginationHelper($totalResults, $currentPage, $perPage);
     }
 
     /**

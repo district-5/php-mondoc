@@ -582,7 +582,7 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertEquals(6, MyService::aggregate()->getSum('age', ['name' => 'Joe']));
         $this->assertEquals(6, MyService::aggregate()->getSum('age', ['name' => ['$eq' => 'Joe']]));
 
-        $tmpPaginator = MyService::getPaginationQueryHelper(1, 10, []);
+        $tmpPaginator = MyService::getPaginationHelper(1, 10, []);
         $this->assertEquals(1, $tmpPaginator->getTotalPages());
         $this->assertEquals(1, $tmpPaginator->getCurrentPage());
         $this->assertEquals(10, $tmpPaginator->getLimit());
@@ -608,7 +608,7 @@ class ModelFunctionalityTest extends MondocBaseTest
             $this->assertTrue($m->save());
         }
 
-        $paginator = MyService::getPaginationQueryHelper(1, 1, []);
+        $paginator = MyService::getPaginationHelper(1, 1, []);
         $this->assertEquals(3, $paginator->getTotalPages());
 
         $ids = [];
@@ -617,20 +617,20 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertFalse(in_array($results[0]->getObjectIdString(), $ids));
         $ids[] = $results[0]->getObjectIdString();
 
-        $paginator = MyService::getPaginationQueryHelper(2, 1, []);
+        $paginator = MyService::getPaginationHelper(2, 1, []);
         $this->assertEquals(3, $paginator->getTotalPages());
         $results = MyService::getPage($paginator, [], 'name', 1);
         $this->assertCount(1, $results);
         $this->assertFalse(in_array($results[0]->getObjectIdString(), $ids));
         $ids[] = $results[0]->getObjectIdString();
 
-        $paginator = MyService::getPaginationQueryHelper(3, 1, []);
+        $paginator = MyService::getPaginationHelper(3, 1, []);
         $this->assertEquals(3, $paginator->getTotalPages());
         $results = MyService::getPage($paginator, [], 'name', 1);
         $this->assertCount(1, $results);
         $this->assertFalse(in_array($results[0]->getObjectIdString(), $ids));
 
-        $paginator = MyService::getPaginationQueryHelper(1, 1, ['name' => 'Joe']);
+        $paginator = MyService::getPaginationHelper(1, 1, ['name' => 'Joe']);
         $this->assertEquals(2, $paginator->getTotalPages());
 
         $ids = [];
@@ -639,7 +639,7 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertFalse(in_array($results[0]->getObjectIdString(), $ids));
         $ids[] = $results[0]->getObjectIdString();
 
-        $paginator = MyService::getPaginationQueryHelper(2, 1, ['name' => 'Joe']);
+        $paginator = MyService::getPaginationHelper(2, 1, ['name' => 'Joe']);
         $this->assertEquals(2, $paginator->getTotalPages());
         $results = MyService::getPage($paginator, ['name' => 'Joe'], 'name', 1);
         $this->assertCount(1, $results);

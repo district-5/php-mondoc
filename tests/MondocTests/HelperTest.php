@@ -32,7 +32,7 @@ namespace District5Tests\MondocTests;
 
 use DateTime;
 use District5\Mondoc\Helper\MondocTypes;
-use District5\Mondoc\Helper\PaginatedQueryHelper;
+use District5\Mondoc\Helper\MondocPaginationHelper;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
@@ -101,7 +101,7 @@ class HelperTest extends MondocBaseTest
     public function testPagination()
     {
         /** @noinspection PhpRedundantOptionalArgumentInspection */
-        $paginator = PaginatedQueryHelper::init(101, 2, 10);
+        $paginator = MondocPaginationHelper::init(101, 2, 10);
         $this->assertEquals(101, $paginator->getTotalResults());
         $this->assertEquals(11, $paginator->getTotalPages());
         $this->assertTrue($paginator->hasPreviousPage());
@@ -113,7 +113,7 @@ class HelperTest extends MondocBaseTest
     public function testPaginationFirstPage()
     {
         /** @noinspection PhpRedundantOptionalArgumentInspection */
-        $paginator = PaginatedQueryHelper::init(100, 1, 10);
+        $paginator = MondocPaginationHelper::init(100, 1, 10);
         $this->assertEquals(10, $paginator->getTotalPages());
         $this->assertFalse($paginator->hasPreviousPage());
         $this->assertTrue($paginator->hasNextPage());
@@ -124,7 +124,7 @@ class HelperTest extends MondocBaseTest
     public function testPaginationLastPage()
     {
         /** @noinspection PhpRedundantOptionalArgumentInspection */
-        $paginator = PaginatedQueryHelper::init(100, 10, 10);
+        $paginator = MondocPaginationHelper::init(100, 10, 10);
         $this->assertEquals(10, $paginator->getTotalPages());
         $this->assertTrue($paginator->hasPreviousPage());
         $this->assertFalse($paginator->hasNextPage());

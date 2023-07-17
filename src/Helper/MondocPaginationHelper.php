@@ -285,4 +285,17 @@ class MondocPaginationHelper
 
         return $proposed >= $paginationStartCounter && $proposed <= $paginationEndCounter;
     }
+
+    /**
+     * @return array
+     */
+    public function asArray(): array
+    {
+        return [
+            'page' => $this->getCurrentPage(),
+            'pages' => $this->getTotalPages(),
+            'results' => $this->getTotalResults(),
+            'perPage' => $this->getLimit()
+        ];
+    }
 }

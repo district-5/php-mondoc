@@ -62,15 +62,6 @@ trait MondocMongoIdTrait
     }
 
     /**
-     * @see MondocMongoIdTrait::getObjectIdString()
-     * @deprecated Use getObjectIdString() instead.
-     */
-    public function getMongoIdString(): ?string
-    {
-        return $this->getObjectIdString();
-    }
-
-    /**
      * Does this model have an ObjectId? IE, has it been saved before?
      *
      * @return bool
@@ -78,15 +69,6 @@ trait MondocMongoIdTrait
     public function hasObjectId(): bool
     {
         return is_object($this->getObjectId()) && $this->getObjectId() instanceof ObjectId;
-    }
-
-    /**
-     * @see MondocMongoIdTrait::hasObjectId()
-     * @deprecated Use hasObjectId() instead.
-     */
-    public function hasMongoId(): bool
-    {
-        return $this->hasObjectId();
     }
 
     /**
@@ -102,15 +84,6 @@ trait MondocMongoIdTrait
     }
 
     /**
-     * @see MondocMongoIdTrait::getObjectId()
-     * @deprecated Use getObjectId() instead.
-     */
-    public function getMongoId(): ?ObjectId
-    {
-        return $this->getObjectId();
-    }
-
-    /**
      * Remove the ObjectId from this model. Ideal for cloning a document.
      *
      * @return $this
@@ -121,15 +94,5 @@ trait MondocMongoIdTrait
         $this->_mondocObjectId = null;
 
         return $this;
-    }
-
-    /**
-     * @see MondocMongoIdTrait::unsetObjectId()
-     * @deprecated Use unsetObjectId() instead.
-     * @noinspection PhpMissingReturnTypeInspection
-     */
-    public function unsetMongoId()
-    {
-        return $this->unsetObjectId();
     }
 }

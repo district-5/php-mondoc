@@ -107,7 +107,7 @@ trait InsertMultiTrait
                 $insertedKey = 0;
                 foreach ($modelsForThisService as $v) {
                     if (array_key_exists($insertedKey, $ids)) {
-                        $v->setMongoId($ids[$insertedKey]);
+                        $v->setObjectId($ids[$insertedKey]);
                         $v->clearPresetObjectId();
                         $v->setMongoCollection($collection);
                     }

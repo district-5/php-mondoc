@@ -93,7 +93,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
     {
         $done = parent::inflateSingleArray($data);
         if (array_key_exists('_id', $data)) {
-            $done->setMongoId($data['_id']);
+            $done->setObjectId($data['_id']);
         }
         $done->inflateKeyToClassMaps();
         $done->assignDefaultVars();
@@ -109,7 +109,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
      * @return $this
      * @noinspection PhpMissingReturnTypeInspection
      */
-    final public function setMongoId(ObjectId $objectId)
+    final public function setObjectId(ObjectId $objectId)
     {
         $this->_mondocObjectId = $objectId;
 

@@ -87,7 +87,6 @@ class ModelFunctionalityTest extends MondocBaseTest
     public function testDateMethods()
     {
         $this->initMongo();
-        $this->mondoc->getCollection('date_model')->drop();
 
         $nowDate = new DateTime();
         $m = new DateModel();
@@ -415,8 +414,6 @@ class ModelFunctionalityTest extends MondocBaseTest
     public function testPersistAndQuery()
     {
         $this->initMongo();
-        // drop the collection
-        $this->mondoc->getCollection('test_model')->drop();
 
         $this->assertEquals(0, MyService::countAll([]));
 
@@ -532,8 +529,6 @@ class ModelFunctionalityTest extends MondocBaseTest
     {
         $this->initMongo();
 
-        // drop the collection
-        $this->mondoc->getCollection('test_model')->drop();
 
         $this->assertEquals(0, MyService::countAll([]));
 
@@ -563,8 +558,6 @@ class ModelFunctionalityTest extends MondocBaseTest
     public function testAverageSumCeilWorkCorrectly()
     {
         $this->initMongo();
-        // drop the collection
-        $this->mondoc->getCollection('test_model')->drop();
 
         $this->assertEquals(0, MyService::countAll([]));
 
@@ -592,8 +585,6 @@ class ModelFunctionalityTest extends MondocBaseTest
     public function testPagination()
     {
         $this->initMongo();
-        // drop the collection
-        $this->mondoc->getCollection('test_model')->drop();
 
         $builder = new QueryBuilder();
 
@@ -649,8 +640,6 @@ class ModelFunctionalityTest extends MondocBaseTest
     public function testPercentile()
     {
         $this->initMongo();
-        // drop the collection
-        $this->mondoc->getCollection('test_model')->drop();
 
         $i = 0;
         $models = [];

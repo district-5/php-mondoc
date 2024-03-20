@@ -49,7 +49,6 @@ class BuilderTest extends MondocBaseTest
     public function testPersistAndQuery()
     {
         $this->initMongo();
-        $this->mondoc->getCollection('test_model')->drop();
 
         $objectId = new ObjectId();
 

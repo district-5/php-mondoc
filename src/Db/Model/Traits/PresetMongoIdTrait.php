@@ -63,15 +63,6 @@ trait PresetMongoIdTrait
     }
 
     /**
-     * @noinspection PhpMissingReturnTypeInspection
-     * @deprecated Use getPresetObjectId() instead.
-     */
-    public function setPresetMongoId(ObjectId|null $presetMongoId)
-    {
-        return $this->setPresetObjectId($presetMongoId);
-    }
-
-    /**
      * Does this model have a preset Mongo ID (which is used for setting the _id on insertion).
      *
      * @return bool

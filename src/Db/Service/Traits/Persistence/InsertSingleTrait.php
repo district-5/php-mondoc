@@ -67,7 +67,7 @@ trait InsertSingleTrait
         );
         if (1 === $insert->getInsertedCount()) {
             $model->clearPresetObjectId();
-            $model->setMongoId($insert->getInsertedId());
+            $model->setObjectId($insert->getInsertedId());
             $model->setMongoCollection($collection);
 
             return true;

@@ -30,89 +30,84 @@
 
 namespace District5\Mondoc\Db\Model\Traits;
 
+use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\BSON\ObjectId;
 
 /**
- * Trait PresetMongoIdTrait.
+ * Trait MondocObjectIdTrait.
  *
  * @package District5\Mondoc\Db\Model\Traits
  */
-trait PresetMongoIdTrait
+trait MondocObjectIdTrait
 {
     /**
-     * Assign a preset ID to be used for insertion.
+     * The ObjectId once the model has been saved for the first time.
      *
      * @var null|ObjectId
      */
-    protected ?ObjectId $_mondocPresetMongoId = null;
+    protected ?ObjectId $_mondocObjectId = null;
 
     /**
-     * Set the preset Mongo ID (which is used for setting the _id on insertion).
+     * Get the string value for the ObjectId of the persisted model.
      *
-     * @param null|ObjectId $presetMongoId
+     * @return null|string
+     */
+    public function getObjectIdString(): ?string
+    {
+        if ($this->hasObjectId()) {
+            return $this->getObjectId()->__toString();
+        }
+
+        return null;
+    }
+
+    /**
+     * Does this model have an ObjectId? IE, has it been saved before?
+     *
+     * @return bool
+     */
+    public function hasObjectId(): bool
+    {
+        return is_object($this->getObjectId()) && $this->getObjectId() instanceof ObjectId;
+    }
+
+    /**
+     * Get the ObjectId of the persisted model.
+     *
+     * @return null|ObjectId
+     */
+    public function getObjectId(): ?ObjectId
+    {
+        return MondocTypes::toObjectId(
+            $this->_mondocObjectId
+        );
+    }
+
+    /**
+     * Remove the ObjectId from this model. Ideal for cloning a document.
      *
      * @return $this
      * @noinspection PhpMissingReturnTypeInspection
-     * @noinspection PhpUnused
      */
-    public function setPresetObjectId(ObjectId|null $presetMongoId)
+    public function unsetObjectId()
     {
-        $this->_mondocPresetMongoId = $presetMongoId;
+        $this->_mondocObjectId = null;
 
         return $this;
     }
 
     /**
-     * Does this model have a preset Mongo ID (which is used for setting the _id on insertion).
+     * Set the ObjectId for this model. Primarily used by the service.
      *
-     * @return bool
-     */
-    public function hasPresetObjectId(): bool
-    {
-        return null !== $this->getPresetObjectId();
-    }
-
-    /**
-     * @noinspection PhpMissingReturnTypeInspection
-     * @deprecated Use hasPresetObjectId() instead.
-     */
-    public function hasPresetMongoId(): bool
-    {
-        return $this->hasPresetObjectId();
-    }
-
-    /**
-     * Get the preset Mongo ID (which is used for setting the _id on insertion).
+     * @param ObjectId $objectId
      *
-     * @return null|ObjectId
-     */
-    public function getPresetObjectId(): ?ObjectId
-    {
-        return $this->_mondocPresetMongoId;
-    }
-
-    /**
+     * @return $this
      * @noinspection PhpMissingReturnTypeInspection
-     * @deprecated Use getPresetObjectId() instead.
      */
-    public function getPresetMongoId(): ?ObjectId
+    final public function setObjectId(ObjectId $objectId)
     {
-        return $this->getPresetObjectId();
-    }
+        $this->_mondocObjectId = $objectId;
 
-    /**
-     * Remove the preset Mongo ID (which is used for setting the _id on insertion).
-     */
-    public function clearPresetObjectId(): void
-    {
-        $this->_mondocPresetMongoId = null;
-    }
-
-    /**
-     * @deprecated Use clearPresetObjectId() instead.
-     */
-    public function clearPresetMongoId(): void
-    {
-        $this->clearPresetObjectId();
+        return $this;
     }
 }

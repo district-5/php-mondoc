@@ -32,9 +32,9 @@ namespace District5\Mondoc\Db\Model;
 
 use DateTime;
 use District5\Mondoc\Db\Model\Traits\DirtyAttributesTrait;
-use District5\Mondoc\Db\Model\Traits\MondocMongoIdTrait;
+use District5\Mondoc\Db\Model\Traits\MondocObjectIdTrait;
 use District5\Mondoc\Db\Model\Traits\MondocMongoTypeTrait;
-use District5\Mondoc\Db\Model\Traits\PresetMongoIdTrait;
+use District5\Mondoc\Db\Model\Traits\PresetObjectIdTrait;
 use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Helper\MondocTypes;
 use District5\Mondoc\MondocConfig;
@@ -51,9 +51,9 @@ use MongoDB\Model\BSONDocument;
 class MondocAbstractModel extends MondocAbstractSubModel
 {
     use MondocMongoTypeTrait;
-    use PresetMongoIdTrait;
+    use PresetObjectIdTrait;
     use DirtyAttributesTrait;
-    use MondocMongoIdTrait;
+    use MondocObjectIdTrait;
 
     /**
      * @var null|Collection
@@ -99,21 +99,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
         $done->assignDefaultVars();
 
         return $done;
-    }
-
-    /**
-     * Set the ObjectId for this model. Primarily used by the service.
-     *
-     * @param ObjectId $objectId
-     *
-     * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
-     */
-    final public function setObjectId(ObjectId $objectId)
-    {
-        $this->_mondocObjectId = $objectId;
-
-        return $this;
     }
 
     /**
@@ -248,6 +233,26 @@ class MondocAbstractModel extends MondocAbstractSubModel
         }
 
         return $this;
+    }
+
+    /**
+     * @param bool $save
+     * @return MondocAbstractModel|static|null
+     */
+    public function clone(bool $save = false): MondocAbstractModel|static|null
+    {
+        $new = clone $this;
+        $new->unsetObjectId();
+        $new->clearPresetObjectId();
+        $new->clearDirty();
+        if ($save === true) {
+            if ($new->save() === true) {
+                return $new;
+            }
+
+            return null;
+        }
+        return $new;
     }
 
     /**

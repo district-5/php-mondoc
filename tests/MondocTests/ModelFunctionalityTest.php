@@ -54,6 +54,7 @@ class ModelFunctionalityTest extends MondocBaseTest
 {
     public function testGetCollection()
     {
+        $this->initMongo();
         $collection = MyService::getCollection(MyService::class);
         $otherCollection = MyService::getCollection();
         $this->assertEquals(
@@ -82,6 +83,40 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertEquals('Foo', $inflated->getName());
         $this->assertEquals(2, $inflated->getAge());
         $this->assertEquals($anId->__toString(), $inflated->getObjectIdString());
+    }
+
+    public function testCloneModelWithSave()
+    {
+        $m = new MyModel();
+        $m->setAge(102);
+        $m->setName('Joe');
+        $this->assertTrue($m->save());
+
+        $clone = $m->clone(true);
+        $this->assertNotEquals($m->getObjectIdString(), $clone->getObjectIdString());
+        $this->assertEquals($m->getAge(), $clone->getAge());
+        $this->assertEquals($m->getName(), $clone->getName());
+
+        $this->assertTrue($m->delete());
+        $this->assertTrue($clone->delete());
+    }
+
+    public function testCloneModelWithoutSave()
+    {
+        $m = new MyModel();
+        $m->setAge(102);
+        $m->setName('Joe');
+        $this->assertTrue($m->save());
+
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
+        $clone = $m->clone(false); // false means do not save
+        $this->assertFalse($clone->hasObjectId());
+        $this->assertFalse($clone->hasPresetObjectId());
+
+        $this->assertEquals($m->getAge(), $clone->getAge());
+        $this->assertEquals($m->getName(), $clone->getName());
+
+        $this->assertTrue($m->delete()); // the clone has not been saved
     }
 
     public function testDateMethods()

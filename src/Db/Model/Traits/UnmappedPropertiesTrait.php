@@ -30,69 +30,35 @@
 
 namespace District5\Mondoc\Db\Model\Traits;
 
-use District5\Mondoc\Helper\MondocTypes;
-use MongoDB\BSON\ObjectId;
-
 /**
- * Trait MondocMongoIdTrait.
+ * Trait UnmappedPropertiesTrait.
  *
  * @package District5\Mondoc\Db\Model\Traits
  */
-trait MondocMongoIdTrait
+trait UnmappedPropertiesTrait
 {
     /**
-     * The ObjectId once the model has been saved for the first time.
+     * An array holding all key/value pairs that weren't found in the object.
      *
-     * @var null|ObjectId
+     * @var array
      */
-    protected ?ObjectId $_mondocObjectId = null;
+    protected array $_mondocUnmapped = [];
 
     /**
-     * Get the string value for the ObjectId of the persisted model.
+     * Get any unmapped fields.
      *
-     * @return null|string
+     * @return array
      */
-    public function getObjectIdString(): ?string
+    public function getUnmappedFields(): array
     {
-        if ($this->hasObjectId()) {
-            return $this->getObjectId()->__toString();
-        }
-
-        return null;
+        return $this->_mondocUnmapped;
     }
 
     /**
-     * Does this model have an ObjectId? IE, has it been saved before?
-     *
      * @return bool
      */
-    public function hasObjectId(): bool
+    public function hasUnmappedProperties(): bool
     {
-        return is_object($this->getObjectId()) && $this->getObjectId() instanceof ObjectId;
-    }
-
-    /**
-     * Get the ObjectId of the persisted model.
-     *
-     * @return null|ObjectId
-     */
-    public function getObjectId(): ?ObjectId
-    {
-        return MondocTypes::toObjectId(
-            $this->_mondocObjectId
-        );
-    }
-
-    /**
-     * Remove the ObjectId from this model. Ideal for cloning a document.
-     *
-     * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
-     */
-    public function unsetObjectId()
-    {
-        $this->_mondocObjectId = null;
-
-        return $this;
+        return !empty($this->_mondocUnmapped);
     }
 }

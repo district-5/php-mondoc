@@ -160,7 +160,7 @@ use District5\Mondoc\Db\Model\MondocAbstractSubModel;
 
 class FavouriteFood extends MondocAbstractSubModel
 {
-    protected $foodName;
+    protected string|null $foodName = null;
     
     public function getFoodName()
     {
@@ -170,15 +170,15 @@ class FavouriteFood extends MondocAbstractSubModel
 
 class Car extends MondocAbstractSubModel
 {
-    protected $brand;
-    protected $colour;
+    protected string|null $brand = null;
+    protected string|null $colour = null;
     
-    public function getBrand()
+    public function getBrand(): ?string
     {
         return $this->brand;
     }
     
-    public function getColour()
+    public function getColour(): ?string
     {
         return $this->colour;
     }
@@ -186,37 +186,51 @@ class Car extends MondocAbstractSubModel
 
 class Person extends MondocAbstractModel
 {
-    protected $name = null;
+    /**
+     * @var string|null
+     */
+    protected string|null $name = null;
     
     /**
      * @var FavouriteFood 
      */
-    protected $favouriteFood = null;
+    protected FavouriteFood|\MongoDB\Model\BSONDocument|null $favouriteFood = null; // Having BSONDocument here is important as inflation will use the property
+    
+    /**
+     * @var FavouriteFood[]
+     */
+    protected array|\MongoDB\Model\BSONArray $allFoods = []; // Having BSONArray here is important as inflation will use the property
     
     /**
      * @var Car 
      */
-    protected $car = null;
+    protected Car|\MongoDB\Model\BSONDocument|null $car = null; // Having BSONDocument here is important as inflation will use the property
     
     /**
      * @var string[] 
      */
     protected array $mondocNested = [
+        'allFoods' => FavouriteFood::class . '[]', // Indicates an array of FavouriteFood objects
         'favouriteFood' => FavouriteFood::class,
         'car' => Car::class
     ];
-    
-    public function getFavouriteFoodName()
+
+    public function getAllFoods(): array
+    {
+        return $this->allFoods;
+    }
+
+    public function getFavouriteFoodName(): ?string
     {
         return $this->favouriteFood->getFoodName();
     }
-    
-    public function getCarBrand()
+
+    public function getCarBrand(): ?string
     {
         return $this->car->getBrand();
     }
-    
-    public function getCarColour()
+
+    public function getCarColour(): ?string
     {
         return $this->car->getColour();
     }

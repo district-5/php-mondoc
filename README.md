@@ -368,4 +368,4 @@ Query building is handled by the `MondocBuilder` library [https://github.com/dis
 #### Testing
 
 You can run PHPUnit against the library by running `composer install` and then running `phpunit`. Before doing so,
-you'll need to copy the `example.phpunit.xml` to `phpunit.xml` and change the environment variables contained within.
+you'll need to assign the `MONGO_CONNECTION_STRING` environment variable to a valid MongoDB connection string.

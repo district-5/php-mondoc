@@ -30,20 +30,18 @@
 
 namespace District5Tests\MondocTests\Example;
 
-use District5\Mondoc\Db\Service\MondocAbstractService;
-
 /**
  * Class VersionedService.
  *
  * @package District5Tests\MondocTests\Service
  */
-class VersionedService extends MondocAbstractService
+class VersionedService extends AbstractTestService
 {
     /**
      * @return string
      */
     protected static function getCollectionName(): string
     {
-        return 'versioned_model';
+        return parent::getCollectionName(); // Just an example, not needed here, but in reality, you'd just return 'my_collection_name'
     }
 }

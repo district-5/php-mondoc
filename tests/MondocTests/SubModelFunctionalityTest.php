@@ -96,12 +96,12 @@ class SubModelFunctionalityTest extends MondocBaseTest
         $this->assertEquals('oranges', $newM->getFoods()[2]->getFood());
 
         $this->assertEquals($id->__toString(), $newM->getObjectIdString());
-        MySubService::getCollection(MySubService::class)->drop();
     }
 
     public function testMulti()
     {
-        MySubService::getCollection(MySubService::class)->drop();
+        $this->initMongo();
+
         $mOne = new MyModelWithSub();
         $mOne->setName('One');
         $ageOne = new AgeSubModel();
@@ -133,6 +133,5 @@ class SubModelFunctionalityTest extends MondocBaseTest
 
         $this->assertEquals($mOne->getFoods()[0]->getFood(), $models[0]->getFoods()[0]->getFood());
         $this->assertEquals($mTwo->getFoods()[0]->getFood(), $models[1]->getFoods()[0]->getFood());
-        MySubService::getCollection(MySubService::class)->drop();
     }
 }

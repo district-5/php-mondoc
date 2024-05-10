@@ -31,6 +31,8 @@
 namespace District5Tests\MondocTests;
 
 use District5\Mondoc\MondocConfig;
+use District5Tests\MondocTests\Example\AllTypesModel;
+use District5Tests\MondocTests\Example\AllTypesService;
 use District5Tests\MondocTests\Example\DateModel;
 use District5Tests\MondocTests\Example\DateService;
 use District5Tests\MondocTests\Example\MyModel;
@@ -78,10 +80,13 @@ abstract class MondocBaseTest extends TestCase
     protected function tearDown(): void
     {
         $this->initMongo();
-        $this->mondoc->getDatabase()->dropCollection('test_model');
-        $this->mondoc->getDatabase()->dropCollection('date_model');
-        $this->mondoc->getDatabase()->dropCollection('single_and_nested_model');
-        $this->mondoc->getDatabase()->dropCollection('versioned_model');
+
+        $map = array_values($this->mondoc->getServiceMap());
+        foreach ($map as $className) {
+            $parts = explode('\\', $className);
+            $collectionName = 'test_' . array_pop($parts);
+            $this->mondoc->getDatabase()->dropCollection($collectionName);
+        }
     }
 
     protected function initMongo(): Database
@@ -108,6 +113,9 @@ abstract class MondocBaseTest extends TestCase
         )->addServiceMapping(
             VersionedModel::class,
             VersionedService::class
+        )->addServiceMapping(
+            AllTypesModel::class,
+            AllTypesService::class
         );
 
         return $this->mondoc->getDatabase();

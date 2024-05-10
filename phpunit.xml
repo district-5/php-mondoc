@@ -31,7 +31,4 @@
       <directory>tests/</directory>
     </testsuite>
   </testsuites>
-<!--  <logging>-->
-<!--    <log type="testdox-html" target="build/testdox.html"/>-->
-<!--  </logging>-->
 </phpunit>

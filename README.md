@@ -237,7 +237,7 @@ class Person extends MondocAbstractModel
 }
 ```
 
-Finding documents..
+#### Finding documents..
 
 ```php
 <?php
@@ -310,6 +310,27 @@ $results = \District5Tests\MondocTests\Example\MyService::getPageByByObjectIdPag
 \District5Tests\MondocTests\Example\MyService::aggregate()->getMax('age', ['foo' => 'bar']);
 // ...or with a string...
 // \District5Tests\MondocTests\Example\MyService::aggregate()->getMax('name', ['foo' => 'bar']);
+```
+
+
+#### Model to array...
+
+You can export a model to an array by calling [`asArray()`](./src/Db/Model/MondocAbstractSubModel.php) on the model.
+This will return an array of the model's properties.
+
+The properties returned by the [`asArray()`](./src/Db/Model/MondocAbstractSubModel.php) method are the properties and
+types that have been set on the model, which means they're likely not able to be directly encoded to JSON. To get around
+this, you can call [`asJsonEncodableArray()`](./src/Db/Model/MondocAbstractSubModel.php) on the model, which will return
+an array that can be encoded to JSON.
+
+```php
+/* @var $model \District5\Mondoc\Db\Model\MondocAbstractModel */
+
+$mongoInsertionDocument = $model->asArray(); // Not encodable to JSON
+$jsonEncodable = $model->asJsonEncodableArray(); // Encodable to JSON
+
+$encodedJson = json_encode($jsonEncodable, JSON_THROW_ON_ERROR);
+echo $encodedJson;
 ```
 
 

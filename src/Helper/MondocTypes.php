@@ -36,6 +36,7 @@ use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
+use stdClass;
 
 /**
  * Class MondocTypes.
@@ -142,5 +143,68 @@ class MondocTypes
         }
 
         return null;
+    }
+
+    /**
+     * Convert a single variable to a json friendly type.
+     *
+     * @param mixed $v
+     *
+     * @return mixed
+     * @noinspection PhpExpressionAlwaysNullInspection
+     */
+    public static function typeToJsonFriendly(mixed $v): mixed
+    {
+        $val = $v;
+        if (is_string($val)) {
+            return $val;
+        } else if (is_int($val)) {
+            return $val;
+        } else if (is_float($val)) {
+            return $val;
+        } else if (is_bool($val)) {
+            return $val;
+        } else if (is_null($val)) {
+            return $val;
+        } else if (is_object($val)) {
+            $val = clone $v; // it's an object
+            if (method_exists($val, 'jsonSerialize')) {
+                if ($val instanceof ObjectId) {
+                    return $val->__toString();
+                }
+                if ($val instanceof UTCDateTime) {
+                    return $val->jsonSerialize()['$date']['$numberLong'];
+                }
+                return self::typeToJsonFriendly(
+                    $val->jsonSerialize()
+                );
+            }
+        }
+
+        if ($val instanceof BSONArray) {
+            return self::typeToJsonFriendly(
+                self::arrayToPhp($val)
+            );
+        }
+        if ($val instanceof BSONDocument) {
+            return self::typeToJsonFriendly(
+                self::arrayToPhp($val)
+            );
+        }
+        if ($val instanceof DateTime) {
+            return $val->format('Uv');
+        }
+        if ($val instanceof stdClass) {
+            return (array)$val;
+        }
+
+        if (is_array($val)) {
+            foreach ($val as $key => $value) {
+                $val[$key] = self::typeToJsonFriendly($value);
+            }
+            return $val;
+        }
+
+        return $val;
     }
 }

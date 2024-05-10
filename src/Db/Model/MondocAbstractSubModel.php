@@ -382,6 +382,16 @@ abstract class MondocAbstractSubModel
     /**
      * @return array
      */
+    public function asJsonEncodableArray(): array
+    {
+        return MondocTypes::typeToJsonFriendly(
+            $this->asArray()
+        );
+    }
+
+    /**
+     * @return array
+     */
     public function getMondocObjectVars(): array
     {
         return get_object_vars($this);

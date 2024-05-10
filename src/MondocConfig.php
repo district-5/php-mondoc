@@ -139,6 +139,10 @@ class MondocConfig
     }
 
     /**
+     * Order is
+     *      ModelFQCN => ServiceFQCN,
+     *      AnotherModelFQCN => AnotherServiceFQCN,
+     *      ...
      * @return string[]
      */
     public function getServiceMap(): array

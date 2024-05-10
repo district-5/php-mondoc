@@ -31,11 +31,11 @@
 namespace District5Tests\MondocTests\Example;
 
 /**
- * Class MySubService.
+ * Class AllTypesService.
  *
  * @package District5Tests\MondocTests\Service
  */
-class MySubService extends AbstractTestService
+class AllTypesService extends AbstractTestService
 {
     /**
      * @return string

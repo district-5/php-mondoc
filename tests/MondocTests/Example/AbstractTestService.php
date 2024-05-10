@@ -30,18 +30,21 @@
 
 namespace District5Tests\MondocTests\Example;
 
+use District5\Mondoc\Db\Service\MondocAbstractService;
+
 /**
- * Class MySubService.
+ * Class AllTypesService.
  *
  * @package District5Tests\MondocTests\Service
  */
-class MySubService extends AbstractTestService
+class AbstractTestService extends MondocAbstractService
 {
     /**
      * @return string
      */
     protected static function getCollectionName(): string
     {
-        return parent::getCollectionName(); // Just an example, not needed here, but in reality, you'd just return 'my_collection_name'
+        $parts = explode('\\', get_called_class());
+        return 'test_' . array_pop($parts);
     }
 }

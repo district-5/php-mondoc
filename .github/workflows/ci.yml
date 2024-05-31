@@ -6,6 +6,10 @@ jobs:
     name: Unit testing
     runs-on: ubuntu-latest
 
+    concurrency:
+      group: mondoc-group
+      cancel-in-progress: true
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3

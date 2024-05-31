@@ -80,13 +80,6 @@ abstract class MondocBaseTest extends TestCase
     protected function tearDown(): void
     {
         $this->initMongo();
-
-        $map = array_values($this->mondoc->getServiceMap());
-        foreach ($map as $className) {
-            $parts = explode('\\', $className);
-            $collectionName = 'test_' . array_pop($parts);
-            $this->mondoc->getDatabase()->dropCollection($collectionName);
-        }
     }
 
     protected function initMongo(): Database
@@ -112,6 +105,19 @@ abstract class MondocBaseTest extends TestCase
             AllTypesService::class
         ); // just to cover the addServiceMapping method
 
+
+        $this->cleanupCollections(); // Start with a clean slate
+
         return $this->mondoc->getDatabase();
+    }
+
+    private function cleanupCollections(): void
+    {
+        $map = array_values($this->mondoc->getServiceMap());
+        foreach ($map as $className) {
+            $parts = explode('\\', $className);
+            $collectionName = 'test_' . array_pop($parts);
+            $this->mondoc->getDatabase()->dropCollection($collectionName);
+        }
     }
 }

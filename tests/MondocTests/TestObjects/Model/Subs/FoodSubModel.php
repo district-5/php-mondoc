@@ -28,15 +28,15 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5Tests\MondocTests\Example\Subs;
+namespace District5Tests\MondocTests\TestObjects\Model\Subs;
 
 use District5\Mondoc\Db\Model\MondocAbstractSubModel;
 use MongoDB\Model\BSONArray;
 
 /**
- * Class FoodSubModel.
+ * Class FoodSubModel
  *
- * @package District5Tests\MondocTests\Example\Subs
+ * @package District5Tests\MondocTests\TestObjects\Model\Subs
  */
 class FoodSubModel extends MondocAbstractSubModel
 {

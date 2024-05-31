@@ -243,73 +243,73 @@ class Person extends MondocAbstractModel
 <?php
 
 // count documents matching a filter
-\District5Tests\MondocTests\Example\MyService::countAll([], []);
+\District5Tests\MondocTests\TestObjects\MyService::countAll([], []);
 // count documents using a query builder
-$builder = \District5Tests\MondocTests\Example\MyService::getQueryBuilder();
-\District5Tests\MondocTests\Example\MyService::countAllByQueryBuilder($builder);
+$builder = \District5Tests\MondocTests\TestObjects\MyService::getQueryBuilder();
+\District5Tests\MondocTests\TestObjects\MyService::countAllByQueryBuilder($builder);
 
 // get single model by id, accepts a string or ObjectId
-\District5Tests\MondocTests\Example\MyService::getById('the-mongo-id');
+\District5Tests\MondocTests\TestObjects\MyService::getById('the-mongo-id');
 
 // get multiple models by ids. accepts string or ObjectIds
-\District5Tests\MondocTests\Example\MyService::getByIds(['an-id', 'another-id']);
+\District5Tests\MondocTests\TestObjects\MyService::getByIds(['an-id', 'another-id']);
 
 // get single model with options
-\District5Tests\MondocTests\Example\MyService::getOneByCriteria(['foo' => 'bar'], ['sort' => ['foo' => -1]]);
+\District5Tests\MondocTests\TestObjects\MyService::getOneByCriteria(['foo' => 'bar'], ['sort' => ['foo' => -1]]);
 
 // get multiple models with options
-\District5Tests\MondocTests\Example\MyService::getMultiByCriteria(['foo' => 'bar'], ['sort' => ['foo' => -1]]);
+\District5Tests\MondocTests\TestObjects\MyService::getMultiByCriteria(['foo' => 'bar'], ['sort' => ['foo' => -1]]);
 
 // paginating results by page number
 $currentPage = 1;
 $perPage = 10;
 $sortByField = 'foo';
 $sortDirection = -1;
-$pagination = \District5Tests\MondocTests\Example\MyService::getPaginationHelper($currentPage, $perPage, ['foo' => 'bar'])
-$results = \District5Tests\MondocTests\Example\MyService::getPage($pagination, $perPage, ['foo' => 'bar'], $sortByField, $sortDirection);
+$pagination = \District5Tests\MondocTests\TestObjects\MyService::getPaginationHelper($currentPage, $perPage, ['foo' => 'bar'])
+$results = \District5Tests\MondocTests\TestObjects\MyService::getPage($pagination, $perPage, ['foo' => 'bar'], $sortByField, $sortDirection);
 
 // paginating results by ID number descending (first page)
 $currentId = null;
 $perPage = 10;
 $sortDirection = -1;
-$pagination = \District5Tests\MondocTests\Example\MyService::getPaginationHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
-$results = \District5Tests\MondocTests\Example\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection, ['foo' => 'bar']);
+$pagination = \District5Tests\MondocTests\TestObjects\MyService::getPaginationHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
+$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection, ['foo' => 'bar']);
 
 // paginating results by ID number descending
 $currentId = '5f7deca120c41f29827c0c60'; // or new ObjectId('5f7deca120c41f29827c0c60');
 $perPage = 10;
 $sortDirection = -1;
-$pagination = \District5Tests\MondocTests\Example\MyService::getPaginationHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
-$results = \District5Tests\MondocTests\Example\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection, ['foo' => 'bar']);
+$pagination = \District5Tests\MondocTests\TestObjects\MyService::getPaginationHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
+$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection, ['foo' => 'bar']);
 
 // paginating results by ID number ascending
 $currentId = '5f7deca120c41f29827c0c60'; // or new ObjectId('5f7deca120c41f29827c0c60');
 $perPage = 10;
 $sortDirection = 1;
-$pagination = \District5Tests\MondocTests\Example\MyService::getPaginationHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
-$results = \District5Tests\MondocTests\Example\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection, ['foo' => 'bar']);
+$pagination = \District5Tests\MondocTests\TestObjects\MyService::getPaginationHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
+$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection, ['foo' => 'bar']);
 
 // get the distinct values for 'age' with a filter and options
-\District5Tests\MondocTests\Example\MyService::getDistinctValuesForKey('age', ['foo' => 'bar'], ['sort' => ['age' => 1]]);
+\District5Tests\MondocTests\TestObjects\MyService::getDistinctValuesForKey('age', ['foo' => 'bar'], ['sort' => ['age' => 1]]);
 
 // average age with filter
-\District5Tests\MondocTests\Example\MyService::aggregate()->getAverage('age', ['foo' => 'bar']);
+\District5Tests\MondocTests\TestObjects\MyService::aggregate()->getAverage('age', ['foo' => 'bar']);
 
 // 10% percentile, sorted asc with filter
-\District5Tests\MondocTests\Example\MyService::aggregate()->getPercentile('age', 0.1, 1, ['foo' => 'bar']);
+\District5Tests\MondocTests\TestObjects\MyService::aggregate()->getPercentile('age', 0.1, 1, ['foo' => 'bar']);
 
 // get sum of a field with a given filter
-\District5Tests\MondocTests\Example\MyService::aggregate()->getSum('age', ['foo' => 'bar']);
+\District5Tests\MondocTests\TestObjects\MyService::aggregate()->getSum('age', ['foo' => 'bar']);
 
 // get the min value of a field with a given filter
-\District5Tests\MondocTests\Example\MyService::aggregate()->getMin('age', ['foo' => 'bar']);
+\District5Tests\MondocTests\TestObjects\MyService::aggregate()->getMin('age', ['foo' => 'bar']);
 // ...or with a string...
-// \District5Tests\MondocTests\Example\MyService::aggregate()->getMin('name', ['foo' => 'bar']);
+// \District5Tests\MondocTests\TestObjects\MyService::aggregate()->getMin('name', ['foo' => 'bar']);
 
 // get the max value of a field with a given filter
-\District5Tests\MondocTests\Example\MyService::aggregate()->getMax('age', ['foo' => 'bar']);
+\District5Tests\MondocTests\TestObjects\MyService::aggregate()->getMax('age', ['foo' => 'bar']);
 // ...or with a string...
-// \District5Tests\MondocTests\Example\MyService::aggregate()->getMax('name', ['foo' => 'bar']);
+// \District5Tests\MondocTests\TestObjects\MyService::aggregate()->getMax('name', ['foo' => 'bar']);
 ```
 
 

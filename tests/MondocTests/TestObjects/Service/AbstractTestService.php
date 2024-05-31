@@ -28,39 +28,23 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5Tests\MondocTests\Example\Subs;
+namespace District5Tests\MondocTests\TestObjects\Service;
 
-use District5\Mondoc\Db\Model\MondocAbstractSubModel;
+use District5\Mondoc\Db\Service\MondocAbstractService;
 
 /**
- * Class AgeWordSubModel.
+ * Class AllTypesService.
  *
- * @package District5Tests\MondocTests\Example\Subs
+ * @package District5Tests\MondocTests\TestObjects\Service
  */
-class AgeWordSubModel extends MondocAbstractSubModel
+class AbstractTestService extends MondocAbstractService
 {
-    /**
-     * @var string
-     */
-    protected string $word;
-
     /**
      * @return string
      */
-    public function getWord(): string
+    protected static function getCollectionName(): string
     {
-        return $this->word;
-    }
-
-    /**
-     * @param string $word
-     *
-     * @return $this
-     */
-    public function setWord(string $word): static
-    {
-        $this->word = $word;
-
-        return $this;
+        $parts = explode('\\', get_called_class());
+        return 'test_' . array_pop($parts);
     }
 }

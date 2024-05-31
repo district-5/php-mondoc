@@ -32,9 +32,9 @@ namespace MondocTests;
 
 use District5\MondocBuilder\QueryBuilder;
 use District5\MondocBuilder\QueryTypes\ValueEqualTo;
-use District5Tests\MondocTests\Example\MyModel;
-use District5Tests\MondocTests\Example\MyService;
 use District5Tests\MondocTests\MondocBaseTest;
+use District5Tests\MondocTests\TestObjects\Model\MyModel;
+use District5Tests\MondocTests\TestObjects\Service\MyService;
 use MongoDB\BSON\ObjectId;
 
 /**

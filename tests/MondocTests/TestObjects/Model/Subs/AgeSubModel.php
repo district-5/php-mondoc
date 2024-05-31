@@ -28,58 +28,78 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5Tests\MondocTests\Example\Subs;
+namespace District5Tests\MondocTests\TestObjects\Model\Subs;
 
 use District5\Mondoc\Db\Model\MondocAbstractSubModel;
+use MongoDB\Model\BSONArray;
+use MongoDB\Model\BSONDocument;
 
 /**
- * Class FoodAttributesSubModel.
+ * Class AgeSubModel
  *
- * @package District5Tests\MondocTests\Example\Subs
+ * @package District5Tests\MondocTests\TestObjects\Model\Subs
  */
-class FoodAttributesSubModel extends MondocAbstractSubModel
+class AgeSubModel extends MondocAbstractSubModel
 {
     /**
-     * @var string
+     * @var int
      */
-    protected string $colour;
+    protected int $age = 0;
 
     /**
-     * @var string
+     * @var AgeWordSubModel|BSONArray|BSONDocument|null
      */
-    protected string $smell;
+    protected BSONDocument|BSONArray|AgeWordSubModel|null $wordModel = null;
 
     /**
-     * @return string
-     * @noinspection PhpUnused
+     * @var string[]
      */
-    public function getColour(): string
+    protected array $mondocNested = [
+        'wordModel' => AgeWordSubModel::class
+    ];
+
+    /**
+     * @return AgeWordSubModel
+     */
+    public function getAgeWordModel(): AgeWordSubModel
     {
-        return $this->colour;
+        if (null === $this->wordModel) {
+            $this->wordModel = new AgeWordSubModel();
+        }
+
+        return $this->wordModel;
     }
 
     /**
-     * @param string $colour
+     * @param AgeWordSubModel $model
+     *
+     * @return $this
      */
-    public function setColour(string $colour): void
+    public function setAgeWordModel(AgeWordSubModel $model): AgeSubModel
     {
-        $this->colour = $colour;
+        $this->wordModel = $model;
+
+        return $this;
     }
 
     /**
-     * @return string
-     * @noinspection PhpUnused
+     * @return int
      */
-    public function getSmell(): string
+    public function getAge(): int
     {
-        return $this->smell;
+        return $this->age;
     }
 
     /**
-     * @param string $smell
+     * @param int $age
+     *
+     * @return $this
+     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function setSmell(string $smell): void
+    public function setAge(int $age)
     {
-        $this->smell = $smell;
+        $this->age = $age;
+
+        return $this;
     }
 }

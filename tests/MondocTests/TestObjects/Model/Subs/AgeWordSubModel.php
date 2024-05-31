@@ -28,20 +28,39 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5Tests\MondocTests\Example;
+namespace District5Tests\MondocTests\TestObjects\Model\Subs;
+
+use District5\Mondoc\Db\Model\MondocAbstractSubModel;
 
 /**
- * Class MySubService.
+ * Class AgeWordSubModel
  *
- * @package District5Tests\MondocTests\Service
+ * @package District5Tests\MondocTests\TestObjects\Model\Subs
  */
-class MySubService extends AbstractTestService
+class AgeWordSubModel extends MondocAbstractSubModel
 {
+    /**
+     * @var string
+     */
+    protected string $word;
+
     /**
      * @return string
      */
-    protected static function getCollectionName(): string
+    public function getWord(): string
     {
-        return parent::getCollectionName(); // Just an example, not needed here, but in reality, you'd just return 'my_collection_name'
+        return $this->word;
+    }
+
+    /**
+     * @param string $word
+     *
+     * @return $this
+     */
+    public function setWord(string $word): static
+    {
+        $this->word = $word;
+
+        return $this;
     }
 }

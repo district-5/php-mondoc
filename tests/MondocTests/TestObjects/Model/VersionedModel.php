@@ -28,20 +28,45 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5Tests\MondocTests\Example;
+namespace District5Tests\MondocTests\TestObjects\Model;
+
+use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
+use District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
+use District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
 
 /**
- * Class MyService.
+ * Class VersionedModel
  *
- * @package District5Tests\MondocTests\Service
+ * @package District5Tests\MondocTests\TestObjects\Model
  */
-class MyService extends AbstractTestService
+class VersionedModel extends MondocAbstractModel
 {
+    use MondocVersionedModelTrait;
+    use MondocCreatedDateTrait;
+    use MondocModifiedDateTrait;
+
     /**
-     * @return string
+     * @var string|null
      */
-    protected static function getCollectionName(): string
+    protected string|null $name = null;
+
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName(string $name): self
     {
-        return parent::getCollectionName(); // Just an example, not needed here, but in reality, you'd just return 'my_collection_name'
+        $this->name = $name;
+        $this->addDirty('name');
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
     }
 }

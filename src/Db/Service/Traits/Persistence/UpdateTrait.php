@@ -140,8 +140,9 @@ trait UpdateTrait
     }
 
     /**
-     * Update a single document by using the QueryBuilder for the filter and options and specying the update
-     * query to use. Any references to this model, held in the code are not updated.
+     * Update a single document by using the QueryBuilder for both the filter and options, and
+     * specifying the update query to use. Any references to this model, held in the code are
+     * not updated.
      *
      * @param QueryBuilder $queryBuilder
      * @param array $query

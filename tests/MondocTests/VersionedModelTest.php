@@ -33,9 +33,9 @@ namespace District5Tests\MondocTests;
 
 use DateTime;
 use District5\Date\Date;
-use District5Tests\MondocTests\Example\DateModel;
-use District5Tests\MondocTests\Example\VersionedModel;
-use District5Tests\MondocTests\Example\VersionedService;
+use District5Tests\MondocTests\TestObjects\Model\DateModel;
+use District5Tests\MondocTests\TestObjects\Model\VersionedModel;
+use District5Tests\MondocTests\TestObjects\Service\VersionedService;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 

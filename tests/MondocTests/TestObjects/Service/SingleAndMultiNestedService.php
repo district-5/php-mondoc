@@ -28,23 +28,20 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5Tests\MondocTests\Example;
-
-use District5\Mondoc\Db\Service\MondocAbstractService;
+namespace District5Tests\MondocTests\TestObjects\Service;
 
 /**
- * Class AllTypesService.
+ * Class SingleAndMultiNestedService.
  *
- * @package District5Tests\MondocTests\Service
+ * @package District5Tests\MondocTests\TestObjects\Service
  */
-class AbstractTestService extends MondocAbstractService
+class SingleAndMultiNestedService extends AbstractTestService
 {
     /**
      * @return string
      */
     protected static function getCollectionName(): string
     {
-        $parts = explode('\\', get_called_class());
-        return 'test_' . array_pop($parts);
+        return parent::getCollectionName(); // Just an example, not needed here, but in reality, you'd just return 'my_collection_name'
     }
 }

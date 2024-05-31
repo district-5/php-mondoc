@@ -30,11 +30,11 @@
 
 namespace District5Tests\MondocTests;
 
-use District5Tests\MondocTests\Example\MySubService;
-use District5Tests\MondocTests\Example\Subs\AgeSubModel;
-use District5Tests\MondocTests\Example\Subs\AgeWordSubModel;
-use District5Tests\MondocTests\Example\Subs\FoodSubModel;
-use District5Tests\MondocTests\Example\Subs\MyModelWithSub;
+use District5Tests\MondocTests\TestObjects\Model\Subs\AgeSubModel;
+use District5Tests\MondocTests\TestObjects\Model\Subs\AgeWordSubModel;
+use District5Tests\MondocTests\TestObjects\Model\Subs\FoodSubModel;
+use District5Tests\MondocTests\TestObjects\Model\Subs\MyModelWithSub;
+use District5Tests\MondocTests\TestObjects\Service\MySubService;
 
 /**
  * Class SubModelFunctionalityTest.

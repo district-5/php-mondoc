@@ -28,14 +28,14 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5Tests\MondocTests\Example;
+namespace District5Tests\MondocTests\TestObjects\Service;
 
 /**
- * Class SingleAndMultiNestedService.
+ * Class MySubService.
  *
- * @package District5Tests\MondocTests\Service
+ * @package District5Tests\MondocTests\TestObjects\Service
  */
-class SingleAndMultiNestedService extends AbstractTestService
+class MySubService extends AbstractTestService
 {
     /**
      * @return string

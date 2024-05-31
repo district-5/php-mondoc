@@ -28,7 +28,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5Tests\MondocTests\Example;
+namespace District5Tests\MondocTests\TestObjects\Model;
 
 use DateTime;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
@@ -39,9 +39,9 @@ use MongoDB\Model\BSONDocument;
 use stdClass;
 
 /**
- * Class DateModel.
+ * Class AllTypesModel
  *
- * @package MyNs\Model
+ * @package District5Tests\MondocTests\TestObjects\Model
  */
 class AllTypesModel extends MondocAbstractModel
 {

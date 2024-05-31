@@ -31,8 +31,8 @@
 namespace District5Tests\MondocTests;
 
 use DateTime;
-use District5\Mondoc\Helper\MondocTypes;
 use District5\Mondoc\Helper\MondocPaginationHelper;
+use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;

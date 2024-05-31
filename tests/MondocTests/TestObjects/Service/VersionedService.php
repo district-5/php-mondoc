@@ -28,47 +28,20 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5Tests\MondocTests\Example;
-
-use DateTime;
-use District5\Mondoc\Db\Model\MondocAbstractModel;
-use District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
-use District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
-use District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
-use MongoDB\BSON\UTCDateTime;
+namespace District5Tests\MondocTests\TestObjects\Service;
 
 /**
- * Class VersionedModel.
+ * Class VersionedService.
  *
- * @package MyNs\Model
+ * @package District5Tests\MondocTests\TestObjects\Service
  */
-class VersionedModel extends MondocAbstractModel
+class VersionedService extends AbstractTestService
 {
-    use MondocVersionedModelTrait;
-    use MondocCreatedDateTrait;
-    use MondocModifiedDateTrait;
-
     /**
-     * @var string|null
+     * @return string
      */
-    protected string|null $name = null;
-
-    /**
-     * @param string $name
-     * @return $this
-     */
-    public function setName(string $name): self
+    protected static function getCollectionName(): string
     {
-        $this->name = $name;
-        $this->addDirty('name');
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getName(): ?string
-    {
-        return $this->name;
+        return parent::getCollectionName(); // Just an example, not needed here, but in reality, you'd just return 'my_collection_name'
     }
 }

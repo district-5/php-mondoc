@@ -30,10 +30,10 @@
 
 namespace District5Tests\MondocTests;
 
-use District5Tests\MondocTests\Example\SingleAndMultiNestedModel;
-use District5Tests\MondocTests\Example\SingleAndMultiNestedService;
-use District5Tests\MondocTests\Example\Subs\FoodAttributesSubModel;
-use District5Tests\MondocTests\Example\Subs\FoodSubModel;
+use District5Tests\MondocTests\TestObjects\Model\SingleAndMultiNestedModel;
+use District5Tests\MondocTests\TestObjects\Model\Subs\FoodAttributesSubModel;
+use District5Tests\MondocTests\TestObjects\Model\Subs\FoodSubModel;
+use District5Tests\MondocTests\TestObjects\Service\SingleAndMultiNestedService;
 
 /**
  * Class SingleAndNestedTest.

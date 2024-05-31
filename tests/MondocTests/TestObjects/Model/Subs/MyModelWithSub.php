@@ -28,45 +28,102 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5Tests\MondocTests\Example;
+namespace District5Tests\MondocTests\TestObjects\Model\Subs;
 
-use DateTime;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
-use MongoDB\BSON\UTCDateTime;
+use MongoDB\Model\BSONArray;
+use MongoDB\Model\BSONDocument;
 
 /**
- * Class DateModel.
+ * Class MyModelWithSub
  *
- * @package MyNs\Model
+ * @package District5Tests\MondocTests\TestObjects\Model\Subs
  */
-class DateModel extends MondocAbstractModel
+class MyModelWithSub extends MondocAbstractModel
 {
     /**
-     * @var DateTime|UTCDateTime
+     * @var string
      */
-    protected DateTime|UTCDateTime $date;
+    protected string $name;
 
     /**
-     * @param bool $asMongo
-     *
-     * @return DateTime|UTCDateTime
+     * @var AgeSubModel|BSONDocument
      */
-    public function getDate(bool $asMongo = false): UTCDateTime|DateTime
-    {
-        return $this->convertDateObject($this->date, $asMongo);
-    }
+    protected BSONDocument|AgeSubModel $age;
 
     /**
-     * @param DateTime $date
+     * @var FoodSubModel[]
+     */
+    protected BSONArray|array $foods = [];
+
+    /**
+     * @var string[]
+     */
+    protected array $mondocNested = [
+        'age' => AgeSubModel::class,
+        'foods' => FoodSubModel::class . '[]'
+    ];
+
+    /**
+     * @param FoodSubModel $food
      *
      * @return $this
      */
-    public function setDate(DateTime $date): static
+    public function addFood(FoodSubModel $food): static
     {
-        $this->date = $date;
-        $this->addDirty('date');
+        $this->foods[] = $food;
 
         return $this;
+    }
+
+    /**
+     * @return AgeSubModel
+     */
+    public function getAge(): AgeSubModel
+    {
+        return $this->age;
+    }
+
+    /**
+     * @param AgeSubModel $age
+     *
+     * @return $this
+     */
+    public function setAge(AgeSubModel $age): static
+    {
+        $this->age = $age;
+        $this->addDirty('age');
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return trim($this->name);
+    }
+
+    /**
+     * @param string $val
+     *
+     * @return $this
+     */
+    public function setName(string $val): static
+    {
+        $this->name = trim($val);
+        $this->addDirty('name');
+
+        return $this;
+    }
+
+    /**
+     * @return FoodSubModel[]
+     */
+    public function getFoods(): array
+    {
+        return $this->foods;
     }
 
     /**

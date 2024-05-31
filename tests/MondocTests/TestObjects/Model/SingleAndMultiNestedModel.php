@@ -28,17 +28,17 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5Tests\MondocTests\Example;
+namespace District5Tests\MondocTests\TestObjects\Model;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
-use District5Tests\MondocTests\Example\Subs\FoodSubModel;
+use District5Tests\MondocTests\TestObjects\Model\Subs\FoodSubModel;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
 
 /**
- * Class DateModel.
+ * Class SingleAndMultiNestedModel
  *
- * @package MyNs\Model
+ * @package District5Tests\MondocTests\TestObjects\Model
  */
 class SingleAndMultiNestedModel extends MondocAbstractModel
 {

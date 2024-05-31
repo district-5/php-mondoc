@@ -88,7 +88,7 @@ abstract class MondocBaseTest extends TestCase
         $this->mondoc = MondocConfig::getInstance();
         /** @noinspection PhpRedundantOptionalArgumentInspection */
         $this->mondoc->addDatabase(
-            $connection->selectDatabase(getenv('MONGO_DATABASE')),
+            $connection->selectDatabase(getenv('MONGO_DATABASE') . php_uname('s')),
             'default'
         );
         $this->mondoc->setServiceMap([

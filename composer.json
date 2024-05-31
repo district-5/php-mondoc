@@ -1,7 +1,7 @@
 {
     "name": "district5/mondoc",
-    "description": "Mondoc is a lightweight and easy to use model library for MongoDB",
-    "keywords": [],
+    "description": "Mondoc is a lightweight and easy to use model and service based abstraction library for MongoDB",
+    "keywords": ["mongodb", "mongo", "odm", "library", "district5"],
     "homepage": "https://github.com/district-5/php-mondoc",
     "license": "mit",
     "authors": [

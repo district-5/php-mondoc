@@ -55,7 +55,7 @@ trait MondocObjectIdTrait
     public function getObjectIdString(): ?string
     {
         if ($this->hasObjectId()) {
-            return $this->getObjectId()->__toString();
+            return MondocTypes::objectIdToString($this->getObjectId());
         }
 
         return null;

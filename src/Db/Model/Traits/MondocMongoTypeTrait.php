@@ -105,9 +105,9 @@ trait MondocMongoTypeTrait
         $final = [];
         foreach ($ids as $id) {
             $newId = $this->toObjectId($id);
-            if (null !== $newId && !in_array($newId->__toString(), $tmp)) {
+            if (null !== $newId && !in_array($stringId = MondocTypes::objectIdToString($newId), $tmp)) {
                 $final[] = $newId;
-                $tmp[] = $newId->__toString();
+                $tmp[] = $stringId;
             }
         }
 

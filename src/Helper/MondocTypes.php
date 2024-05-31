@@ -112,7 +112,8 @@ class MondocTypes
     }
 
     /**
-     * Convert a string or ObjectId to an ObjectId.
+     * Convert a string, array, or ObjectId to an ObjectId.
+     * Handles the formats of: array('oid' => '< 24 character ID >'), array('$oid' => '< 24 character ID >'), '< 24 character ID >'.
      *
      * @param array|string|ObjectId|null $id
      *
@@ -120,29 +121,47 @@ class MondocTypes
      */
     public static function toObjectId(ObjectId|array|string|null $id): ?ObjectId
     {
-        /* @var $id array|null|string|ObjectId */
         if (null === $id) {
-            return $id;
+            return null;
         }
-
+        if (is_string($id) && 24 === strlen($id)) {
+            return new ObjectId($id);
+        }
         if ($id instanceof ObjectId) {
             return $id;
         }
 
-        if (is_string($id) && 24 === strlen($id)) {
-            return new ObjectId($id);
-        }
-
         if (is_array($id)) {
-            if (array_key_exists('oid', $id)) {
-                return new ObjectId($id['oid']);
+            if (array_key_exists('oid', $id) && is_string($id['oid']) && 24 === strlen($id['oid'])) {
+                return self::toObjectId($id['oid']);
             }
-            if (array_key_exists('$oid', $id)) {
-                return new ObjectId($id['$oid']);
+            if (array_key_exists('$oid', $id) && is_string($id['$oid']) && 24 === strlen($id['$oid'])) {
+                return self::toObjectId($id['$oid']);
             }
         }
 
         return null;
+    }
+
+    /**
+     * @param string $id
+     * @return ObjectIdå
+     */
+    public static function stringToObjectId(string $id): ObjectId
+    {
+        return self::toObjectId($id);
+    }
+
+    /**
+     * Convert an ObjectId to a string.
+     *
+     * @param ObjectId $id
+     *
+     * @return string
+     */
+    public static function objectIdToString(ObjectId $id): string
+    {
+        return $id->__toString();
     }
 
     /**
@@ -170,7 +189,7 @@ class MondocTypes
             $val = clone $v; // it's an object
             if (method_exists($val, 'jsonSerialize')) {
                 if ($val instanceof ObjectId) {
-                    return $val->__toString();
+                    return MondocTypes::objectIdToString($val);
                 }
                 if ($val instanceof UTCDateTime) {
                     return $val->jsonSerialize()['$date']['$numberLong'];

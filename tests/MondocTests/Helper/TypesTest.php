@@ -54,6 +54,19 @@ use stdClass;
  */
 class TypesTest extends MondocBaseTest
 {
+    public function testMongoIdCasting()
+    {
+        $stringId = '5f9b1b3b7f8b9b001f000000';
+        $objectId = new ObjectId($stringId);
+
+        $this->assertEquals($stringId, MondocTypes::objectIdToString($objectId));
+        $this->assertEquals($objectId, MondocTypes::stringToObjectId($stringId));
+
+        $this->assertEquals($stringId, MondocTypes::toObjectId($stringId)->__toString());
+        $this->assertEquals($stringId, MondocTypes::toObjectId(['oid' => $stringId])->__toString());
+        $this->assertEquals($stringId, MondocTypes::toObjectId(['$oid' => $stringId])->__toString());
+    }
+
     public function testDateConversions()
     {
         $dateTime = new DateTime();

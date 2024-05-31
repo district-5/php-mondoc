@@ -31,8 +31,6 @@
 namespace District5Tests\MondocTests\TestObjects\Model\Subs;
 
 use District5\Mondoc\Db\Model\MondocAbstractSubModel;
-use MongoDB\Model\BSONArray;
-use MongoDB\Model\BSONDocument;
 
 /**
  * Class AgeSubModel
@@ -47,9 +45,9 @@ class AgeSubModel extends MondocAbstractSubModel
     protected int $age = 0;
 
     /**
-     * @var AgeWordSubModel|BSONArray|BSONDocument|null
+     * @var AgeWordSubModel|null
      */
-    protected BSONDocument|BSONArray|AgeWordSubModel|null $wordModel = null;
+    protected AgeWordSubModel|null $wordModel = null;
 
     /**
      * @var string[]
@@ -75,7 +73,7 @@ class AgeSubModel extends MondocAbstractSubModel
      *
      * @return $this
      */
-    public function setAgeWordModel(AgeWordSubModel $model): AgeSubModel
+    public function setAgeWordModel(AgeWordSubModel $model): static
     {
         $this->wordModel = $model;
 
@@ -94,9 +92,8 @@ class AgeSubModel extends MondocAbstractSubModel
      * @param int $age
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function setAge(int $age)
+    public function setAge(int $age): static
     {
         $this->age = $age;
 

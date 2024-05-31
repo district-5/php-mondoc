@@ -51,7 +51,6 @@ class FoodAttributesSubModel extends MondocAbstractSubModel
 
     /**
      * @return string
-     * @noinspection PhpUnused
      */
     public function getColour(): string
     {
@@ -68,7 +67,6 @@ class FoodAttributesSubModel extends MondocAbstractSubModel
 
     /**
      * @return string
-     * @noinspection PhpUnused
      */
     public function getSmell(): string
     {

@@ -55,8 +55,6 @@ trait FinancialCandlesTrait
      * @param int $minuteGranularity
      * @param int|null $limitNumber
      * @return AggregateFinancialCandleDto[]
-     * @noinspection PhpUnused
-     * @noinspection DuplicatedCode
      *
      * @example $this->getCandles(
      *      [
@@ -145,7 +143,6 @@ trait FinancialCandlesTrait
         }
 
         if (!empty($candles)) {
-            /** @noinspection PhpConditionAlreadyCheckedInspection */
             if ($sortDirection === -1) {
                 usort($candles, function ($first, $second) {
                     /* @var $first AggregateFinancialCandleDto */

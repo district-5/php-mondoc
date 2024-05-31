@@ -51,7 +51,6 @@ trait PercentileOfNumberFieldTrait
      * @param array $filter
      *
      * @return null|float|int
-     * @noinspection PhpUnused
      */
     public function getPercentile(string $fieldName, float $percentile, int $sortDirection = 1, array $filter = []): float|int|null
     {

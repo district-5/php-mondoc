@@ -27,8 +27,6 @@
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
- * @noinspection PhpUnused
  */
 
 namespace District5\Mondoc\Db\Model\Traits;
@@ -73,9 +71,8 @@ trait MondocModifiedDateTrait
      * @param DateTime $date
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function setModifiedDate(DateTime $date)
+    public function setModifiedDate(DateTime $date): static
     {
         $this->md = $date;
         if (method_exists($this, 'addDirty')) {
@@ -89,7 +86,7 @@ trait MondocModifiedDateTrait
      *
      * @return $this
      */
-    public function touchModifiedDate(): self
+    public function touchModifiedDate(): static
     {
         return $this->setModifiedDate(
             Date::nowUtc()

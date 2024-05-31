@@ -48,7 +48,6 @@ trait DecrementTrait
      * @param int $delta
      *
      * @return bool
-     * @noinspection PhpUnused
      */
     public static function dec(ObjectId $id, string $field, int $delta = 1): bool
     {
@@ -65,7 +64,6 @@ trait DecrementTrait
      * @param ObjectId $id
      * @param array $fieldsToDeltas
      * @return bool
-     * @noinspection PhpUnused
      * @example
      *      ->decMulti(
      *          $model->getObjectId(),

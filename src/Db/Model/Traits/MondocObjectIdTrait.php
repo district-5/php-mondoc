@@ -87,9 +87,8 @@ trait MondocObjectIdTrait
      * Remove the ObjectId from this model. Ideal for cloning a document.
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function unsetObjectId()
+    public function unsetObjectId(): static
     {
         $this->_mondocObjectId = null;
 
@@ -102,9 +101,8 @@ trait MondocObjectIdTrait
      * @param ObjectId $objectId
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    final public function setObjectId(ObjectId $objectId)
+    final public function setObjectId(ObjectId $objectId): static
     {
         $this->_mondocObjectId = $objectId;
 

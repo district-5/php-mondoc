@@ -51,7 +51,6 @@ trait PaginationTrait
      * @param array $filter
      *
      * @return MondocPaginationHelper
-     * @noinspection PhpUnused
      */
     public static function getPaginationHelper(int $currentPageNumber, int $perPage, array $filter = []): MondocPaginationHelper
     {
@@ -69,7 +68,6 @@ trait PaginationTrait
      * @param array $filter
      *
      * @return MondocPaginationHelper
-     * @noinspection PhpUnused
      */
     public static function getPaginationHelperForObjectIdPagination(int $perPage, array $filter = []): MondocPaginationHelper
     {
@@ -88,7 +86,6 @@ trait PaginationTrait
      * @param string|null $sortByField
      * @param int $sortDirection
      * @return MondocAbstractModel[]
-     * @noinspection PhpUnused
      */
     public static function getPage(MondocPaginationHelper $paginator, array $filter = [], ?string $sortByField = null, int $sortDirection = -1): array
     {
@@ -114,7 +111,6 @@ trait PaginationTrait
      * @param int $sortDirection
      * @return MondocAbstractModel[]
      * @throws InvalidArgumentException
-     * @noinspection PhpUnused
      */
     public static function getPageByByObjectIdPagination(MondocPaginationHelper $paginator, ObjectId|string|null $currentId, int $sortDirection = -1, array $filter = []): array
     {

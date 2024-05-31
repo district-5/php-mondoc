@@ -31,6 +31,7 @@
 namespace District5\Mondoc\Db\Service\Traits\Persistence;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\MondocConfig;
 
 /**
@@ -46,8 +47,6 @@ trait InsertMultiTrait
      * @param MondocAbstractModel[] $models
      *
      * @return bool
-     * @noinspection PhpUnused
-     * @noinspection PhpFullyQualifiedNameUsageInspection
      */
     public static function insertMulti(array $models): bool
     {
@@ -77,7 +76,7 @@ trait InsertMultiTrait
         $otherServiceInsertionSucceeded = true;
         foreach ($otherServiceModels as $srv => $others) {
             $hadOtherModels = true;
-            /* @var $srv \District5\Mondoc\Db\Service\MondocAbstractService */
+            /* @var $srv MondocAbstractService */
             if ($srv::insertMulti($others) !== true) {
                 $otherServiceInsertionSucceeded = false;
             }

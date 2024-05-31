@@ -69,9 +69,8 @@ class MondocAbstractModel extends MondocAbstractSubModel
      * @param BSONDocument $document
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    public static function inflateSingleBsonDocument(BSONDocument $document)
+    public static function inflateSingleBsonDocument(BSONDocument $document): static
     {
         $m = self::inflateSingleArray(
             $document->getArrayCopy()
@@ -87,7 +86,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
      * @param array $data
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
     public static function inflateSingleArray(array $data): static
     {
@@ -124,9 +122,8 @@ class MondocAbstractModel extends MondocAbstractSubModel
      * @param null|Collection $collection
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function setMongoCollection(?Collection $collection)
+    public function setMongoCollection(?Collection $collection): static
     {
         $this->_mondocCollection = $collection;
 
@@ -179,60 +176,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
         }
 
         return false;
-    }
-
-    /**
-     * Inflate a model from an array of data.
-     *
-     * @param array $data
-     *
-     * @return $this
-     * @noinspection PhpUnused
-     * @noinspection PhpMissingReturnTypeInspection
-     * @noinspection DuplicatedCode
-     */
-    public function inflateFurtherValues(array $data)
-    {
-        $subModelClassMap = $this->getKeyToClassMap();
-        $fieldMap = $this->getFieldToFieldMap();
-
-        foreach ($data as $k => $v) {
-            if (is_int($k)) {
-                continue;
-            }
-
-            if (in_array($k, $this->getPropertyExclusions())) {
-                continue;
-            }
-            if (array_key_exists($k, $fieldMap)) {
-                $k = $fieldMap[$k];
-            }
-            if ($v instanceof DateTime) {
-                $v = MondocTypes::phpDateToMongoDateTime($v);
-            }
-
-            if (is_array($v) && true === $this->isMondocNestedAnyType($k)) {
-                $subModelClassName = $subModelClassMap[$k];
-                if ($this->isMondocNestedMultipleObjects($k) === true) {
-                    $subModelClassName = substr($subModelClassName, 0, -2);
-                }
-                if (class_exists($subModelClassName)) {
-                    /* @var $subModelClassName MondocAbstractSubModel */
-                    if ($this->isMondocNestedMultipleObjects($k)) {
-                        $v = $subModelClassName::inflateMultipleArrays($v);
-                    } else {
-                        $v = $subModelClassName::inflateSingleArray($v);
-                    }
-                } else {
-                    // Class didn't exist, so adding to unmapped.
-                    $this->_mondocUnmapped[$k] = $v;
-                }
-            }
-            $this->__set($k, $v);
-            $this->addDirty($k);
-        }
-
-        return $this;
     }
 
     /**
@@ -378,7 +321,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
      * @param array $data
      *
      * @return ObjectId[]
-     * @noinspection PhpUnused
      */
     protected function convertArrayOfMongoIdsToMongoIds(array $data): array
     {

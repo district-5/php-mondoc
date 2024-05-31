@@ -50,10 +50,8 @@ trait DeletionTrait
      * @param MondocAbstractModel $model
      *
      * @return bool
-     * @noinspection PhpUnused
-     * @noinspection PhpMissingParamTypeInspection
      */
-    public static function deleteModel($model): bool
+    public static function deleteModel(MondocAbstractModel $model): bool
     {
         if (!is_object($model) || false === method_exists($model, 'isMondocModel')) {
             return false;

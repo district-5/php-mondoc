@@ -154,6 +154,10 @@ models defined in the `$mondocNested` array.
 
 Sub models must extend `\District5\Mondoc\Db\Model\MondocAbstractSubModel`.
 
+ > **Please note**: in versions prior to 5.1.0 any nested property was required to have `BSONDocument` or `BSONArray` as
+ > part of the property definition. This is no longer required as the library will automatically inflate the class(es)
+ > correctly
+
 ```php
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Model\MondocAbstractSubModel;
@@ -194,17 +198,17 @@ class Person extends MondocAbstractModel
     /**
      * @var FavouriteFood 
      */
-    protected FavouriteFood|\MongoDB\Model\BSONDocument|null $favouriteFood = null; // Having BSONDocument here is important as inflation will use the property
+    protected FavouriteFood|null $favouriteFood = null; // Having BSONDocument here is important as inflation will use the property
     
     /**
      * @var FavouriteFood[]
      */
-    protected array|\MongoDB\Model\BSONArray $allFoods = []; // Having BSONArray here is important as inflation will use the property
+    protected array $allFoods = []; // Having BSONArray here is important as inflation will use the property
     
     /**
      * @var Car 
      */
-    protected Car|\MongoDB\Model\BSONDocument|null $car = null; // Having BSONDocument here is important as inflation will use the property
+    protected Car|null $car = null; // Having BSONDocument here is important as inflation will use the property
     
     /**
      * @var string[] 

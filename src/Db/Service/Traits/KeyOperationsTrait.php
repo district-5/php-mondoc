@@ -46,7 +46,6 @@ trait KeyOperationsTrait
      * @param MondocAbstractModel $model
      *
      * @return bool
-     * @noinspection PhpUnused
      */
     public static function removeKey(string $key, MondocAbstractModel $model): bool
     {

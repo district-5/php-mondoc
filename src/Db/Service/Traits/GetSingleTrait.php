@@ -102,7 +102,6 @@ trait GetSingleTrait
      * @param string|ObjectId $id
      *
      * @return null|MondocAbstractModel
-     * @noinspection PhpUnused
      */
     public static function getById(ObjectId|string $id): ?MondocAbstractModel
     {

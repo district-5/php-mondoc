@@ -51,9 +51,8 @@ trait DirtyAttributesTrait
      * Clear the dirty parameter array. Dirty values aren't referenced for new objects.
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function clearDirty()
+    public function clearDirty(): static
     {
         $this->_mondocDirty = [];
 
@@ -76,9 +75,8 @@ trait DirtyAttributesTrait
      * @param string $key
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    protected function addDirty(string $key)
+    protected function addDirty(string $key): static
     {
         $this->_mondocDirty[] = $key;
 

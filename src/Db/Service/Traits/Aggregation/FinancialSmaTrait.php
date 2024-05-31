@@ -58,8 +58,6 @@ trait FinancialSmaTrait
      * @param int $sortDirection (optional) default 1. 1 = ascending, -1 = descending
      * @param array $additionalFilter (optional) default []. additional filter to apply to the aggregation
      * @return AggregateSmaDto[]
-     * @noinspection PhpUnused
-     * @noinspection DuplicatedCode
      *
      * @throws Exception
      * @example $this->getFinancialSma(

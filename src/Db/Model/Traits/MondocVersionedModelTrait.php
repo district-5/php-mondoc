@@ -71,9 +71,8 @@ trait MondocVersionedModelTrait
      * @param int $version
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function setModelVersion(int $version)
+    public function setModelVersion(int $version): static
     {
         $this->_v = $version;
         if (method_exists($this, 'addDirty')) {
@@ -86,9 +85,8 @@ trait MondocVersionedModelTrait
      * Increment the version of this model
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function incrementModelVersion()
+    public function incrementModelVersion(): static
     {
         return $this->setModelVersion(
             ($this->_v + 1)
@@ -99,9 +97,8 @@ trait MondocVersionedModelTrait
      * Decrement the version of this model
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function decrementModelVersion()
+    public function decrementModelVersion(): static
     {
         return $this->setModelVersion(
             ($this->_v - 1)

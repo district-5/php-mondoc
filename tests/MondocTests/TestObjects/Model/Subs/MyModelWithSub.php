@@ -31,8 +31,6 @@
 namespace District5Tests\MondocTests\TestObjects\Model\Subs;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
-use MongoDB\Model\BSONArray;
-use MongoDB\Model\BSONDocument;
 
 /**
  * Class MyModelWithSub
@@ -47,14 +45,14 @@ class MyModelWithSub extends MondocAbstractModel
     protected string $name;
 
     /**
-     * @var AgeSubModel|BSONDocument
+     * @var AgeSubModel
      */
-    protected BSONDocument|AgeSubModel $age;
+    protected AgeSubModel $age;
 
     /**
      * @var FoodSubModel[]
      */
-    protected BSONArray|array $foods = [];
+    protected array $foods = [];
 
     /**
      * @var string[]

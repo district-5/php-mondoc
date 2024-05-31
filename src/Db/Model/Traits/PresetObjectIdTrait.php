@@ -52,10 +52,8 @@ trait PresetObjectIdTrait
      * @param null|ObjectId $presetMongoId
      *
      * @return $this
-     * @noinspection PhpMissingReturnTypeInspection
-     * @noinspection PhpUnused
      */
-    public function setPresetObjectId(ObjectId|null $presetMongoId)
+    public function setPresetObjectId(ObjectId|null $presetMongoId): static
     {
         $this->_mondocPresetObjectId = $presetMongoId;
 

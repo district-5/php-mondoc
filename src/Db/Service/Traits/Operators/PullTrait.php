@@ -46,7 +46,6 @@ trait PullTrait
      * @param string $field
      * @param string|int|bool $value
      * @return bool
-     * @noinspection PhpUnused
      */
     protected static function pullFromArrayWithFilter(array $filter, string $field, mixed $value): bool
     {
@@ -66,7 +65,6 @@ trait PullTrait
      * @param string $field
      * @param string|int|bool $value
      * @return bool
-     * @noinspection PhpUnused
      */
     protected static function pullFromArrayById(ObjectId $id, string $field, mixed $value): bool
     {

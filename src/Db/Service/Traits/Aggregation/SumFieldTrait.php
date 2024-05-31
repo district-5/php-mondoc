@@ -48,7 +48,6 @@ trait SumFieldTrait
      * @param array $filter
      *
      * @return float|int
-     * @noinspection PhpUnused
      * @noinspection DuplicatedCode
      */
     public function getSum(string $fieldName, array $filter = []): float|int

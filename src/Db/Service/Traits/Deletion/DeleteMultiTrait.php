@@ -46,7 +46,6 @@ trait DeleteMultiTrait
      * @param array $options (optional)
      *
      * @return null|int
-     * @noinspection PhpUnused
      */
     public static function deleteMulti(array $query, array $options = []): ?int
     {

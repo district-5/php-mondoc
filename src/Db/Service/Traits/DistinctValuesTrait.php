@@ -45,7 +45,6 @@ trait DistinctValuesTrait
      * @param array $options (optional)
      *
      * @return array
-     * @noinspection PhpUnused
      */
     public static function getDistinctValuesForKey(string $key, array $filter = [], array $options = []): array
     {

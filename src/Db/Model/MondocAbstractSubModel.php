@@ -143,6 +143,9 @@ abstract class MondocAbstractSubModel
         }
         $final = [];
         foreach ($data as $datum) {
+            if ($datum instanceof BSONDocument) {
+                $datum = $datum->getArrayCopy();
+            }
             $final[] = $cl::inflateSingleArray($datum);
         }
 
@@ -180,7 +183,7 @@ abstract class MondocAbstractSubModel
             }
 
             $isInClassMap = array_key_exists($k, $classMap);
-            if (is_array($v) && $isInClassMap === true) {
+            if ((is_array($v) || is_object($v)) && $isInClassMap === true) {
                 $subClassName = $classMap[$k];
                 $isMulti = false;
                 if (str_ends_with($subClassName, '[]')) {
@@ -188,6 +191,9 @@ abstract class MondocAbstractSubModel
                     $subClassName = substr($subClassName, 0, -2);
                 }
                 if (class_exists($subClassName)) {
+                    if (is_object($v)) {
+                        $v = MondocTypes::arrayToPhp($v);
+                    }
                     /* @var $subClassName MondocAbstractSubModel */
                     if ($isMulti) {
                         $v = $subClassName::inflateMultipleArrays($v);
@@ -245,9 +251,8 @@ abstract class MondocAbstractSubModel
      * @param object $obj
      *
      * @return array
-     * @noinspection PhpMissingParamTypeInspection
      */
-    protected static function objectToArray($obj): array
+    protected static function objectToArray(object $obj): array
     {
         $props = get_object_vars($obj);
         $array = [];

@@ -57,6 +57,8 @@ class SingleAndNestedTest extends MondocBaseTest
         $attributes1 = new FoodAttributesSubModel();
         $attributes1->setColour('white');
         $attributes1->setSmell('wheat');
+        $this->assertEquals('white', $attributes1->getColour());
+        $this->assertEquals('wheat', $attributes1->getSmell());
         $food->setAttributes([$attributes1]);
 
         $m->setFood($food);

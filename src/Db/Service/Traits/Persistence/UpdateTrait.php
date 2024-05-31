@@ -47,14 +47,9 @@ trait UpdateTrait
      * @param MondocAbstractModel $model
      *
      * @return bool
-     * @noinspection PhpUnused
-     * @noinspection PhpMissingParamTypeInspection
      */
-    public static function update($model): bool
+    public static function update(MondocAbstractModel $model): bool
     {
-        if (!is_object($model) || false === method_exists($model, 'isMondocModel')) {
-            return false;
-        }
         if (empty($model->getDirty())) {
             return true;
         }
@@ -147,7 +142,6 @@ trait UpdateTrait
      * @param QueryBuilder $queryBuilder
      * @param array $query
      * @return bool
-     * @noinspection PhpUnused
      */
     public static function updateOneByQueryBuilder(QueryBuilder $queryBuilder, array $query): bool
     {
@@ -190,7 +184,6 @@ trait UpdateTrait
      * @param QueryBuilder $queryBuilder
      * @param array $update
      * @return bool
-     * @noinspection PhpUnused
      */
     public static function updateManyByQueryBuilder(QueryBuilder $queryBuilder, array $update): bool
     {

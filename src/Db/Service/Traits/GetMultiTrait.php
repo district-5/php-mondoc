@@ -65,7 +65,6 @@ trait GetMultiTrait
      * @param array $options
      *
      * @return MondocAbstractModel[]
-     * @noinspection PhpUnused
      */
     public static function getMultiByCriteria(array $filter = [], array $options = []): array
     {

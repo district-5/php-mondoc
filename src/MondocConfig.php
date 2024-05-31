@@ -130,7 +130,6 @@ class MondocConfig
      *
      * @param array $serviceMap
      * @return $this
-     * @noinspection PhpUnused
      */
     public function setServiceMap(array $serviceMap): MondocConfig
     {

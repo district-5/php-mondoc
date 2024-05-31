@@ -48,7 +48,6 @@ trait MaxFieldTrait
      * @param array $filter
      *
      * @return mixed|null
-     * @noinspection PhpUnused
      * @noinspection DuplicatedCode
      */
     public function getMax(string $fieldName, array $filter = []): mixed

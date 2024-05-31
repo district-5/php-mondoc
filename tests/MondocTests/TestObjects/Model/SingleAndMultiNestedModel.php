@@ -32,8 +32,6 @@ namespace District5Tests\MondocTests\TestObjects\Model;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5Tests\MondocTests\TestObjects\Model\Subs\FoodSubModel;
-use MongoDB\Model\BSONArray;
-use MongoDB\Model\BSONDocument;
 
 /**
  * Class SingleAndMultiNestedModel
@@ -48,14 +46,14 @@ class SingleAndMultiNestedModel extends MondocAbstractModel
     protected string $name;
 
     /**
-     * @var BSONDocument|FoodSubModel|null
+     * @var FoodSubModel|null
      */
-    protected BSONDocument|FoodSubModel|null $food = null;
+    protected FoodSubModel|null $food = null;
 
     /**
      * @var FoodSubModel[]
      */
-    protected BSONArray|array $foods = [];
+    protected array $foods = [];
 
     /**
      * @var array

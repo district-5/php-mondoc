@@ -48,7 +48,6 @@ trait MinFieldTrait
      * @param array $filter
      *
      * @return mixed|null
-     * @noinspection PhpUnused
      * @noinspection DuplicatedCode
      */
     public function getMin(string $fieldName, array $filter = []): mixed

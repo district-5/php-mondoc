@@ -148,7 +148,6 @@ class MondocPaginationHelper
      * @param int $perPage (optional) default 10
      *
      * @return MondocPaginationHelper
-     * @noinspection PhpUnused
      */
     public static function init(int $totalResults, int $currentPage, int $perPage = 10): MondocPaginationHelper
     {
@@ -157,7 +156,6 @@ class MondocPaginationHelper
 
     /**
      * @return bool
-     * @noinspection PhpUnused
      */
     public function isFirstPage(): bool
     {
@@ -168,7 +166,6 @@ class MondocPaginationHelper
      * Get the current page.
      *
      * @return int
-     * @noinspection PhpUnused
      */
     public function getCurrentPage(): int
     {
@@ -177,7 +174,6 @@ class MondocPaginationHelper
 
     /**
      * @return bool
-     * @noinspection PhpUnused
      */
     public function isLastPage(): bool
     {
@@ -188,7 +184,6 @@ class MondocPaginationHelper
      * Get the total number of pages.
      *
      * @return int
-     * @noinspection PhpUnused
      */
     public function getTotalPages(): int
     {
@@ -197,7 +192,6 @@ class MondocPaginationHelper
 
     /**
      * @return bool
-     * @noinspection PhpUnused
      */
     public function hasMultiplePages(): bool
     {

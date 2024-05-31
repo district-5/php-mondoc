@@ -31,7 +31,6 @@
 namespace District5Tests\MondocTests\TestObjects\Model\Subs;
 
 use District5\Mondoc\Db\Model\MondocAbstractSubModel;
-use MongoDB\Model\BSONArray;
 
 /**
  * Class FoodSubModel
@@ -48,7 +47,7 @@ class FoodSubModel extends MondocAbstractSubModel
     /**
      * @var FoodAttributesSubModel[]
      */
-    protected BSONArray|array $attributes = [];
+    protected array $attributes = [];
 
     protected array $mondocNested = [
         'attributes' => FoodAttributesSubModel::class . '[]',

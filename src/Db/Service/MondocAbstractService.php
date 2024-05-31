@@ -51,7 +51,6 @@ use MongoDB\Database;
  * Class MondocAbstractService.
  *
  * @package District5\Mondoc\Db\Service
- * @noinspection PhpUnused
  */
 abstract class MondocAbstractService
 {
@@ -71,7 +70,6 @@ abstract class MondocAbstractService
      * Retrieve the Database instance.
      *
      * @return null|Database
-     * @noinspection PhpUnused
      */
     public static function getMongo(): ?Database
     {
@@ -96,9 +94,8 @@ abstract class MondocAbstractService
      * @param string|null $clz
      *
      * @return Collection
-     * @noinspection PhpMissingParamTypeInspection
      */
-    public static function getCollection($clz = null): Collection
+    public static function getCollection(string|null $clz = null): Collection
     {
         if (null === $clz) {
             $clz = get_called_class();

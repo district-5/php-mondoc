@@ -98,7 +98,6 @@ trait MondocMongoTypeTrait
      * @param ObjectId[] $ids
      *
      * @return ObjectId[]
-     * @noinspection PhpUnused
      */
     protected function deduplicateArrayOfMongoIds(array $ids): array
     {

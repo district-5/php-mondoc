@@ -61,7 +61,6 @@ trait IncrementTrait
      * @param ObjectId $id
      * @param array $fieldsToDeltas
      * @return bool
-     * @noinspection PhpUnused
      * @example
      *      ->incMulti(
      *          $model->getObjectId(),

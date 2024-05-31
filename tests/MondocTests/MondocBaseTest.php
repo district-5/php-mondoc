@@ -98,25 +98,19 @@ abstract class MondocBaseTest extends TestCase
             $connection->selectDatabase(getenv('MONGO_DATABASE')),
             'default'
         );
+        $this->mondoc->setServiceMap([
+            DateModel::class => DateService::class,
+            MyModel::class => MyService::class,
+            MyModelWithSub::class => MySubService::class,
+            SingleAndMultiNestedModel::class => SingleAndMultiNestedService::class,
+        ]); // just to cover the setServiceMap method
         $this->mondoc->addServiceMapping(
-            DateModel::class,
-            DateService::class
-        )->addServiceMapping(
-            MyModel::class,
-            MyService::class
-        )->addServiceMapping(
-            MyModelWithSub::class,
-            MySubService::class
-        )->addServiceMapping(
-            SingleAndMultiNestedModel::class,
-            SingleAndMultiNestedService::class
-        )->addServiceMapping(
             VersionedModel::class,
             VersionedService::class
         )->addServiceMapping(
             AllTypesModel::class,
             AllTypesService::class
-        );
+        ); // just to cover the addServiceMapping method
 
         return $this->mondoc->getDatabase();
     }

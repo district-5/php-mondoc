@@ -46,7 +46,6 @@ trait CountableTrait
      * @param mixed $value
      *
      * @return int
-     * @noinspection PhpUnused
      */
     public static function countWhereKeyEqualsValue(string $key, mixed $value): int
     {
@@ -62,7 +61,6 @@ trait CountableTrait
      * @param array $options (optional)
      *
      * @return int
-     * @noinspection PhpUnused
      */
     public static function countAll(array $query = [], array $options = []): int
     {
@@ -81,7 +79,6 @@ trait CountableTrait
      * @param QueryBuilder $builder
      *
      * @return int
-     * @noinspection PhpUnused
      */
     public static function countAllByQueryBuilder(QueryBuilder $builder): int
     {
@@ -102,7 +99,6 @@ trait CountableTrait
      * @param array $options (optional)
      *
      * @return int
-     * @noinspection PhpUnused
      */
     public static function estimateDocumentCount(array $options = []): int
     {

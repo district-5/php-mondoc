@@ -45,13 +45,9 @@ trait InsertSingleTrait
      * @param MondocAbstractModel $model
      *
      * @return bool
-     * @noinspection PhpMissingParamTypeInspection
      */
-    public static function insert($model): bool
+    public static function insert(MondocAbstractModel $model): bool
     {
-        if (!is_object($model) || false === method_exists($model, 'isMondocModel')) {
-            return false;
-        }
         $collection = self::getCollection(
             get_called_class()
         );

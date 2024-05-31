@@ -55,10 +55,8 @@ trait PersistenceTrait
      * @param MondocAbstractModel $model
      *
      * @return bool
-     * @noinspection PhpUnused
-     * @noinspection PhpMissingParamTypeInspection
      */
-    public static function saveModel($model): bool
+    public static function saveModel(MondocAbstractModel $model): bool
     {
         if (!is_object($model) || false === method_exists($model, 'isMondocModel')) {
             return false;

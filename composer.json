@@ -15,7 +15,7 @@
         "mongodb/mongodb": "^1.8",
         "ext-mongodb": "*",
         "district5/mondoc-builder": "*",
-        "district5/date": ">=2.0.3"
+        "district5/date": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "9.*"

@@ -32,15 +32,13 @@ namespace District5Tests\MondocTests\TestObjects\Model;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Model\Traits\MondocCloneableTrait;
-use MongoDB\Model\BSONArray;
-use MongoDB\Model\BSONDocument;
 
 /**
- * Class MyModel
+ * Class MyDuplicateModel
  *
  * @package District5Tests\MondocTests\TestObjects\Model
  */
-class MyModel extends MondocAbstractModel
+class MyDuplicateModel extends MondocAbstractModel
 {
     use MondocCloneableTrait;
 
@@ -53,49 +51,6 @@ class MyModel extends MondocAbstractModel
      * @var int
      */
     protected int $age = 0;
-
-    /**
-     * @return bool
-     */
-    public function incrementAge(): bool
-    {
-        /** @noinspection PhpRedundantOptionalArgumentInspection */
-        return $this->inc('age', 1);
-    }
-
-    /**
-     * @return bool
-     */
-    public function decrementAge(): bool
-    {
-        /** @noinspection PhpRedundantOptionalArgumentInspection */
-        return $this->dec('age', 1);
-    }
-
-    /**
-     * This method must return the array to insert into Mongo.
-     *
-     * @return array
-     */
-    public function asArray(): array
-    {
-        $this->assignDefaultVars();
-
-        return [
-            'name' => $this->getName(),
-            'age' => $this->getAge()
-        ];
-    }
-
-    /**
-     * Called to assign any default variables. You should always check for presence as
-     * this method is called at both before save, and after retrieval. This avoids overwriting
-     * your set values.
-     */
-    protected function assignDefaultVars(): void
-    {
-        // TODO: Implement
-    }
 
     /**
      * @return string
@@ -137,14 +92,5 @@ class MyModel extends MondocAbstractModel
         $this->addDirty('age');
 
         return $this;
-    }
-
-    /**
-     * @param BSONArray|BSONDocument $bson
-     * @return array
-     */
-    public function getArrayFromBson(BSONArray|BSONDocument $bson): array
-    {
-        return $this->arrayToPhpArray($bson);
     }
 }

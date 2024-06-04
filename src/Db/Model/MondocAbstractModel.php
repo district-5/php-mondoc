@@ -30,13 +30,11 @@
 
 namespace District5\Mondoc\Db\Model;
 
-use DateTime;
 use District5\Mondoc\Db\Model\Traits\DirtyAttributesTrait;
-use District5\Mondoc\Db\Model\Traits\MondocObjectIdTrait;
 use District5\Mondoc\Db\Model\Traits\MondocMongoTypeTrait;
+use District5\Mondoc\Db\Model\Traits\MondocObjectIdTrait;
 use District5\Mondoc\Db\Model\Traits\PresetObjectIdTrait;
 use District5\Mondoc\Db\Service\MondocAbstractService;
-use District5\Mondoc\Helper\MondocTypes;
 use District5\Mondoc\MondocConfig;
 use Exception;
 use MongoDB\BSON\ObjectId;
@@ -179,26 +177,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
     }
 
     /**
-     * @param bool $save
-     * @return MondocAbstractModel|static|null
-     */
-    public function clone(bool $save = false): MondocAbstractModel|static|null
-    {
-        $new = clone $this;
-        $new->unsetObjectId();
-        $new->clearPresetObjectId();
-        $new->clearDirty();
-        if ($save === true) {
-            if ($new->save() === true) {
-                return $new;
-            }
-
-            return null;
-        }
-        return $new;
-    }
-
-    /**
      * @return string[]
      */
     protected function getFieldToFieldMap(): array
@@ -332,5 +310,22 @@ class MondocAbstractModel extends MondocAbstractSubModel
         }
 
         return array_values($n);
+    }
+
+    /**
+     * Export the model as a JSON encodable array, omitting certain fields.
+     *
+     * @param array $omitKeys (optional) fields to omit.
+     * @return array
+     */
+    public function asJsonEncodableArray(array $omitKeys = []): array
+    {
+        $data = parent::asJsonEncodableArray();
+        $data['_id'] = $this->getObjectIdString();
+        foreach ($omitKeys as $o) {
+            unset($data[$o]);
+        }
+
+        return $data;
     }
 }

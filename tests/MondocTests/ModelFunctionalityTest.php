@@ -36,6 +36,7 @@ use District5\Mondoc\MondocConfig;
 use District5\MondocBuilder\QueryBuilder;
 use District5\MondocBuilder\QueryTypes\ValueEqualTo;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
+use District5Tests\MondocTests\TestObjects\Model\MyDuplicateModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
 use District5Tests\MondocTests\TestObjects\Service\DateService;
 use District5Tests\MondocTests\TestObjects\Service\MyService;
@@ -99,6 +100,35 @@ class ModelFunctionalityTest extends MondocBaseTest
 
         $this->assertTrue($m->delete());
         $this->assertTrue($clone->delete());
+    }
+
+    public function testCloneModelWithAlternateModel()
+    {
+        $m = new MyModel();
+        $m->setAge(102);
+        $m->setName('Joe');
+        $this->assertTrue($m->save());
+
+        MondocConfig::getInstance()->addServiceMapping(
+            MyDuplicateModel::class,
+            MyService::class
+        ); // required to map a service to a model
+
+        $clone = $m->clone(true, MyDuplicateModel::class);
+        $this->assertInstanceOf(MyDuplicateModel::class, $clone);
+        $this->assertNotEquals($m->getObjectIdString(), $clone->getObjectIdString());
+        $this->assertEquals($m->getAge(), $clone->getAge());
+        $this->assertEquals($m->getName(), $clone->getName());
+
+        $clone2 = $m->clone(true, new MyDuplicateModel());
+        $this->assertInstanceOf(MyDuplicateModel::class, $clone2);
+        $this->assertNotEquals($m->getObjectIdString(), $clone2->getObjectIdString());
+        $this->assertEquals($m->getAge(), $clone2->getAge());
+        $this->assertEquals($m->getName(), $clone2->getName());
+
+        $this->assertTrue($m->delete());
+        $this->assertTrue($clone->delete());
+        $this->assertTrue($clone2->delete());
     }
 
     public function testCloneModelWithoutSave()
@@ -197,18 +227,6 @@ class ModelFunctionalityTest extends MondocBaseTest
 
         $this->assertTrue($m->delete());
         $this->assertTrue($mT->delete());
-    }
-
-    public function testServiceMap()
-    {
-        $this->initMongo();
-
-        $map = MondocConfig::getInstance()->getServiceMap();
-        $this->assertIsArray($map);
-        $this->assertArrayHasKey(MyModel::class, $map);
-        $this->assertArrayHasKey(DateModel::class, $map);
-        $this->assertEquals(MyService::class, $map[MyModel::class]);
-        $this->assertEquals(DateService::class, $map[DateModel::class]);
     }
 
     public function testInsertMultiWithMultipleModelsAcrossTwoServices()

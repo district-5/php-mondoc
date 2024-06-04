@@ -51,6 +51,8 @@ trait PaginationTrait
      * @param array $filter
      *
      * @return MondocPaginationHelper
+     *
+     * @see PaginationTrait::getPaginationHelperForObjectIdPagination
      */
     public static function getPaginationHelper(int $currentPageNumber, int $perPage, array $filter = []): MondocPaginationHelper
     {
@@ -68,13 +70,15 @@ trait PaginationTrait
      * @param array $filter
      *
      * @return MondocPaginationHelper
+     *
+     * @see PaginationTrait::getPaginationHelper
      */
     public static function getPaginationHelperForObjectIdPagination(int $perPage, array $filter = []): MondocPaginationHelper
     {
-        return new MondocPaginationHelper(
-            self::countAll($filter),
+        return self::getPaginationHelper(
             1,
-            $perPage
+            $perPage,
+            $filter
         );
     }
 
@@ -83,11 +87,11 @@ trait PaginationTrait
      *
      * @param MondocPaginationHelper $paginator
      * @param array $filter
-     * @param string|null $sortByField
-     * @param int $sortDirection
+     * @param string|null $sortByField (optional) default '_id'
+     * @param int $sortDirection (optional) default -1
      * @return MondocAbstractModel[]
      */
-    public static function getPage(MondocPaginationHelper $paginator, array $filter = [], ?string $sortByField = null, int $sortDirection = -1): array
+    public static function getPage(MondocPaginationHelper $paginator, array $filter = [], ?string $sortByField = '_id', int $sortDirection = -1): array
     {
         $options = [
             'skip' => $paginator->getSkip(),

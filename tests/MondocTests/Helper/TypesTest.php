@@ -188,68 +188,68 @@ class TypesTest extends MondocBaseTest
             )
         );
 
+        $callableTest = function ($json) use ($anId, $phpDate) {
+            $this->assertArrayHasKey('anId', $json);
+            $this->assertArrayHasKey('string', $json);
+            $this->assertArrayHasKey('int', $json);
+            $this->assertArrayHasKey('null', $json);
+            $this->assertArrayHasKey('float', $json);
+            $this->assertArrayHasKey('bool', $json);
+            $this->assertArrayHasKey('phpDate', $json);
+            $this->assertArrayHasKey('mongoDate', $json);
+            $this->assertArrayHasKey('phpArray', $json);
+            $this->assertArrayHasKey('bsonArray', $json);
+            $this->assertArrayHasKey('phpObject', $json);
+            $this->assertArrayHasKey('bsonObject', $json);
+
+            $this->assertIsString($json['anId']);
+            $this->assertIsString($json['string']);
+            $this->assertIsInt($json['int']);
+            $this->assertNull($json['null']);
+            $this->assertIsFloat($json['float']);
+            $this->assertTrue($json['bool']);
+            $this->assertIsString($json['phpDate']);
+            $this->assertIsString($json['mongoDate']);
+            $this->assertIsArray($json['phpArray']);
+            $this->assertIsArray($json['bsonArray']);
+            $this->assertIsArray($json['phpObject']);
+            $this->assertIsArray($json['bsonObject']);
+
+            $this->assertEquals('bar', $json['phpObject']['foo']);
+            $this->assertEquals('bar', $json['bsonObject']['foo']);
+            $this->assertEquals([1, 2, 3], $json['phpObject']['array']);
+            $this->assertEquals([1, 2, 3], $json['bsonObject']['array']);
+            $this->assertEquals([1, 2, 3, ['foo' => 'bar']], $json['phpArray']);
+            $this->assertEquals([1, 2, 3, ['foo' => 'bar']], $json['bsonArray']);
+            $this->assertEquals($phpDate->format('Uv'), $json['phpDate']);
+            $this->assertEquals($phpDate->getTimestamp() * 1000, $json['mongoDate']);
+            $this->assertEquals($anId->__toString(), $json['anId']);
+            $this->assertEquals('string', $json['string']);
+            $this->assertEquals(1, $json['int']);
+            // $this->assertNull($json['null']); // already tested
+            $this->assertEquals(1.01, $json['float']);
+            // $this->assertTrue($json['bool']); // already tested
+        };
+
         $json = $m->asJsonEncodableArray();
-        $this->assertArrayHasKey('anId', $json);
-        $this->assertArrayHasKey('string', $json);
-        $this->assertArrayHasKey('int', $json);
-        $this->assertArrayHasKey('null', $json);
-        $this->assertArrayHasKey('float', $json);
-        $this->assertArrayHasKey('bool', $json);
-        $this->assertArrayHasKey('phpDate', $json);
-        $this->assertArrayHasKey('mongoDate', $json);
-        $this->assertArrayHasKey('phpArray', $json);
-        $this->assertArrayHasKey('bsonArray', $json);
-        $this->assertArrayHasKey('phpObject', $json);
-        $this->assertArrayHasKey('bsonObject', $json);
-
-        $this->assertIsString($json['anId']);
-        $this->assertIsString($json['string']);
-        $this->assertIsInt($json['int']);
-        $this->assertNull($json['null']);
-        $this->assertIsFloat($json['float']);
-        $this->assertTrue($json['bool']);
-        $this->assertIsString($json['phpDate']);
-        $this->assertIsString($json['mongoDate']);
-        $this->assertIsArray($json['phpArray']);
-        $this->assertIsArray($json['bsonArray']);
-        $this->assertIsArray($json['phpObject']);
-        $this->assertIsArray($json['bsonObject']);
-
-        $this->assertEquals('bar', $json['phpObject']['foo']);
-        $this->assertEquals('bar', $json['bsonObject']['foo']);
-        $this->assertEquals([1, 2, 3], $json['phpObject']['array']);
-        $this->assertEquals([1, 2, 3], $json['bsonObject']['array']);
-        $this->assertEquals([1, 2, 3, ['foo' => 'bar']], $json['phpArray']);
-        $this->assertEquals([1, 2, 3, ['foo' => 'bar']], $json['bsonArray']);
-        $this->assertEquals($phpDate->format('Uv'), $json['phpDate']);
-        $this->assertEquals($phpDate->getTimestamp() * 1000, $json['mongoDate']);
-        $this->assertEquals($anId->__toString(), $json['anId']);
-        $this->assertEquals('string', $json['string']);
-        $this->assertEquals(1, $json['int']);
-        // $this->assertNull($json['null']); // already tested
-        $this->assertEquals(1.01, $json['float']);
-        // $this->assertTrue($json['bool']); // already tested
+        $jsonWithoutId = $m->asJsonEncodableArray(['_id']);
+        $callableTest($json);
 
         $m->save();
+
         $newM = AllTypesService::getById($m->getObjectId());
-
         $newJson = $newM->asJsonEncodableArray();
-        $this->assertArrayHasKey('anId', $newJson);
-        $this->assertArrayHasKey('string', $newJson);
-        $this->assertArrayHasKey('int', $newJson);
-        $this->assertArrayHasKey('null', $newJson);
-        $this->assertArrayHasKey('float', $newJson);
-        $this->assertArrayHasKey('bool', $newJson);
-        $this->assertArrayHasKey('phpDate', $newJson);
-        $this->assertArrayHasKey('mongoDate', $newJson);
-        $this->assertArrayHasKey('phpArray', $newJson);
-        $this->assertArrayHasKey('bsonArray', $newJson);
-        $this->assertArrayHasKey('phpObject', $newJson);
-        $this->assertArrayHasKey('bsonObject', $newJson);
+        $callableTest($newJson);
 
-        $this->assertEquals(
+        $this->assertNotEquals(
             json_encode($json, JSON_THROW_ON_ERROR),
             json_encode($newJson, JSON_THROW_ON_ERROR)
+        ); // Because _id is not in $json but is in $newJson
+
+        $newJsonWithoutId = $newM->asJsonEncodableArray(['_id']);
+        $this->assertEquals(
+            json_encode($jsonWithoutId, JSON_THROW_ON_ERROR, 512),
+            json_encode($newJsonWithoutId, JSON_THROW_ON_ERROR, 512)
         );
     }
 }

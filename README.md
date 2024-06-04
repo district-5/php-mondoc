@@ -106,6 +106,12 @@ class MyModel extends MondocAbstractModel
 * `MondocModifiedDateTrait` - Adds a `md` property to a model to utilise as an updated date.
   * This value is automatically assigned the current UTC date, but you can override this 
     behaviour by assigning a value to the `md` property prior to saving.
+* `MondocCloneableTrait` - Adds a `clone` method to the model, which will return a new
+    instance of the model with the same properties as the original. Optionally, when calling
+    `->clone` you can pass a boolean to indicate if you want to persist the new model to the
+    database. The optional second parameter is the object or class to clone to. For example,
+    you can make a clone of `MyModel` and convert it to `OtherModel` by calling
+    `$myModel->clone( < save:bool > , OtherModel::class)`. 
 
 **Traits examples**
 
@@ -116,6 +122,7 @@ class MyModel extends \District5\Mondoc\Db\Model\MondocAbstractModel
     use \District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
     use \District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
     use \District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
+    use \District5\Mondoc\Db\Model\Traits\MondocCloneableTrait;
     
     // Rest of your model code...
 }
@@ -324,14 +331,15 @@ This will return an array of the model's properties.
 
 The properties returned by the [`asArray()`](./src/Db/Model/MondocAbstractSubModel.php) method are the properties and
 types that have been set on the model, which means they're likely not able to be directly encoded to JSON. To get around
-this, you can call [`asJsonEncodableArray()`](./src/Db/Model/MondocAbstractSubModel.php) on the model, which will return
-an array that can be encoded to JSON.
+this, you can call [`asJsonEncodableArray()`](./src/Db/Model/MondocAbstractSubModel.php) on the model, which will return an array that can be encoded to JSON.
+Optionally, you can provide a list of fields to omit from the returned array.
 
 ```php
 /* @var $model \District5\Mondoc\Db\Model\MondocAbstractModel */
 
 $mongoInsertionDocument = $model->asArray(); // Not encodable to JSON
 $jsonEncodable = $model->asJsonEncodableArray(); // Encodable to JSON
+$jsonEncodable = $model->asJsonEncodableArray(['password', 'secret']); // Encodable to JSON omitting the 'password' and 'secret' properties
 
 $encodedJson = json_encode($jsonEncodable, JSON_THROW_ON_ERROR);
 echo $encodedJson;

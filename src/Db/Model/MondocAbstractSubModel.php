@@ -385,13 +385,21 @@ abstract class MondocAbstractSubModel
     }
 
     /**
+     * Export the model as a JSON encodable array, omitting certain fields.
+     *
+     * @param array $omitKeys (optional) fields to omit.
      * @return array
      */
-    public function asJsonEncodableArray(): array
+    public function asJsonEncodableArray(array $omitKeys = []): array
     {
-        return MondocTypes::typeToJsonFriendly(
+        $data = MondocTypes::typeToJsonFriendly(
             $this->asArray()
         );
+        foreach ($omitKeys as $o) {
+            unset($data[$o]);
+        }
+
+        return $data;
     }
 
     /**

@@ -24,6 +24,7 @@ jobs:
         uses: php-actions/phpunit@v3
         env:
           MONGO_CONNECTION_STRING: '${{ secrets.MONGO_CONNECTION_STRING }}'
+          XDEBUG_MODE: "coverage"
         with:
           version: 9.6
           php_version: 8.3

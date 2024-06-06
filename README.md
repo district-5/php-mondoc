@@ -1,6 +1,8 @@
 District5 - Mondoc
 ======
 
+![CI](https://github.com/district-5/php-mondoc/actions/workflows/ci.yml/badge.svg)
+
 ### Composer...
 
 Use composer to add this library as a dependency onto your project.

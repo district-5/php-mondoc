@@ -35,7 +35,7 @@ use District5\MondocBuilder\QueryBuilder;
 use MongoDB\Collection;
 
 /**
- * Trait UpdateTrait.
+ * Trait UpdateMultiTrait.
  *
  * @package District5\Mondoc\Db\Service\Traits\Persistence
  */

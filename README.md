@@ -357,7 +357,8 @@ $theId = new \MongoDB\BSON\ObjectId('61dfee5591efcf44e023d692');
 
 $person = new Person();
 $person->setPresetObjectId(new ObjectId());
-$person->save();
+$insertOrUpdateOptions = [];
+$person->save($insertOrUpdateOptions); // optional
 
 echo $person->getObjectIdString(); // 61dfee5591efcf44e023d692
 ```

@@ -28,7 +28,7 @@ jobs:
           version: 9.6
           php_version: 8.3
           php_extensions: "xdebug mongodb calendar sockets"
-          args: "-d date.timezone=UTC"
+          args: "-d date.timezone=UTC -d xdebug.mode=coverage"
           configuration: phpunit.xml
           testsuite: MondocTestSuite
           bootstrap: tests/bootstrap.php

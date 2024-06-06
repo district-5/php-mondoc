@@ -28,37 +28,20 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Service\Traits\Deletion;
-
-use District5\Mondoc\Helper\MondocTypes;
-use MongoDB\BSON\ObjectId;
-use MongoDB\DeleteResult;
+namespace District5Tests\MondocTests\TestObjects\Service;
 
 /**
- * Trait DeleteSingleTrait.
+ * Class FinancialCandleService
  *
- * @package District5\Mondoc\Db\Service\Traits\Deletion
+ * @package District5Tests\MondocTests\TestObjects\Service
  */
-trait DeleteSingleTrait
+class FinancialCandleService extends AbstractTestService
 {
     /**
-     * Delete a single document from the collection by a given ID.
-     *
-     * @param string|ObjectId $id
-     *
-     * @return bool
+     * @return string
      */
-    public static function delete(ObjectId|string $id): bool
+    protected static function getCollectionName(): string
     {
-        $collection = self::getCollection(
-            get_called_class()
-        );
-        $delete = $collection->deleteOne(
-            [
-                '_id' => MondocTypes::toObjectId($id)
-            ]
-        );
-
-        return $delete instanceof DeleteResult ? $delete->getDeletedCount() : false;
+        return parent::getCollectionName(); // Just an example, not needed here, but in reality, you'd just return 'my_collection_name'
     }
 }

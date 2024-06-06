@@ -34,8 +34,11 @@ namespace District5Tests\MondocTests;
 use District5\Mondoc\MondocConfig;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
+use District5Tests\MondocTests\TestObjects\Model\NoServiceModel;
 use District5Tests\MondocTests\TestObjects\Service\DateService;
 use District5Tests\MondocTests\TestObjects\Service\MyService;
+use MongoDB\BSON\ObjectId;
+use MongoDB\Database;
 
 /**
  * Class MondocConfigTest.
@@ -46,10 +49,30 @@ use District5Tests\MondocTests\TestObjects\Service\MyService;
  */
 class MondocConfigTest extends MondocBaseTest
 {
-    public function testServiceMap()
+    public function testAddDatabaseForAlternateKey()
     {
-        $this->initMongo();
+        $invalid = MondocConfig::getInstance()->getDatabase('alternate');
+        $this->assertNull($invalid);
+        MondocConfig::getInstance()->addDatabase(
+            MondocConfig::getInstance()->getDatabase(),
+            'alternate'
+        );
+        $valid = MondocConfig::getInstance()->getDatabase('alternate');
+        $this->assertInstanceOf(Database::class, $valid);
+    }
 
+    public function testGetDatabase()
+    {
+        $database = MondocConfig::getInstance()->getDatabase();
+        $this->assertInstanceOf(Database::class, $database);
+        $this->assertEquals($this->getDatabaseName(), $database->getDatabaseName());
+
+        $service = MyService::getMongo();
+        $this->assertEquals($this->getDatabaseName(), $service->getDatabaseName());
+    }
+
+    public function testValidServiceMapRetrieval()
+    {
         $map = MondocConfig::getInstance()->getServiceMap();
         $this->assertIsArray($map);
         $this->assertArrayHasKey(MyModel::class, $map);
@@ -62,5 +85,41 @@ class MondocConfigTest extends MondocBaseTest
 
         $this->assertEquals(MyService::class, MondocConfig::getInstance()->getServiceForModel(MyModel::class));
         $this->assertEquals(DateService::class, MondocConfig::getInstance()->getServiceForModel(DateModel::class));
+    }
+
+    public function testInvalidServiceMapRetrieval()
+    {
+        $this->assertNull(MondocConfig::getInstance()->getModelForService('NonExistentService'));
+        $this->assertNull(MondocConfig::getInstance()->getServiceForModel('NonExistentModel'));
+    }
+
+    public function testCreateAndDeleteForInvalidModelWithoutService()
+    {
+        $m = new NoServiceModel();
+        $m->setName('test');
+        $this->assertFalse($m->save());
+        $this->assertFalse($m->delete());
+
+        $m->setObjectId(new ObjectId());
+        $this->assertFalse($m->delete());
+    }
+
+    public function testInvalidGetsFromConfig()
+    {
+        $this->assertNull(MondocConfig::getInstance()->getCollection('blah-blah', 'non-existent'));
+        $this->assertNull(MondocConfig::getInstance()->getDatabase('non-existent'));
+    }
+
+    public function testReconstruct()
+    {
+        $old = MondocConfig::getInstance();
+        $oldDb = $old->getDatabase();
+        $oldMap = $old->getServiceMap();
+        $newInstance = MondocConfig::getInstance()->reconstruct();
+        $this->assertNull($newInstance->getDatabase());
+        $newInstance->addDatabase($oldDb);
+        $newInstance->setServiceMap($oldMap);
+        $this->assertInstanceOf(Database::class, $newInstance->getDatabase());
+        $this->assertEquals($old->getServiceMap(), $newInstance->getServiceMap());
     }
 }

@@ -28,37 +28,60 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Service\Traits\Deletion;
+namespace District5\Mondoc\Helper\Traits;
 
-use District5\Mondoc\Helper\MondocTypes;
-use MongoDB\BSON\ObjectId;
-use MongoDB\DeleteResult;
+use DateTime;
+use District5\Date\Date;
+use MongoDB\BSON\UTCDateTime;
 
 /**
- * Trait DeleteSingleTrait.
+ * Trait DateObjectConversionTrait
  *
- * @package District5\Mondoc\Db\Service\Traits\Deletion
+ * @package District5\Mondoc\Helper\Traits
  */
-trait DeleteSingleTrait
+trait DateObjectConversionTrait
 {
     /**
-     * Delete a single document from the collection by a given ID.
+     * Convert a Mongo UTCDateTime to a PHP DateTime. It doesn't matter which you pass in.
      *
-     * @param string|ObjectId $id
+     * @param DateTime|UTCDateTime $provided
      *
-     * @return bool
+     * @return null|DateTime
      */
-    public static function delete(ObjectId|string $id): bool
+    public static function dateToPHPDateTime(mixed $provided): ?DateTime
     {
-        $collection = self::getCollection(
-            get_called_class()
-        );
-        $delete = $collection->deleteOne(
-            [
-                '_id' => MondocTypes::toObjectId($id)
-            ]
-        );
+        if (!is_object($provided)) {
+            return null;
+        }
+        if ($provided instanceof UTCDateTime) {
+            return Date::mongo()->convertFrom($provided);
+        }
+        if ($provided instanceof DateTime) {
+            return $provided;
+        }
 
-        return $delete instanceof DeleteResult ? $delete->getDeletedCount() : false;
+        return null;
+    }
+
+    /**
+     * Convert a PHP DateTime to a Mongo UTCDateTime. It doesn't matter which you pass in.
+     *
+     * @param DateTime|UTCDateTime $provided
+     *
+     * @return null|UTCDateTime
+     */
+    public static function phpDateToMongoDateTime(mixed $provided): ?UTCDateTime
+    {
+        if (!is_object($provided)) {
+            return null;
+        }
+        if ($provided instanceof DateTime) {
+            return Date::mongo()->convertTo($provided);
+        }
+        if ($provided instanceof UTCDateTime) {
+            return $provided;
+        }
+
+        return null;
     }
 }

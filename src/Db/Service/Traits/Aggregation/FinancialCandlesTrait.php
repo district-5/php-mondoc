@@ -56,7 +56,7 @@ trait FinancialCandlesTrait
      * @param int|null $limitNumber
      * @return AggregateFinancialCandleDto[]
      *
-     * @example $this->getCandles(
+     * @example $this->getFinancialXMinuteCandles(
      *      [
      *          'pair' => 'BTC-USD',
      *          'exchange' => 'some-crypto-exchange'

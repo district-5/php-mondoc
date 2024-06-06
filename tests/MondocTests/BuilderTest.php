@@ -48,8 +48,7 @@ class BuilderTest extends MondocBaseTest
 {
     public function testPersistAndQuery()
     {
-        $this->initMongo();
-
+        MyService::deleteMulti([]);
         $objectId = new ObjectId();
 
         $m = new MyModel();

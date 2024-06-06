@@ -389,7 +389,6 @@ $phpArrayFromArray = MondocTypes::arrayToPhp($bsonArray);
 /** @noinspection SpellCheckingInspection */
 $anId = '61dfee5591efcf44e023d692';
 $objectId = MondocTypes::toObjectId($anId);
-$anotherObjectId = MondocTypes::stringToObjectId($anId);
 // You can also pass existing ObjectId's into the conversion and nothing happens.
 // MondocTypes::toObjectId(new \MongoDB\BSON\ObjectId());
 // MondocTypes::toObjectId($objectId);

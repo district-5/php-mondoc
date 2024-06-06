@@ -31,4 +31,4 @@ jobs:
           args: "-d date.timezone=UTC"
           configuration: phpunit.xml
           testsuite: MondocTestSuite
-          bootstrap: vendor/autoload.php
+          bootstrap: tests/bootstrap.php

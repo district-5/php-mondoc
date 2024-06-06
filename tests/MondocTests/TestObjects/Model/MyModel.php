@@ -54,6 +54,8 @@ class MyModel extends MondocAbstractModel
      */
     protected int $age = 0;
 
+    private $_controlAsArray = false;
+
     /**
      * @return bool
      */
@@ -81,10 +83,18 @@ class MyModel extends MondocAbstractModel
     {
         $this->assignDefaultVars();
 
-        return [
-            'name' => $this->getName(),
-            'age' => $this->getAge()
-        ];
+        if ($this->_controlAsArray) {
+            return [
+                'name' => $this->getName(),
+                'age' => $this->getAge(),
+                'foo' => 'bar'
+            ];
+        } else {
+            return [
+                'name' => $this->getName(),
+                'age' => $this->getAge()
+            ];
+        }
     }
 
     /**
@@ -145,6 +155,66 @@ class MyModel extends MondocAbstractModel
      */
     public function getArrayFromBson(BSONArray|BSONDocument $bson): array
     {
-        return $this->arrayToPhpArray($bson);
+        return self::arrayToPhp($bson);
+    }
+
+    /**
+     * @param array $array
+     * @return array
+     */
+    public function getArrayFromArray(array $array): array
+    {
+        return self::arrayToPhp($array);
+    }
+
+    /**
+     * Hack to allow it through.
+     *
+     * @param string $string
+     * @param int $int
+     * @return void
+     */
+    public function addUnmappedKey(string $string, int $int): void
+    {
+        $this->_mondocUnmapped[$string] = $int;
+    }
+
+    /**
+     * Hack to allow it through for tests
+     *
+     * @param string $key
+     * @param string $value
+     * @return void
+     */
+    public function proxyAddDirty(string $key, string $value): void
+    {
+        $this->addDirty($key, $value);
+    }
+
+    /**
+     * @param bool $val
+     * @return void
+     */
+    public function proxyControlAsArray(bool $val): void
+    {
+        $this->_controlAsArray = $val;
+    }
+
+    /**
+     * @param array $val
+     * @return array
+     */
+    public function proxyArrayToArray(array $val): array
+    {
+        return $this->arrayToArray($val);
+    }
+
+    /**
+     * @param object $val
+     * @return array
+     */
+    public function proxyObjectToArray(object $val): array
+    {
+        return $this->objectToArray($val);
     }
 }

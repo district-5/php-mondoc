@@ -91,17 +91,9 @@ class MondocAbstractModel extends MondocAbstractSubModel
         if (array_key_exists('_id', $data)) {
             $done->setObjectId($data['_id']);
         }
-        $done->inflateKeyToClassMaps();
         $done->assignDefaultVars();
 
         return $done;
-    }
-
-    /**
-     * Assign any default variables to this model.
-     */
-    protected function assignDefaultVars(): void
-    {
     }
 
     /**
@@ -131,13 +123,18 @@ class MondocAbstractModel extends MondocAbstractSubModel
     /**
      * Save this model. Must be overridden in your code. Inner logic might be `return MyService::saveModel($model);`.
      *
+     * @param array $insertOrUpdateOptions
+     *
      * @return bool
+     *
+     * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-insertOne/
+     * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
      */
-    public function save(): bool
+    public function save(array $insertOrUpdateOptions = []): bool
     {
         if (null !== $serviceFQCN = MondocConfig::getInstance()->getServiceForModel(get_called_class())) {
             /* @var $serviceFQCN MondocAbstractService (it's not, it's actually a string) */
-            return $serviceFQCN::saveModel($this);
+            return $serviceFQCN::saveModel($this, $insertOrUpdateOptions);
         }
         return false;
     }
@@ -162,18 +159,11 @@ class MondocAbstractModel extends MondocAbstractSubModel
             return false;
         }
 
-        try {
-            $delete = $this->_mondocCollection->deleteOne(
-                [
-                    '_id' => $this->getObjectId()
-                ]
-            );
+        $delete = $this->_mondocCollection->deleteOne([
+            '_id' => $this->getObjectId()
+        ]);
 
-            return 1 === $delete->getDeletedCount();
-        } catch (Exception) {
-        }
-
-        return false;
+        return 1 === $delete->getDeletedCount();
     }
 
     /**
@@ -187,33 +177,19 @@ class MondocAbstractModel extends MondocAbstractSubModel
     }
 
     /**
-     * Inflate multiple arrays of data into the called model.
-     *
-     * @param array $data
-     *
-     * @return $this[]
-     */
-    public static function inflateMultipleArrays(array $data): array
-    {
-        $done = parent::inflateMultipleArrays($data);
-        $new = [];
-        $i = 0;
-        foreach ($done as $d) {
-            $d->inflateKeyToClassMaps();
-            $d->assignDefaultVars();
-            $new[] = $d;
-            ++$i;
-        }
-
-        return $new;
-    }
-
-    /**
      * @return bool
      */
     final public function isMondocModel(): bool
     {
         return true;
+    }
+
+    /**
+     * @return bool
+     */
+    final public function isMondocSubModel(): bool
+    {
+        return false;
     }
 
     /**
@@ -286,11 +262,12 @@ class MondocAbstractModel extends MondocAbstractSubModel
             return false;
         }
 
-        if (true === $service::inc($this->getObjectId(), $field, $delta)) {
+        $perform = $service::inc($this->getObjectId(), $field, $delta);
+        if ($perform === true) {
             $this->{$field} += $delta;
-            return true;
         }
-        return false;
+
+        return $perform;
     }
 
     /**
@@ -304,7 +281,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
     {
         $n = [];
         foreach ($data as $i) {
-            if (null !== $id = $this->toObjectId($i)) {
+            if (null !== $id = self::toObjectId($i)) {
                 $n[] = $id;
             }
         }

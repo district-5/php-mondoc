@@ -36,7 +36,8 @@ use District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
 use District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
 use District5\Mondoc\Db\Service\Traits\Persistence\InsertMultiTrait;
 use District5\Mondoc\Db\Service\Traits\Persistence\InsertSingleTrait;
-use District5\Mondoc\Db\Service\Traits\Persistence\UpdateTrait;
+use District5\Mondoc\Db\Service\Traits\Persistence\UpdateMultiTrait;
+use District5\Mondoc\Db\Service\Traits\Persistence\UpdateSingleTrait;
 
 /**
  * Trait PersistenceTrait.
@@ -47,38 +48,41 @@ trait PersistenceTrait
 {
     use InsertSingleTrait;
     use InsertMultiTrait;
-    use UpdateTrait;
+    use UpdateSingleTrait;
+    use UpdateMultiTrait;
 
     /**
      * Save a model into the collection.
      *
      * @param MondocAbstractModel $model
+     * @param array $insertOrUpdateOptions
      *
      * @return bool
+     *
+     * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-insertOne/
+     * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
      */
-    public static function saveModel(MondocAbstractModel $model): bool
+    public static function saveModel(MondocAbstractModel $model, array $insertOrUpdateOptions = []): bool
     {
-        if (!is_object($model) || false === method_exists($model, 'isMondocModel')) {
-            return false;
-        }
         $uses = class_uses($model);
         $hasModified = in_array(MondocModifiedDateTrait::class, $uses, true);
         $hasCreated = in_array(MondocCreatedDateTrait::class, $uses, true);
         if (null === $model->getObjectId()) {
-            /* @var $model MondocCreatedDateTrait */
+            /* @var $model MondocCreatedDateTrait for PhpStorm purposes only */
             if ($hasCreated === true && $model->getCreatedDate(false) === null) {
-                $model->{'setCreatedDate'}(Date::nowUtc());
+                $model->setCreatedDate(Date::nowUtc());
             }
-            /* @var $model MondocModifiedDateTrait */
+            /* @var $model MondocModifiedDateTrait for PhpStorm purposes only */
             if ($hasModified === true && $model->getModifiedDate(false) === null) {
-                $model->{'setModifiedDate'}(Date::nowUtc());
+                $model->setModifiedDate(Date::nowUtc());
             }
-            return self::insert($model);
+            return self::insert($model, $insertOrUpdateOptions);
         }
 
         if ($hasModified === true && !in_array('md', $model->getDirty())) {
-            $model->{'setModifiedDate'}(Date::nowUtc());
+            /* @var $model MondocModifiedDateTrait for PhpStorm purposes only */
+            $model->setModifiedDate(Date::nowUtc());
         }
-        return self::update($model);
+        return self::update($model, $insertOrUpdateOptions);
     }
 }

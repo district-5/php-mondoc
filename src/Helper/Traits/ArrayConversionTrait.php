@@ -28,37 +28,34 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Service\Traits\Deletion;
+namespace District5\Mondoc\Helper\Traits;
 
-use District5\Mondoc\Helper\MondocTypes;
-use MongoDB\BSON\ObjectId;
-use MongoDB\DeleteResult;
+use MongoDB\Model\BSONArray;
+use MongoDB\Model\BSONDocument;
 
 /**
- * Trait DeleteSingleTrait.
+ * Trait ArrayConversionTrait
  *
- * @package District5\Mondoc\Db\Service\Traits\Deletion
+ * @package District5\Mondoc\Helper\Traits
  */
-trait DeleteSingleTrait
+trait ArrayConversionTrait
 {
     /**
-     * Delete a single document from the collection by a given ID.
+     * Lazy convert BSONDocuments and BSONArray's to php arrays.
      *
-     * @param string|ObjectId $id
+     * @param array|BSONArray|BSONDocument $item
      *
-     * @return bool
+     * @return array|mixed
      */
-    public static function delete(ObjectId|string $id): bool
+    public static function arrayToPhp(mixed $item): mixed
     {
-        $collection = self::getCollection(
-            get_called_class()
-        );
-        $delete = $collection->deleteOne(
-            [
-                '_id' => MondocTypes::toObjectId($id)
-            ]
-        );
+        if (is_array($item)) {
+            return $item;
+        }
+        if ($item instanceof BSONDocument || $item instanceof BSONArray) {
+            return $item->getArrayCopy();
+        }
 
-        return $delete instanceof DeleteResult ? $delete->getDeletedCount() : false;
+        return $item;
     }
 }

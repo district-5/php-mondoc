@@ -45,9 +45,9 @@ trait DeleteMultiTrait
      * @param array $query
      * @param array $options (optional)
      *
-     * @return null|int
+     * @return int
      */
-    public static function deleteMulti(array $query, array $options = []): ?int
+    public static function deleteMulti(array $query, array $options = []): int
     {
         $collection = self::getCollection(
             get_called_class()
@@ -56,10 +56,7 @@ trait DeleteMultiTrait
             $query,
             $options
         );
-        if ($delete instanceof DeleteResult) {
-            return $delete->getDeletedCount();
-        }
 
-        return null;
+        return $delete instanceof DeleteResult ? $delete->getDeletedCount() : 0;
     }
 }

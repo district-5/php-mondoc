@@ -73,23 +73,19 @@ trait GetMultiTrait
             $calledClass
         );
         $cursor = $collection->find($filter, $options);
-        if ($cursor) {
-            $objs = [];
-            /* @var $calledClass MondocAbstractService */
-            $clz = $calledClass::getModelClass();
-            /* @var $clz MondocAbstractModel - it's not. It's actually a string. */
-            /** @noinspection PhpUnusedLocalVariableInspection */
-            foreach ($cursor as $k => $v) {
-                /* @var $v BSONDocument */
-                $m = $clz::inflateSingleBsonDocument($v);
-                $m->setMongoCollection($collection);
-                $objs[] = $m;
-            }
-
-            return $objs;
+        $objs = [];
+        /* @var $calledClass MondocAbstractService */
+        $clz = $calledClass::getModelClass();
+        /* @var $clz MondocAbstractModel - it's not. It's actually a string. */
+        /** @noinspection PhpUnusedLocalVariableInspection */
+        foreach ($cursor as $k => $v) {
+            /* @var $v BSONDocument */
+            $m = $clz::inflateSingleBsonDocument($v);
+            $m->setMongoCollection($collection);
+            $objs[] = $m;
         }
 
-        return [];
+        return $objs;
     }
 
     /**

@@ -32,6 +32,9 @@ namespace District5\Mondoc\Helper;
 
 use DateTime;
 use District5\Date\Date;
+use District5\Mondoc\Helper\Traits\ArrayConversionTrait;
+use District5\Mondoc\Helper\Traits\DateObjectConversionTrait;
+use District5\Mondoc\Helper\Traits\ObjectIdConversionTrait;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Model\BSONArray;
@@ -45,112 +48,9 @@ use stdClass;
  */
 class MondocTypes
 {
-    /**
-     * Convert a Mongo UTCDateTime to a PHP DateTime. It doesn't matter which you pass in.
-     *
-     * @param DateTime|UTCDateTime $provided
-     *
-     * @return null|DateTime
-     */
-    public static function dateToPHPDateTime(mixed $provided): ?DateTime
-    {
-        if ($provided instanceof UTCDateTime) {
-            if (false !== $converted = Date::mongo()->convertFrom($provided)) {
-                return $converted;
-            }
-            return null;
-        }
-        if ($provided instanceof DateTime) {
-            return $provided;
-        }
-
-        return null;
-    }
-
-    /**
-     * Convert a PHP DateTime to a Mongo UTCDateTime. It doesn't matter which you pass in.
-     *
-     * @param DateTime|UTCDateTime $provided
-     *
-     * @return null|UTCDateTime
-     */
-    public static function phpDateToMongoDateTime(mixed $provided): ?UTCDateTime
-    {
-        if (!is_object($provided)) {
-            return null;
-        }
-        if ($provided instanceof DateTime) {
-            if (false !== $converted = Date::mongo()->convertTo($provided)) {
-                return $converted;
-            }
-            return null;
-        }
-        if ($provided instanceof UTCDateTime) {
-            return $provided;
-        }
-
-        return null;
-    }
-
-    /**
-     * Lazy convert BSONDocuments and BSONArray's to php arrays.
-     *
-     * @param array|BSONArray|BSONDocument $item
-     *
-     * @return array|mixed
-     */
-    public static function arrayToPhp(mixed $item): mixed
-    {
-        if (is_array($item)) {
-            return $item;
-        }
-        if ($item instanceof BSONDocument || $item instanceof BSONArray) {
-            return $item->getArrayCopy();
-        }
-
-        return $item;
-    }
-
-    /**
-     * Convert a string, array, or ObjectId to an ObjectId.
-     * Handles the formats of: array('oid' => '< 24 character ID >'), array('$oid' => '< 24 character ID >'), '< 24 character ID >'.
-     *
-     * @param array|string|ObjectId|null $id
-     *
-     * @return null|ObjectId
-     */
-    public static function toObjectId(ObjectId|array|string|null $id): ?ObjectId
-    {
-        if (null === $id) {
-            return null;
-        }
-        if (is_string($id) && 24 === strlen($id)) {
-            return new ObjectId($id);
-        }
-        if ($id instanceof ObjectId) {
-            return $id;
-        }
-
-        if (is_array($id)) {
-            if (array_key_exists('oid', $id) && is_string($id['oid']) && 24 === strlen($id['oid'])) {
-                return self::toObjectId($id['oid']);
-            }
-            if (array_key_exists('$oid', $id) && is_string($id['$oid']) && 24 === strlen($id['$oid'])) {
-                return self::toObjectId($id['$oid']);
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string $id
-     * @return ObjectIdå
-     */
-    public static function stringToObjectId(string $id): ObjectId
-    {
-        return self::toObjectId($id);
-    }
+    use ObjectIdConversionTrait;
+    use DateObjectConversionTrait;
+    use ArrayConversionTrait;
 
     /**
      * Convert an ObjectId to a string.
@@ -200,16 +100,6 @@ class MondocTypes
             }
         }
 
-        if ($val instanceof BSONArray) {
-            return self::typeToJsonFriendly(
-                self::arrayToPhp($val)
-            );
-        }
-        if ($val instanceof BSONDocument) {
-            return self::typeToJsonFriendly(
-                self::arrayToPhp($val)
-            );
-        }
         if ($val instanceof DateTime) {
             return $val->format('Uv');
         }
@@ -224,6 +114,6 @@ class MondocTypes
             return $val;
         }
 
-        return $val;
+        return null;
     }
 }

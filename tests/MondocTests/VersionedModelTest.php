@@ -58,43 +58,27 @@ class VersionedModelTest extends MondocBaseTest
         );
     }
 
-    public function testInflationDeflation()
-    {
-        $data = [
-            'name' => 'Foo',
-            '_v' => 2
-        ];
-        $inflated = VersionedModel::inflateSingleArray($data);
-        $this->assertEquals('Foo', $inflated->getName());
-        $this->assertEquals(2, $inflated->getModelVersion());
-
-        $anId = new ObjectId();
-        $data = [
-            'name' => 'Foo',
-            '_v' => 2,
-            '_id' => $anId
-        ];
-        $inflated = VersionedModel::inflateSingleArray($data);
-        $this->assertEquals('Foo', $inflated->getName());
-        $this->assertEquals(2, $inflated->getModelVersion());
-        $this->assertEquals($anId->__toString(), $inflated->getObjectIdString());
-        $this->assertTrue($inflated->isModelVersionX(2));
-        $this->assertFalse($inflated->isModelVersionX(1));
-    }
-
     public function testIsOrIsNotVersionable()
     {
         $m = new DateModel();
         $this->assertFalse($m->isVersionableModel());
 
         $m = new VersionedModel();
+        $this->assertNull($m->getModifiedDate(false));
+        $this->assertNull($m->getCreatedDate(false));
+
+        $m->touchModifiedDate();
+        $m->touchCreatedDate();
+
+        $this->assertInstanceOf(DateTime::class, $m->getModifiedDate(false));
+        $this->assertInstanceOf(DateTime::class, $m->getCreatedDate(false));
+
         $this->assertTrue($m->isVersionableModel());
     }
 
     /** @noinspection PhpRedundantOptionalArgumentInspection */
     public function testFullVersioningFunctionality()
     {
-        $this->initMongo();
 
         $m = new VersionedModel();
         $m->setName('Foo');

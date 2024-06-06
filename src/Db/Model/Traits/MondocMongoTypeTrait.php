@@ -32,10 +32,11 @@ namespace District5\Mondoc\Db\Model\Traits;
 
 use DateTime;
 use District5\Mondoc\Helper\MondocTypes;
+use District5\Mondoc\Helper\Traits\ArrayConversionTrait;
+use District5\Mondoc\Helper\Traits\DateObjectConversionTrait;
+use District5\Mondoc\Helper\Traits\ObjectIdConversionTrait;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
-use MongoDB\Model\BSONArray;
-use MongoDB\Model\BSONDocument;
 
 /**
  * Trait MondocMongoTypeTrait.
@@ -44,6 +45,10 @@ use MongoDB\Model\BSONDocument;
  */
 trait MondocMongoTypeTrait
 {
+    use ObjectIdConversionTrait;
+    use DateObjectConversionTrait;
+    use ArrayConversionTrait;
+
     /**
      * Convert a date object to either a PHP DateTime (by passing $asMongo=false)
      * or as a Mongo UTCDateTime (by passing $asMongo=true).
@@ -60,69 +65,9 @@ trait MondocMongoTypeTrait
         }
 
         if ($asMongo) {
-            return MondocTypes::phpDateToMongoDateTime($date);
+            return self::phpDateToMongoDateTime($date);
         }
 
-        return MondocTypes::dateToPHPDateTime($date);
-    }
-
-    /**
-     * Convert any array type to a PHP Array.
-     *
-     * @param BSONDocument|BSONArray|array $provided
-     *
-     * @return array
-     */
-    protected function arrayToPhpArray(BSONDocument|BSONArray|array $provided): mixed
-    {
-        if (!is_object($provided)) {
-            if (!is_array($provided)) {
-                return [];
-            }
-
-            return $provided;
-        }
-        if ($provided instanceof BSONArray) {
-            $provided = $provided->getArrayCopy();
-        }
-        if ($provided instanceof BSONDocument) {
-            $provided = $provided->getArrayCopy();
-        }
-
-        return $provided;
-    }
-
-    /**
-     * Iterate through an array of ObjectIds to deduplicate them.
-     *
-     * @param ObjectId[] $ids
-     *
-     * @return ObjectId[]
-     */
-    protected function deduplicateArrayOfMongoIds(array $ids): array
-    {
-        $tmp = [];
-        $final = [];
-        foreach ($ids as $id) {
-            $newId = $this->toObjectId($id);
-            if (null !== $newId && !in_array($stringId = MondocTypes::objectIdToString($newId), $tmp)) {
-                $final[] = $newId;
-                $tmp[] = $stringId;
-            }
-        }
-
-        return $final;
-    }
-
-    /**
-     * Convert a string or ObjectId to an ObjectId.
-     *
-     * @param array|string|ObjectId|null $id
-     *
-     * @return null|ObjectId
-     */
-    protected function toObjectId(ObjectId|array|string|null $id): ?ObjectId
-    {
-        return MondocTypes::toObjectId($id);
+        return self::dateToPHPDateTime($date);
     }
 }

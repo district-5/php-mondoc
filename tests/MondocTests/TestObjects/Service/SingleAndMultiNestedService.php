@@ -30,6 +30,8 @@
 
 namespace District5Tests\MondocTests\TestObjects\Service;
 
+use MongoDB\BSON\ObjectId;
+
 /**
  * Class SingleAndMultiNestedService.
  *
@@ -43,5 +45,25 @@ class SingleAndMultiNestedService extends AbstractTestService
     protected static function getCollectionName(): string
     {
         return parent::getCollectionName(); // Just an example, not needed here, but in reality, you'd just return 'my_collection_name'
+    }
+
+    public static function pullFriendById(ObjectId $id, string $name): void
+    {
+        self::pullFromArrayById($id, 'friends', $name);
+    }
+
+    public static function pushFriendById(ObjectId $id, string $name): void
+    {
+        self::pushIntoArrayById($id, 'friends', $name);
+    }
+
+    public static function pullFriendByFilter(array $filter, string $name): void
+    {
+        self::pullFromArrayWithFilter($filter, 'friends', $name);
+    }
+
+    public static function pushFriendByFilter(array $filter, string $name): void
+    {
+        self::pushIntoArrayWithFilter($filter, 'friends', $name);
     }
 }

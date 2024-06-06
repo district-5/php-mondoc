@@ -28,37 +28,62 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Service\Traits\Deletion;
+namespace District5\Mondoc\Db\Service\Traits\Persistence;
 
-use District5\Mondoc\Helper\MondocTypes;
-use MongoDB\BSON\ObjectId;
-use MongoDB\DeleteResult;
+use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\MondocBuilder\QueryBuilder;
+use MongoDB\Collection;
 
 /**
- * Trait DeleteSingleTrait.
+ * Trait UpdateTrait.
  *
- * @package District5\Mondoc\Db\Service\Traits\Deletion
+ * @package District5\Mondoc\Db\Service\Traits\Persistence
  */
-trait DeleteSingleTrait
+trait UpdateMultiTrait
 {
     /**
-     * Delete a single document from the collection by a given ID.
+     * Update multiple documents by applying a filter and an update query. Any references to these
+     * models, held in the code are not updated.
      *
-     * @param string|ObjectId $id
+     * @param array $filter
+     * @param array $update
+     * @param array $updateOptions
      *
      * @return bool
+     *
+     * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
      */
-    public static function delete(ObjectId|string $id): bool
+    public static function updateMany(array $filter, array $update, array $updateOptions = []): bool
     {
         $collection = self::getCollection(
             get_called_class()
         );
-        $delete = $collection->deleteOne(
-            [
-                '_id' => MondocTypes::toObjectId($id)
-            ]
+        $perform = $collection->updateMany(
+            $filter,
+            $update,
+            $updateOptions
         );
 
-        return $delete instanceof DeleteResult ? $delete->getDeletedCount() : false;
+        return $perform->isAcknowledged();
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param array $update
+     * @return bool
+     */
+    public static function updateManyByQueryBuilder(QueryBuilder $queryBuilder, array $update): bool
+    {
+        $collection = self::getCollection(
+            get_called_class()
+        );
+
+        $perform = $collection->updateMany(
+            $queryBuilder->getArrayCopy(),
+            $update,
+            $queryBuilder->getOptions()->getArrayCopy()
+        );
+
+        return $perform->isAcknowledged();
     }
 }

@@ -35,20 +35,23 @@ use District5\MondocBuilder\QueryBuilder;
 use MongoDB\Collection;
 
 /**
- * Trait UpdateTrait.
+ * Trait UpdateSingleTrait.
  *
  * @package District5\Mondoc\Db\Service\Traits\Persistence
  */
-trait UpdateTrait
+trait UpdateSingleTrait
 {
     /**
      * Update a model in the collection. Called automatically when using saveModel() in the AbstractService.
      *
      * @param MondocAbstractModel $model
+     * @param array $updateOptions
      *
      * @return bool
+     *
+     * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
      */
-    public static function update(MondocAbstractModel $model): bool
+    public static function update(MondocAbstractModel $model, array $updateOptions = []): bool
     {
         if (empty($model->getDirty())) {
             return true;
@@ -72,9 +75,6 @@ trait UpdateTrait
                 }
             }
         }
-        if (array_key_exists('_mondocObjectId', $changeSet)) {
-            unset($changeSet['_mondocObjectId']);
-        }
         $unsetValues = $model->getMondocKeysToRemove();
 
         $collection = self::getCollection(
@@ -87,9 +87,10 @@ trait UpdateTrait
         }
         $performed = $collection->updateOne(
             ['_id' => $model->getObjectId()],
-            $query
+            $query,
+            $updateOptions
         );
-        if ($performed->isAcknowledged()) {
+        if ($performed->isAcknowledged() && $performed->getMatchedCount() === 1) {
             $model->clearDirty();
             $model->setMongoCollection($collection);
 
@@ -105,8 +106,10 @@ trait UpdateTrait
      *
      * @param array $filter
      * @param array $query
-     * @param bool $upsert
+     * @param array $updateOptions
+     *
      * @return bool
+     *
      * @example
      *     MyService::updateOne(
      *          [
@@ -116,8 +119,10 @@ trait UpdateTrait
      *              '$set' => ['age' => 2]
      *          ]
      *      );
+     *
+     * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
      */
-    public static function updateOne(array $filter, array $query, bool $upsert = false): bool
+    public static function updateOne(array $filter, array $query, array $updateOptions = []): bool
     {
         $collection = self::getCollection(
             get_called_class()
@@ -126,9 +131,7 @@ trait UpdateTrait
         $perform = $collection->updateOne(
             $filter,
             $query,
-            [
-                'upsert' => $upsert
-            ]
+            $updateOptions
         );
 
         return $perform->isAcknowledged();
@@ -141,6 +144,7 @@ trait UpdateTrait
      *
      * @param QueryBuilder $queryBuilder
      * @param array $query
+     *
      * @return bool
      */
     public static function updateOneByQueryBuilder(QueryBuilder $queryBuilder, array $query): bool
@@ -152,48 +156,6 @@ trait UpdateTrait
         $perform = $collection->updateOne(
             $queryBuilder->getArrayCopy(),
             $query,
-            $queryBuilder->getOptions()->getArrayCopy()
-        );
-
-        return $perform->isAcknowledged();
-    }
-
-    /**
-     * @param array $filter
-     * @param array $update
-     * @param bool $upsert
-     * @return bool
-     */
-    public static function updateMany(array $filter, array $update, bool $upsert = false): bool
-    {
-        $collection = self::getCollection(
-            get_called_class()
-        );
-        $perform = $collection->updateMany(
-            $filter,
-            $update,
-            [
-                'upsert' => $upsert
-            ]
-        );
-
-        return $perform->isAcknowledged();
-    }
-
-    /**
-     * @param QueryBuilder $queryBuilder
-     * @param array $update
-     * @return bool
-     */
-    public static function updateManyByQueryBuilder(QueryBuilder $queryBuilder, array $update): bool
-    {
-        $collection = self::getCollection(
-            get_called_class()
-        );
-
-        $perform = $collection->updateMany(
-            $queryBuilder->getArrayCopy(),
-            $update,
             $queryBuilder->getOptions()->getArrayCopy()
         );
 

@@ -50,7 +50,7 @@ class FoodSubModel extends MondocAbstractSubModel
     protected array $attributes = [];
 
     protected array $mondocNested = [
-        'attributes' => FoodAttributesSubModel::class . '[]',
+        'attributes' => FoodAttributesSubModel::class . '[]'
     ];
 
     /**

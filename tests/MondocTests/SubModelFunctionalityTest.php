@@ -47,7 +47,6 @@ class SubModelFunctionalityTest extends MondocBaseTest
 {
     public function testBasicModelMethods()
     {
-        $this->initMongo();
 
         $ageModel = new AgeSubModel();
         $ageModel->setAge(2);
@@ -100,7 +99,6 @@ class SubModelFunctionalityTest extends MondocBaseTest
 
     public function testMulti()
     {
-        $this->initMongo();
 
         $mOne = new MyModelWithSub();
         $mOne->setName('One');

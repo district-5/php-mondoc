@@ -28,37 +28,31 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Service\Traits\Deletion;
+namespace District5Tests\MondocTests\TestObjects\Model;
 
-use District5\Mondoc\Helper\MondocTypes;
-use MongoDB\BSON\ObjectId;
-use MongoDB\DeleteResult;
+use District5\Mondoc\Db\Model\MondocAbstractModel;
 
 /**
- * Trait DeleteSingleTrait.
+ * Class InvalidClassMapModel
  *
- * @package District5\Mondoc\Db\Service\Traits\Deletion
+ * @package District5Tests\MondocTests\TestObjects\Model
  */
-trait DeleteSingleTrait
+class InvalidClassMapModel extends MondocAbstractModel
 {
     /**
-     * Delete a single document from the collection by a given ID.
-     *
-     * @param string|ObjectId $id
-     *
-     * @return bool
+     * @var string|null
      */
-    public static function delete(ObjectId|string $id): bool
-    {
-        $collection = self::getCollection(
-            get_called_class()
-        );
-        $delete = $collection->deleteOne(
-            [
-                '_id' => MondocTypes::toObjectId($id)
-            ]
-        );
+    protected string|null $name = null;
 
-        return $delete instanceof DeleteResult ? $delete->getDeletedCount() : false;
+    protected array $mondocNested = [
+        'invalidClass' => 'ThisIsNotAValidClass'
+    ];
+
+    /**
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
     }
 }

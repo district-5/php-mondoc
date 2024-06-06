@@ -31,12 +31,10 @@
 namespace District5\Mondoc\Db\Model;
 
 use DateTime;
-use District5\Mondoc\Db\Model\Traits\KeyToClassMapInflationTrait;
 use District5\Mondoc\Db\Model\Traits\UnmappedPropertiesTrait;
 use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
-use UnexpectedValueException;
 
 /**
  * Trait MondocAbstractSubModel.
@@ -45,7 +43,6 @@ use UnexpectedValueException;
  */
 abstract class MondocAbstractSubModel
 {
-    use KeyToClassMapInflationTrait;
     use UnmappedPropertiesTrait;
 
     /**
@@ -96,8 +93,8 @@ abstract class MondocAbstractSubModel
         foreach ($this->mondocNested as $k => $className) {
             if (str_ends_with($className, '[]')) {
                 $this->{$k} = [];
-                if (class_exists(substr($className, -2))) {
-                    $this->{$k} = new $className();
+                $cleanedName = substr($className, 0, -2);
+                if (class_exists($cleanedName)) {
                     $this->_mondocEstablishedNestedMultiple[$k] = true;
                     $this->_mondocEstablishedNestedSingle[$k] = false;
                 }
@@ -120,7 +117,7 @@ abstract class MondocAbstractSubModel
      * MyModel::inflateMultipleArrays(
      *      [
      *          [
-     *          'name' => 'Joe',
+     *              'name' => 'Joe',
      *              'age' => 30
      *          ],
      *          [
@@ -136,20 +133,25 @@ abstract class MondocAbstractSubModel
             return [];
         }
         $cl = get_called_class();
-        $inst = new $cl();
         /* @var $cl MondocAbstractSubModel - it's not really. */
-        if (!$inst instanceof MondocAbstractSubModel) {
-            return [];
-        }
         $final = [];
         foreach ($data as $datum) {
             if ($datum instanceof BSONDocument) {
                 $datum = $datum->getArrayCopy();
             }
-            $final[] = $cl::inflateSingleArray($datum);
+            $inst = $cl::inflateSingleArray($datum);
+            $inst->assignDefaultVars();
+            $final[] = $inst;
         }
 
         return $final;
+    }
+
+    /**
+     * Assign any default variables to this model.
+     */
+    protected function assignDefaultVars(): void
+    {
     }
 
     /**
@@ -163,11 +165,6 @@ abstract class MondocAbstractSubModel
     {
         $cl = get_called_class();
         $inst = new $cl();
-        if (!$inst instanceof MondocAbstractSubModel) {
-            throw new UnexpectedValueException(
-                'Class ' . $cl . ' does not extend ' . MondocAbstractSubModel::class
-            );
-        }
         $classMap = $inst->getKeyToClassMap();
 
         $fieldMap = $inst->getFieldToFieldMap();
@@ -360,17 +357,21 @@ abstract class MondocAbstractSubModel
             if (in_array($k, $this->getPropertyExclusions())) {
                 continue;
             }
-            if (array_key_exists($k, $this->getKeyToClassMap())) {
-                if (str_ends_with($this->getKeyToClassMap()[$k], '[]')) {
+            if ($this->isMondocNestedAnyType($k) === true) {
+                if ($this->isMondocNestedMultipleObjects($k) === true) {
                     /* @var $v MondocAbstractSubModel[] */
                     $subs = [];
                     foreach ($v as $datum) {
-                        $subs[] = $datum->asArray();
+                        if ($datum instanceof MondocAbstractSubModel) {
+                            $subs[] = $datum->asArray();
+                        }
                     }
                     $v = $subs;
                 } else {
-                    /* @var $v MondocAbstractSubModel */
-                    $v = $v->asArray();
+                    if ($v instanceof MondocAbstractSubModel) {
+                        /* @var $v MondocAbstractSubModel */
+                        $v = $v->asArray();
+                    }
                 }
             } elseif ($v instanceof DateTime) {
                 $v = MondocTypes::phpDateToMongoDateTime($v);
@@ -452,5 +453,21 @@ abstract class MondocAbstractSubModel
     public function isVersionableModel(): bool
     {
         return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMondocModel(): bool
+    {
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMondocSubModel(): bool
+    {
+        return true;
     }
 }

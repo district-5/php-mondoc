@@ -9,22 +9,32 @@
         forceCoversAnnotation="false"
         processIsolation="false"
         stopOnError="false"
-        stopOnFailure="false"
+        stopOnFailure="true"
         stopOnIncomplete="false"
         stopOnSkipped="false"
         timeoutForSmallTests="1"
         timeoutForMediumTests="10"
         timeoutForLargeTests="60"
-        bootstrap="vendor/autoload.php"
+        bootstrap="tests/bootstrap.php"
         cacheResult="false"
-        verbose="false">
-  <coverage processUncoveredFiles="true">
+        verbose="true">
+  <coverage includeUncoveredFiles="true"
+            pathCoverage="false"
+            ignoreDeprecatedCodeUnits="true"
+            disableCodeCoverageIgnore="true">
     <include>
       <directory>src</directory>
     </include>
+    <exclude>
+      <directory>tests</directory>
+    </exclude>
+    <report>
+      <php outputFile="build/coverage/php.php"/>
+      <html outputDirectory="build/coverage/html" lowUpperBound="50" highLowerBound="90"/>
+    </report>
   </coverage>
   <php>
-    <env name="MONGO_DATABASE" value="tmp" force="true"/>
+    <env name="MONGO_DATABASE" value="MondocTests_" force="true"/>
   </php>
   <testsuites>
     <testsuite name="MondocTestSuite">

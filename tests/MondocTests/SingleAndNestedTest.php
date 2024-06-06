@@ -30,6 +30,7 @@
 
 namespace District5Tests\MondocTests;
 
+use District5\Mondoc\MondocConfig;
 use District5Tests\MondocTests\TestObjects\Model\SingleAndMultiNestedModel;
 use District5Tests\MondocTests\TestObjects\Model\Subs\FoodAttributesSubModel;
 use District5Tests\MondocTests\TestObjects\Model\Subs\FoodSubModel;
@@ -44,10 +45,20 @@ use District5Tests\MondocTests\TestObjects\Service\SingleAndMultiNestedService;
  */
 class SingleAndNestedTest extends MondocBaseTest
 {
+    public function testMondocModelVsSubModel()
+    {
+        $m = new SingleAndMultiNestedModel();
+        $this->assertTrue($m->isMondocModel());
+        $this->assertFalse($m->isMondocSubModel());
+
+        $nested = new FoodSubModel();
+        $this->assertFalse($nested->isMondocModel());
+        $this->assertTrue($nested->isMondocSubModel());
+    }
+
     /** @noinspection PhpPossiblePolymorphicInvocationInspection */
     public function testFull()
     {
-        $this->initMongo();
 
         $m = new SingleAndMultiNestedModel();
         $m->setName('foo');
@@ -101,5 +112,98 @@ class SingleAndNestedTest extends MondocBaseTest
 
         // Delete the document
         $this->assertTrue($m->delete());
+    }
+
+    public function testAsArrayWithUnmappedStillAddsThem()
+    {
+        $single = new SingleAndMultiNestedModel();
+        $single->setName('foo');
+        $this->assertArrayNotHasKey('bar', $single->asArray());
+        $single->__set('bar', 'baz');
+        $this->assertArrayHasKey('bar', $single->asArray());
+        $this->assertEquals('baz', $single->asArray()['bar']);
+    }
+
+    public function testDeleteWithoutServiceButCollectionAssigned()
+    {
+        $m = new SingleAndMultiNestedModel();
+        $m->setFriends(['Joe', 'Jane']);
+        $this->assertTrue($m->save());
+        $map = MondocConfig::getInstance()->getServiceMap();
+        $cloneMap = array_merge($map);
+        unset($cloneMap[SingleAndMultiNestedModel::class]);
+        MondocConfig::getInstance()->setServiceMap($cloneMap);
+        $this->assertTrue($m->delete());
+        MondocConfig::getInstance()->setServiceMap($map);
+    }
+
+    public function testPushAndPull()
+    {
+        $m = new SingleAndMultiNestedModel();
+        $m->setFriends(['Joe', 'Jane']);
+        $this->assertTrue($m->save());
+
+        $found = SingleAndMultiNestedService::getById($m->getObjectId());
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+        $this->assertEquals(['Joe', 'Jane'], $found->getFriends());
+
+        SingleAndMultiNestedService::pullFriendById($m->getObjectId(), 'Joe');
+        $found = SingleAndMultiNestedService::getById($m->getObjectId());
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+        $this->assertEquals(['Jane'], $found->getFriends());
+
+        SingleAndMultiNestedService::pushFriendById($m->getObjectId(), 'Joe');
+        $found = SingleAndMultiNestedService::getById($m->getObjectId());
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+        $this->assertEquals(['Jane', 'Joe'], $found->getFriends());
+
+        SingleAndMultiNestedService::pullFriendByFilter(['_id' => $m->getObjectId()], 'Joe');
+        $found = SingleAndMultiNestedService::getById($m->getObjectId());
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+        $this->assertEquals(['Jane'], $found->getFriends());
+
+        SingleAndMultiNestedService::pushFriendByFilter(['_id' => $m->getObjectId()], 'Joe');
+        $found = SingleAndMultiNestedService::getById($m->getObjectId());
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+        $this->assertEquals(['Jane', 'Joe'], $found->getFriends());
+
+        SingleAndMultiNestedService::pushFriendById($m->getObjectId(), 'Dave');
+        $found = SingleAndMultiNestedService::getById($m->getObjectId());
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+        $this->assertEquals(['Jane', 'Joe', 'Dave'], $found->getFriends());
+
+        // Delete the document
+        $this->assertTrue($m->delete());
+    }
+
+    public function testSubModelValues()
+    {
+        $sub = new FoodSubModel();
+
+        $this->assertEquals(get_class($sub), $sub->__toString());
+
+        $sub->setFood('bread');
+        $attributes = new FoodAttributesSubModel();
+        $attributes->setColour('white');
+        $attributes->setSmell('wheat');
+        $sub->setAttributes([$attributes]);
+        $this->assertEquals('bread', $sub->getFood());
+        $encodable = $sub->asJsonEncodableArray(['attributes']);
+        $this->assertArrayNotHasKey('attributes', $encodable);
+        $this->assertArrayHasKey('type', $encodable);
+
+        $encodableWithEverything = $sub->asJsonEncodableArray();
+        $this->assertArrayHasKey('attributes', $encodableWithEverything);
+        $this->assertCount(1, $encodableWithEverything['attributes']);
+        $this->assertArrayHasKey('colour', $encodableWithEverything['attributes'][0]);
+        $this->assertArrayHasKey('smell', $encodableWithEverything['attributes'][0]);
+        $this->assertArrayHasKey('type', $encodableWithEverything);
+
+        $this->assertEmpty($sub->getUnmappedFields());
+        /** @noinspection PhpUndefinedFieldInspection */
+        $sub->foo = 'bar';
+        $this->assertArrayHasKey('foo', $sub->getUnmappedFields());
+        $this->assertEquals('bar', $sub->foo);
+        $this->assertNull($sub->thisDoesntExist);
     }
 }

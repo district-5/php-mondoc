@@ -65,6 +65,17 @@ class AllTypesModel extends MondocAbstractModel
         $this->addDirty('anId');
     }
 
+    /**
+     * This is just to expose the protected method and avoid reflection.
+     *
+     * @param array $data
+     * @return array
+     */
+    public function exposeConvertArrayOfMongoIdsToMongoIds(array $data): array
+    {
+        return $this->convertArrayOfMongoIdsToMongoIds($data);
+    }
+
     public function setString($v): void
     {
         $this->string = $v;

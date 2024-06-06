@@ -45,10 +45,13 @@ trait InsertMultiTrait
      * Insert multiple models in the collection.
      *
      * @param MondocAbstractModel[] $models
+     * @param array $insertOptions
      *
      * @return bool
+     *
+     * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-insertMany/
      */
-    public static function insertMulti(array $models): bool
+    public static function insertMulti(array $models, array $insertOptions = []): bool
     {
         if (empty($models)) {
             return true;
@@ -77,17 +80,12 @@ trait InsertMultiTrait
         foreach ($otherServiceModels as $srv => $others) {
             $hadOtherModels = true;
             /* @var $srv MondocAbstractService */
-            if ($srv::insertMulti($others) !== true) {
-                $otherServiceInsertionSucceeded = false;
-            }
+            $srv::insertMulti($others, $insertOptions) === true || ($otherServiceInsertionSucceeded = false);
         }
 
         $data = [];
         foreach ($modelsForThisService as $model) {
             $asArray = $model->asArray();
-            if (array_key_exists('_mondocObjectId', $asArray)) {
-                unset($asArray['_mondocObjectId']);
-            }
             if ($model->hasPresetObjectId()) {
                 $asArray['_id'] = $model->getPresetObjectId();
             }
@@ -99,7 +97,8 @@ trait InsertMultiTrait
                 get_called_class()
             );
             $insert = $collection->insertMany(
-                $data
+                $data,
+                $insertOptions
             );
             if ($insert->getInsertedCount() === count($data)) {
                 $ids = $insert->getInsertedIds();
@@ -119,10 +118,10 @@ trait InsertMultiTrait
             }
         }
 
+        $result = false;
         if ($hadOtherModels) {
-            return $otherServiceInsertionSucceeded;
+            $result = $otherServiceInsertionSucceeded;
         }
-
-        return false;
+        return $result;
     }
 }

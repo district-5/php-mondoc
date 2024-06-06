@@ -43,32 +43,33 @@ trait InsertSingleTrait
      * Insert a model in the collection. Called automatically when using saveModel() in the AbstractService.
      *
      * @param MondocAbstractModel $model
-     *
+     * @param array $insertOptions
+
      * @return bool
+     *
+     * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-insertOne/
      */
-    public static function insert(MondocAbstractModel $model): bool
+    public static function insert(MondocAbstractModel $model, array $insertOptions = []): bool
     {
         $collection = self::getCollection(
             get_called_class()
         );
         $data = $model->asArray();
-        if (array_key_exists('_mondocObjectId', $data)) {
-            unset($data['_mondocObjectId']);
-        }
         if ($model->hasPresetObjectId()) {
             $data['_id'] = $model->getPresetObjectId();
         }
         $insert = $collection->insertOne(
-            $data
+            $data,
+            $insertOptions
         );
-        if (1 === $insert->getInsertedCount()) {
+
+        $success = $insert->getInsertedCount() === 1;
+        if ($success === true) {
             $model->clearPresetObjectId();
             $model->setObjectId($insert->getInsertedId());
             $model->setMongoCollection($collection);
-
-            return true;
         }
 
-        return false;
+        return $success;
     }
 }

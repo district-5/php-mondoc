@@ -190,4 +190,13 @@ class MondocConfig
         }
         return null;
     }
+
+    /**
+     * @return MondocConfig
+     */
+    public function reconstruct(): MondocConfig
+    {
+        self::$_instance = null;
+        return self::getInstance();
+    }
 }

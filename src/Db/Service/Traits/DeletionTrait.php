@@ -53,9 +53,6 @@ trait DeletionTrait
      */
     public static function deleteModel(MondocAbstractModel $model): bool
     {
-        if (!is_object($model) || false === method_exists($model, 'isMondocModel')) {
-            return false;
-        }
         if (self::delete($model->getObjectId())) {
             $model->setMongoCollection(null);
             $model->unsetObjectId();

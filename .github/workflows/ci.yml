@@ -24,12 +24,12 @@ jobs:
         uses: php-actions/phpunit@v3
         env:
           MONGO_CONNECTION_STRING: '${{ secrets.MONGO_CONNECTION_STRING }}'
-          XDEBUG_MODE: "coverage"
+          XDEBUG_MODE: coverage
         with:
           version: 9.6
           php_version: 8.3
           php_extensions: "xdebug mongodb calendar sockets"
-          args: "-d date.timezone=UTC -d xdebug.mode=coverage"
+          args: "-d date.timezone=UTC"
           configuration: phpunit.xml
           testsuite: MondocTestSuite
           bootstrap: tests/bootstrap.php

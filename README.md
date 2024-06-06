@@ -1,7 +1,7 @@
 District5 - Mondoc
 ======
 
-![CI](https://github.com/district-5/php-mondoc/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/district-5/php-mondoc/actions/workflows/ci.yml/badge.svg?branch=master)
 
 ### Composer...
 

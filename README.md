@@ -157,29 +157,49 @@ class MyModel extends \District5\Mondoc\Db\Model\MondocAbstractModel
 
 #### The service layer
 
+The logic for querying the database is always performed in the service layer. There's only a single required method,
+`getCollectionName`, which should return the name of the collection in the database.
+
+Optionally, you can define a `getConnectionId` method to return the connection ID to use from the `MondocConfig`
+connection manager. This is useful if you're using multiple connections, for example, a connection for authentication
+and a connection for the main application.
+
 ```php
 <?php
 namespace Myns\Service;
 
 use MyNs\Model\MyModel;
+use District5\Mondoc\Db\Service\MondocAbstractService
 
 /**
  * Class MyService
  * @package MyNs\Service
  */
-class MyService extends AbstractService
+class MyService extends MondocAbstractService
 {
     /**
+     * Get the collection name.
+     *
      * @return string
      */
     protected static function getCollectionName(): string
     {
         return 'users';
     }
+    
+    /**
+     * Get the connection ID to use from the MondocConfig manager. Defaults to 'default'.
+     * This method isn't required if you're using the default connection, but if you're using
+     * multiple connections, you can use this method to return the connection ID.
+     *
+     * @return string
+     */
+    protected static function getConnectionId() : string
+    {
+        return 'default'; // this is the default connection.
+    }
 }
 ```
-
-The logic for querying the database etc., is always performed in the service layer.
 
 #### Nesting objects
 

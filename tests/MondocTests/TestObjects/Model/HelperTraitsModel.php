@@ -31,14 +31,23 @@
 namespace District5Tests\MondocTests\TestObjects\Model;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
+use District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
+use District5\Mondoc\Db\Model\Traits\MondocRevisionNumberTrait;
+use District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
 
 /**
- * Class NoServiceModel
+ * Class HelperTraitsModel
  *
  * @package District5Tests\MondocTests\TestObjects\Model
  */
-class NoServiceModel extends MondocAbstractModel
+class HelperTraitsModel extends MondocAbstractModel
 {
+    use MondocVersionedModelTrait;
+    use MondocCreatedDateTrait;
+    use MondocModifiedDateTrait;
+    use MondocRevisionNumberTrait;
+
     /**
      * @var string|null
      */
@@ -61,23 +70,5 @@ class NoServiceModel extends MondocAbstractModel
     public function getName(): ?string
     {
         return $this->name;
-    }
-
-    /**
-     * @param string $toCheck
-     * @return bool
-     */
-    public function exposeIsPropertyExcludedSingle(string $toCheck): bool
-    {
-        return $this->isPropertyExcluded($toCheck);
-    }
-
-    /**
-     * @param string[] $toCheck
-     * @return bool
-     */
-    public function exposeIsPropertyExcludedArray(array $toCheck): bool
-    {
-        return $this->isPropertyExcluded($toCheck);
     }
 }

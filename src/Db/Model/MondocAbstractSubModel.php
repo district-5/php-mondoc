@@ -33,7 +33,7 @@ namespace District5\Mondoc\Db\Model;
 use DateTime;
 use District5\Mondoc\Db\Model\Traits\ExcludedPropertiesTrait;
 use District5\Mondoc\Db\Model\Traits\FieldAliasMapTrait;
-use District5\Mondoc\Db\Model\Traits\NestedModelTrait;
+use District5\Mondoc\Db\Model\Traits\MondocNestedModelTrait;
 use District5\Mondoc\Db\Model\Traits\UnmappedPropertiesTrait;
 use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\Model\BSONArray;
@@ -48,7 +48,7 @@ abstract class MondocAbstractSubModel
 {
     use ExcludedPropertiesTrait;
     use FieldAliasMapTrait;
-    use NestedModelTrait;
+    use MondocNestedModelTrait;
     use UnmappedPropertiesTrait;
 
     /**
@@ -138,19 +138,14 @@ abstract class MondocAbstractSubModel
                 if ($isMulti === true) {
                     $subClassName = substr($subClassName, 0, -2);
                 }
-                if (class_exists($subClassName)) {
-                    if (is_object($v)) {
-                        $v = MondocTypes::arrayToPhp($v);
-                    }
-                    /* @var $subClassName MondocAbstractSubModel */
-                    if ($isMulti === true) {
-                        $v = $subClassName::inflateMultipleArrays($v);
-                    } else {
-                        $v = $subClassName::inflateSingleArray($v);
-                    }
+                if (is_object($v)) {
+                    $v = MondocTypes::arrayToPhp($v);
+                }
+                /* @var $subClassName MondocAbstractSubModel */
+                if ($isMulti === true) {
+                    $v = $subClassName::inflateMultipleArrays($v);
                 } else {
-                    // Class didn't exist, so adding to unmapped.
-                    $inst->_mondocUnmapped[$k] = $v;
+                    $v = $subClassName::inflateSingleArray($v);
                 }
             }
             if ($isNestedAny === false && ($v instanceof BSONDocument || $v instanceof BSONArray)) {
@@ -345,6 +340,16 @@ abstract class MondocAbstractSubModel
      * @return bool
      */
     public function isVersionableModel(): bool
+    {
+        return false;
+    }
+
+    /**
+     * Does the model contain this revision number trait?
+     *
+     * @return bool
+     */
+    public function isRevisionNumberModel(): bool
     {
         return false;
     }

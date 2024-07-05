@@ -31,11 +31,11 @@
 namespace District5Tests\MondocTests\TestObjects\Service;
 
 /**
- * Class VersionedService.
+ * Class HelperTraitsService.
  *
  * @package District5Tests\MondocTests\TestObjects\Service
  */
-class VersionedService extends AbstractTestService
+class HelperTraitsService extends AbstractTestService
 {
     /**
      * @return string

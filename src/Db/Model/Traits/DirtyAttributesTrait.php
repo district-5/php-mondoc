@@ -85,9 +85,16 @@ trait DirtyAttributesTrait
 
     /**
      * Check if a field is dirty. Dirty values aren't referenced for new objects.
+     *
+     * @param string|null $key
+     * @return bool
      */
-    protected function isDirty(string $key): bool
+    public function isDirty(string|null $key): bool
     {
-        return in_array($key, $this->_mondocDirty);
+        if ($key === null) {
+            return !empty($this->getDirty());
+        }
+
+        return in_array($key, $this->getDirty());
     }
 }

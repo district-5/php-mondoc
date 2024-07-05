@@ -34,7 +34,7 @@ namespace District5Tests\MondocTests;
 use District5Tests\MondocTests\TestObjects\Model\InvalidNestedModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
 use District5Tests\MondocTests\TestObjects\Model\SingleAndMultiNestedModel;
-use District5Tests\MondocTests\TestObjects\Model\VersionedModel;
+use District5Tests\MondocTests\TestObjects\Model\HelperTraitsModel;
 use District5Tests\MondocTests\TestObjects\Service\MyService;
 use MongoDB\BSON\ObjectId;
 
@@ -103,7 +103,7 @@ class ModelInflationTest extends MondocBaseTest
             'name' => 'Foo',
             '_v' => 2
         ];
-        $inflated = VersionedModel::inflateSingleArray($data);
+        $inflated = HelperTraitsModel::inflateSingleArray($data);
         $this->assertEquals('Foo', $inflated->getName());
         $this->assertEquals(2, $inflated->getModelVersion());
 
@@ -113,7 +113,7 @@ class ModelInflationTest extends MondocBaseTest
             '_v' => 2,
             '_id' => $anId
         ];
-        $inflated = VersionedModel::inflateSingleArray($data);
+        $inflated = HelperTraitsModel::inflateSingleArray($data);
         $this->assertEquals('Foo', $inflated->getName());
         $this->assertEquals(2, $inflated->getModelVersion());
         $this->assertEquals($anId->__toString(), $inflated->getObjectIdString());

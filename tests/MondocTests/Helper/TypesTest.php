@@ -395,9 +395,13 @@ class TypesTest extends MondocBaseTest
     public function testDirty()
     {
         $myModel = new NoServiceModel();
-        $this->assertFalse($myModel->exposeIsDirty('name'));
+        $this->assertFalse($myModel->isDirty(null));
+        $this->assertFalse($myModel->isDirty('name'));
+        $this->assertFalse($myModel->isDirty('blah'));
         $myModel->setName('foo');
-        $this->assertTrue($myModel->exposeIsDirty('name'));
+        $this->assertTrue($myModel->isDirty(null));
+        $this->assertTrue($myModel->isDirty('name'));
+        $this->assertFalse($myModel->isDirty('blah'));
     }
 
     public function testDeduplicationOfArrayOfObjectIds()

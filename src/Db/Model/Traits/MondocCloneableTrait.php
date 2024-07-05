@@ -30,14 +30,8 @@
 
 namespace District5\Mondoc\Db\Model\Traits;
 
-use DateTime;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Model\MondocAbstractSubModel;
-use District5\Mondoc\Helper\MondocTypes;
-use MongoDB\BSON\ObjectId;
-use MongoDB\BSON\UTCDateTime;
-use MongoDB\Model\BSONArray;
-use MongoDB\Model\BSONDocument;
 
 /**
  * Trait MondocCloneableTrait.

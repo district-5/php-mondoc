@@ -8,7 +8,7 @@ use District5Tests\MondocTests\TestObjects\Model\FinancialCandleModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModelWithSub;
 use District5Tests\MondocTests\TestObjects\Model\SingleAndMultiNestedModel;
-use District5Tests\MondocTests\TestObjects\Model\VersionedModel;
+use District5Tests\MondocTests\TestObjects\Model\HelperTraitsModel;
 use District5Tests\MondocTests\TestObjects\Service\AllTypesService;
 use District5Tests\MondocTests\TestObjects\Service\DateService;
 use District5Tests\MondocTests\TestObjects\Service\FieldAliasTestService;
@@ -16,7 +16,7 @@ use District5Tests\MondocTests\TestObjects\Service\FinancialCandleService;
 use District5Tests\MondocTests\TestObjects\Service\MyService;
 use District5Tests\MondocTests\TestObjects\Service\MySubService;
 use District5Tests\MondocTests\TestObjects\Service\SingleAndMultiNestedService;
-use District5Tests\MondocTests\TestObjects\Service\VersionedService;
+use District5Tests\MondocTests\TestObjects\Service\HelperTraitsService;
 use MongoDB\Client;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -37,8 +37,8 @@ $mondoc->setServiceMap([
     FieldAliasTestModel::class => FieldAliasTestService::class
 ]); // just to cover the setServiceMap method
 $mondoc->addServiceMapping(
-    VersionedModel::class,
-    VersionedService::class
+    HelperTraitsModel::class,
+    HelperTraitsService::class
 )->addServiceMapping(
     AllTypesModel::class,
     AllTypesService::class

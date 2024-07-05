@@ -122,10 +122,19 @@ class MyModel extends MondocAbstractModel
 
 ##### Optional traits...
 
-* `MondocVersionedModelTrait` - You can easily version data within a model by using the
-  `\District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait` trait. This trait introduces
-  a `_v` variable in the model, which you can choose to increment when you choose.
-  * You can detect if a model has a version by calling `isVersionableModel()` on the model.
+* `MondocVersionedModelTrait` - Version your data easily.
+  * You can easily version data within a model by using the 
+    `\District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait` trait. This trait introduces
+    a `_v` variable in the model, which you can choose to increment when you choose.
+    * You can detect if a model has a version by calling `isVersionableModel()` on the model.
+* `MondocRevisionNumberTrait` - Adds an `_rn` property to a model to utilise as a revision
+    number. This value is automatically set to `1` upon initial save of a model, and is
+    incremented each time the model is updated. You can override this behaviour by manually
+    assigning a value to the `_rn` property by calling `setRevisionNumber` method on your 
+    inheriting model. This is different from the versioned model trait, as the revision number
+    is incremented each time the model is updated, regardless of the changes made.
+  * You can detect if a model has a revision number by calling `isRevisionNumberModel()` on the
+    model.
 * `MondocCreatedDateTrait` - Adds a `cd` property to a model to utilise as a created date.
   * This value is automatically assigned to the current UTC date upon initial save of a model,
     or if an existing model is updated and the `cd` property has not been set. You can 
@@ -138,7 +147,7 @@ class MyModel extends MondocAbstractModel
     `->clone` you can pass a boolean to indicate if you want to persist the new model to the
     database. The optional second parameter is the object or class to clone to. For example,
     you can make a clone of `MyModel` and convert it to `OtherModel` by calling
-    `$myModel->clone( < save:bool > , OtherModel::class)`. 
+    `$myModel->clone( < save:bool > , OtherModel::class)`.
 
 **Traits examples**
 
@@ -146,10 +155,11 @@ class MyModel extends MondocAbstractModel
 <?php
 class MyModel extends \District5\Mondoc\Db\Model\MondocAbstractModel
 {
-    use \District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
     use \District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
     use \District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
     use \District5\Mondoc\Db\Model\Traits\MondocCloneableTrait;
+    use \District5\Mondoc\Db\Model\Traits\MondocRevisionNumberTrait;
+    use \District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
     
     // Rest of your model code...
 }

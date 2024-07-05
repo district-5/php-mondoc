@@ -31,11 +31,11 @@
 namespace District5\Mondoc\Db\Model\Traits;
 
 /**
- * Trait NestedModelTrait.
+ * Trait MondocNestedModelTrait.
  *
  * @package District5\Mondoc\Db\Model\Traits
  */
-trait NestedModelTrait
+trait MondocNestedModelTrait
 {
     /**
      * An array holding data on which keys need to be coerced into sub DTOs.

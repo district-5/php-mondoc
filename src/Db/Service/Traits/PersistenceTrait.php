@@ -34,6 +34,7 @@ use District5\Date\Date;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
 use District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
+use District5\Mondoc\Db\Model\Traits\MondocRevisionNumberTrait;
 use District5\Mondoc\Db\Service\Traits\Persistence\InsertMultiTrait;
 use District5\Mondoc\Db\Service\Traits\Persistence\InsertSingleTrait;
 use District5\Mondoc\Db\Service\Traits\Persistence\UpdateMultiTrait;
@@ -67,6 +68,7 @@ trait PersistenceTrait
     {
         $hasModified = HasTrait::has($model, MondocModifiedDateTrait::class);
         $hasCreated = HasTrait::has($model, MondocCreatedDateTrait::class);
+        $hasRevision = $model->isRevisionNumberModel();
         if (null === $model->getObjectId()) {
             /* @var $model MondocCreatedDateTrait for PhpStorm purposes only */
             if ($hasCreated === true && $model->getCreatedDate(false) === null) {
@@ -76,12 +78,20 @@ trait PersistenceTrait
             if ($hasModified === true && $model->getModifiedDate(false) === null) {
                 $model->touchModifiedDate();
             }
+            /* @var $model MondocRevisionNumberTrait for PhpStorm purposes only */
+            if ($hasRevision === true && $model->getRevisionNumber() === 0) {
+                $model->incrementRevisionNumber();
+            }
             return self::insert($model, $insertOrUpdateOptions);
         }
 
-        if ($hasModified === true && !in_array('md', $model->getDirty())) {
+        if ($hasModified === true && $model->isDirty('md') === false) {
             /* @var $model MondocModifiedDateTrait for PhpStorm purposes only */
             $model->setModifiedDate(Date::nowUtc());
+        }
+        if ($hasRevision === true && $model->isDirty('_rn') === false) {
+            /* @var $model MondocRevisionNumberTrait for PhpStorm purposes only */
+            $model->incrementRevisionNumber();
         }
         return self::update($model, $insertOrUpdateOptions);
     }

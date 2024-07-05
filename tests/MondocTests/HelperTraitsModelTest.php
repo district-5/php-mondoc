@@ -34,24 +34,24 @@ namespace District5Tests\MondocTests;
 use DateTime;
 use District5\Date\Date;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
-use District5Tests\MondocTests\TestObjects\Model\VersionedModel;
-use District5Tests\MondocTests\TestObjects\Service\VersionedService;
-use MongoDB\BSON\ObjectId;
+use District5Tests\MondocTests\TestObjects\Model\HelperTraitsModel;
+use District5Tests\MondocTests\TestObjects\Model\MyModel;
+use District5Tests\MondocTests\TestObjects\Service\HelperTraitsService;
 use MongoDB\BSON\UTCDateTime;
 
 /**
- * Class VersionedModelTest.
+ * Class HelperTraitsModelTest.
  *
  * @package District5Tests\MondocTests
  *
  * @internal
  */
-class VersionedModelTest extends MondocBaseTest
+class HelperTraitsModelTest extends MondocBaseTest
 {
     public function testGetCollection()
     {
-        $collection = VersionedService::getCollection(VersionedService::class);
-        $otherCollection = VersionedService::getCollection();
+        $collection = HelperTraitsService::getCollection(HelperTraitsService::class);
+        $otherCollection = HelperTraitsService::getCollection();
         $this->assertEquals(
             $collection->getCollectionName(),
             $otherCollection->getCollectionName()
@@ -63,7 +63,7 @@ class VersionedModelTest extends MondocBaseTest
         $m = new DateModel();
         $this->assertFalse($m->isVersionableModel());
 
-        $m = new VersionedModel();
+        $m = new HelperTraitsModel();
         $this->assertNull($m->getModifiedDate(false));
         $this->assertNull($m->getCreatedDate(false));
 
@@ -79,22 +79,26 @@ class VersionedModelTest extends MondocBaseTest
     /** @noinspection PhpRedundantOptionalArgumentInspection */
     public function testFullVersioningFunctionality()
     {
-
-        $m = new VersionedModel();
+        $m = new HelperTraitsModel();
         $m->setName('Foo');
+        $this->assertEquals(0, $m->getRevisionNumber());
         $this->assertTrue($m->save());
         $this->assertEquals(1, $m->getModelVersion());
+        $this->assertEquals(1, $m->getRevisionNumber());
         $this->assertTrue($m->hasObjectId());
 
-        $model = VersionedService::getById($m->getObjectId());
-        /* @var $model VersionedModel */
+        $model = HelperTraitsService::getById($m->getObjectId());
+        /* @var $model HelperTraitsModel */
         $this->assertEquals(1, $model->getModelVersion());
+        $this->assertEquals(1, $model->getRevisionNumber());
         $this->assertEquals('Foo', $model->getName());
         $model->incrementModelVersion();
         $this->assertEquals(2, $model->getModelVersion());
+        $this->assertEquals(1, $m->getRevisionNumber());
         $this->assertTrue($model->save());
+        $this->assertEquals(2, $model->getRevisionNumber()); // triggers increment on save only
 
-        $model = VersionedService::getById($m->getObjectId());
+        $model = HelperTraitsService::getById($m->getObjectId());
         $this->assertInstanceOf(DateTime::class, $model->getCreatedDate(false));
         $this->assertInstanceOf(UTCDateTime::class, $model->getCreatedDate(true));
         $this->assertTrue(Date::validateObject($model->getCreatedDate(false))->isOlderThan(Date::modify(Date::nowUtc())->add()->seconds(5)));
@@ -105,17 +109,42 @@ class VersionedModelTest extends MondocBaseTest
         $this->assertTrue(Date::validateObject($model->getModifiedDate(false))->isOlderThan(Date::modify(Date::nowUtc())->add()->seconds(5)));
         $this->assertTrue(Date::validateObject($model->getModifiedDate(false))->isNewerThan(Date::modify(Date::nowUtc())->minus()->seconds(5)));
 
-        /* @var $model VersionedModel */
+        /* @var $model HelperTraitsModel */
         $this->assertEquals(2, $model->getModelVersion());
+        $this->assertEquals(2, $model->getRevisionNumber());
         $this->assertEquals('Foo', $model->getName());
         $model->decrementModelVersion();
         $this->assertEquals(1, $model->getModelVersion());
         $this->assertTrue($model->save());
 
-        $model = VersionedService::getById($m->getObjectId());
-        /* @var $model VersionedModel */
+        $model = HelperTraitsService::getById($m->getObjectId());
+        /* @var $model HelperTraitsModel */
         $this->assertEquals(1, $model->getModelVersion());
+        $this->assertEquals(3, $model->getRevisionNumber());
         $this->assertEquals('Foo', $model->getName());
-        $this->assertTrue($model->delete());
+
+        $model->setName('Bar');
+        $model->setRevisionNumber(PHP_INT_MAX); // integer overflow test
+        $model->save(); // this won't increment on save, as it's already been set as dirty.
+
+        $newModel = HelperTraitsService::getById($m->getObjectId());
+        /* @var $newModel HelperTraitsModel */
+        // PHP_INT_MAX is 9223372036854775807
+        $this->assertEquals(PHP_INT_MAX, $newModel->getRevisionNumber());
+        $newModel->incrementRevisionNumber();
+        $this->assertEquals(1, $newModel->getRevisionNumber());
+
+        $this->assertTrue($newModel->delete());
+    }
+
+    public function testIsXModelTrait()
+    {
+        $myModel = new MyModel();
+        $this->assertFalse($myModel->isVersionableModel());
+        $this->assertFalse($myModel->isRevisionNumberModel());
+
+        $traitModel = new HelperTraitsModel();
+        $this->assertTrue($traitModel->isVersionableModel());
+        $this->assertTrue($traitModel->isRevisionNumberModel());
     }
 }

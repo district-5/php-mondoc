@@ -1,4 +1,5 @@
 <?php
+
 /**
  * District5 Mondoc Library
  *
@@ -28,45 +29,73 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5Tests\MondocTests\TestObjects\Model;
-
-use District5\Mondoc\Db\Model\MondocAbstractModel;
-use District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
-use District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
-use District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
+namespace District5\Mondoc\Db\Model\Traits;
 
 /**
- * Class VersionedModel
+ * Trait MondocRevisionNumberTrait.
  *
- * @package District5Tests\MondocTests\TestObjects\Model
+ * @package District5\Mondoc\Db\Model\Traits
  */
-class VersionedModel extends MondocAbstractModel
+trait MondocRevisionNumberTrait
 {
-    use MondocVersionedModelTrait;
-    use MondocCreatedDateTrait;
-    use MondocModifiedDateTrait;
-
     /**
-     * @var string|null
+     * The revision number of the model
+     *
+     * @var int
      */
-    protected string|null $name = null;
+    protected int $_rn = 0;
 
     /**
-     * @param string $name
+     * Get the revision number of this model
+     *
+     * @return int
+     */
+    public function getRevisionNumber(): int
+    {
+        return $this->_rn;
+    }
+
+    /**
+     * Set the revision number of this model
+     *
+     * @param int $revision
+     *
      * @return $this
      */
-    public function setName(string $name): self
+    public function setRevisionNumber(int $revision): static
     {
-        $this->name = $name;
-        $this->addDirty('name');
+        $this->_rn = $revision;
+        if (method_exists($this, 'addDirty')) {
+            $this->addDirty('_rn');
+        }
         return $this;
     }
 
     /**
-     * @return string|null
+     * Increment the revision number of this model. When using this trait,
+     * the revision number will automatically increment when saving the model.
+     *
+     * @return $this
      */
-    public function getName(): ?string
+    public function incrementRevisionNumber(): static
     {
-        return $this->name;
+        if ($this->_rn === PHP_INT_MAX) {
+            $this->_rn = 0;
+        }
+        $this->_rn++;
+        if (method_exists($this, 'addDirty')) {
+            $this->addDirty('_rn');
+        }
+        return $this;
+    }
+
+    /**
+     * Does the model contain this revision number trait?
+     *
+     * @return bool
+     */
+    public function isRevisionNumberModel(): bool
+    {
+        return true;
     }
 }

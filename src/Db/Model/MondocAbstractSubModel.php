@@ -56,7 +56,7 @@ abstract class MondocAbstractSubModel
      */
     public function __construct()
     {
-        $this->initMondocNestedModel();
+        $this->initMondocNestedModels();
         $this->initMondocFieldAliases();
     }
 

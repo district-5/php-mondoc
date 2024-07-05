@@ -37,6 +37,7 @@ use District5\Date\Date;
 use District5\Mondoc\Helper\MondocTypes;
 use District5Tests\MondocTests\MondocBaseTest;
 use District5Tests\MondocTests\TestObjects\Model\AllTypesModel;
+use District5Tests\MondocTests\TestObjects\Model\NoServiceModel;
 use District5Tests\MondocTests\TestObjects\Service\AllTypesService;
 use JsonException;
 use MongoDB\BSON\ObjectId;
@@ -389,6 +390,14 @@ class TypesTest extends MondocBaseTest
         $this->assertEquals($ids[3], $converted[3]->__toString());
         $this->assertEquals($ids[4], $converted[4]->__toString());
         $this->assertEquals($ids[5], $converted[5]->__toString());
+    }
+
+    public function testDirty()
+    {
+        $myModel = new NoServiceModel();
+        $this->assertFalse($myModel->exposeIsDirty('name'));
+        $myModel->setName('foo');
+        $this->assertTrue($myModel->exposeIsDirty('name'));
     }
 
     public function testDeduplicationOfArrayOfObjectIds()

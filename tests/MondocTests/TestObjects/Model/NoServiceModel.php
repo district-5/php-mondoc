@@ -73,11 +73,20 @@ class NoServiceModel extends MondocAbstractModel
     }
 
     /**
-     * @param array $toCheck
+     * @param string[] $toCheck
      * @return bool
      */
     public function exposeIsPropertyExcludedArray(array $toCheck): bool
     {
         return $this->isPropertyExcluded($toCheck);
+    }
+
+    /**
+     * @param string $val
+     * @return bool
+     */
+    public function exposeIsDirty(string $val): bool
+    {
+        return $this->isDirty($val);
     }
 }

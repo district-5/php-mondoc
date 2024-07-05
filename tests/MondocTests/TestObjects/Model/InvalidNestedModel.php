@@ -33,17 +33,20 @@ namespace District5Tests\MondocTests\TestObjects\Model;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 
 /**
- * Class InvalidClassMapModel
+ * Class InvalidNestedModel
  *
  * @package District5Tests\MondocTests\TestObjects\Model
  */
-class InvalidClassMapModel extends MondocAbstractModel
+class InvalidNestedModel extends MondocAbstractModel
 {
     /**
      * @var string|null
      */
     protected string|null $name = null;
 
+    /**
+     * @var array
+     */
     protected array $mondocNested = [
         'invalidClass' => 'ThisIsNotAValidClass'
     ];

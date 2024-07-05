@@ -45,14 +45,14 @@ trait ExcludedPropertiesTrait
     protected function getPropertyExclusions(): array
     {
         return [
-            'mondocNested', 'mondocFieldAliases', '_mondocCollection', '_mondocUnmapped', '_mondocDirty',
-            '_mondocPresetObjectId', '_mondocObjectId', '_mondocBson', '_mondocEstablishedNestedSingle',
-            '_mondocEstablishedNestedMultiple'
+            '_mondocObjectId', '_mondocBson', '_mondocCollection', '_mondocPresetObjectId',
+            '_mondocUnmapped', '_mondocDirty', '_mondocEstablishedNestedSingle', '_mondocEstablishedNestedMultiple',
+            'mondocNested', 'mondocFieldAliases'
         ];
     }
 
     /**
-     * Check if a field is excluded from the model.
+     * Check if a single field is, or one of many fields, are excluded from the actual database document.
      *
      * @param string|string[] $nameOrNames
      * @return bool

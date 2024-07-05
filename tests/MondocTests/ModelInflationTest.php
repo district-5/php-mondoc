@@ -31,7 +31,7 @@
 
 namespace District5Tests\MondocTests;
 
-use District5Tests\MondocTests\TestObjects\Model\InvalidClassMapModel;
+use District5Tests\MondocTests\TestObjects\Model\InvalidNestedModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
 use District5Tests\MondocTests\TestObjects\Model\SingleAndMultiNestedModel;
 use District5Tests\MondocTests\TestObjects\Model\VersionedModel;
@@ -74,7 +74,7 @@ class ModelInflationTest extends MondocBaseTest
     public function testInvalidClassMapInflation()
     {
         $data = ['a' => 'b'];
-        $d = InvalidClassMapModel::inflateSingleArray([
+        $d = InvalidNestedModel::inflateSingleArray([
             'name' => 'foo',
             'invalidClass' => $data,
             'noField' => 'bar'

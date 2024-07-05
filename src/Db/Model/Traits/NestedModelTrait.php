@@ -50,10 +50,27 @@ trait NestedModelTrait
     protected array $mondocNested = [];
 
     /**
+     * An array holding all established single nested objects (IE, BSONDocument not BSONArray).
+     * @example [ 'theField' => <bool> ]
+     *
+     * @var array
+     */
+    protected array $_mondocEstablishedNestedSingle = [];
+
+    /**
+     * An array holding all established multiple nested objects (IE, BSONArray not BSONDocument).
+     * @example [ 'theField' => <bool> ]
+     *
+     * @var array
+     */
+    protected array $_mondocEstablishedNestedMultiple = [];
+
+    /**
      * Initialise the nested models.
+     *
      * @return void
      */
-    protected function initMondocNestedModel(): void
+    protected function initMondocNestedModels(): void
     {
         foreach ($this->mondocNested as $k => $className) {
             if (str_ends_with($className, '[]')) {
@@ -72,22 +89,8 @@ trait NestedModelTrait
     }
 
     /**
-     * An array holding all established single nested objects (IE, BSONDocument not BSONArray).
-     * @example [ 'theField' => <bool> ]
+     * Check if a single field is, or one of many fields, are actually a mapped nested models or models.
      *
-     * @var array
-     */
-    protected array $_mondocEstablishedNestedSingle = [];
-
-    /**
-     * An array holding all established multiple nested objects (IE, BSONArray not BSONDocument).
-     * @example [ 'theField' => <bool> ]
-     *
-     * @var array
-     */
-    protected array $_mondocEstablishedNestedMultiple = [];
-
-    /**
      * @param string|string[] $fieldOrFields
      * @return bool
      */
@@ -97,6 +100,8 @@ trait NestedModelTrait
     }
 
     /**
+     * Check if a single field is, or one of many fields, is actually a mapped nested model.
+     *
      * @param string|string[] $fieldOrFields
      * @return bool
      */
@@ -106,9 +111,7 @@ trait NestedModelTrait
             if (array_key_exists($fieldOrFields, $this->_mondocEstablishedNestedSingle)) {
                 return $this->_mondocEstablishedNestedSingle[$fieldOrFields];
             }
-            $this->_mondocEstablishedNestedSingle[$fieldOrFields] = (array_key_exists($fieldOrFields, $this->getKeyToClassMap()) && !str_ends_with($this->getKeyToClassMap()[$fieldOrFields], '[]'));
-
-            return $this->_mondocEstablishedNestedSingle[$fieldOrFields];
+            return false;
         }
         foreach ($fieldOrFields as $field) {
             if ($this->isMondocNestedSingleObject($field) === true) {
@@ -120,6 +123,8 @@ trait NestedModelTrait
     }
 
     /**
+     * Check if a single field is, or one of many fields, is actually a mapped nested model.
+     *
      * @param string|string[] $fieldOrFields
      * @return bool
      */
@@ -129,8 +134,7 @@ trait NestedModelTrait
             if (array_key_exists($fieldOrFields, $this->_mondocEstablishedNestedMultiple)) {
                 return $this->_mondocEstablishedNestedMultiple[$fieldOrFields];
             }
-            $this->_mondocEstablishedNestedMultiple[$fieldOrFields] = (array_key_exists($fieldOrFields, $this->getKeyToClassMap()) && str_ends_with($this->getKeyToClassMap()[$fieldOrFields], '[]'));
-            return $this->_mondocEstablishedNestedMultiple[$fieldOrFields];
+            return false;
         }
 
         foreach ($fieldOrFields as $field) {

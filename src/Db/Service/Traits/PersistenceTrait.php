@@ -38,6 +38,7 @@ use District5\Mondoc\Db\Service\Traits\Persistence\InsertMultiTrait;
 use District5\Mondoc\Db\Service\Traits\Persistence\InsertSingleTrait;
 use District5\Mondoc\Db\Service\Traits\Persistence\UpdateMultiTrait;
 use District5\Mondoc\Db\Service\Traits\Persistence\UpdateSingleTrait;
+use District5\Mondoc\Helper\HasTrait;
 
 /**
  * Trait PersistenceTrait.
@@ -64,17 +65,16 @@ trait PersistenceTrait
      */
     public static function saveModel(MondocAbstractModel $model, array $insertOrUpdateOptions = []): bool
     {
-        $uses = class_uses($model);
-        $hasModified = in_array(MondocModifiedDateTrait::class, $uses, true);
-        $hasCreated = in_array(MondocCreatedDateTrait::class, $uses, true);
+        $hasModified = HasTrait::has($model, MondocModifiedDateTrait::class);
+        $hasCreated = HasTrait::has($model, MondocCreatedDateTrait::class);
         if (null === $model->getObjectId()) {
             /* @var $model MondocCreatedDateTrait for PhpStorm purposes only */
             if ($hasCreated === true && $model->getCreatedDate(false) === null) {
-                $model->setCreatedDate(Date::nowUtc());
+                $model->touchCreatedDate();
             }
             /* @var $model MondocModifiedDateTrait for PhpStorm purposes only */
             if ($hasModified === true && $model->getModifiedDate(false) === null) {
-                $model->setModifiedDate(Date::nowUtc());
+                $model->touchModifiedDate();
             }
             return self::insert($model, $insertOrUpdateOptions);
         }

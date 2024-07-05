@@ -131,12 +131,11 @@ abstract class MondocAbstractSubModel
             }
             $k = $inst->getFieldAliasSingleMap($k, false);
 
-            $isInClassMap = array_key_exists($k, $classMap);
-            if ((is_array($v) || is_object($v)) && $isInClassMap === true) {
+            $isNestedAny = $inst->isMondocNestedAnyType($k);
+            if ((is_array($v) || is_object($v)) && $isNestedAny === true) {
                 $subClassName = $classMap[$k];
-                $isMulti = false;
-                if (str_ends_with($subClassName, '[]')) {
-                    $isMulti = true;
+                $isMulti = $inst->isMondocNestedMultipleObjects($k);
+                if ($isMulti === true) {
                     $subClassName = substr($subClassName, 0, -2);
                 }
                 if (class_exists($subClassName)) {
@@ -144,7 +143,7 @@ abstract class MondocAbstractSubModel
                         $v = MondocTypes::arrayToPhp($v);
                     }
                     /* @var $subClassName MondocAbstractSubModel */
-                    if ($isMulti) {
+                    if ($isMulti === true) {
                         $v = $subClassName::inflateMultipleArrays($v);
                     } else {
                         $v = $subClassName::inflateSingleArray($v);
@@ -154,7 +153,7 @@ abstract class MondocAbstractSubModel
                     $inst->_mondocUnmapped[$k] = $v;
                 }
             }
-            if ($isInClassMap === false && ($v instanceof BSONDocument || $v instanceof BSONArray)) {
+            if ($isNestedAny === false && ($v instanceof BSONDocument || $v instanceof BSONArray)) {
                 $v = $v->getArrayCopy();
             }
 

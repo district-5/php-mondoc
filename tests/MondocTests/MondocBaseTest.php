@@ -31,23 +31,7 @@
 namespace District5Tests\MondocTests;
 
 use District5\Mondoc\MondocConfig;
-use District5Tests\MondocTests\TestObjects\Model\AllTypesModel;
-use District5Tests\MondocTests\TestObjects\Model\DateModel;
-use District5Tests\MondocTests\TestObjects\Model\FinancialCandleModel;
-use District5Tests\MondocTests\TestObjects\Model\MyModel;
-use District5Tests\MondocTests\TestObjects\Model\SingleAndMultiNestedModel;
-use District5Tests\MondocTests\TestObjects\Model\Subs\MyModelWithSub;
-use District5Tests\MondocTests\TestObjects\Model\VersionedModel;
-use District5Tests\MondocTests\TestObjects\Service\AllTypesService;
-use District5Tests\MondocTests\TestObjects\Service\DateService;
-use District5Tests\MondocTests\TestObjects\Service\FinancialCandleService;
-use District5Tests\MondocTests\TestObjects\Service\MyService;
-use District5Tests\MondocTests\TestObjects\Service\MySubService;
-use District5Tests\MondocTests\TestObjects\Service\SingleAndMultiNestedService;
-use District5Tests\MondocTests\TestObjects\Service\VersionedService;
 use MondocTests\SingletonDbStore;
-use MongoDB\Client;
-use MongoDB\Database;
 use PHPUnit\Framework\TestCase;
 
 /**

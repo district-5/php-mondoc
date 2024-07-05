@@ -28,56 +28,20 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5Tests\MondocTests\TestObjects\Model;
-
-use District5\Mondoc\Db\Model\MondocAbstractModel;
+namespace District5Tests\MondocTests\TestObjects\Service;
 
 /**
- * Class NoServiceModel
+ * Class FieldAliasTestService.
  *
- * @package District5Tests\MondocTests\TestObjects\Model
+ * @package District5Tests\MondocTests\TestObjects\Service
  */
-class NoServiceModel extends MondocAbstractModel
+class FieldAliasTestService extends AbstractTestService
 {
     /**
-     * @var string|null
+     * @return string
      */
-    protected string|null $name = null;
-
-    /**
-     * @param string $name
-     * @return $this
-     */
-    public function setName(string $name): self
+    protected static function getCollectionName(): string
     {
-        $this->name = $name;
-        $this->addDirty('name');
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $toCheck
-     * @return bool
-     */
-    public function exposeIsPropertyExcludedSingle(string $toCheck): bool
-    {
-        return $this->isPropertyExcluded($toCheck);
-    }
-
-    /**
-     * @param array $toCheck
-     * @return bool
-     */
-    public function exposeIsPropertyExcludedArray(array $toCheck): bool
-    {
-        return $this->isPropertyExcluded($toCheck);
+        return parent::getCollectionName(); // Just an example, not needed here, but in reality, you'd just return 'my_collection_name'
     }
 }

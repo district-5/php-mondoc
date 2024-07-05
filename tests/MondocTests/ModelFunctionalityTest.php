@@ -36,9 +36,9 @@ use District5\MondocBuilder\QueryBuilder;
 use District5\MondocBuilder\QueryTypes\ValueEqualTo;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
+use District5Tests\MondocTests\TestObjects\Model\NoServiceModel;
 use District5Tests\MondocTests\TestObjects\Service\DateService;
 use District5Tests\MondocTests\TestObjects\Service\MyService;
-use MongoDB\BSON\ObjectId;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
 
@@ -309,5 +309,14 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertTrue($multi[0]->delete());
 
         unset($multi);
+    }
+
+    public function testPropertyExclusionsWorkCorrectly()
+    {
+        $single = new NoServiceModel();
+        $this->assertTrue($single->exposeIsPropertyExcludedSingle('_mondocObjectId')); // _mondocObjectId is excluded
+        $this->assertFalse($single->exposeIsPropertyExcludedSingle('thisIsOk')); // thisIsOk is not excluded
+        $this->assertTrue($single->exposeIsPropertyExcludedArray(['thisIsOk', '_mondocObjectId'])); // _mondocObjectId is excluded
+        $this->assertFalse($single->exposeIsPropertyExcludedArray(['thisIsOk', 'thisToo'])); // neither are excluded
     }
 }

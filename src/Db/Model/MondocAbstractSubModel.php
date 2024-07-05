@@ -31,6 +31,9 @@
 namespace District5\Mondoc\Db\Model;
 
 use DateTime;
+use District5\Mondoc\Db\Model\Traits\ExcludedPropertiesTrait;
+use District5\Mondoc\Db\Model\Traits\FieldAliasMapTrait;
+use District5\Mondoc\Db\Model\Traits\NestedModelTrait;
 use District5\Mondoc\Db\Model\Traits\UnmappedPropertiesTrait;
 use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\Model\BSONArray;
@@ -43,67 +46,18 @@ use MongoDB\Model\BSONDocument;
  */
 abstract class MondocAbstractSubModel
 {
+    use ExcludedPropertiesTrait;
+    use FieldAliasMapTrait;
+    use NestedModelTrait;
     use UnmappedPropertiesTrait;
-
-    /**
-     * An array holding data on which keys need to be coerced into sub DTOs.
-     *
-     * @example
-     *      [
-     *          'property' => '\Full\Class\Name'
-     *      ]
-     *
-     * @var string[]
-     */
-    protected array $mondocNested = [];
-
-    /**
-     * An array holding all established single nested objects (IE, BSONDocument not BSONArray).
-     * @example [ 'theField' => <bool> ]
-     *
-     * @var array
-     */
-    protected array $_mondocEstablishedNestedSingle = [];
-
-    /**
-     * An array holding all established multiple nested objects (IE, BSONArray not BSONDocument).
-     * @example [ 'theField' => <bool> ]
-     *
-     * @var array
-     */
-    protected array $_mondocEstablishedNestedMultiple = [];
-
-    /**
-     * An array holding original key to new keys.
-     *
-     * @example
-     *      [
-     *      'some_underscore_key' => 'someCamelCaseKey'
-     *      ]
-     *
-     * @var string[]
-     */
-    protected array $fieldToFieldMap = [];
 
     /**
      * MondocAbstractSubModel constructor.
      */
     public function __construct()
     {
-        foreach ($this->mondocNested as $k => $className) {
-            if (str_ends_with($className, '[]')) {
-                $this->{$k} = [];
-                $cleanedName = substr($className, 0, -2);
-                if (class_exists($cleanedName)) {
-                    $this->_mondocEstablishedNestedMultiple[$k] = true;
-                    $this->_mondocEstablishedNestedSingle[$k] = false;
-                }
-            } else if (class_exists($className)) {
-                $this->{$k} = new $className();
-                $this->_mondocEstablishedNestedSingle[$k] = true;
-                $this->_mondocEstablishedNestedMultiple[$k] = false;
-            }
-        }
+        $this->initMondocNestedModel();
+        $this->initMondocFieldAliases();
     }
 
     /**
@@ -165,9 +119,9 @@ abstract class MondocAbstractSubModel
     {
         $cl = get_called_class();
         $inst = new $cl();
+        /* @var $inst MondocAbstractSubModel */
         $classMap = $inst->getKeyToClassMap();
 
-        $fieldMap = $inst->getFieldToFieldMap();
         foreach ($data as $k => $v) {
             if (is_int($k)) {
                 continue;
@@ -175,9 +129,7 @@ abstract class MondocAbstractSubModel
             if (in_array($k, $inst->getPropertyExclusions())) {
                 continue;
             }
-            if (array_key_exists($k, $fieldMap)) {
-                $k = $fieldMap[$k];
-            }
+            $k = $inst->getFieldAliasSingleMap($k, false);
 
             $isInClassMap = array_key_exists($k, $classMap);
             if ((is_array($v) || is_object($v)) && $isInClassMap === true) {
@@ -218,28 +170,6 @@ abstract class MondocAbstractSubModel
     protected function getKeyToClassMap(): array
     {
         return $this->mondocNested;
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getFieldToFieldMap(): array
-    {
-        return $this->fieldToFieldMap;
-    }
-
-    /**
-     * Holds an array of protected variable names.
-     *
-     * @return array
-     */
-    protected function getPropertyExclusions(): array
-    {
-        return [
-            'mondocNested', 'fieldToFieldMap', '_mondocCollection', '_mondocUnmapped', '_mondocDirty',
-            '_mondocPresetObjectId', '_mondocObjectId', '_mondocBson', '_mondocEstablishedNestedSingle',
-            '_mondocEstablishedNestedMultiple'
-        ];
     }
 
     /**
@@ -353,12 +283,13 @@ abstract class MondocAbstractSubModel
     public function asArray(): array
     {
         $data = [];
-        foreach ($this->getMondocObjectVars() as $k => $v) {
-            if (in_array($k, $this->getPropertyExclusions())) {
+        foreach ($this->getMondocObjectVars() as $originalK => $v) {
+            $k = $this->getFieldAliasSingleMap($originalK, true);
+            if ($this->isPropertyExcluded([$k, $originalK]) === true) {
                 continue;
             }
-            if ($this->isMondocNestedAnyType($k) === true) {
-                if ($this->isMondocNestedMultipleObjects($k) === true) {
+            if ($this->isMondocNestedAnyType([$k, $originalK]) === true) {
+                if ($this->isMondocNestedMultipleObjects([$k, $originalK]) === true) {
                     /* @var $v MondocAbstractSubModel[] */
                     $subs = [];
                     foreach ($v as $datum) {
@@ -409,42 +340,6 @@ abstract class MondocAbstractSubModel
     public function getMondocObjectVars(): array
     {
         return get_object_vars($this);
-    }
-
-    /**
-     * @param string $field
-     * @return bool
-     */
-    protected function isMondocNestedAnyType(string $field): bool
-    {
-        return $this->isMondocNestedSingleObject($field) === true || $this->isMondocNestedMultipleObjects($field) === true;
-    }
-
-    /**
-     * @param string $field
-     * @return bool
-     */
-    protected function isMondocNestedSingleObject(string $field): bool
-    {
-        if (array_key_exists($field, $this->_mondocEstablishedNestedSingle)) {
-            return $this->_mondocEstablishedNestedSingle[$field];
-        }
-        $this->_mondocEstablishedNestedSingle[$field] = (array_key_exists($field, $this->getKeyToClassMap()) && !str_ends_with($this->getKeyToClassMap()[$field], '[]'));
-
-        return $this->_mondocEstablishedNestedSingle[$field];
-    }
-
-    /**
-     * @param string $field
-     * @return bool
-     */
-    protected function isMondocNestedMultipleObjects(string $field): bool
-    {
-        if (array_key_exists($field, $this->_mondocEstablishedNestedMultiple)) {
-            return $this->_mondocEstablishedNestedMultiple[$field];
-        }
-        $this->_mondocEstablishedNestedMultiple[$field] = (array_key_exists($field, $this->getKeyToClassMap()) && str_ends_with($this->getKeyToClassMap()[$field], '[]'));
-        return $this->_mondocEstablishedNestedMultiple[$field];
     }
 
     /**

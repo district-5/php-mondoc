@@ -30,107 +30,94 @@
 
 namespace District5Tests\MondocTests\TestObjects\Model\Subs;
 
-use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Model\MondocAbstractSubModel;
+use District5\Mondoc\Db\Model\Traits\FieldAliasMapTrait;
 
 /**
- * Class MyModelWithSub
+ * Class FoodSubModel
  *
  * @package District5Tests\MondocTests\TestObjects\Model\Subs
  */
-class MyModelWithSub extends MondocAbstractModel
+class FieldAliasSubModel extends MondocAbstractSubModel
 {
     /**
      * @var string
      */
-    protected string $name;
+    protected string $hairColor;
 
     /**
-     * @var AgeSubModel
+     * @var string
      */
-    protected AgeSubModel $age;
+    protected string $hairDescription;
 
     /**
-     * @var FoodSubModel[]
+     * @var string
      */
-    protected array $foods = [];
+    protected string $hairLength;
 
     /**
-     * @var string[]
+     * @var array
+     * @see FieldAliasMapTrait::$mondocFieldAliases
      */
-    protected array $mondocNested = [
-        'age' => AgeSubModel::class,
-        'foods' => FoodSubModel::class . '[]'
+    protected array $mondocFieldAliases = [
+        'hc' => 'hairColor',
+        'hd' => 'hairDescription',
     ];
 
     /**
-     * @param FoodSubModel $food
+     * @param string $hairColor
      *
      * @return $this
      */
-    public function addFood(FoodSubModel $food): static
+    public function setHairColor(string $hairColor): self
     {
-        $this->foods[] = $food;
-
-        return $this;
-    }
-
-    /**
-     * @return AgeSubModel
-     */
-    public function getAge(): AgeSubModel
-    {
-        return $this->age;
-    }
-
-    /**
-     * @param AgeSubModel $age
-     *
-     * @return $this
-     */
-    public function setAge(AgeSubModel $age): static
-    {
-        $this->age = $age;
-        $this->addDirty('age');
-
+        $this->hairColor = $hairColor;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getName(): string
+    public function getHairColor(): string
     {
-        return trim($this->name);
+        return $this->hairColor;
     }
 
     /**
-     * @param string $val
+     * @param string $hairDescription
      *
      * @return $this
      */
-    public function setName(string $val): static
+    public function setHairDescription(string $hairDescription): self
     {
-        $this->name = trim($val);
-        $this->addDirty('name');
-
+        $this->hairDescription = $hairDescription;
         return $this;
     }
 
     /**
-     * @return FoodSubModel[]
+     * @return string
      */
-    public function getFoods(): array
+    public function getHairDescription(): string
     {
-        return $this->foods;
+        return $this->hairDescription;
     }
 
     /**
-     * Called to assign any default variables. You should always check for presence as
-     * this method is called at both before save, and after retrieval. This avoids overwriting
-     * your set values.
+     * @param string $hairLength
+     *
+     * @return $this
      */
-    protected function assignDefaultVars(): void
+    public function setHairLength(string $hairLength): self
     {
-        // TODO: Implement
+        $this->hairLength = $hairLength;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHairLength(): string
+    {
+        return $this->hairLength;
     }
 }

@@ -28,56 +28,46 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5Tests\MondocTests\TestObjects\Model;
-
-use District5\Mondoc\Db\Model\MondocAbstractModel;
+namespace District5\Mondoc\Db\Model\Traits;
 
 /**
- * Class NoServiceModel
+ * Trait ExcludedPropertiesTrait.
  *
- * @package District5Tests\MondocTests\TestObjects\Model
+ * @package District5\Mondoc\Db\Model\Traits
  */
-class NoServiceModel extends MondocAbstractModel
+trait ExcludedPropertiesTrait
 {
     /**
-     * @var string|null
+     * Holds an array of protected variable names.
+     *
+     * @return array
      */
-    protected string|null $name = null;
-
-    /**
-     * @param string $name
-     * @return $this
-     */
-    public function setName(string $name): self
+    protected function getPropertyExclusions(): array
     {
-        $this->name = $name;
-        $this->addDirty('name');
-        return $this;
+        return [
+            'mondocNested', 'mondocFieldAliases', '_mondocCollection', '_mondocUnmapped', '_mondocDirty',
+            '_mondocPresetObjectId', '_mondocObjectId', '_mondocBson', '_mondocEstablishedNestedSingle',
+            '_mondocEstablishedNestedMultiple'
+        ];
     }
 
     /**
-     * @return string|null
-     */
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $toCheck
+     * Check if a field is excluded from the model.
+     *
+     * @param string|string[] $nameOrNames
      * @return bool
      */
-    public function exposeIsPropertyExcludedSingle(string $toCheck): bool
+    protected function isPropertyExcluded(string|array $nameOrNames): bool
     {
-        return $this->isPropertyExcluded($toCheck);
-    }
-
-    /**
-     * @param array $toCheck
-     * @return bool
-     */
-    public function exposeIsPropertyExcludedArray(array $toCheck): bool
-    {
-        return $this->isPropertyExcluded($toCheck);
+        $exclusions = $this->getPropertyExclusions();
+        if (is_array($nameOrNames)) {
+            foreach ($nameOrNames as $name) {
+                if (in_array($name, $exclusions)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return in_array($nameOrNames, $exclusions);
     }
 }

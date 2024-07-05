@@ -30,10 +30,10 @@
 
 namespace District5Tests\MondocTests;
 
+use District5Tests\MondocTests\TestObjects\Model\MyModelWithSub;
 use District5Tests\MondocTests\TestObjects\Model\Subs\AgeSubModel;
 use District5Tests\MondocTests\TestObjects\Model\Subs\AgeWordSubModel;
 use District5Tests\MondocTests\TestObjects\Model\Subs\FoodSubModel;
-use District5Tests\MondocTests\TestObjects\Model\Subs\MyModelWithSub;
 use District5Tests\MondocTests\TestObjects\Service\MySubService;
 
 /**

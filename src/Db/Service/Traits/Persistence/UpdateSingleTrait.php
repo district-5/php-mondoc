@@ -61,6 +61,7 @@ trait UpdateSingleTrait
         $dirty = $model->getDirty();
         $changeSet = [];
         foreach ($dirty as $key) {
+            $key = $model->getFieldAliasSingleMap($key, true);
             if (array_key_exists($key, $data)) {
                 $changeSet[$key] = $data[$key];
             } else {

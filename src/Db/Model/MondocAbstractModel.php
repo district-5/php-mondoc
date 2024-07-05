@@ -36,7 +36,6 @@ use District5\Mondoc\Db\Model\Traits\MondocObjectIdTrait;
 use District5\Mondoc\Db\Model\Traits\PresetObjectIdTrait;
 use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\MondocConfig;
-use Exception;
 use MongoDB\BSON\ObjectId;
 use MongoDB\Collection;
 use MongoDB\Model\BSONDocument;
@@ -167,16 +166,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
     }
 
     /**
-     * @return string[]
-     */
-    protected function getFieldToFieldMap(): array
-    {
-        $this->fieldToFieldMap['_id'] = '_mondocObjectId';
-
-        return $this->fieldToFieldMap;
-    }
-
-    /**
      * @return bool
      */
     final public function isMondocModel(): bool
@@ -201,6 +190,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
     {
         $allSetVariables = $this->getMondocObjectVars();
         $ignore = $this->getPropertyExclusions();
+        $fieldMapKey = array_keys($this->getFieldAliasMap());
         $bsonArray = [];
         if ($this->getOriginalBsonDocument() !== null) {
             $bsonArray = array_keys($this->getOriginalBsonDocument()->getArrayCopy());
@@ -214,7 +204,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
 
         $toUnset = [];
         foreach ($bsonArray as $bsonKey) {
-            if ('_id' !== $bsonKey && !in_array($bsonKey, $allSetVariables)) {
+            if ('_id' !== $bsonKey && !in_array($bsonKey, $allSetVariables) && !in_array($bsonKey, $fieldMapKey)) {
                 $toUnset[$bsonKey] = 1;
             }
         }

@@ -61,7 +61,6 @@ $config->addServiceMapping(
 namespace MyNs\Model;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
-use MyNs\Service\MyService;
 
 /**
  * Class MyModel
@@ -73,6 +72,11 @@ class MyModel extends MondocAbstractModel
      * @var string
      */
     protected $name = null;
+    
+    // This is optional, but can be used to map fields from the database to the model to keep keys short in storage.
+    protected array $mondocFieldAliases = [
+        'n' => 'name', // the `name` value would be stored in the database as the key `n`
+    ];
 
     /**
      * @return string
@@ -92,6 +96,27 @@ class MyModel extends MondocAbstractModel
         $this->addDirty('name');
         return $this;
     }
+}
+```
+
+Additionally, in the model you can leverage the `$mondocFieldAliases` property to map fields from the database to the
+model to keep keys short in storage. This is optional, but can be useful in some cases. An example of this is shown
+below:
+
+```php
+namespace MyNs\Model;
+
+use District5\Mondoc\Db\Model\MondocAbstractModel;
+
+class MyModel extends MondocAbstractModel
+{
+    protected string $name = null;
+    
+    protected array $mondocFieldAliases = [
+        'n' => 'name',
+    ];
+
+    // Rest of your model code...
 }
 ```
 
@@ -158,14 +183,40 @@ The logic for querying the database etc., is always performed in the service lay
 
 #### Nesting objects
 
-You can nest objects in each other. The main model must extend `\District5\Mondoc\Db\Model\MondocAbstractModel` and have the sub
-models defined in the `$mondocNested` array.
+You can nest objects in each other. The main model must extend `\District5\Mondoc\Db\Model\MondocAbstractModel` and have
+the sub models defined in the `$mondocNested` array.
 
 Sub models must extend `\District5\Mondoc\Db\Model\MondocAbstractSubModel`.
+
+When implementing `$mondocNested`, you declare a single nested model, or an array of nested models. For example:
+
+```php
+protected Food $favouriteFood;
+protected array $allFoods; // Array of 'Food' objects
+
+protected array $mondocNested = [
+    'favouriteFood' => Food::class, // Single nested model
+    'allFoods' => Food::class . '[]' // Array of nested models
+];
+```
 
  > **Please note**: in versions prior to 5.1.0 any nested property was required to have `BSONDocument` or `BSONArray` as
  > part of the property definition. This is no longer required as the library will automatically inflate the class(es)
  > correctly
+
+Nested objects, regardless of depths, can also take advantage of the `$mondocFieldAliases` property to map fields from the
+database to the model. This keeps the keys short in storage, while allowing for longer, more descriptive keys in the
+model. For the above example, you could have the following:
+
+```php
+protected Food $favouriteFood;
+protected array $allFoods; // Array of 'Food' objects
+
+protected array $mondocFieldAliases = [
+    'ff' => 'favouriteFood',
+    'af' => 'allFoods'
+];
+```
 
 ```php
 use District5\Mondoc\Db\Model\MondocAbstractModel;
@@ -173,11 +224,23 @@ use District5\Mondoc\Db\Model\MondocAbstractSubModel;
 
 class FavouriteFood extends MondocAbstractSubModel
 {
-    protected string|null $foodName = null;
-    
+    protected string $foodName;
+
+    protected string $foodDescription;
+
+    // This is optional, but can be used to map fields from the database to the model to keep keys short in storage
+    protected array $mondocFieldAliases = [
+        'fd' => 'foodDescription',
+    ];
+
     public function getFoodName()
     {
         return $this->foodName;
+    }
+
+    public function getFoodDescription()
+    {
+        return $this->foodDescription;
     }
 }
 
@@ -350,7 +413,8 @@ echo $encodedJson;
 
 #### Useful information...
 
-To use a pre-determined ObjectId as the document `_id`, you can call `setPresetObjectId` against the model. For example:
+To use a pre-determined ObjectId as the document `_id`, you can call `setPresetObjectId` against the model. This will
+force the model to absorb this ObjectId and not generate a new one upon insertion. For example:
 
 ```php
 <?php
@@ -365,7 +429,27 @@ $person->save($insertOrUpdateOptions); // optional
 echo $person->getObjectIdString(); // 61dfee5591efcf44e023d692
 ```
 
-This will force the model to absorb this ObjectId and not generate a new one upon insertion.
+Additionally, there's a method called `assignDefaultVars` which can be used to assign default values to the model's
+properties. This is useful for setting default values for properties. The call to `assignDefaultVars` occurs AFTER
+inflation has occurred, so it's important to note that the properties may already have values assigned. For example:
+
+```php
+<?php
+use District5\Mondoc\Db\Model\MondocAbstractModel;
+
+class MyModel extends MondocAbstractModel
+{
+    protected string $name = null;
+    protected int $version = 0;
+
+    protected function assignDefaultVars()
+    {
+        if ($this->version < 1) {
+            $this->version = 1;
+        }
+    }
+}
+```
 
 #### Converting between types
 
@@ -410,6 +494,32 @@ $objectId = MondocTypes::toObjectId([
 #### Query building
 
 Query building is handled by the `MondocBuilder` library [https://github.com/district-5/php-mondoc-builder](https://github.com/district-5/php-mondoc-builder).
+
+The query builder does not take into account for the model's properties, but rather the database's properties. This
+means that it will not listen or adhere to any field mappings that have been set on the model.
+
+For example, this map would require the query builder to use the `n` key, not `name`:
+
+```php
+<?php
+use District5\Mondoc\Db\Model\MondocAbstractSubModel;
+
+class MyModel extends MondocAbstractSubModel
+{
+    protected array $mondocFieldAliases = [
+        'n' => 'name',
+    ];
+    
+    // Rest of your model code...
+}
+
+$wontWork = new \District5\Mondoc\Db\Builder\MondocBuilder\MondocBuilder();
+$wontWork->addFilter('name', 'John'); // This WILL NOT WORK with the field mapping
+
+$willWork = new \District5\Mondoc\Db\Builder\MondocBuilder\MondocBuilder();
+$willWork->addFilter('n', 'John'); // This will work with the field mapping
+```
+
 
 #### Testing
 

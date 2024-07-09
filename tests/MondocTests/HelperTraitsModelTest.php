@@ -35,6 +35,7 @@ use DateTime;
 use District5\Date\Date;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
 use District5Tests\MondocTests\TestObjects\Model\HelperTraitsModel;
+use District5Tests\MondocTests\TestObjects\Model\HelperTraitsOtherModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
 use District5Tests\MondocTests\TestObjects\Service\HelperTraitsService;
 use MongoDB\BSON\UTCDateTime;
@@ -146,5 +147,28 @@ class HelperTraitsModelTest extends MondocBaseTest
         $traitModel = new HelperTraitsModel();
         $this->assertTrue($traitModel->isVersionableModel());
         $this->assertTrue($traitModel->isRevisionNumberModel());
+    }
+
+    public function testInsertMultiOnModelsWithTraits()
+    {
+        $model = new HelperTraitsModel();
+        $model->setName('Foo');
+
+        $other = new HelperTraitsOtherModel();
+        $other->setName('Bar');
+
+        $this->assertTrue(HelperTraitsService::insertMulti([$model, $other]));
+
+        $this->assertTrue($model->hasObjectId());
+        $this->assertTrue($other->hasObjectId());
+
+        $this->assertInstanceOf(DateTime::class, $model->getCreatedDate(false));
+        $this->assertInstanceOf(DateTime::class, $model->getModifiedDate(false));
+        $this->assertInstanceOf(DateTime::class, $other->getCreatedDate(false));
+        $this->assertInstanceOf(DateTime::class, $other->getModifiedDate(false));
+        $this->assertEquals(1, $model->getRevisionNumber());
+        $this->assertEquals(1, $other->getRevisionNumber());
+
+        HelperTraitsService::insertMulti([$model, $other]);
     }
 }

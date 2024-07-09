@@ -31,7 +31,11 @@
 namespace District5\Mondoc\Db\Service\Traits\Persistence;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
+use District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
+use District5\Mondoc\Db\Model\Traits\MondocRevisionNumberTrait;
 use District5\Mondoc\Db\Service\MondocAbstractService;
+use District5\Mondoc\Helper\HasTrait;
 use District5\Mondoc\MondocConfig;
 
 /**
@@ -85,6 +89,22 @@ trait InsertMultiTrait
 
         $data = [];
         foreach ($modelsForThisService as $model) {
+            $hasModified = HasTrait::has($model, MondocModifiedDateTrait::class);
+            $hasCreated = HasTrait::has($model, MondocCreatedDateTrait::class);
+            $hasRevision = $model->isRevisionNumberModel();
+            /* @var $model MondocCreatedDateTrait for PhpStorm purposes only */
+            if ($hasCreated === true && $model->getCreatedDate(false) === null) {
+                $model->touchCreatedDate();
+            }
+            /* @var $model MondocModifiedDateTrait for PhpStorm purposes only */
+            if ($hasModified === true && $model->getModifiedDate(false) === null) {
+                $model->touchModifiedDate();
+            }
+            /* @var $model MondocRevisionNumberTrait for PhpStorm purposes only */
+            if ($hasRevision === true && $model->getRevisionNumber() === 0) {
+                $model->incrementRevisionNumber();
+            }
+
             $asArray = $model->asArray();
             if ($model->hasPresetObjectId()) {
                 $asArray['_id'] = $model->getPresetObjectId();

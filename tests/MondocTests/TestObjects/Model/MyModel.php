@@ -182,13 +182,13 @@ class MyModel extends MondocAbstractModel
     /**
      * Hack to allow it through for tests
      *
-     * @param string $key
+     * @param string $property
      * @param string $value
      * @return void
      */
-    public function proxyAddDirty(string $key, string $value): void
+    public function proxyAddDirty(string $property, string $value): void
     {
-        $this->addDirty($key, $value);
+        $this->addDirty($property);
     }
 
     /**

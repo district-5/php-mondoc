@@ -72,13 +72,13 @@ trait DirtyAttributesTrait
     /**
      * Add a dirty value, indicating it should be saved upon updating. Dirty values aren't referenced for new objects.
      *
-     * @param string $key
+     * @param string $property
      *
      * @return $this
      */
-    protected function addDirty(string $key): static
+    protected function addDirty(string $property): static
     {
-        $this->_mondocDirty[] = $key;
+        $this->_mondocDirty[] = $property;
 
         return $this;
     }
@@ -86,15 +86,15 @@ trait DirtyAttributesTrait
     /**
      * Check if a field is dirty. Dirty values aren't referenced for new objects.
      *
-     * @param string|null $key
+     * @param string|null $property
      * @return bool
      */
-    public function isDirty(string|null $key): bool
+    public function isDirty(string|null $property): bool
     {
-        if ($key === null) {
+        if ($property === null) {
             return !empty($this->getDirty());
         }
 
-        return in_array($key, $this->getDirty());
+        return in_array($property, $this->getDirty());
     }
 }

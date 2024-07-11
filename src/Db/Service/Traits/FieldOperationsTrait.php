@@ -33,11 +33,11 @@ namespace District5\Mondoc\Db\Service\Traits;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 
 /**
- * Trait KeyOperationsTrait.
+ * Trait FieldOperationsTrait.
  *
  * @package District5\Mondoc\Db\Service\Traits
  */
-trait KeyOperationsTrait
+trait FieldOperationsTrait
 {
     /**
      * Remove a key from a single document.
@@ -46,11 +46,26 @@ trait KeyOperationsTrait
      * @param MondocAbstractModel $model
      *
      * @return bool
+     * @deprecated Use removeField instead
+     * @see self::removeField
      */
     public static function removeKey(string $key, MondocAbstractModel $model): bool
     {
+        return self::removeField($key, $model);
+    }
+
+    /**
+     * Remove a field from a single document.
+     *
+     * @param string $field
+     * @param MondocAbstractModel $model
+     *
+     * @return bool
+     */
+    public static function removeField(string $field, MondocAbstractModel $model): bool
+    {
         $fields = $model->getUnmappedFields();
-        if (!array_key_exists($key, $fields)) {
+        if (!array_key_exists($field, $fields)) {
             return false;
         }
         $collection = self::getCollection(
@@ -58,7 +73,7 @@ trait KeyOperationsTrait
         );
         $result = $collection->updateOne(
             ['_id' => $model->getObjectId()],
-            ['$unset' => [$key => 1]]
+            ['$unset' => [$field => 1]]
         );
 
         return 1 === $result->getModifiedCount();

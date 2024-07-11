@@ -85,26 +85,26 @@ class MondocConfig
 
     /**
      * @param Database $database
-     * @param string $key
+     * @param string $connectionId
      *
      * @return $this
      */
-    public function addDatabase(Database $database, string $key = 'default'): MondocConfig
+    public function addDatabase(Database $database, string $connectionId = 'default'): MondocConfig
     {
-        $this->databases[$key] = $database;
+        $this->databases[$connectionId] = $database;
 
         return $this;
     }
 
     /**
      * @param string $name
-     * @param string $key
+     * @param string $connectionId
      *
      * @return null|Collection
      */
-    public function getCollection(string $name, string $key = 'default'): ?Collection
+    public function getCollection(string $name, string $connectionId = 'default'): ?Collection
     {
-        if (null !== $database = $this->getDatabase($key)) {
+        if (null !== $database = $this->getDatabase($connectionId)) {
             return $database->selectCollection($name);
         }
 
@@ -112,14 +112,14 @@ class MondocConfig
     }
 
     /**
-     * @param string $key
+     * @param string $connectionId
      *
      * @return null|Database
      */
-    public function getDatabase(string $key = 'default'): ?Database
+    public function getDatabase(string $connectionId = 'default'): ?Database
     {
-        if (array_key_exists($key, $this->databases)) {
-            return $this->databases[$key];
+        if (array_key_exists($connectionId, $this->databases)) {
+            return $this->databases[$connectionId];
         }
 
         return null;

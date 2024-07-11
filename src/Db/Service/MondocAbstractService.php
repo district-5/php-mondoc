@@ -38,7 +38,7 @@ use District5\Mondoc\Db\Service\Traits\DistinctValuesTrait;
 use District5\Mondoc\Db\Service\Traits\ExistenceTrait;
 use District5\Mondoc\Db\Service\Traits\GetMultiTrait;
 use District5\Mondoc\Db\Service\Traits\GetSingleTrait;
-use District5\Mondoc\Db\Service\Traits\KeyOperationsTrait;
+use District5\Mondoc\Db\Service\Traits\FieldOperationsTrait;
 use District5\Mondoc\Db\Service\Traits\OperatorsTrait;
 use District5\Mondoc\Db\Service\Traits\PaginationTrait;
 use District5\Mondoc\Db\Service\Traits\PersistenceTrait;
@@ -61,7 +61,7 @@ abstract class MondocAbstractService
     use GetMultiTrait;
     use GetSingleTrait;
     use ExistenceTrait;
-    use KeyOperationsTrait;
+    use FieldOperationsTrait;
     use OperatorsTrait;
     use PaginationTrait;
     use PersistenceTrait;

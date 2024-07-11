@@ -52,8 +52,8 @@ class RemoveKeysAndAtomicTest extends MondocBaseTest
 
         $this->assertEquals(101, MyService::getById($m->getObjectId())->getAge());
         $m->addUnmappedKey('age', 101); // hack to get it into unmapped
-        $this->assertTrue(MyService::removeKey('age', $m));
-        $this->assertFalse(MyService::removeKey('noSuchField', $m));
+        $this->assertTrue(MyService::removeKey('age', $m)); // TODO: Change to removeField after deprecation
+        $this->assertFalse(MyService::removeField('noSuchField', $m));
         $this->assertEquals(0, MyService::getById($m->getObjectId())->getAge()); // 0 is the default value
     }
 

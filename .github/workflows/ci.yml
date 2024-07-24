@@ -18,7 +18,8 @@ jobs:
         uses: php-actions/composer@v6
         with:
           php_version: 8.3
-          php_extensions: "xdebug mongodb calendar sockets"
+          #php_extensions: "xdebug mongodb calendar sockets"
+          args: --ignore-platform-reqs
 
       - name: Run unit tests
         uses: php-actions/phpunit@v3

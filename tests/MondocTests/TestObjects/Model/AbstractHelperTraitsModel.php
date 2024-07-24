@@ -28,47 +28,23 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Helper;
+namespace District5Tests\MondocTests\TestObjects\Model;
+
+use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
+use District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
+use District5\Mondoc\Db\Model\Traits\MondocRevisionNumberTrait;
+use District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
 
 /**
- * Class HasTrait.
+ * Class AbstractHelperTraitsModel
  *
- * @package District5\Mondoc\Helper
+ * @package District5Tests\MondocTests\TestObjects\Model
  */
-class HasTrait
+abstract class AbstractHelperTraitsModel extends MondocAbstractModel
 {
-    /**
-     * @param object $object
-     * @param string $trait
-     * @return bool
-     */
-    public static function has(object $object, string $trait): bool
-    {
-        $traits = class_uses($object);
-        if (in_array($trait, $traits)) {
-            return true;
-        }
-
-        return self::parentHas(get_class($object), $trait);
-    }
-
-    /**
-     * @param string $className
-     * @param string $trait
-     * @return bool
-     */
-    private static function parentHas(string $className, string $trait): bool
-    {
-        $parent = get_parent_class($className);
-        if ($parent === false) {
-            return false;
-        }
-
-        $traits = class_uses($parent);
-        if (in_array($trait, $traits)) {
-            return true;
-        }
-
-        return self::parentHas($parent, $trait);
-    }
+    use MondocVersionedModelTrait;
+    use MondocCreatedDateTrait;
+    use MondocModifiedDateTrait;
+    use MondocRevisionNumberTrait;
 }

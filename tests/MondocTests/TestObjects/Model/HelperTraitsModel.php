@@ -41,13 +41,8 @@ use District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
  *
  * @package District5Tests\MondocTests\TestObjects\Model
  */
-class HelperTraitsModel extends MondocAbstractModel
+class HelperTraitsModel extends AbstractHelperTraitsModel
 {
-    use MondocVersionedModelTrait;
-    use MondocCreatedDateTrait;
-    use MondocModifiedDateTrait;
-    use MondocRevisionNumberTrait;
-
     /**
      * @var string|null
      */

@@ -31,6 +31,8 @@
 
 namespace District5Tests\MondocTests;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\MondocConfig;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
@@ -49,10 +51,12 @@ use MongoDB\Database;
  */
 class MondocConfigTest extends MondocBaseTest
 {
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
     public function testAddDatabaseForAlternateKey()
     {
-        $invalid = MondocConfig::getInstance()->getDatabase('alternate');
-        $this->assertNull($invalid);
         MondocConfig::getInstance()->addDatabase(
             MondocConfig::getInstance()->getDatabase(),
             'alternate'
@@ -61,6 +65,10 @@ class MondocConfigTest extends MondocBaseTest
         $this->assertInstanceOf(Database::class, $valid);
     }
 
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
     public function testGetDatabase()
     {
         $database = MondocConfig::getInstance()->getDatabase();
@@ -71,6 +79,9 @@ class MondocConfigTest extends MondocBaseTest
         $this->assertEquals($this->getDatabaseName(), $service->getDatabaseName());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     */
     public function testValidServiceMapRetrieval()
     {
         $map = MondocConfig::getInstance()->getServiceMap();
@@ -87,36 +98,54 @@ class MondocConfigTest extends MondocBaseTest
         $this->assertEquals(DateService::class, MondocConfig::getInstance()->getServiceForModel(DateModel::class));
     }
 
-    public function testInvalidServiceMapRetrieval()
+    public function testInvalidServiceMapRetrievalThrowsWhenRequestingService()
     {
+        $this->expectException(MondocServiceMapErrorException::class);
         $this->assertNull(MondocConfig::getInstance()->getModelForService('NonExistentService'));
+    }
+
+    public function testInvalidServiceMapRetrievalThrowsWhenRequestingModel()
+    {
+        $this->expectException(MondocServiceMapErrorException::class);
         $this->assertNull(MondocConfig::getInstance()->getServiceForModel('NonExistentModel'));
     }
 
-    public function testCreateAndDeleteForInvalidModelWithoutService()
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    public function testInvalidGetsFromConfigWhenRequestingDatabase()
     {
-        $m = new NoServiceModel();
-        $m->setName('test');
-        $this->assertFalse($m->save());
-        $this->assertFalse($m->delete());
-
-        $m->setObjectId(new ObjectId());
-        $this->assertFalse($m->delete());
-    }
-
-    public function testInvalidGetsFromConfig()
-    {
-        $this->assertNull(MondocConfig::getInstance()->getCollection('blah-blah', 'non-existent'));
+        $this->expectException(MondocConfigConfigurationException::class);
         $this->assertNull(MondocConfig::getInstance()->getDatabase('non-existent'));
     }
 
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    public function testInvalidGetsFromConfigWhenRequestingCollection()
+    {
+        $this->expectException(MondocConfigConfigurationException::class);
+        $this->assertNull(MondocConfig::getInstance()->getCollection('blah-blah', 'non-existent'));
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
     public function testReconstruct()
     {
         $old = MondocConfig::getInstance();
         $oldDb = $old->getDatabase();
         $oldMap = $old->getServiceMap();
         $newInstance = MondocConfig::getInstance()->reconstruct();
-        $this->assertNull($newInstance->getDatabase());
+        try {
+            $newInstance->getDatabase();
+            $this->fail('Expected exception not thrown');
+        } catch (MondocConfigConfigurationException $e) {
+            $this->assertEquals('MondocConfig: database connection not found for connection ID: default', $e->getMessage());
+        }
         $newInstance->addDatabase($oldDb);
         $newInstance->setServiceMap($oldMap);
         $this->assertInstanceOf(Database::class, $newInstance->getDatabase());

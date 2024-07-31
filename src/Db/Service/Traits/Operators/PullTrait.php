@@ -30,6 +30,7 @@
 
 namespace District5\Mondoc\Db\Service\Traits\Operators;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use MongoDB\BSON\ObjectId;
 
 /**
@@ -46,6 +47,8 @@ trait PullTrait
      * @param string $field
      * @param string|int|bool $value
      * @return bool
+     * @throws MondocConfigConfigurationException
+     * @noinspection PhpUnused
      */
     protected static function pullFromArrayWithFilter(array $filter, string $field, mixed $value): bool
     {
@@ -65,6 +68,8 @@ trait PullTrait
      * @param string $field
      * @param string|int|bool $value
      * @return bool
+     * @throws MondocConfigConfigurationException
+     * @noinspection PhpUnused
      */
     protected static function pullFromArrayById(ObjectId $id, string $field, mixed $value): bool
     {

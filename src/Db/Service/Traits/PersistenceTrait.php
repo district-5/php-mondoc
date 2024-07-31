@@ -39,7 +39,8 @@ use District5\Mondoc\Db\Service\Traits\Persistence\InsertMultiTrait;
 use District5\Mondoc\Db\Service\Traits\Persistence\InsertSingleTrait;
 use District5\Mondoc\Db\Service\Traits\Persistence\UpdateMultiTrait;
 use District5\Mondoc\Db\Service\Traits\Persistence\UpdateSingleTrait;
-use District5\Mondoc\Helper\HasTrait;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Helper\HasTraitHelper;
 
 /**
  * Trait PersistenceTrait.
@@ -61,21 +62,22 @@ trait PersistenceTrait
      *
      * @return bool
      *
-     * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-insertOne/
+     * @throws MondocConfigConfigurationException
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
+     * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-insertOne/
      */
     public static function saveModel(MondocAbstractModel $model, array $insertOrUpdateOptions = []): bool
     {
-        $hasModified = HasTrait::has($model, MondocModifiedDateTrait::class);
-        $hasCreated = HasTrait::has($model, MondocCreatedDateTrait::class);
+        $hasModified = HasTraitHelper::has($model, MondocModifiedDateTrait::class);
+        $hasCreated = HasTraitHelper::has($model, MondocCreatedDateTrait::class);
         $hasRevision = $model->isRevisionNumberModel();
         if (null === $model->getObjectId()) {
             /* @var $model MondocCreatedDateTrait for PhpStorm purposes only */
-            if ($hasCreated === true && $model->getCreatedDate(false) === null) {
+            if ($hasCreated === true && $model->getCreatedDate() === null) {
                 $model->touchCreatedDate();
             }
             /* @var $model MondocModifiedDateTrait for PhpStorm purposes only */
-            if ($hasModified === true && $model->getModifiedDate(false) === null) {
+            if ($hasModified === true && $model->getModifiedDate() === null) {
                 $model->touchModifiedDate();
             }
             /* @var $model MondocRevisionNumberTrait for PhpStorm purposes only */

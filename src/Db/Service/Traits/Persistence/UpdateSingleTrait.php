@@ -31,6 +31,7 @@
 namespace District5\Mondoc\Db\Service\Traits\Persistence;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\MondocBuilder\QueryBuilder;
 use MongoDB\Collection;
 
@@ -49,6 +50,7 @@ trait UpdateSingleTrait
      *
      * @return bool
      *
+     * @throws MondocConfigConfigurationException
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
      */
     public static function update(MondocAbstractModel $model, array $updateOptions = []): bool
@@ -111,6 +113,8 @@ trait UpdateSingleTrait
      *
      * @return bool
      *
+     * @throws MondocConfigConfigurationException
+     * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
      * @example
      *     MyService::updateOne(
      *          [
@@ -121,7 +125,6 @@ trait UpdateSingleTrait
      *          ]
      *      );
      *
-     * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
      */
     public static function updateOne(array $filter, array $query, array $updateOptions = []): bool
     {
@@ -147,6 +150,7 @@ trait UpdateSingleTrait
      * @param array $query
      *
      * @return bool
+     * @throws MondocConfigConfigurationException
      */
     public static function updateOneByQueryBuilder(QueryBuilder $queryBuilder, array $query): bool
     {

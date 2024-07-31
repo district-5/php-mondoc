@@ -30,6 +30,7 @@
 
 namespace District5Tests\MondocTests\TestObjects\Service;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use MongoDB\BSON\ObjectId;
 
 /**
@@ -47,21 +48,33 @@ class SingleAndMultiNestedService extends AbstractTestService
         return parent::getCollectionName(); // Just an example, not needed here, but in reality, you'd just return 'my_collection_name'
     }
 
+    /**
+     * @throws MondocConfigConfigurationException
+     */
     public static function pullFriendById(ObjectId $id, string $name): void
     {
         self::pullFromArrayById($id, 'friends', $name);
     }
 
+    /**
+     * @throws MondocConfigConfigurationException
+     */
     public static function pushFriendById(ObjectId $id, string $name): void
     {
         self::pushIntoArrayById($id, 'friends', $name);
     }
 
+    /**
+     * @throws MondocConfigConfigurationException
+     */
     public static function pullFriendByFilter(array $filter, string $name): void
     {
         self::pullFromArrayWithFilter($filter, 'friends', $name);
     }
 
+    /**
+     * @throws MondocConfigConfigurationException
+     */
     public static function pushFriendByFilter(array $filter, string $name): void
     {
         self::pushIntoArrayWithFilter($filter, 'friends', $name);

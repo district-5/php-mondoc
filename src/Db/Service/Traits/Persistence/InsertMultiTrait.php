@@ -35,7 +35,9 @@ use District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
 use District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
 use District5\Mondoc\Db\Model\Traits\MondocRevisionNumberTrait;
 use District5\Mondoc\Db\Service\MondocAbstractService;
-use District5\Mondoc\Helper\HasTrait;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
+use District5\Mondoc\Helper\HasTraitHelper;
 use District5\Mondoc\MondocConfig;
 
 /**
@@ -53,6 +55,8 @@ trait InsertMultiTrait
      *
      * @return bool
      *
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-insertMany/
      */
     public static function insertMulti(array $models, array $insertOptions = []): bool
@@ -89,15 +93,15 @@ trait InsertMultiTrait
 
         $data = [];
         foreach ($modelsForThisService as $model) {
-            $hasModified = HasTrait::has($model, MondocModifiedDateTrait::class);
-            $hasCreated = HasTrait::has($model, MondocCreatedDateTrait::class);
+            $hasModified = HasTraitHelper::has($model, MondocModifiedDateTrait::class);
+            $hasCreated = HasTraitHelper::has($model, MondocCreatedDateTrait::class);
             $hasRevision = $model->isRevisionNumberModel();
             /* @var $model MondocCreatedDateTrait for PhpStorm purposes only */
-            if ($hasCreated === true && $model->getCreatedDate(false) === null) {
+            if ($hasCreated === true && $model->getCreatedDate() === null) {
                 $model->touchCreatedDate();
             }
             /* @var $model MondocModifiedDateTrait for PhpStorm purposes only */
-            if ($hasModified === true && $model->getModifiedDate(false) === null) {
+            if ($hasModified === true && $model->getModifiedDate() === null) {
                 $model->touchModifiedDate();
             }
             /* @var $model MondocRevisionNumberTrait for PhpStorm purposes only */

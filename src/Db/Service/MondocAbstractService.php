@@ -42,13 +42,15 @@ use District5\Mondoc\Db\Service\Traits\FieldOperationsTrait;
 use District5\Mondoc\Db\Service\Traits\OperatorsTrait;
 use District5\Mondoc\Db\Service\Traits\PaginationTrait;
 use District5\Mondoc\Db\Service\Traits\PersistenceTrait;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\MondocConfig;
 use District5\MondocBuilder\QueryBuilder;
 use MongoDB\Collection;
 use MongoDB\Database;
 
 /**
- * Class MondocAbstractService.
+ * Abstract class MondocAbstractService.
  *
  * @package District5\Mondoc\Db\Service
  */
@@ -70,6 +72,7 @@ abstract class MondocAbstractService
      * Retrieve the Database instance.
      *
      * @return null|Database
+     * @throws MondocConfigConfigurationException
      */
     public static function getMongo(): ?Database
     {
@@ -94,6 +97,7 @@ abstract class MondocAbstractService
      * @param string|null $clz
      *
      * @return Collection
+     * @throws MondocConfigConfigurationException
      */
     public static function getCollection(string|null $clz = null): Collection
     {
@@ -134,6 +138,7 @@ abstract class MondocAbstractService
 
     /**
      * @return string
+     * @throws MondocServiceMapErrorException
      */
     public static function getModelClass(): string
     {

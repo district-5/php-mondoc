@@ -30,6 +30,7 @@
 
 namespace District5\Mondoc\Db\Service\Traits\Atomic;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use MongoDB\BSON\ObjectId;
 
 /**
@@ -48,6 +49,7 @@ trait DecrementTrait
      * @param int $delta
      *
      * @return bool
+     * @throws MondocConfigConfigurationException
      */
     public static function dec(ObjectId $id, string $field, int $delta = 1): bool
     {
@@ -64,6 +66,7 @@ trait DecrementTrait
      * @param ObjectId $id
      * @param array $fieldsToDeltas
      * @return bool
+     * @throws MondocConfigConfigurationException
      * @example
      *      ->decMulti(
      *          $model->getObjectId(),

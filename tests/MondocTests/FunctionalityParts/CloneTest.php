@@ -31,6 +31,8 @@
 
 namespace District5Tests\MondocTests\FunctionalityParts;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\MondocConfig;
 use District5Tests\MondocTests\MondocBaseTest;
 use District5Tests\MondocTests\TestObjects\Model\MyDuplicateModel;
@@ -45,6 +47,10 @@ use District5Tests\MondocTests\TestObjects\Service\MyService;
  */
 class CloneTest extends MondocBaseTest
 {
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testCloneModelWithSave()
     {
         $m = new MyModel();
@@ -61,6 +67,10 @@ class CloneTest extends MondocBaseTest
         $this->assertTrue($clone->delete());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testCloneModelWithAlternateModel()
     {
         $m = new MyModel();
@@ -90,6 +100,10 @@ class CloneTest extends MondocBaseTest
         $this->assertTrue($clone2->delete());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testCloneModelWithoutSave()
     {
         $m = new MyModel();
@@ -108,8 +122,12 @@ class CloneTest extends MondocBaseTest
         $this->assertTrue($m->delete()); // the clone has not been saved
     }
 
+    /**
+     * @throws MondocConfigConfigurationException
+     */
     public function testCloneModelWithInvalidModel()
     {
+        $this->expectException(MondocServiceMapErrorException::class);
         $m = new MyModel();
         $m->setAge(102);
         $m->setName('Joe');

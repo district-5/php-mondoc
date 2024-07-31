@@ -35,6 +35,8 @@ use District5\Mondoc\Db\Model\Traits\MondocMongoTypeTrait;
 use District5\Mondoc\Db\Model\Traits\MondocObjectIdTrait;
 use District5\Mondoc\Db\Model\Traits\PresetObjectIdTrait;
 use District5\Mondoc\Db\Service\MondocAbstractService;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\MondocConfig;
 use MongoDB\BSON\ObjectId;
 use MongoDB\Collection;
@@ -126,22 +128,28 @@ class MondocAbstractModel extends MondocAbstractSubModel
      *
      * @return bool
      *
-     * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-insertOne/
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
+     * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-insertOne/
      */
     public function save(array $insertOrUpdateOptions = []): bool
     {
-        if (null !== $serviceFQCN = MondocConfig::getInstance()->getServiceForModel(get_called_class())) {
-            /* @var $serviceFQCN MondocAbstractService (it's not, it's actually a string) */
-            return $serviceFQCN::saveModel($this, $insertOrUpdateOptions);
-        }
-        return false;
+        $serviceFQCN = MondocConfig::getInstance()->getServiceForModel(get_called_class());
+        /* @var $serviceFQCN MondocAbstractService (it's not, it's actually a string) */
+
+        return $serviceFQCN::saveModel(
+            $this,
+            $insertOrUpdateOptions
+        );
     }
 
     /**
      * Delete this model. Must be overridden in your code. Inner logic might be `return MyService::deleteModel($model);`.
      *
      * @return bool
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
      */
     public function delete(): bool
     {
@@ -149,20 +157,12 @@ class MondocAbstractModel extends MondocAbstractSubModel
             return false;
         }
 
-        if (null !== $serviceFQCN = MondocConfig::getInstance()->getServiceForModel(get_called_class())) {
-            /* @var $serviceFQCN MondocAbstractService (it's not, it's actually a string) */
-            return $serviceFQCN::delete($this->getObjectId());
-        }
+        $serviceFQCN = MondocConfig::getInstance()->getServiceForModel(get_called_class());
+        /* @var $serviceFQCN MondocAbstractService (it's not, it's actually a string) */
 
-        if ($this->_mondocCollection === null) {
-            return false;
-        }
-
-        $delete = $this->_mondocCollection->deleteOne([
-            '_id' => $this->getObjectId()
-        ]);
-
-        return 1 === $delete->getDeletedCount();
+        return $serviceFQCN::deleteModel(
+            $this
+        );
     }
 
     /**
@@ -227,6 +227,8 @@ class MondocAbstractModel extends MondocAbstractSubModel
      * @param string $field
      * @param int $delta
      * @return bool
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
      */
     public function dec(string $field, int $delta = 1): bool
     {
@@ -240,12 +242,12 @@ class MondocAbstractModel extends MondocAbstractSubModel
      * @param string $field
      * @param int $delta
      * @return bool
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
      */
     public function inc(string $field, int $delta = 1): bool
     {
-        if (null === $service = MondocConfig::getInstance()->getServiceForModel(get_called_class())) {
-            return false;
-        }
+        $service = MondocConfig::getInstance()->getServiceForModel(get_called_class());
         /* @var $service MondocAbstractService */
         if ($this->hasObjectId() === false) {
             $this->{$field} += $delta;
@@ -266,6 +268,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
      * @param array $data
      *
      * @return ObjectId[]
+     * @noinspection PhpUnused
      */
     protected function convertArrayOfMongoIdsToMongoIds(array $data): array
     {
@@ -280,7 +283,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
     }
 
     /**
-     * Export the model as a JSON encodable array, omitting certain fields.
+     * Export the model as a JSON encodable array, optionally omitting certain fields.
      *
      * @param array $omitKeys (optional) fields to omit.
      * @return array

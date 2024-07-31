@@ -31,6 +31,8 @@
 
 namespace District5Tests\MondocTests\FunctionalityParts;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\MondocBaseTest;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
 use District5Tests\MondocTests\TestObjects\Service\MyService;
@@ -44,6 +46,10 @@ use District5Tests\MondocTests\TestObjects\Service\MyService;
  */
 class AverageSumAverageTest extends MondocBaseTest
 {
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testAverageSumAverageWorkCorrectly()
     {
         MyService::deleteMulti([]);
@@ -63,6 +69,9 @@ class AverageSumAverageTest extends MondocBaseTest
         $this->runSum();
     }
 
+    /**
+     * @throws MondocConfigConfigurationException
+     */
     private function runAverage(): void
     {
         $this->assertEquals(4, MyService::aggregate()->getAverage('age'));
@@ -70,6 +79,9 @@ class AverageSumAverageTest extends MondocBaseTest
         $this->assertEquals(3, MyService::aggregate()->getAverage('age', ['name' => ['$eq' => 'Joe']]));
     }
 
+    /**
+     * @throws MondocConfigConfigurationException
+     */
     private function runSum(): void
     {
         $this->assertEquals(12, MyService::aggregate()->getSum('age'));

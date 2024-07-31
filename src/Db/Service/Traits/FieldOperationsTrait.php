@@ -31,6 +31,7 @@
 namespace District5\Mondoc\Db\Service\Traits;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 
 /**
  * Trait FieldOperationsTrait.
@@ -40,27 +41,13 @@ use District5\Mondoc\Db\Model\MondocAbstractModel;
 trait FieldOperationsTrait
 {
     /**
-     * Remove a key from a single document.
-     *
-     * @param string $key
-     * @param MondocAbstractModel $model
-     *
-     * @return bool
-     * @deprecated Use removeField instead
-     * @see self::removeField
-     */
-    public static function removeKey(string $key, MondocAbstractModel $model): bool
-    {
-        return self::removeField($key, $model);
-    }
-
-    /**
      * Remove a field from a single document.
      *
      * @param string $field
      * @param MondocAbstractModel $model
      *
      * @return bool
+     * @throws MondocConfigConfigurationException
      */
     public static function removeField(string $field, MondocAbstractModel $model): bool
     {

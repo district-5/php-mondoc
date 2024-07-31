@@ -31,6 +31,8 @@
 namespace District5\Mondoc\Db\Service\Traits;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\MondocTypes;
 use District5\Mondoc\Helper\MondocPaginationHelper;
 use InvalidArgumentException;
@@ -52,6 +54,7 @@ trait PaginationTrait
      *
      * @return MondocPaginationHelper
      *
+     * @throws MondocConfigConfigurationException
      * @see PaginationTrait::getPaginationHelperForObjectIdPagination
      */
     public static function getPaginationHelper(int $currentPageNumber, int $perPage, array $filter = []): MondocPaginationHelper
@@ -71,6 +74,7 @@ trait PaginationTrait
      *
      * @return MondocPaginationHelper
      *
+     * @throws MondocConfigConfigurationException
      * @see PaginationTrait::getPaginationHelper
      */
     public static function getPaginationHelperForObjectIdPagination(int $perPage, array $filter = []): MondocPaginationHelper
@@ -90,6 +94,8 @@ trait PaginationTrait
      * @param string|null $sortByField (optional) default '_id'
      * @param int $sortDirection (optional) default -1
      * @return MondocAbstractModel[]
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
      */
     public static function getPage(MondocPaginationHelper $paginator, array $filter = [], ?string $sortByField = '_id', int $sortDirection = -1): array
     {
@@ -110,11 +116,12 @@ trait PaginationTrait
      * Get a page of results for a specific query filter. This method is to be used for _id based pagination.
      *
      * @param MondocPaginationHelper $paginator
-     * @param array $filter
      * @param string|ObjectId|null $currentId
      * @param int $sortDirection
+     * @param array $filter
      * @return MondocAbstractModel[]
-     * @throws InvalidArgumentException
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
      */
     public static function getPageByByObjectIdPagination(MondocPaginationHelper $paginator, ObjectId|string|null $currentId, int $sortDirection = -1, array $filter = []): array
     {

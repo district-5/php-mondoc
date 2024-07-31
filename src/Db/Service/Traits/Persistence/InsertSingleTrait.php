@@ -31,6 +31,7 @@
 namespace District5\Mondoc\Db\Service\Traits\Persistence;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 
 /**
  * Trait InsertSingleTrait.
@@ -44,9 +45,9 @@ trait InsertSingleTrait
      *
      * @param MondocAbstractModel $model
      * @param array $insertOptions
-
      * @return bool
      *
+     * @throws MondocConfigConfigurationException
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-insertOne/
      */
     public static function insert(MondocAbstractModel $model, array $insertOptions = []): bool

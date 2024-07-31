@@ -30,6 +30,7 @@
 
 namespace District5\Mondoc\Db\Service\Traits;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\MondocBuilder\QueryBuilder;
 
 /**
@@ -46,6 +47,8 @@ trait CountableTrait
      * @param mixed $value
      *
      * @return int
+     * @throws MondocConfigConfigurationException
+     * @throws MondocConfigConfigurationException
      */
     public static function countWhereKeyEqualsValue(string $key, mixed $value): int
     {
@@ -61,6 +64,7 @@ trait CountableTrait
      * @param array $options (optional)
      *
      * @return int
+     * @throws MondocConfigConfigurationException
      */
     public static function countAll(array $query = [], array $options = []): int
     {
@@ -79,6 +83,7 @@ trait CountableTrait
      * @param QueryBuilder $builder
      *
      * @return int
+     * @throws MondocConfigConfigurationException
      */
     public static function countAllByQueryBuilder(QueryBuilder $builder): int
     {
@@ -99,6 +104,7 @@ trait CountableTrait
      * @param array $options (optional)
      *
      * @return int
+     * @throws MondocConfigConfigurationException
      */
     public static function estimateDocumentCount(array $options = []): int
     {

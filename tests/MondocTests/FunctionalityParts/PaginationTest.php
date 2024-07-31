@@ -31,6 +31,8 @@
 
 namespace District5Tests\MondocTests\FunctionalityParts;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\MondocBuilder\QueryBuilder;
 use District5Tests\MondocTests\MondocBaseTest;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
@@ -47,6 +49,10 @@ use MongoDB\BSON\ObjectId;
  */
 class PaginationTest extends MondocBaseTest
 {
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testPagination()
     {
         MyService::deleteMulti([]);
@@ -117,6 +123,10 @@ class PaginationTest extends MondocBaseTest
         $this->assertEquals($idsSaved[1]->__toString(), MyService::getPageByByObjectIdPagination($paginator, $idsSaved[2], -1, [])[0]->getObjectIdString());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testInvalidSortDirectionForPaginationByObjectId()
     {
         $this->expectException(InvalidArgumentException::class);

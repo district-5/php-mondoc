@@ -30,6 +30,7 @@
 
 namespace District5\Mondoc\Db\Service\Traits\Aggregation;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use MongoDB\Collection;
 use MongoDB\Driver\Cursor;
 use MongoDB\Model\BSONDocument;
@@ -49,6 +50,7 @@ trait AverageFieldTrait
      *
      * @return float|int
      * @noinspection DuplicatedCode
+     * @throws MondocConfigConfigurationException
      */
     public function getAverage(string $fieldName, array $filter = []): float|int
     {

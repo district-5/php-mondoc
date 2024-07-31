@@ -32,6 +32,7 @@ namespace District5\Mondoc\Db\Service\Traits;
 
 use District5\Mondoc\Db\Service\Traits\Atomic\DecrementTrait;
 use District5\Mondoc\Db\Service\Traits\Atomic\IncrementTrait;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use MongoDB\BSON\ObjectId;
 
 /**
@@ -51,6 +52,7 @@ trait AtomicTrait
      * @param array $query
      *
      * @return bool
+     * @throws MondocConfigConfigurationException
      */
     protected static function atomic(ObjectId $id, array $query): bool
     {

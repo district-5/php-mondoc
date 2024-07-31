@@ -31,6 +31,8 @@
 
 namespace District5Tests\MondocTests\FunctionalityParts;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\MondocBaseTest;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
 use District5Tests\MondocTests\TestObjects\Model\NoServiceModel;
@@ -43,6 +45,10 @@ use District5Tests\MondocTests\TestObjects\Service\MyService;
  */
 class RemoveKeysAndAtomicTest extends MondocBaseTest
 {
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testRemovingKey()
     {
         $m = new MyModel();
@@ -52,18 +58,35 @@ class RemoveKeysAndAtomicTest extends MondocBaseTest
 
         $this->assertEquals(101, MyService::getById($m->getObjectId())->getAge());
         $m->addUnmappedKey('age', 101); // hack to get it into unmapped
-        $this->assertTrue(MyService::removeKey('age', $m)); // TODO: Change to removeField after deprecation
+        $this->assertTrue(MyService::removeField('age', $m));
         $this->assertFalse(MyService::removeField('noSuchField', $m));
         $this->assertEquals(0, MyService::getById($m->getObjectId())->getAge()); // 0 is the default value
     }
 
-    public function testIncrementDecrementInvalidModel()
+    /**
+     * @throws MondocConfigConfigurationException
+     */
+    public function testIncrementInvalidModel()
     {
+        $this->expectException(MondocServiceMapErrorException::class);
         $m = new NoServiceModel();
         $this->assertFalse($m->inc('age', 2));
+    }
+
+    /**
+     * @throws MondocConfigConfigurationException
+     */
+    public function testDecrementInvalidModel()
+    {
+        $this->expectException(MondocServiceMapErrorException::class);
+        $m = new NoServiceModel();
         $this->assertFalse($m->dec('age', 2));
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testIncrementDecrementModelShortcuts()
     {
         $m = new MyModel();
@@ -98,6 +121,10 @@ class RemoveKeysAndAtomicTest extends MondocBaseTest
         $this->assertEquals(88, MyService::getById($m->getObjectId())->getAge());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testIncrementDecrementMulti()
     {
         $m = new MyModel();

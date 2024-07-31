@@ -30,6 +30,8 @@
 
 namespace MondocTests;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\MondocBuilder\QueryBuilder;
 use District5\MondocBuilder\QueryTypes\ValueEqualTo;
 use District5Tests\MondocTests\MondocBaseTest;
@@ -46,6 +48,10 @@ use MongoDB\BSON\ObjectId;
  */
 class BuilderTest extends MondocBaseTest
 {
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testPersistAndQuery()
     {
         MyService::deleteMulti([]);

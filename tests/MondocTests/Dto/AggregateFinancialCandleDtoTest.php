@@ -33,6 +33,8 @@ namespace District5Tests\MondocTests\Dto;
 
 use District5\Date\Date;
 use District5\Mondoc\Dto\AggregateFinancialCandleDto;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\TestObjects\Model\FinancialCandleModel;
 use District5Tests\MondocTests\TestObjects\Service\FinancialCandleService;
 use InvalidArgumentException;
@@ -57,6 +59,10 @@ class AggregateFinancialCandleDtoTest extends AbstractFinancialTest
         $this->assertEquals($date, $dto->getDate());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testDatabaseInteractionsForFinancialCandles()
     {
         FinancialCandleService::deleteMulti([]);
@@ -137,6 +143,9 @@ class AggregateFinancialCandleDtoTest extends AbstractFinancialTest
         $this->assertEquals(1.8, $reverseCandles[5]->getClose());
     }
 
+    /**
+     * @throws MondocConfigConfigurationException
+     */
     public function testQueryingFinancialCandlesWithInvalidSortThrowsException()
     {
         $this->expectException(InvalidArgumentException::class);

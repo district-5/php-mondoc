@@ -32,6 +32,8 @@ namespace District5\Mondoc\Db\Service\Traits;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Service\MondocAbstractService;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\MondocTypes;
 use District5\MondocBuilder\QueryBuilder;
 use MongoDB\BSON\ObjectId;
@@ -50,6 +52,8 @@ trait GetSingleTrait
      * @param QueryBuilder $builder
      *
      * @return MondocAbstractModel|null
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
      */
     public static function getOneByQueryBuilder(QueryBuilder $builder): ?MondocAbstractModel
     {
@@ -66,6 +70,8 @@ trait GetSingleTrait
      * @param array $options
      *
      * @return MondocAbstractModel|null
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
      */
     public static function getOneByCriteria(array $filter = [], array $options = []): ?MondocAbstractModel
     {
@@ -102,6 +108,8 @@ trait GetSingleTrait
      * @param string|ObjectId $id
      *
      * @return null|MondocAbstractModel
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
      */
     public static function getById(ObjectId|string $id): ?MondocAbstractModel
     {
@@ -122,6 +130,8 @@ trait GetSingleTrait
      * @param mixed $value
      *
      * @return MondocAbstractModel|null
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
      */
     public static function getOneWhereKeyEqualsValue(string $key, mixed $value): ?MondocAbstractModel
     {
@@ -137,6 +147,8 @@ trait GetSingleTrait
      * @param mixed $value
      *
      * @return MondocAbstractModel|null
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
      */
     public static function getOneWhereKeyDoesNotEqualValue(string $key, mixed $value): ?MondocAbstractModel
     {

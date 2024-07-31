@@ -34,6 +34,8 @@ namespace District5Tests\MondocTests\Helper;
 use DateTime;
 use DateTimeInterface;
 use District5\Date\Date;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\MondocTypes;
 use District5Tests\MondocTests\MondocBaseTest;
 use District5Tests\MondocTests\TestObjects\Model\AllTypesModel;
@@ -258,6 +260,8 @@ class TypesTest extends MondocBaseTest
 
     /**
      * @throws JsonException
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
      */
     public function testAsJsonEncodableOption()
     {

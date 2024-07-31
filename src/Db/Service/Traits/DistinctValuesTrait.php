@@ -30,6 +30,8 @@
 
 namespace District5\Mondoc\Db\Service\Traits;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+
 /**
  * Trait DistinctValuesTrait.
  *
@@ -45,6 +47,7 @@ trait DistinctValuesTrait
      * @param array $options (optional)
      *
      * @return array
+     * @throws MondocConfigConfigurationException
      */
     public static function getDistinctValuesForKey(string $key, array $filter = [], array $options = []): array
     {

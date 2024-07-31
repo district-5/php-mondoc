@@ -32,6 +32,8 @@ namespace District5\Mondoc\Db\Model\Traits;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Model\MondocAbstractSubModel;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 
 /**
  * Trait MondocCloneableTrait.
@@ -44,6 +46,8 @@ trait MondocCloneableTrait
      * @param bool $save
      * @param string|MondocAbstractModel|null $clz
      * @return MondocAbstractModel|static|null
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
      */
     public function clone(bool $save = false, string|MondocAbstractModel|null $clz = null): MondocAbstractModel|static|null
     {
@@ -61,11 +65,8 @@ trait MondocCloneableTrait
         $new->clearPresetObjectId();
         $new->clearDirty();
         if ($save === true) {
-            if ($new->save() === true) {
-                return $new;
-            }
+            return $new->save() === true ? $new : null;
 
-            return null;
         }
         return $new;
     }

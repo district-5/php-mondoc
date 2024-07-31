@@ -30,6 +30,7 @@
 
 namespace District5\Mondoc\Db\Service\Traits\Aggregation;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use MongoDB\Collection;
 use MongoDB\Driver\Cursor;
 use MongoDB\Model\BSONDocument;
@@ -49,6 +50,8 @@ trait MaxFieldTrait
      *
      * @return mixed|null
      * @noinspection DuplicatedCode
+     * @throws MondocConfigConfigurationException
+     * @throws MondocConfigConfigurationException
      */
     public function getMax(string $fieldName, array $filter = []): mixed
     {

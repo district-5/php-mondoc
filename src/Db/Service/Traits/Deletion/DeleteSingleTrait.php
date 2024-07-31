@@ -30,6 +30,7 @@
 
 namespace District5\Mondoc\Db\Service\Traits\Deletion;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\BSON\ObjectId;
 use MongoDB\DeleteResult;
@@ -47,6 +48,7 @@ trait DeleteSingleTrait
      * @param string|ObjectId $id
      *
      * @return bool
+     * @throws MondocConfigConfigurationException
      */
     public static function delete(ObjectId|string $id): bool
     {

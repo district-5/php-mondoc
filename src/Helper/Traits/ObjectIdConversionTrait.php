@@ -30,14 +30,8 @@
 
 namespace District5\Mondoc\Helper\Traits;
 
-use DateTime;
-use District5\Date\Date;
 use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\BSON\ObjectId;
-use MongoDB\BSON\UTCDateTime;
-use MongoDB\Model\BSONArray;
-use MongoDB\Model\BSONDocument;
-use stdClass;
 
 /**
  * Trait ObjectIdConversionTrait

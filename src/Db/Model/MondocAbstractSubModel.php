@@ -40,7 +40,7 @@ use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
 
 /**
- * Trait MondocAbstractSubModel.
+ * Abstract class MondocAbstractSubModel.
  *
  * @package District5\Mondoc\Db\Model
  */

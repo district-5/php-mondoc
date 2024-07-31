@@ -30,6 +30,7 @@
 
 namespace District5\Mondoc\Db\Service\Traits\Aggregation;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use MongoDB\Collection;
 use MongoDB\Driver\Cursor;
 use MongoDB\Model\BSONDocument;
@@ -51,6 +52,7 @@ trait PercentileOfNumberFieldTrait
      * @param array $filter
      *
      * @return null|float|int
+     * @throws MondocConfigConfigurationException
      */
     public function getPercentile(string $fieldName, float $percentile, int $sortDirection = 1, array $filter = []): float|int|null
     {

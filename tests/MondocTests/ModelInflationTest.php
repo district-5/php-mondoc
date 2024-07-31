@@ -31,6 +31,8 @@
 
 namespace District5Tests\MondocTests;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\TestObjects\Model\InvalidNestedModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
 use District5Tests\MondocTests\TestObjects\Model\SingleAndMultiNestedModel;
@@ -121,6 +123,10 @@ class ModelInflationTest extends MondocBaseTest
         $this->assertFalse($inflated->isModelVersionX(1));
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testInflateMultipleArrays()
     {
         $data = [

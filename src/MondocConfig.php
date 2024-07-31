@@ -30,6 +30,8 @@
 
 namespace District5\Mondoc;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use MongoDB\Collection;
 use MongoDB\Database;
 
@@ -100,29 +102,33 @@ class MondocConfig
      * @param string $name
      * @param string $connectionId
      *
-     * @return null|Collection
+     * @return Collection
+     * @throws MondocConfigConfigurationException
      */
-    public function getCollection(string $name, string $connectionId = 'default'): ?Collection
+    public function getCollection(string $name, string $connectionId = 'default'): Collection
     {
-        if (null !== $database = $this->getDatabase($connectionId)) {
-            return $database->selectCollection($name);
-        }
-
-        return null;
+        return $this->getDatabase(
+            $connectionId
+        )->selectCollection(
+            $name
+        );
     }
 
     /**
      * @param string $connectionId
      *
-     * @return null|Database
+     * @return Database
+     * @throws MondocConfigConfigurationException
      */
-    public function getDatabase(string $connectionId = 'default'): ?Database
+    public function getDatabase(string $connectionId = 'default'): Database
     {
-        if (array_key_exists($connectionId, $this->databases)) {
-            return $this->databases[$connectionId];
+        if (!array_key_exists($connectionId, $this->databases)) {
+            throw new MondocConfigConfigurationException(
+                'MondocConfig: database connection not found for connection ID: ' . $connectionId
+            );
         }
 
-        return null;
+        return $this->databases[$connectionId];
     }
 
     /**
@@ -162,19 +168,23 @@ class MondocConfig
 
     /**
      * @param string $modelFQCN
-     * @return string|null
+     * @return string
+     * @throws MondocServiceMapErrorException
      */
-    public function getServiceForModel(string $modelFQCN): ?string
+    public function getServiceForModel(string $modelFQCN): string
     {
-        if (array_key_exists($modelFQCN, $this->serviceMap)) {
-            return $this->serviceMap[$modelFQCN];
+        if (!array_key_exists($modelFQCN, $this->serviceMap)) {
+            throw new MondocServiceMapErrorException(
+                'MondocConfig: service not found for model: ' . $modelFQCN
+            );
         }
-        return null;
+        return $this->serviceMap[$modelFQCN];
     }
 
     /**
      * @param string $serviceFQCN
      * @return string|null
+     * @throws MondocServiceMapErrorException
      */
     public function getModelForService(string $serviceFQCN): ?string
     {
@@ -188,7 +198,10 @@ class MondocConfig
                 return $modelFQCN;
             }
         }
-        return null;
+
+        throw new MondocServiceMapErrorException(
+            'MondocConfig: model not found for service: ' . $serviceFQCN
+        );
     }
 
     /**

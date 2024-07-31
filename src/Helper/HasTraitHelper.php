@@ -31,11 +31,11 @@
 namespace District5\Mondoc\Helper;
 
 /**
- * Class HasTrait.
+ * Class HasTraitHelper.
  *
  * @package District5\Mondoc\Helper
  */
-class HasTrait
+class HasTraitHelper
 {
     /**
      * @param object $object

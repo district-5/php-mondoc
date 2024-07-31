@@ -31,14 +31,11 @@
 namespace District5\Mondoc\Helper;
 
 use DateTime;
-use District5\Date\Date;
 use District5\Mondoc\Helper\Traits\ArrayConversionTrait;
 use District5\Mondoc\Helper\Traits\DateObjectConversionTrait;
 use District5\Mondoc\Helper\Traits\ObjectIdConversionTrait;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
-use MongoDB\Model\BSONArray;
-use MongoDB\Model\BSONDocument;
 use stdClass;
 
 /**

@@ -31,11 +31,9 @@
 namespace District5\Mondoc\Db\Model\Traits;
 
 use DateTime;
-use District5\Mondoc\Helper\MondocTypes;
 use District5\Mondoc\Helper\Traits\ArrayConversionTrait;
 use District5\Mondoc\Helper\Traits\DateObjectConversionTrait;
 use District5\Mondoc\Helper\Traits\ObjectIdConversionTrait;
-use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
 /**

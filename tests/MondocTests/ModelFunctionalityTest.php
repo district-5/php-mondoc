@@ -32,6 +32,8 @@
 namespace District5Tests\MondocTests;
 
 use DateTime;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\MondocBuilder\QueryBuilder;
 use District5\MondocBuilder\QueryTypes\ValueEqualTo;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
@@ -51,6 +53,9 @@ use MongoDB\Model\BSONDocument;
  */
 class ModelFunctionalityTest extends MondocBaseTest
 {
+    /**
+     * @throws MondocConfigConfigurationException
+     */
     public function testGetCollection()
     {
         $collection = MyService::getCollection(MyService::class);
@@ -61,6 +66,10 @@ class ModelFunctionalityTest extends MondocBaseTest
         );
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testDateMethods()
     {
         $nowDate = new DateTime();
@@ -78,6 +87,23 @@ class ModelFunctionalityTest extends MondocBaseTest
         /** @noinspection PhpRedundantOptionalArgumentInspection */
         $this->assertEquals($m->getDate(false)->format('Y-m-d H:i:s'), $found->getDate(false)->format('Y-m-d H:i:s'));
         $this->assertTrue($found->delete());
+    }
+
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
+    public function testDeleteWorksAsExpected()
+    {
+        $m = new MyModel();
+        $m->setAge(2);
+        $m->setName('Joe');
+        $this->assertTrue($m->save());
+        $this->assertTrue($m->hasObjectId());
+        $this->assertTrue($m->delete());
+        $this->assertFalse($m->hasObjectId());
+
+        $this->assertFalse($m->delete()); // already deleted, no ObjectId now
     }
 
     public function testBasicModelMethods()
@@ -113,6 +139,10 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertEquals(['foo' => 'bar'], $m->getArrayFromArray(['foo' => 'bar']));
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testModelHasAndDoesNotHaveIds()
     {
         $m = new MyModel();
@@ -132,6 +162,10 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertTrue($m->delete());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testGetWhereEqualOrNotEqual()
     {
         MyService::deleteMulti([]);
@@ -149,6 +183,10 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertTrue($m->delete());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testModelExistence()
     {
         $m = new MyModel();
@@ -181,12 +219,20 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertTrue($m->delete());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testGetByIdWhereEmptyOrInvalidIds()
     {
         $value = MyService::getById('foo');
         $this->assertNull($value);
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testGetByIdsWhereEmptyOrInvalidIds()
     {
         $value = MyService::getByIds([]);
@@ -198,6 +244,10 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertEmpty($value);
     }
 
+    /**
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
+     */
     public function testPersistAndQuery()
     {
 

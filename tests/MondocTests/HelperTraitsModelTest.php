@@ -33,6 +33,8 @@ namespace District5Tests\MondocTests;
 
 use DateTime;
 use District5\Date\Date;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
 use District5Tests\MondocTests\TestObjects\Model\HelperTraitsModel;
 use District5Tests\MondocTests\TestObjects\Model\HelperTraitsOtherModel;
@@ -49,6 +51,9 @@ use MongoDB\BSON\UTCDateTime;
  */
 class HelperTraitsModelTest extends MondocBaseTest
 {
+    /**
+     * @throws MondocConfigConfigurationException
+     */
     public function testGetCollection()
     {
         $collection = HelperTraitsService::getCollection(HelperTraitsService::class);
@@ -78,6 +83,10 @@ class HelperTraitsModelTest extends MondocBaseTest
     }
 
     /** @noinspection PhpRedundantOptionalArgumentInspection */
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testFullVersioningFunctionality()
     {
         $m = new HelperTraitsModel();
@@ -149,6 +158,10 @@ class HelperTraitsModelTest extends MondocBaseTest
         $this->assertTrue($traitModel->isRevisionNumberModel());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testInsertMultiOnModelsWithTraits()
     {
         $model = new HelperTraitsModel();

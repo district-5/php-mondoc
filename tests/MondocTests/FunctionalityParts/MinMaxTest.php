@@ -31,6 +31,8 @@
 
 namespace District5Tests\MondocTests\FunctionalityParts;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\MondocBaseTest;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
 use District5Tests\MondocTests\TestObjects\Service\MyService;
@@ -44,6 +46,10 @@ use District5Tests\MondocTests\TestObjects\Service\MyService;
  */
 class MinMaxTest extends MondocBaseTest
 {
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testMinNumber()
     {
         MyService::deleteMulti([]);

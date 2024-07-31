@@ -30,6 +30,8 @@
 
 namespace District5Tests\MondocTests;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\TestObjects\Model\FieldAliasTestModel;
 use District5Tests\MondocTests\TestObjects\Service\FieldAliasTestService;
 use MongoDB\BSON\ObjectId;
@@ -43,6 +45,10 @@ use MongoDB\BSON\ObjectId;
  */
 class FieldAliasTest extends MondocBaseTest
 {
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testFieldMap()
     {
         FieldAliasTestService::deleteMulti([]);
@@ -80,6 +86,10 @@ class FieldAliasTest extends MondocBaseTest
         $this->assertTrue($third->delete());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testFieldMapNested()
     {
         FieldAliasTestService::deleteMulti([]);

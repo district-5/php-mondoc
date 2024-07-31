@@ -30,6 +30,7 @@
 
 namespace District5\Mondoc\Db\Service\Traits\Deletion;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use MongoDB\DeleteResult;
 
 /**
@@ -46,6 +47,7 @@ trait DeleteMultiTrait
      * @param array $options (optional)
      *
      * @return int
+     * @throws MondocConfigConfigurationException
      */
     public static function deleteMulti(array $query, array $options = []): int
     {

@@ -30,9 +30,8 @@
 
 namespace District5\Mondoc\Db\Service\Traits\Persistence;
 
-use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\MondocBuilder\QueryBuilder;
-use MongoDB\Collection;
 
 /**
  * Trait UpdateMultiTrait.
@@ -51,6 +50,7 @@ trait UpdateMultiTrait
      *
      * @return bool
      *
+     * @throws MondocConfigConfigurationException
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
      */
     public static function updateMany(array $filter, array $update, array $updateOptions = []): bool
@@ -71,6 +71,7 @@ trait UpdateMultiTrait
      * @param QueryBuilder $queryBuilder
      * @param array $update
      * @return bool
+     * @throws MondocConfigConfigurationException
      */
     public static function updateManyByQueryBuilder(QueryBuilder $queryBuilder, array $update): bool
     {

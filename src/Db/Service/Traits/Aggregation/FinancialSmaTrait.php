@@ -60,18 +60,30 @@ trait FinancialSmaTrait
      * @return AggregateSmaDto[]
      *
      * @throws Exception
-     * @example $this->getFinancialSma(
-     *      $symbolField = 'pair',
-     *      $symbolValue = 'ETH-USD',
-     *      $from = new DateTime('2020-01-01 00:00:00'),
-     *      $to = new DateTime('2020-01-07 23:59:59'),
-     *      $dateField = 'createdDate',
-     *      $priceField = 'price'
-     *      $numGroupMinutes = 5, // 5 minute granularity
-     *      $smaNumPeriods = 7, // 7 periods
-     *      $sortDirection = 1, // 1 = ascending, -1 = descending
-     *      $additionalFilter = ['platform' => 'binance']
-     * );
+     * @example
+     *      $symbolField = 'pair';
+     *      $symbolValue = 'ETH-USD';
+     *      $from = new DateTime('2020-01-01 00:00:00');
+     *      $to = new DateTime('2020-01-07 23:59:59');
+     *      $dateField = 'createdDate';
+     *      $priceField = 'price';
+     *      $numGroupMinutes = 5; // 5 minute granularity
+     *      $smaNumPeriods = 7; // 7 periods
+     *      $sortDirection = 1; // 1 = ascending, -1 = descending
+     *      $additionalFilter = ['platform' => 'binance'];
+     *
+     *      $smaData = $this->getFinancialSma(
+     *          $symbolField,
+     *          $symbolValue,
+     *          $from,
+     *          $to,
+     *          $dateField,
+     *          $priceField,
+     *          $numGroupMinutes,
+     *          $smaNumPeriods,
+     *          $sortDirection,
+     *          $additionalFilter
+     *      );
      */
     public function getFinancialSma(string $symbolField, string $symbolValue, DateTime $from, DateTime $to, string $dateField, string $priceField, int $numGroupMinutes, int $smaNumPeriods, int $sortDirection = 1, array $additionalFilter = []): array
     {

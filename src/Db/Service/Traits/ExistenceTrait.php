@@ -30,6 +30,8 @@
 
 namespace District5\Mondoc\Db\Service\Traits;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\MondocBuilder\QueryBuilder;
 
 /**
@@ -45,6 +47,8 @@ trait ExistenceTrait
      *
      * @param QueryBuilder $builder
      * @return bool
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
      */
     public static function existsWithQueryBuilder(QueryBuilder $builder): bool
     {
@@ -61,6 +65,8 @@ trait ExistenceTrait
      * @param array $criteria
      * @param array $options
      * @return bool
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
      */
     public static function exists(array $criteria, array $options = []): bool
     {

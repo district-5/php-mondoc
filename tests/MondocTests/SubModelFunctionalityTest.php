@@ -30,6 +30,8 @@
 
 namespace District5Tests\MondocTests;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\TestObjects\Model\MyModelWithSub;
 use District5Tests\MondocTests\TestObjects\Model\Subs\AgeSubModel;
 use District5Tests\MondocTests\TestObjects\Model\Subs\AgeWordSubModel;
@@ -45,6 +47,10 @@ use District5Tests\MondocTests\TestObjects\Service\MySubService;
  */
 class SubModelFunctionalityTest extends MondocBaseTest
 {
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testBasicModelMethods()
     {
 
@@ -97,6 +103,10 @@ class SubModelFunctionalityTest extends MondocBaseTest
         $this->assertEquals($id->__toString(), $newM->getObjectIdString());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testMulti()
     {
 

@@ -32,6 +32,8 @@
 namespace District5Tests\MondocTests\FunctionalityParts;
 
 use DateTime;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\MondocBaseTest;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
@@ -46,6 +48,10 @@ use MongoDB\BSON\ObjectId;
  */
 class InsertionTest extends MondocBaseTest
 {
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testInsertMulti()
     {
         $m = new MyModel();
@@ -72,6 +78,10 @@ class InsertionTest extends MondocBaseTest
         $this->assertTrue($mT->delete());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testUpdateDocumentThatDoesntExist()
     {
         $m = new MyModel();
@@ -85,6 +95,10 @@ class InsertionTest extends MondocBaseTest
         $this->assertTrue($m->delete());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testDirtyFieldWithNewKeySet()
     {
         $m = new MyModel();
@@ -124,6 +138,10 @@ class InsertionTest extends MondocBaseTest
         $this->assertTrue($anotherOne->delete());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testInsertMultiWithMultipleModelsAcrossTwoServices()
     {
         $mStart = new MyModel();
@@ -168,6 +186,10 @@ class InsertionTest extends MondocBaseTest
         $this->assertTrue($mT->delete());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testInsertMultiWithOneModel()
     {
         $m = new MyModel();
@@ -185,6 +207,10 @@ class InsertionTest extends MondocBaseTest
         $this->assertTrue($m->delete());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testInsertMultiWithPresetIds()
     {
         $idOne = new ObjectId();
@@ -219,6 +245,10 @@ class InsertionTest extends MondocBaseTest
         $this->assertTrue($mT->delete());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testInsertMultiWithOneModelWithPresetIds()
     {
         $idOne = new ObjectId();
@@ -241,6 +271,10 @@ class InsertionTest extends MondocBaseTest
         $this->assertTrue($m->delete());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testInsertMultiWithNoModels()
     {
         $this->assertTrue(MyService::insertMulti([]));

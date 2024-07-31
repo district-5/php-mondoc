@@ -30,6 +30,7 @@
 
 namespace District5\Mondoc\Db\Service\Traits\Atomic;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use MongoDB\BSON\ObjectId;
 
 /**
@@ -47,6 +48,7 @@ trait IncrementTrait
      * @param int $delta
      *
      * @return bool
+     * @throws MondocConfigConfigurationException
      */
     public static function inc(ObjectId $id, string $field, int $delta = 1): bool
     {
@@ -61,6 +63,7 @@ trait IncrementTrait
      * @param ObjectId $id
      * @param array $fieldsToDeltas
      * @return bool
+     * @throws MondocConfigConfigurationException
      * @example
      *      ->incMulti(
      *          $model->getObjectId(),

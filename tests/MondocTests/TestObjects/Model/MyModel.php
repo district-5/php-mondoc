@@ -32,6 +32,8 @@ namespace District5Tests\MondocTests\TestObjects\Model;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Model\Traits\MondocCloneableTrait;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
 
@@ -54,10 +56,12 @@ class MyModel extends MondocAbstractModel
      */
     protected int $age = 0;
 
-    private $_controlAsArray = false;
+    private bool $_controlAsArray = false;
 
     /**
      * @return bool
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
      */
     public function incrementAge(): bool
     {
@@ -67,6 +71,8 @@ class MyModel extends MondocAbstractModel
 
     /**
      * @return bool
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
      */
     public function decrementAge(): bool
     {

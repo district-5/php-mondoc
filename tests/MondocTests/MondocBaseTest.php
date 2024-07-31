@@ -30,8 +30,7 @@
 
 namespace District5Tests\MondocTests;
 
-use District5\Mondoc\MondocConfig;
-use MondocTests\SingletonDbStore;
+use District5\Mondoc\MondocConfig;;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -45,11 +44,6 @@ abstract class MondocBaseTest extends TestCase
      * @var null|string
      */
     protected string|null $uniqueKey = null;
-
-    /**
-     * @var null|MondocConfig
-     */
-    protected MondocConfig|null $mondoc = null;
 
     /**
      * @return null|string

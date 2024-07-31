@@ -30,6 +30,8 @@
 
 namespace District5Tests\MondocTests;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\MondocConfig;
 use District5Tests\MondocTests\TestObjects\Model\SingleAndMultiNestedModel;
 use District5Tests\MondocTests\TestObjects\Model\Subs\FoodAttributesSubModel;
@@ -57,6 +59,10 @@ class SingleAndNestedTest extends MondocBaseTest
     }
 
     /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testFull()
     {
 
@@ -124,19 +130,10 @@ class SingleAndNestedTest extends MondocBaseTest
         $this->assertEquals('baz', $single->asArray()['bar']);
     }
 
-    public function testDeleteWithoutServiceButCollectionAssigned()
-    {
-        $m = new SingleAndMultiNestedModel();
-        $m->setFriends(['Joe', 'Jane']);
-        $this->assertTrue($m->save());
-        $map = MondocConfig::getInstance()->getServiceMap();
-        $cloneMap = array_merge($map);
-        unset($cloneMap[SingleAndMultiNestedModel::class]);
-        MondocConfig::getInstance()->setServiceMap($cloneMap);
-        $this->assertTrue($m->delete());
-        MondocConfig::getInstance()->setServiceMap($map);
-    }
-
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testPushAndPull()
     {
         $m = new SingleAndMultiNestedModel();
@@ -204,6 +201,7 @@ class SingleAndNestedTest extends MondocBaseTest
         $sub->foo = 'bar';
         $this->assertArrayHasKey('foo', $sub->getUnmappedFields());
         $this->assertEquals('bar', $sub->foo);
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->assertNull($sub->thisDoesntExist);
     }
 }

@@ -30,6 +30,7 @@
 
 namespace District5\Mondoc\Db\Service\Traits\Operators;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use MongoDB\BSON\ObjectId;
 
 /**
@@ -46,6 +47,8 @@ trait PushTrait
      * @param string $field
      * @param string $value
      * @return bool
+     * @throws MondocConfigConfigurationException
+     * @noinspection PhpUnused
      */
     protected static function pushIntoArrayWithFilter(array $filter, string $field, string $value): bool
     {
@@ -66,6 +69,8 @@ trait PushTrait
      * @param string $value
      * @param bool $distinct
      * @return bool
+     * @throws MondocConfigConfigurationException
+     * @noinspection PhpUnused
      */
     protected static function pushIntoArrayById(ObjectId $id, string $field, string $value, bool $distinct = true): bool
     {

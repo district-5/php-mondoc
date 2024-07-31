@@ -1,5 +1,6 @@
 <?php
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\MondocConfig;
 use District5Tests\MondocTests\TestObjects\Model\AllTypesModel;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
@@ -60,4 +61,7 @@ function cleanupCollections($mondoc): void
 }
 
 cleanupCollections($mondoc); // Start with a clean slate
-$mondoc->getDatabase();
+try {
+    $mondoc->getDatabase();
+} catch (MondocConfigConfigurationException $e) {
+}

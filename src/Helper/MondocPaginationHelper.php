@@ -63,17 +63,24 @@ class MondocPaginationHelper
     protected int $skip = 0;
 
     /**
+     * @var array
+     */
+    protected array $filter = [];
+
+    /**
      * MondocPaginationHelper constructor.
      *
      * @param int $totalResults
      * @param int $currentPage
      * @param int $perPage (optional) default 10
+     * @param array $filter
      */
-    public function __construct(int $totalResults, int $currentPage, int $perPage = 10)
+    public function __construct(int $totalResults, int $currentPage, int $perPage = 10, array $filter = [])
     {
         $this->cleanPerPage($perPage);
         $this->cleanCurrentPage($currentPage);
         $this->cleanTotalResults($totalResults);
+        $this->filter = $filter;
         $this->establishTotalPages();
         $this->establishSkip();
     }
@@ -242,6 +249,14 @@ class MondocPaginationHelper
     public function hasNextPage(): bool
     {
         return $this->getCurrentPage() < $this->getTotalPages();
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilter(): array
+    {
+        return $this->filter;
     }
 
     /**

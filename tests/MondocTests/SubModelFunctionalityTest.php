@@ -142,4 +142,13 @@ class SubModelFunctionalityTest extends MondocBaseTest
         $this->assertEquals($mOne->getFoods()[0]->getFood(), $models[0]->getFoods()[0]->getFood());
         $this->assertEquals($mTwo->getFoods()[0]->getFood(), $models[1]->getFoods()[0]->getFood());
     }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function tearDown(): void
+    {
+        MySubService::deleteMulti([]);
+    }
 }

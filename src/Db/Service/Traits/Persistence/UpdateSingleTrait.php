@@ -32,6 +32,8 @@ namespace District5\Mondoc\Db\Service\Traits\Persistence;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
+use District5\Mondoc\Extensions\Retention\MondocRetentionService;
 use District5\MondocBuilder\QueryBuilder;
 use MongoDB\Collection;
 
@@ -51,6 +53,7 @@ trait UpdateSingleTrait
      * @return bool
      *
      * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
      */
     public static function update(MondocAbstractModel $model, array $updateOptions = []): bool
@@ -96,6 +99,10 @@ trait UpdateSingleTrait
         if ($performed->isAcknowledged() && $performed->getMatchedCount() === 1) {
             $model->clearDirty();
             $model->setMongoCollection($collection);
+
+            if ($model->isMondocRetentionEnabled()) {
+                MondocRetentionService::create($model);
+            }
 
             return true;
         }

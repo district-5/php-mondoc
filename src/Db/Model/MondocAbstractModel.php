@@ -33,10 +33,12 @@ namespace District5\Mondoc\Db\Model;
 use District5\Mondoc\Db\Model\Traits\DirtyAttributesTrait;
 use District5\Mondoc\Db\Model\Traits\MondocMongoTypeTrait;
 use District5\Mondoc\Db\Model\Traits\MondocObjectIdTrait;
+use District5\Mondoc\Db\Model\Traits\MondocRetentionTrait;
 use District5\Mondoc\Db\Model\Traits\PresetObjectIdTrait;
 use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
+use District5\Mondoc\Helper\HasTraitHelper;
 use District5\Mondoc\MondocConfig;
 use MongoDB\BSON\ObjectId;
 use MongoDB\Collection;
@@ -260,6 +262,14 @@ class MondocAbstractModel extends MondocAbstractSubModel
         }
 
         return $perform;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMondocRetentionEnabled(): bool
+    {
+        return HasTraitHelper::has($this, MondocRetentionTrait::class);
     }
 
     /**

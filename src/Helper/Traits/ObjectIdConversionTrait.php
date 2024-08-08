@@ -41,6 +41,28 @@ use MongoDB\BSON\ObjectId;
 trait ObjectIdConversionTrait
 {
     /**
+     * Get a new ObjectId.
+     *
+     * @return ObjectId
+     */
+    public static function newObjectId(): ObjectId
+    {
+        return new ObjectId();
+    }
+
+    /**
+     * Convert an ObjectId to a string.
+     *
+     * @param ObjectId $id
+     *
+     * @return string
+     */
+    public static function objectIdToString(ObjectId $id): string
+    {
+        return $id->__toString();
+    }
+
+    /**
      * Convert a string, array, or ObjectId to an ObjectId.
      * Handles the formats of: array('oid' => '< 24 character ID >'), array('$oid' => '< 24 character ID >'), '< 24 character ID >'.
      *

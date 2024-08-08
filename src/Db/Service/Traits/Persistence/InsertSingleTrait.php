@@ -32,6 +32,8 @@ namespace District5\Mondoc\Db\Service\Traits\Persistence;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
+use District5\Mondoc\Extensions\Retention\MondocRetentionService;
 
 /**
  * Trait InsertSingleTrait.
@@ -48,6 +50,7 @@ trait InsertSingleTrait
      * @return bool
      *
      * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-insertOne/
      */
     public static function insert(MondocAbstractModel $model, array $insertOptions = []): bool
@@ -69,6 +72,10 @@ trait InsertSingleTrait
             $model->clearPresetObjectId();
             $model->setObjectId($insert->getInsertedId());
             $model->setMongoCollection($collection);
+
+            if ($model->isMondocRetentionEnabled()) {
+                MondocRetentionService::create($model);
+            }
         }
 
         return $success;

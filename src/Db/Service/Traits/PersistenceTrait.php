@@ -40,6 +40,7 @@ use District5\Mondoc\Db\Service\Traits\Persistence\InsertSingleTrait;
 use District5\Mondoc\Db\Service\Traits\Persistence\UpdateMultiTrait;
 use District5\Mondoc\Db\Service\Traits\Persistence\UpdateSingleTrait;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\HasTraitHelper;
 
 /**
@@ -63,6 +64,7 @@ trait PersistenceTrait
      * @return bool
      *
      * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-insertOne/
      */

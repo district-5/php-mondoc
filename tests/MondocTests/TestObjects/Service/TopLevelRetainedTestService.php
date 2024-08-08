@@ -28,46 +28,20 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Model\Traits;
+namespace District5Tests\MondocTests\TestObjects\Service;
 
 /**
- * Trait ExcludedPropertiesTrait.
+ * Class TopLevelRetainedTestService.
  *
- * @package District5\Mondoc\Db\Model\Traits
+ * @package District5Tests\MondocTests\TestObjects\Service
  */
-trait ExcludedPropertiesTrait
+class TopLevelRetainedTestService extends AbstractTestService
 {
     /**
-     * Holds an array of protected variable names.
-     *
-     * @return array
+     * @return string
      */
-    protected function getPropertyExclusions(): array
+    protected static function getCollectionName(): string
     {
-        return [
-            '_mondocObjectId', '_mondocBson', '_mondocCollection', '_mondocPresetObjectId',
-            '_mondocUnmapped', '_mondocDirty', '_mondocEstablishedNestedSingle', '_mondocEstablishedNestedMultiple',
-            '_mondocRetentionExpiry', '_mondocRetentionChangeMeta', 'mondocNested', 'mondocFieldAliases'
-        ];
-    }
-
-    /**
-     * Check if a single field is, or one of many fields, are excluded from the actual database document.
-     *
-     * @param string|string[] $nameOrNames
-     * @return bool
-     */
-    protected function isPropertyExcluded(string|array $nameOrNames): bool
-    {
-        $exclusions = $this->getPropertyExclusions();
-        if (is_array($nameOrNames)) {
-            foreach ($nameOrNames as $name) {
-                if (in_array($name, $exclusions)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        return in_array($nameOrNames, $exclusions);
+        return parent::getCollectionName(); // Just an example, not needed here, but in reality, you'd just return 'my_collection_name'
     }
 }

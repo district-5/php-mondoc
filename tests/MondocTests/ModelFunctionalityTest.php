@@ -369,4 +369,13 @@ class ModelFunctionalityTest extends MondocBaseTest
         $this->assertTrue($single->exposeIsPropertyExcludedArray(['thisIsOk', '_mondocObjectId'])); // _mondocObjectId is excluded
         $this->assertFalse($single->exposeIsPropertyExcludedArray(['thisIsOk', 'thisToo'])); // neither are excluded
     }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function tearDown(): void
+    {
+        MyService::deleteMulti([]);
+    }
 }

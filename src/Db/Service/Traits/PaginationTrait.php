@@ -35,6 +35,7 @@ use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\MondocTypes;
 use District5\Mondoc\Helper\MondocPaginationHelper;
+use District5\MondocBuilder\QueryBuilder;
 use InvalidArgumentException;
 use MongoDB\BSON\ObjectId;
 
@@ -62,7 +63,8 @@ trait PaginationTrait
         return new MondocPaginationHelper(
             self::countAll($filter),
             $currentPageNumber,
-            $perPage
+            $perPage,
+            $filter
         );
     }
 
@@ -87,17 +89,39 @@ trait PaginationTrait
     }
 
     /**
+     * Get paginator by a query builder
+     *
+     * @param QueryBuilder $builder
+     * @param int $currentPageNumber
+     * @param int $perPage
+     *
+     * @return MondocPaginationHelper
+     *
+     * @throws MondocConfigConfigurationException
+     * @see PaginationTrait::getPaginationHelperForObjectIdPagination
+     */
+    public static function getPaginationHelperByQueryBuilder(QueryBuilder $builder, int $currentPageNumber, int $perPage): MondocPaginationHelper
+    {
+        $query = $builder->getArrayCopy();
+        return new MondocPaginationHelper(
+            self::countAll($query),
+            $currentPageNumber,
+            $perPage,
+            $query
+        );
+    }
+
+    /**
      * Get a page of results for a specific query filter.
      *
      * @param MondocPaginationHelper $paginator
-     * @param array $filter
      * @param string|null $sortByField (optional) default '_id'
      * @param int $sortDirection (optional) default -1
      * @return MondocAbstractModel[]
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
      */
-    public static function getPage(MondocPaginationHelper $paginator, array $filter = [], ?string $sortByField = '_id', int $sortDirection = -1): array
+    public static function getPage(MondocPaginationHelper $paginator, ?string $sortByField = '_id', int $sortDirection = -1): array
     {
         $options = [
             'skip' => $paginator->getSkip(),
@@ -107,7 +131,7 @@ trait PaginationTrait
             $options['sort'] = [$sortByField => $sortDirection];
         }
         return self::getMultiByCriteria(
-            $filter,
+            $paginator->getFilter(),
             $options
         );
     }
@@ -118,13 +142,13 @@ trait PaginationTrait
      * @param MondocPaginationHelper $paginator
      * @param string|ObjectId|null $currentId
      * @param int $sortDirection
-     * @param array $filter
      * @return MondocAbstractModel[]
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
      */
-    public static function getPageByByObjectIdPagination(MondocPaginationHelper $paginator, ObjectId|string|null $currentId, int $sortDirection = -1, array $filter = []): array
+    public static function getPageByByObjectIdPagination(MondocPaginationHelper $paginator, ObjectId|string|null $currentId, int $sortDirection = -1): array
     {
+        $filter = $paginator->getFilter();
         $options = [
             'limit' => $paginator->getLimit(),
             'sort' => ['_id' => $sortDirection]

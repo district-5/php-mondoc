@@ -141,6 +141,8 @@ class AggregateFinancialCandleDtoTest extends AbstractFinancialTest
         $this->assertEquals(1.8, $reverseCandles[5]->getLow());
         $this->assertEquals(1.9, $reverseCandles[5]->getOpen());
         $this->assertEquals(1.8, $reverseCandles[5]->getClose());
+
+        FinancialCandleService::deleteMulti([]);
     }
 
     /**
@@ -160,5 +162,14 @@ class AggregateFinancialCandleDtoTest extends AbstractFinancialTest
             0, // Invalid sort direction
             100
         );
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function tearDown(): void
+    {
+        FinancialCandleService::deleteMulti([]);
     }
 }

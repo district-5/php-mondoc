@@ -370,6 +370,7 @@ class TypesTest extends MondocBaseTest
             json_encode($jsonWithoutId, JSON_THROW_ON_ERROR, 512),
             json_encode($newJsonWithoutId, JSON_THROW_ON_ERROR, 512)
         );
+        $m->delete();
     }
 
     public function testConvertArrayOfObjectIds()

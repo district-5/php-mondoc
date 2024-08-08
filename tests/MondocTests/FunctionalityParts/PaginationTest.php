@@ -34,6 +34,8 @@ namespace District5Tests\MondocTests\FunctionalityParts;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\MondocBuilder\QueryBuilder;
+use District5\MondocBuilder\QueryTypes\ValueEqualTo;
+use District5\MondocBuilder\QueryTypes\ValueGreaterThan;
 use District5Tests\MondocTests\MondocBaseTest;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
 use District5Tests\MondocTests\TestObjects\Service\MyService;
@@ -76,21 +78,21 @@ class PaginationTest extends MondocBaseTest
         $this->assertEquals(3, $paginator->getTotalPages());
 
         $ids = [];
-        $results = MyService::getPage($paginator, [], 'name', 1);
+        $results = MyService::getPage($paginator, 'name', 1);
         $this->assertCount(1, $results);
         $this->assertFalse(in_array($results[0]->getObjectIdString(), $ids));
         $ids[] = $results[0]->getObjectIdString();
 
         $paginator = MyService::getPaginationHelper(2, 1, []);
         $this->assertEquals(3, $paginator->getTotalPages());
-        $results = MyService::getPage($paginator, [], 'name', 1);
+        $results = MyService::getPage($paginator, 'name', 1);
         $this->assertCount(1, $results);
         $this->assertFalse(in_array($results[0]->getObjectIdString(), $ids));
         $ids[] = $results[0]->getObjectIdString();
 
         $paginator = MyService::getPaginationHelper(3, 1, []);
         $this->assertEquals(3, $paginator->getTotalPages());
-        $results = MyService::getPage($paginator, [], 'name', 1);
+        $results = MyService::getPage($paginator, 'name', 1);
         $this->assertCount(1, $results);
         $this->assertFalse(in_array($results[0]->getObjectIdString(), $ids));
 
@@ -98,29 +100,34 @@ class PaginationTest extends MondocBaseTest
         $this->assertEquals(2, $paginator->getTotalPages());
 
         $ids = [];
-        $results = MyService::getPage($paginator, ['name' => 'Joe'], 'name', 1);
+        $results = MyService::getPage($paginator, 'name', 1);
         $this->assertCount(1, $results);
         $this->assertFalse(in_array($results[0]->getObjectIdString(), $ids));
         $ids[] = $results[0]->getObjectIdString();
 
         $paginator = MyService::getPaginationHelper(2, 1, ['name' => 'Joe']);
         $this->assertEquals(2, $paginator->getTotalPages());
-        $results = MyService::getPage($paginator, ['name' => 'Joe'], 'name', 1);
+        $results = MyService::getPage($paginator, 'name', 1);
         $this->assertCount(1, $results);
         $this->assertFalse(in_array($results[0]->getObjectIdString(), $ids));
 
         $paginator = MyService::getPaginationHelperForObjectIdPagination(1, []);
-        $firstPage = MyService::getPageByByObjectIdPagination($paginator, null, 1, []);
+        $firstPage = MyService::getPageByByObjectIdPagination($paginator, null, 1);
         $this->assertCount(1, $firstPage);
         $this->assertEquals('Joe', $firstPage[0]->getName());
 
-        $firstPage = MyService::getPageByByObjectIdPagination($paginator, null, -1, []);
+        $firstPage = MyService::getPageByByObjectIdPagination($paginator, null, -1);
         $this->assertCount(1, $firstPage);
         $this->assertEquals('Jane', $firstPage[0]->getName());
 
         $paginator = MyService::getPaginationHelperForObjectIdPagination(1, []);
-        $this->assertEquals($idsSaved[1]->__toString(), MyService::getPageByByObjectIdPagination($paginator, $idsSaved[0], 1, [])[0]->getObjectIdString());
-        $this->assertEquals($idsSaved[1]->__toString(), MyService::getPageByByObjectIdPagination($paginator, $idsSaved[2], -1, [])[0]->getObjectIdString());
+        $this->assertEquals($idsSaved[1]->__toString(), MyService::getPageByByObjectIdPagination($paginator, $idsSaved[0], 1)[0]->getObjectIdString());
+        $this->assertEquals($idsSaved[1]->__toString(), MyService::getPageByByObjectIdPagination($paginator, $idsSaved[2], -1)[0]->getObjectIdString());
+
+        $builder = MyService::getQueryBuilder();
+        $builder->addQueryPart((new ValueGreaterThan())->integer('age', 1));
+        $paginator = MyService::getPaginationHelperByQueryBuilder($builder, 1, 1);
+        $this->assertEquals(3, $paginator->getTotalPages());
     }
 
     /**

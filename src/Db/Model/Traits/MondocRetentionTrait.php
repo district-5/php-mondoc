@@ -30,44 +30,61 @@
 
 namespace District5\Mondoc\Db\Model\Traits;
 
+use DateTime;
+use MongoDB\BSON\UTCDateTime;
+
 /**
- * Trait ExcludedPropertiesTrait.
+ * Trait MondocRetentionTrait.
  *
  * @package District5\Mondoc\Db\Model\Traits
  */
-trait ExcludedPropertiesTrait
+trait MondocRetentionTrait
 {
     /**
-     * Holds an array of protected variable names.
-     *
-     * @return array
+     * @var DateTime|UTCDateTime|null
      */
-    protected function getPropertyExclusions(): array
+    private DateTime|UTCDateTime|null $_mondocRetentionExpiry = null;
+
+    /**
+     * @var array
+     */
+    private array $_mondocRetentionChangeMeta = [];
+
+    /**
+     * @param array $data
+     * @return $this
+     */
+    public function setMondocRetentionChangeMeta(array $data): static
     {
-        return [
-            '_mondocObjectId', '_mondocBson', '_mondocCollection', '_mondocPresetObjectId',
-            '_mondocUnmapped', '_mondocDirty', '_mondocEstablishedNestedSingle', '_mondocEstablishedNestedMultiple',
-            '_mondocRetentionExpiry', '_mondocRetentionChangeMeta', 'mondocNested', 'mondocFieldAliases'
-        ];
+        $this->_mondocRetentionChangeMeta = $data;
+
+        return $this;
     }
 
     /**
-     * Check if a single field is, or one of many fields, are excluded from the actual database document.
-     *
-     * @param string|string[] $nameOrNames
-     * @return bool
+     * @return array
      */
-    protected function isPropertyExcluded(string|array $nameOrNames): bool
+    public function getMondocRetentionChangeMeta(): array
     {
-        $exclusions = $this->getPropertyExclusions();
-        if (is_array($nameOrNames)) {
-            foreach ($nameOrNames as $name) {
-                if (in_array($name, $exclusions)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        return in_array($nameOrNames, $exclusions);
+        return $this->_mondocRetentionChangeMeta;
+    }
+
+    /**
+     * @param DateTime|UTCDateTime|null $expiry
+     * @return $this
+     */
+    public function setMondocRetentionExpiry(DateTime|UTCDateTime|null $expiry): static
+    {
+        $this->_mondocRetentionExpiry = $expiry;
+
+        return $this;
+    }
+
+    /**
+     * @return DateTime|UTCDateTime|null
+     */
+    public function getMondocRetentionExpiry(): DateTime|UTCDateTime|null
+    {
+        return $this->_mondocRetentionExpiry;
     }
 }

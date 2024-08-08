@@ -150,4 +150,13 @@ class ModelInflationTest extends MondocBaseTest
         $this->assertTrue($inflated[1]->hasObjectId());
         $this->assertTrue($inflated[2]->hasObjectId());
     }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function tearDown(): void
+    {
+        MyService::deleteMulti([]);
+    }
 }

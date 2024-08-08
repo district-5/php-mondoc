@@ -50,18 +50,6 @@ class MondocTypes
     use ArrayConversionTrait;
 
     /**
-     * Convert an ObjectId to a string.
-     *
-     * @param ObjectId $id
-     *
-     * @return string
-     */
-    public static function objectIdToString(ObjectId $id): string
-    {
-        return $id->__toString();
-    }
-
-    /**
      * Convert a single variable to a json friendly type.
      *
      * @param mixed $v

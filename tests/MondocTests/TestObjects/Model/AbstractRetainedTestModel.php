@@ -28,46 +28,17 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Model\Traits;
+namespace District5Tests\MondocTests\TestObjects\Model;
+
+use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Model\Traits\MondocRetentionTrait;
 
 /**
- * Trait ExcludedPropertiesTrait.
+ * Class AbstractHelperTraitsModel
  *
- * @package District5\Mondoc\Db\Model\Traits
+ * @package District5Tests\MondocTests\TestObjects\Model
  */
-trait ExcludedPropertiesTrait
+abstract class AbstractRetainedTestModel extends MondocAbstractModel
 {
-    /**
-     * Holds an array of protected variable names.
-     *
-     * @return array
-     */
-    protected function getPropertyExclusions(): array
-    {
-        return [
-            '_mondocObjectId', '_mondocBson', '_mondocCollection', '_mondocPresetObjectId',
-            '_mondocUnmapped', '_mondocDirty', '_mondocEstablishedNestedSingle', '_mondocEstablishedNestedMultiple',
-            '_mondocRetentionExpiry', '_mondocRetentionChangeMeta', 'mondocNested', 'mondocFieldAliases'
-        ];
-    }
-
-    /**
-     * Check if a single field is, or one of many fields, are excluded from the actual database document.
-     *
-     * @param string|string[] $nameOrNames
-     * @return bool
-     */
-    protected function isPropertyExcluded(string|array $nameOrNames): bool
-    {
-        $exclusions = $this->getPropertyExclusions();
-        if (is_array($nameOrNames)) {
-            foreach ($nameOrNames as $name) {
-                if (in_array($name, $exclusions)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        return in_array($nameOrNames, $exclusions);
-    }
+    use MondocRetentionTrait;
 }

@@ -148,9 +148,9 @@ class MyModel extends MondocAbstractModel
     database. The optional second parameter is the object or class to clone to. For example,
     you can make a clone of `MyModel` and convert it to `OtherModel` by calling
     `$myModel->clone( < save:bool > , OtherModel::class)`.
-* `MondocRetentionTrait` - Adding this to your model exposes a `setMondocRetentionChangeMeta`
-    method, which allows you to set the retention data for the model. This is useful for setting
-    things such as the retention period and the retention policy.
+* `MondocRetentionTrait` - Adding this to your model exposes the `setMondocRetentionChangeMeta`
+    and `setMondocRetentionExpiry` methods, which allows you to set the retention data for the
+    model. This is useful for setting things such as the retention period and the retention policy.
 
 **Traits examples**
 
@@ -177,6 +177,11 @@ The logic for querying the database is always performed in the service layer. Th
 Optionally, you can define a `getConnectionId` method to return the connection ID to use from the `MondocConfig`
 connection manager. This is useful if you're using multiple connections, for example, a connection for authentication
 and a connection for the main application.
+
+All Mondoc native queries automatically convert `DateTime` objects to `UTCDateTime` objects when querying a collection.
+
+> **Please note**: in versions prior to 6.3.0 the `PaginationTrait` required you to pass the filter into each method
+> call. This is no longer required, as the filter is carried through by the `MondocPaginationHelper` object now.
 
 ```php
 <?php
@@ -369,6 +374,12 @@ $builder = \District5Tests\MondocTests\TestObjects\MyService::getQueryBuilder();
 
 // get multiple models with options
 \District5Tests\MondocTests\TestObjects\MyService::getMultiByCriteria(['foo' => 'bar'], ['sort' => ['foo' => -1]]);
+
+// working with dates, both of these queries are the same
+$phpDate = new \DateTime();
+\District5Tests\MondocTests\TestObjects\MyService::getMultiByCriteria(['dateField' => ['$lte' => $phpDate]]);
+$mongoDate = \District5\Mondoc\Helper\MondocTypes::phpDateToMongoDateTime($phpDate);
+\District5Tests\MondocTests\TestObjects\MyService::getMultiByCriteria(['dateField' => ['$lte' => $mongoDate]]);
 
 // paginating results by page number
 $currentPage = 1;

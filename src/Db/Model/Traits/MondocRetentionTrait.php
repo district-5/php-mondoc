@@ -31,6 +31,12 @@
 namespace District5\Mondoc\Db\Model\Traits;
 
 use DateTime;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
+use District5\Mondoc\Extensions\Retention\MondocRetentionModel;
+use District5\Mondoc\Extensions\Retention\MondocRetentionService;
+use District5\Mondoc\Helper\MondocPaginationHelper;
+use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
 /**
@@ -87,4 +93,62 @@ trait MondocRetentionTrait
     {
         return $this->_mondocRetentionExpiry;
     }
+
+    /**
+     * Get the retention history for the model.
+     *
+     * @param int $perPage
+     * @param int $currentPage
+     * @return MondocPaginationHelper
+     * @throws MondocConfigConfigurationException
+     */
+    public function getRetentionPaginatorForModel(int $perPage, int $currentPage): MondocPaginationHelper
+    {
+        if ($this->hasObjectId()) {
+            return MondocRetentionService::getRetentionHistoryPaginationHelperForModel(
+                $this,
+                $perPage,
+                $currentPage
+            );
+        }
+
+        return MondocRetentionService::getRetentionHistoryPaginationHelperForClassName(
+            $this,
+            $perPage,
+            $currentPage
+        );
+    }
+
+    /**
+     * Get the retention history for the model.
+     *
+     * @param MondocPaginationHelper $paginator
+     * @param string $sortByField (optional) Default is '_id'
+     * @param int $sortDirection (optional) Default is -1
+     * @return MondocRetentionModel[]
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
+     */
+    public function getRetentionPageByPaginator(MondocPaginationHelper $paginator, string $sortByField = '_id', int $sortDirection = -1): array
+    {
+        return MondocRetentionService::getRetentionPage(
+            $paginator,
+            $sortByField,
+            $sortDirection
+        );
+    }
+
+    /**
+     * Get the ObjectId of the persisted model.
+     *
+     * @return null|ObjectId
+     */
+    abstract public function getObjectId(): ?ObjectId;
+
+    /**
+     * Does this model have an ObjectId? IE, has it been saved before?
+     *
+     * @return bool
+     */
+    abstract public function hasObjectId(): bool;
 }

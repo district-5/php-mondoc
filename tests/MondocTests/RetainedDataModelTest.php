@@ -188,6 +188,17 @@ class RetainedDataModelTest extends MondocBaseTest
 
         $paginator = MondocRetentionService::getRetentionHistoryPaginationHelperForClassName(TopLevelRetainedTestModel::class, 12, 1);
         $this->assertEquals(1, $paginator->getTotalPages());
+        $paginatorFromModel = $m->getRetentionPaginatorForModel(12, 1);
+        $this->assertEquals(1, $paginatorFromModel->getTotalPages());
+        $this->assertGreaterThan(0, $paginatorFromModel->getTotalResults());
+        $this->assertEquals($paginator->getTotalResults(), $paginatorFromModel->getTotalResults());
+
+        $modelBased = new TopLevelRetainedTestModel();
+        $paginatorFromModel = $modelBased->getRetentionPaginatorForModel(12, 1); // This paginator is based on the entire TopLevelRetainedTestModel class.
+        $this->assertEquals(1, $paginatorFromModel->getTotalPages());
+        $this->assertGreaterThan(0, $paginatorFromModel->getTotalResults());
+        $this->assertEquals($paginator->getTotalResults(), $paginatorFromModel->getTotalResults());
+
         $paginator = MondocRetentionService::getRetentionHistoryPaginationHelperForModel($m, 12, 1);
         $this->assertEquals(1, $paginator->getTotalPages());
 
@@ -296,8 +307,8 @@ class RetainedDataModelTest extends MondocBaseTest
         $pageOfResultsClassName = MondocRetentionService::getRetentionPage($paginatorClassName);
         $pageOfResultsModel = MondocRetentionService::getRetentionPage($paginatorModel);
 
-        $this->assertEquals(1, count($pageOfResultsClassName));
-        $this->assertEquals(1, count($pageOfResultsModel));
+        $this->assertCount(1, $pageOfResultsClassName);
+        $this->assertCount(1, $pageOfResultsModel);
 
         $this->assertEquals($m1->getObjectIdString(), $pageOfResultsClassName[0]->getSourceObjectIdString());
         $this->assertEquals($m1->getObjectIdString(), $pageOfResultsModel[0]->getSourceObjectIdString());
@@ -306,8 +317,12 @@ class RetainedDataModelTest extends MondocBaseTest
         $this->assertEquals(1, $paginatorClassNameWithObjectInstead->getTotalPages());
         $this->assertEquals(1, $paginatorClassNameWithObjectInstead->getTotalResults());
         $pageOfResultsClassNameWithObjectInstead = MondocRetentionService::getRetentionPage($paginatorClassNameWithObjectInstead);
-        $this->assertEquals(1, count($pageOfResultsClassNameWithObjectInstead));
+        $this->assertCount(1, $pageOfResultsClassNameWithObjectInstead);
         $this->assertEquals($m1->getObjectIdString(), $pageOfResultsClassNameWithObjectInstead[0]->getSourceObjectIdString());
+
+        $pageFromModel = $m1->getRetentionPageByPaginator($paginatorClassNameWithObjectInstead);
+        $this->assertCount(1, $pageFromModel);
+        $this->assertEquals($m1->getObjectIdString(), $pageFromModel[0]->getSourceObjectIdString());
 
         $this->assertEquals(3, TopLevelRetainedTestService::deleteMulti([]));
         $this->assertEquals(3, MondocRetentionService::deleteMulti([]));

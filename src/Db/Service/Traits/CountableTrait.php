@@ -31,6 +31,7 @@
 namespace District5\Mondoc\Db\Service\Traits;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Helper\FilterFormatter;
 use District5\MondocBuilder\QueryBuilder;
 
 /**
@@ -60,19 +61,19 @@ trait CountableTrait
     /**
      * Count all matching documents in a collection using a given filter, using given options.
      *
-     * @param array $query (optional)
+     * @param array $filter (optional)
      * @param array $options (optional)
      *
      * @return int
      * @throws MondocConfigConfigurationException
      */
-    public static function countAll(array $query = [], array $options = []): int
+    public static function countAll(array $filter = [], array $options = []): int
     {
         $collection = self::getCollection(
             get_called_class()
         );
         return $collection->countDocuments(
-            $query,
+            FilterFormatter::format($filter),
             $options
         );
     }
@@ -93,7 +94,9 @@ trait CountableTrait
             get_called_class()
         );
         return $collection->countDocuments(
-            $builder->getArrayCopy(),
+            FilterFormatter::format(
+                $builder->getArrayCopy()
+            ),
             $builder->getOptions()->getArrayCopy()
         );
     }

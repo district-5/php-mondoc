@@ -49,16 +49,16 @@ trait AtomicTrait
      * Perform an atomic operation.
      *
      * @param ObjectId $id
-     * @param array $query
+     * @param array $update
      *
      * @return bool
      * @throws MondocConfigConfigurationException
      */
-    protected static function atomic(ObjectId $id, array $query): bool
+    protected static function atomic(ObjectId $id, array $update): bool
     {
         return self::updateOne(
-            ['_id' => $id],
-            $query
+            ['_id' => $id], // Formatted in the updateOne method
+            $update // Formatted in the updateOne method
         );
     }
 }

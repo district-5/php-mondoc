@@ -53,7 +53,7 @@ trait PullTrait
     protected static function pullFromArrayWithFilter(array $filter, string $field, mixed $value): bool
     {
         return self::updateOne(
-            $filter,
+            $filter, // Formatted in the updateOne method
             [
                 '$pull' => [$field => $value]
             ]
@@ -73,11 +73,11 @@ trait PullTrait
      */
     protected static function pullFromArrayById(ObjectId $id, string $field, mixed $value): bool
     {
-        $query = [
+        $filter = [
             '_id' => $id
         ];
         return self::updateOne(
-            $query,
+            $filter, // Formatted in the updateOne method
             [
                 '$pull' => [$field => $value]
             ]

@@ -31,6 +31,9 @@
 namespace District5\Mondoc\Db\Service\Traits\Deletion;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Helper\FilterFormatter;
+use District5\Mondoc\Helper\MondocTypes;
+use MongoDB\BSON\ObjectId;
 use MongoDB\DeleteResult;
 
 /**
@@ -43,19 +46,56 @@ trait DeleteMultiTrait
     /**
      * Delete multiple documents based on a given query and options.
      *
-     * @param array $query
+     * @param array $filter
      * @param array $options (optional)
      *
      * @return int
      * @throws MondocConfigConfigurationException
      */
-    public static function deleteMulti(array $query, array $options = []): int
+    public static function deleteMulti(array $filter, array $options = []): int
     {
         $collection = self::getCollection(
             get_called_class()
         );
         $delete = $collection->deleteMany(
-            $query,
+            FilterFormatter::format($filter),
+            $options
+        );
+
+        return $delete instanceof DeleteResult ? $delete->getDeletedCount() : 0;
+    }
+
+    /**
+     * Delete multiple documents based on a given array of object IDs.
+     *
+     * @param ObjectId[] $objectIds
+     * @param array $options (optional)
+     *
+     * @return int
+     * @throws MondocConfigConfigurationException
+     */
+    public static function deleteMultiObjectIds(array $objectIds, array $options = []): int
+    {
+        if (empty($objectIds)) {
+            return 0;
+        }
+        foreach ($objectIds as $key => $objectId) {
+            $objectIds[$key] = MondocTypes::toObjectId($objectId);
+        }
+
+        $collection = self::getCollection(
+            get_called_class()
+        );
+        $delete = $collection->deleteMany(
+            FilterFormatter::format(
+                [
+                    '_id' => [
+                        '$in' => array_values(
+                            $objectIds
+                        )
+                    ]
+                ]
+            ),
             $options
         );
 

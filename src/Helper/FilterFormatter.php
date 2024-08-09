@@ -28,58 +28,30 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Service\Traits\Deletion;
+namespace District5\Mondoc\Helper;
 
-use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Helper\FilterFormatter;
-use District5\Mondoc\Helper\MondocTypes;
-use MongoDB\BSON\ObjectId;
-use MongoDB\DeleteResult;
+use DateTime;
 
 /**
- * Trait DeleteSingleTrait.
- *
- * @package District5\Mondoc\Db\Service\Traits\Deletion
+ * Class FilterFormatter
+ * @package District5\Mondoc\Helper
  */
-trait DeleteSingleTrait
+class FilterFormatter
 {
     /**
-     * Delete a single document from the collection by a given ID.
-     *
-     * @param string|ObjectId $id
-     *
-     * @return bool
-     * @throws MondocConfigConfigurationException
-     */
-    public static function delete(ObjectId|string $id): bool
-    {
-        return self::deleteOne(
-            [
-                '_id' => MondocTypes::toObjectId($id)
-            ]
-        );
-    }
-
-    /**
-     * Delete a single document from the collection by a given filter.
-     *
      * @param array $filter
-     * @param array $options
-     * @return bool
-     * @throws MondocConfigConfigurationException
+     * @return array
      */
-    public static function deleteOne(array $filter, array $options = []): bool
+    public static function format(array $filter): array
     {
-        $collection = self::getCollection(
-            get_called_class()
-        );
-        $delete = $collection->deleteOne(
-            FilterFormatter::format(
-                $filter
-            ),
-            $options
-        );
+        foreach ($filter as $key => $value) {
+            if ($value instanceof DateTime) {
+                $filter[$key] = MondocTypes::phpDateToMongoDateTime($value);
+            } elseif (is_array($value)) {
+                $filter[$key] = self::format($value);
+            }
+        }
 
-        return $delete instanceof DeleteResult ? $delete->getDeletedCount() : false;
+        return $filter;
     }
 }

@@ -33,8 +33,8 @@ namespace District5\Mondoc\Db\Service\Traits;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
-use District5\Mondoc\Helper\MondocTypes;
 use District5\Mondoc\Helper\MondocPaginationHelper;
+use District5\Mondoc\Helper\MondocTypes;
 use District5\MondocBuilder\QueryBuilder;
 use InvalidArgumentException;
 use MongoDB\BSON\ObjectId;
@@ -61,7 +61,7 @@ trait PaginationTrait
     public static function getPaginationHelper(int $currentPageNumber, int $perPage, array $filter = []): MondocPaginationHelper
     {
         return new MondocPaginationHelper(
-            self::countAll($filter),
+            self::countAll($filter), // Formatted in the countAll method
             $currentPageNumber,
             $perPage,
             $filter
@@ -131,7 +131,7 @@ trait PaginationTrait
             $options['sort'] = [$sortByField => $sortDirection];
         }
         return self::getMultiByCriteria(
-            $paginator->getFilter(),
+            $paginator->getFilter(), // Formatted in the getMultiByCriteria method
             $options
         );
     }
@@ -166,7 +166,7 @@ trait PaginationTrait
         }
 
         return self::getMultiByCriteria(
-            $filter,
+            $filter, // Formatted in the getMultiByCriteria method
             $options
         );
     }

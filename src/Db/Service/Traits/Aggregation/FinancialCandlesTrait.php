@@ -32,6 +32,7 @@ namespace District5\Mondoc\Db\Service\Traits\Aggregation;
 
 use District5\Mondoc\Dto\AggregateFinancialCandleDto;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Helper\FilterFormatter;
 use District5\Mondoc\Helper\MondocTypes;
 use InvalidArgumentException;
 use MongoDB\Collection;
@@ -96,7 +97,7 @@ trait FinancialCandlesTrait
 
         $query = [
             [
-                '$match' => $filter
+                '$match' => FilterFormatter::format($filter)
             ],
             [
                 '$group' => [

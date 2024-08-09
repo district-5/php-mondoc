@@ -31,6 +31,7 @@
 namespace District5\Mondoc\Db\Service\Traits\Aggregation;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Helper\FilterFormatter;
 use MongoDB\Collection;
 use MongoDB\Driver\Cursor;
 use MongoDB\Model\BSONDocument;
@@ -72,7 +73,7 @@ trait MaxFieldTrait
             array_unshift(
                 $query,
                 [
-                    '$match' => $filter
+                    '$match' => FilterFormatter::format($filter)
                 ]
             );
         }

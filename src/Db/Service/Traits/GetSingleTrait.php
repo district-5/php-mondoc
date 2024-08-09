@@ -34,6 +34,7 @@ use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
+use District5\Mondoc\Helper\FilterFormatter;
 use District5\Mondoc\Helper\MondocTypes;
 use District5\MondocBuilder\QueryBuilder;
 use MongoDB\BSON\ObjectId;
@@ -58,7 +59,9 @@ trait GetSingleTrait
     public static function getOneByQueryBuilder(QueryBuilder $builder): ?MondocAbstractModel
     {
         return self::getOneByCriteria(
-            $builder->getArrayCopy(),
+            FilterFormatter::format(
+                $builder->getArrayCopy()
+            ),
             $builder->getOptions()->getArrayCopy()
         );
     }
@@ -87,7 +90,10 @@ trait GetSingleTrait
         $collection = self::getCollection(
             $calledClass
         );
-        $match = $collection->findOne($filter, $options);
+        $match = $collection->findOne(
+            FilterFormatter::format($filter),
+            $options
+        );
         if ($match) {
             /* @var $match BSONDocument */
             /* @var $calledClass MondocAbstractService */
@@ -119,7 +125,7 @@ trait GetSingleTrait
         $service = get_called_class();
         /* @var $service MondocAbstractService - it's not. It's actually a string. */
         return $service::getOneByCriteria(
-            ['_id' => $converted]
+            ['_id' => $converted] // Formatted in the getOneByCriteria method
         );
     }
 
@@ -136,7 +142,7 @@ trait GetSingleTrait
     public static function getOneWhereKeyEqualsValue(string $key, mixed $value): ?MondocAbstractModel
     {
         return self::getOneByCriteria([
-            $key => ['$eq' => $value]
+            $key => ['$eq' => $value] // Formatted in the getOneByCriteria method
         ]);
     }
 
@@ -153,7 +159,7 @@ trait GetSingleTrait
     public static function getOneWhereKeyDoesNotEqualValue(string $key, mixed $value): ?MondocAbstractModel
     {
         return self::getOneByCriteria([
-            $key => ['$ne' => $value]
+            $key => ['$ne' => $value] // Formatted in the getOneByCriteria method
         ]);
     }
 }

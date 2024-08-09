@@ -74,7 +74,7 @@ trait DeleteMultiTrait
      * @return int
      * @throws MondocConfigConfigurationException
      */
-    public static function deleteMultiObjectIds(array $objectIds, array $options = []): int
+    public static function deleteByIds(array $objectIds, array $options = []): int
     {
         if (empty($objectIds)) {
             return 0;

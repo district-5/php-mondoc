@@ -387,28 +387,28 @@ $perPage = 10;
 $sortByField = 'foo';
 $sortDirection = -1;
 $pagination = \District5Tests\MondocTests\TestObjects\MyService::getPaginationHelper($currentPage, $perPage, ['foo' => 'bar'])
-$results = \District5Tests\MondocTests\TestObjects\MyService::getPage($pagination, $sortByField, $sortDirection); // the filter is carried through by the pagination helper
+$results = \District5Tests\MondocTests\TestObjects\MyService::getPage($pagination, $sortByField, $sortDirection); // Since 6.3.0 the filter is carried through by the pagination helper
 
 // paginating results by ID number descending (first page)
 $currentId = null;
 $perPage = 10;
 $sortDirection = -1;
 $pagination = \District5Tests\MondocTests\TestObjects\MyService::getPaginationHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
-$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection);
+$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection); // Since 6.3.0 the filter is carried through by the pagination helper
 
 // paginating results by ID number descending
 $currentId = '5f7deca120c41f29827c0c60'; // or new ObjectId('5f7deca120c41f29827c0c60');
 $perPage = 10;
 $sortDirection = -1;
 $pagination = \District5Tests\MondocTests\TestObjects\MyService::getPaginationHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
-$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection);
+$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection); // Since 6.3.0 the filter is carried through by the pagination helper
 
 // paginating results by ID number ascending
 $currentId = '5f7deca120c41f29827c0c60'; // or new ObjectId('5f7deca120c41f29827c0c60');
 $perPage = 10;
 $sortDirection = 1;
 $pagination = \District5Tests\MondocTests\TestObjects\MyService::getPaginationHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
-$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection);
+$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection); // Since 6.3.0 the filter is carried through by the pagination helper
 
 // get the distinct values for 'age' with a filter and options
 \District5Tests\MondocTests\TestObjects\MyService::getDistinctValuesForKey('age', ['foo' => 'bar'], ['sort' => ['age' => 1]]);

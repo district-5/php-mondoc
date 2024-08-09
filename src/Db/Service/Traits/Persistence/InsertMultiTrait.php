@@ -37,6 +37,7 @@ use District5\Mondoc\Db\Model\Traits\MondocRevisionNumberTrait;
 use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
+use District5\Mondoc\Extensions\Retention\MondocRetentionService;
 use District5\Mondoc\Helper\HasTraitHelper;
 use District5\Mondoc\MondocConfig;
 
@@ -125,6 +126,7 @@ trait InsertMultiTrait
                 $insertOptions
             );
             if ($insert->getInsertedCount() === count($data)) {
+                $retentionModels = [];
                 $ids = $insert->getInsertedIds();
                 $insertedKey = 0;
                 foreach ($modelsForThisService as $v) {
@@ -132,9 +134,16 @@ trait InsertMultiTrait
                         $v->setObjectId($ids[$insertedKey]);
                         $v->clearPresetObjectId();
                         $v->setMongoCollection($collection);
+                        if ($v->isMondocRetentionEnabled()) {
+                            $retentionModels[] = MondocRetentionService::createStub($v);
+                        }
                     }
                     $insertedKey++;
                 }
+                MondocRetentionService::insertMulti(
+                    $retentionModels
+                );
+
 
                 if ($otherServiceInsertionSucceeded === true) {
                     return true;

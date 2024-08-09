@@ -31,6 +31,7 @@
 namespace District5\Mondoc\Db\Service\Traits;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Helper\FilterFormatter;
 
 /**
  * Trait DistinctValuesTrait.
@@ -54,6 +55,10 @@ trait DistinctValuesTrait
         $collection = self::getCollection(
             get_called_class()
         );
-        return $collection->distinct($key, $filter, $options);
+        return $collection->distinct(
+            $key,
+            FilterFormatter::format($filter),
+            $options
+        );
     }
 }

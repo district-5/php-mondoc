@@ -31,6 +31,7 @@
 namespace District5\Mondoc\Db\Service\Traits\Persistence;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Helper\FilterFormatter;
 use District5\MondocBuilder\QueryBuilder;
 
 /**
@@ -59,8 +60,8 @@ trait UpdateMultiTrait
             get_called_class()
         );
         $perform = $collection->updateMany(
-            $filter,
-            $update,
+            FilterFormatter::format($filter),
+            FilterFormatter::format($update),
             $updateOptions
         );
 
@@ -80,8 +81,8 @@ trait UpdateMultiTrait
         );
 
         $perform = $collection->updateMany(
-            $queryBuilder->getArrayCopy(),
-            $update,
+            FilterFormatter::format($queryBuilder->getArrayCopy()),
+            FilterFormatter::format($update),
             $queryBuilder->getOptions()->getArrayCopy()
         );
 

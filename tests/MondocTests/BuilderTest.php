@@ -101,4 +101,13 @@ class BuilderTest extends MondocBaseTest
         $this->assertEquals('Foo', $getModels[0]->getName());
         $this->assertEquals(1, $getModels[0]->getAge());
     }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function tearDown(): void
+    {
+        MyService::deleteMulti([]);
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace District5\Mondoc\Exception;
 
 use Exception;

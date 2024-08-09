@@ -148,6 +148,9 @@ class MyModel extends MondocAbstractModel
     database. The optional second parameter is the object or class to clone to. For example,
     you can make a clone of `MyModel` and convert it to `OtherModel` by calling
     `$myModel->clone( < save:bool > , OtherModel::class)`.
+* `MondocRetentionTrait` - Adding this to your model exposes the `setMondocRetentionChangeMeta`
+    and `setMondocRetentionExpiry` methods, which allows you to set the retention data for the
+    model. This is useful for setting things such as the retention period and the retention policy.
 
 **Traits examples**
 
@@ -160,6 +163,7 @@ class MyModel extends \District5\Mondoc\Db\Model\MondocAbstractModel
     use \District5\Mondoc\Db\Model\Traits\MondocCloneableTrait;
     use \District5\Mondoc\Db\Model\Traits\MondocRevisionNumberTrait;
     use \District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
+    use \District5\Mondoc\Db\Model\Traits\MondocRetentionTrait;
     
     // Rest of your model code...
 }
@@ -173,6 +177,11 @@ The logic for querying the database is always performed in the service layer. Th
 Optionally, you can define a `getConnectionId` method to return the connection ID to use from the `MondocConfig`
 connection manager. This is useful if you're using multiple connections, for example, a connection for authentication
 and a connection for the main application.
+
+All Mondoc native queries automatically convert `DateTime` objects to `UTCDateTime` objects when querying a collection.
+
+> **Please note**: in versions prior to 6.3.0 the `PaginationTrait` required you to pass the filter into each method
+> call. This is no longer required, as the filter is carried through by the `MondocPaginationHelper` object now.
 
 ```php
 <?php
@@ -366,34 +375,40 @@ $builder = \District5Tests\MondocTests\TestObjects\MyService::getQueryBuilder();
 // get multiple models with options
 \District5Tests\MondocTests\TestObjects\MyService::getMultiByCriteria(['foo' => 'bar'], ['sort' => ['foo' => -1]]);
 
+// working with dates, both of these queries are the same
+$phpDate = new \DateTime();
+\District5Tests\MondocTests\TestObjects\MyService::getMultiByCriteria(['dateField' => ['$lte' => $phpDate]]);
+$mongoDate = \District5\Mondoc\Helper\MondocTypes::phpDateToMongoDateTime($phpDate);
+\District5Tests\MondocTests\TestObjects\MyService::getMultiByCriteria(['dateField' => ['$lte' => $mongoDate]]);
+
 // paginating results by page number
 $currentPage = 1;
 $perPage = 10;
 $sortByField = 'foo';
 $sortDirection = -1;
 $pagination = \District5Tests\MondocTests\TestObjects\MyService::getPaginationHelper($currentPage, $perPage, ['foo' => 'bar'])
-$results = \District5Tests\MondocTests\TestObjects\MyService::getPage($pagination, $perPage, ['foo' => 'bar'], $sortByField, $sortDirection);
+$results = \District5Tests\MondocTests\TestObjects\MyService::getPage($pagination, $sortByField, $sortDirection); // the filter is carried through by the pagination helper
 
 // paginating results by ID number descending (first page)
 $currentId = null;
 $perPage = 10;
 $sortDirection = -1;
 $pagination = \District5Tests\MondocTests\TestObjects\MyService::getPaginationHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
-$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection, ['foo' => 'bar']);
+$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection);
 
 // paginating results by ID number descending
 $currentId = '5f7deca120c41f29827c0c60'; // or new ObjectId('5f7deca120c41f29827c0c60');
 $perPage = 10;
 $sortDirection = -1;
 $pagination = \District5Tests\MondocTests\TestObjects\MyService::getPaginationHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
-$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection, ['foo' => 'bar']);
+$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection);
 
 // paginating results by ID number ascending
 $currentId = '5f7deca120c41f29827c0c60'; // or new ObjectId('5f7deca120c41f29827c0c60');
 $perPage = 10;
 $sortDirection = 1;
 $pagination = \District5Tests\MondocTests\TestObjects\MyService::getPaginationHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
-$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection, ['foo' => 'bar']);
+$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection);
 
 // get the distinct values for 'age' with a filter and options
 \District5Tests\MondocTests\TestObjects\MyService::getDistinctValuesForKey('age', ['foo' => 'bar'], ['sort' => ['age' => 1]]);
@@ -519,6 +534,130 @@ $objectId = MondocTypes::toObjectId([
 $objectId = MondocTypes::toObjectId([
     'oid' => '61dfee5591efcf44e023d692'
 ]);
+```
+
+#### Retention of data
+
+When using the `MondocRetentionTrait` trait, you can set the retention data for a model by calling
+`setMondocRetentionChangeMeta`. There is no preset retention data, so you must set this yourself. This is useful for
+setting things such as the user's name who initiated the change, or similar for compliance and the retention policy.
+Additionally, the method `setMondocRetentionExpiry` method is exposed, and can be used to set the expiry date for the
+retention data. The library does not automatically delete the data when the retention period has expired, but you can
+use the `MondocRetentionService` to query for data that has expired, using either 
+`getPaginatorForExpiredRetentionForClassName` or `getPaginatorForExpiredRetentionForObject`, and then subsequently the
+`getRetentionPage` method.
+
+Exposed methods in the `MondocRetentionService`:
+
+* `create` - Create a new retention model. This is called automatically by Mondoc when a model contains the
+    `MondocRetentionTrait` trait.
+* `createStub` - Create a new retention model, but don't save it. This is useful for creating a retention model that
+    you want to save at a later date. This is used when inserting multiple models.
+* `getLatestRetentionModelForModel` - Get the latest retention model for a given (previously saved) model.
+* `countRetentionModelsForClassName` - Count the number of retention models for a given class name.
+* `countRetentionModelsForModel` - Count the number of retention models for a given (previously saved) model.
+* `getRetentionHistoryPaginationHelperForClassName` - Get a pagination helper for the retention history for a given
+    class name.
+* `getRetentionHistoryPaginationHelperForModel` - Get a pagination helper for the retention history for a given
+    (previously saved) model.
+* `addIndexes` - Add the indexes to the retention collection. This is NOT called automatically by Mondoc, and must
+    be called manually by your application.
+* `hasIndexes` - Check if the indexes have been added to the retention collection. This is a helper method to allow
+    you to check if the indexes have been added, and if not, you can call `addIndexes` to add them.
+* `getPaginatorForExpiredRetentionForClassName` - Get a pagination helper for the retention history for a given class
+    name, where the retention has expired.
+* `getPaginatorForExpiredRetentionForObject` - Get a pagination helper for the retention history for a given (previously
+    saved) model, where the retention has expired.
+* `getRetentionPage` - Get a page of retention models from the pagination helper. This is the method you use after
+    retrieving a pagination helper via `getPaginatorForExpiredRetentionForClassName` or
+    `getPaginatorForExpiredRetentionForObject`.
+
+Within a `MondoRetentionModel`, the following methods are available:
+
+* `toOriginalModel` - Get the original model that the retention data is associated with. This will return the model
+    inflated with the data that was saved at the time of the retention data being saved.
+* `getSourceModelData` - Get the data that was saved at the time of the retention data being saved. This will return
+    the data as it was saved at the time of the retention data being saved, in array format.
+* `getSourceObjectId` - Get the ObjectId of the original model that the retention data is associated with.
+* `getSourceObjectIdString` - Get the ObjectId of the original model that the retention data is associated with, as a
+    string.
+* `getSourceClassName` - Get the class name of the original model that the retention data is associated with.
+* `getRetentionData` - Get the retention data that was saved at the time of the retention data being saved, as set by
+    the original call to `setMondocRetentionChangeMeta`, contained in the `MondocRetentionTrait`.
+* `getRetentionExpiry` - Get the retention expiry date that was saved at the time of the retention data being saved, as
+    set by the original call to `setMondocRetentionExpiry`, contained in the `MondocRetentionTrait`.
+* `hasRetentionExpired` - Check if this retention model has expired. This will return `true` if the retention data has
+    expired, and `false` if it has not.
+
+A working example of using the retention trait is shown below:
+
+```php
+<?php
+
+use District5\Date\Date;
+use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Model\Traits\MondocRetentionTrait;
+use District5\Mondoc\Helper\MondocTypes;
+use District5\Mondoc\Extensions\Retention\MondocRetentionService;
+
+class MyService extends MondocAbstractService
+{
+    protected static function getCollectionName(): string
+    {
+        return 'data';
+    }
+}
+
+class MyModel extends MondocAbstractModel
+{
+    use MondocRetentionTrait;
+
+    protected string $name = null;
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+        $this->addDirty('name');
+        return $this;
+    }
+}
+
+$model = new MyModel();
+$model->setName('John Doe');
+$model->setMondocRetentionData([
+    'user' => 'joe.bloggs',
+]);
+$model->setMondocRetentionExpiry(
+    Date::modify(
+        Date::nowUtc()
+    )->plus()->days(30)
+);
+$model->save();
+
+// There is now both a `MyModel` saved, and a `MondocRetentionModel` saved with the retention data.
+$retrieved = MyService::getById($model->getObjectIdString());
+$retrieved->setMondocRetentionData([
+    'user' => 'jane.bloggs',
+]);
+$retrieved->setMondocRetentionExpiry(
+    null // this data will never expire
+);
+$retrieved->save();
+
+// A new `MondocRetentionModel` is saved with the updated retention data. There are now two `MondocRetentionModel`'s
+
+$paginator = MondocRetentionService::getRetentionHistoryPaginationHelperForClassName(
+    MyModel::class,
+    1,
+    10,
+    ['user' => 'joe.bloggs']
+);
+$results = MondocRetentionService::getPage(
+    $paginator // The filter is carried through by the pagination helper
+);
+// This will return the `MongoRetentionModel` for the `MyModel` with the user `joe.bloggs`
+$firstResultInflated = $results[0]->toOriginalModel();
+echo $firstResultInflated->getName(); // John Doe
 ```
 
 #### Query building

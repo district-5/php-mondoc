@@ -28,46 +28,71 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Model\Traits;
+namespace District5Tests\MondocTests\TestObjects\Model;
+
+use District5Tests\MondocTests\TestObjects\Model\Subs\AgeSubModel;
 
 /**
- * Trait ExcludedPropertiesTrait.
+ * Class TopLevelRetainedTestModel.
  *
- * @package District5\Mondoc\Db\Model\Traits
+ * @package District5Tests\MondocTests\TestObjects\Model
  */
-trait ExcludedPropertiesTrait
+class SubLevelRetainedTestModel extends AbstractRetainedTestModel
 {
     /**
-     * Holds an array of protected variable names.
-     *
-     * @return array
+     * @var string|null
      */
-    protected function getPropertyExclusions(): array
+    protected string|null $name;
+
+    /**
+     * @var AgeSubModel|null
+     */
+    protected AgeSubModel|null $age;
+
+    /**
+     * @var string[]
+     */
+    protected array $mondocNested = [
+        'age' => AgeSubModel::class
+    ];
+
+    /**
+     * @return string|null
+     */
+    public function getName(): string|null
     {
-        return [
-            '_mondocObjectId', '_mondocBson', '_mondocCollection', '_mondocPresetObjectId',
-            '_mondocUnmapped', '_mondocDirty', '_mondocEstablishedNestedSingle', '_mondocEstablishedNestedMultiple',
-            '_mondocRetentionExpiry', '_mondocRetentionChangeMeta', 'mondocNested', 'mondocFieldAliases'
-        ];
+        return $this->name;
     }
 
     /**
-     * Check if a single field is, or one of many fields, are excluded from the actual database document.
+     * @param string $name
      *
-     * @param string|string[] $nameOrNames
-     * @return bool
+     * @return $this
      */
-    protected function isPropertyExcluded(string|array $nameOrNames): bool
+    public function setName(string $name): SubLevelRetainedTestModel
     {
-        $exclusions = $this->getPropertyExclusions();
-        if (is_array($nameOrNames)) {
-            foreach ($nameOrNames as $name) {
-                if (in_array($name, $exclusions)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        return in_array($nameOrNames, $exclusions);
+        $this->name = $name;
+        $this->addDirty('name');
+        return $this;
+    }
+
+    /**
+     * @return AgeSubModel
+     */
+    public function getAge(): AgeSubModel
+    {
+        return $this->age;
+    }
+
+    /**
+     * @param AgeSubModel $age
+     *
+     * @return $this
+     */
+    public function setAge(AgeSubModel $age): SubLevelRetainedTestModel
+    {
+        $this->age = $age;
+        $this->addDirty('age');
+        return $this;
     }
 }

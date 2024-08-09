@@ -32,6 +32,7 @@ namespace District5\Mondoc\Db\Service\Traits;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
+use District5\Mondoc\Helper\FilterFormatter;
 use District5\MondocBuilder\QueryBuilder;
 
 /**
@@ -53,7 +54,9 @@ trait ExistenceTrait
     public static function existsWithQueryBuilder(QueryBuilder $builder): bool
     {
         return self::exists(
-            $builder->getArrayCopy(),
+            FilterFormatter::format(
+                $builder->getArrayCopy()
+            ),
             $builder->getOptions()->getArrayCopy()
         );
     }
@@ -70,6 +73,7 @@ trait ExistenceTrait
      */
     public static function exists(array $criteria, array $options = []): bool
     {
+        $criteria = FilterFormatter::format($criteria);
         if (!array_key_exists('projection', $options)) {
             $options['projection'] = ['_id' => 1];
         }

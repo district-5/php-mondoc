@@ -53,7 +53,7 @@ trait PushTrait
     protected static function pushIntoArrayWithFilter(array $filter, string $field, string $value): bool
     {
         return self::updateOne(
-            $filter,
+            $filter, // Formatted in the updateOne method
             [
                 '$push' => [$field => $value]
             ]
@@ -74,14 +74,14 @@ trait PushTrait
      */
     protected static function pushIntoArrayById(ObjectId $id, string $field, string $value, bool $distinct = true): bool
     {
-        $query = [
+        $filter = [
             '_id' => $id
         ];
         if ($distinct === true) {
-            $query[$field] = ['$ne' => $value];
+            $filter[$field] = ['$ne' => $value];
         }
         return self::updateOne(
-            $query,
+            $filter, // Formatted in the updateOne method
             [
                 '$push' => [$field => $value]
             ]

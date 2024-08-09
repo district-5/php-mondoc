@@ -31,6 +31,7 @@
 namespace District5\Mondoc\Db\Service\Traits\Deletion;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Helper\FilterFormatter;
 use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\BSON\ObjectId;
 use MongoDB\DeleteResult;
@@ -52,13 +53,31 @@ trait DeleteSingleTrait
      */
     public static function delete(ObjectId|string $id): bool
     {
+        return self::deleteOne(
+            [
+                '_id' => MondocTypes::toObjectId($id)
+            ]
+        );
+    }
+
+    /**
+     * Delete a single document from the collection by a given filter.
+     *
+     * @param array $filter
+     * @param array $options
+     * @return bool
+     * @throws MondocConfigConfigurationException
+     */
+    public static function deleteOne(array $filter, array $options = []): bool
+    {
         $collection = self::getCollection(
             get_called_class()
         );
         $delete = $collection->deleteOne(
-            [
-                '_id' => MondocTypes::toObjectId($id)
-            ]
+            FilterFormatter::format(
+                $filter
+            ),
+            $options
         );
 
         return $delete instanceof DeleteResult ? $delete->getDeletedCount() : false;

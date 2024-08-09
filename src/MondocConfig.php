@@ -32,6 +32,8 @@ namespace District5\Mondoc;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
+use District5\Mondoc\Extensions\Retention\MondocRetentionModel;
+use District5\Mondoc\Extensions\Retention\MondocRetentionService;
 use MongoDB\Collection;
 use MongoDB\Database;
 
@@ -150,6 +152,20 @@ class MondocConfig
      *      ...
      * @return string[]
      */
+    protected function getExtensionsServiceMap(): array
+    {
+        return [
+            MondocRetentionModel::class => MondocRetentionService::class,
+        ];
+    }
+
+    /**
+     * Order is
+     *      ModelFQCN => ServiceFQCN,
+     *      AnotherModelFQCN => AnotherServiceFQCN,
+     *      ...
+     * @return string[]
+     */
     public function getServiceMap(): array
     {
         return $this->serviceMap;
@@ -173,12 +189,14 @@ class MondocConfig
      */
     public function getServiceForModel(string $modelFQCN): string
     {
-        if (!array_key_exists($modelFQCN, $this->serviceMap)) {
+        $allServiceMap = array_merge($this->getServiceMap(), $this->getExtensionsServiceMap());
+
+        if (!array_key_exists($modelFQCN, $allServiceMap)) {
             throw new MondocServiceMapErrorException(
                 'MondocConfig: service not found for model: ' . $modelFQCN
             );
         }
-        return $this->serviceMap[$modelFQCN];
+        return $allServiceMap[$modelFQCN];
     }
 
     /**
@@ -192,7 +210,9 @@ class MondocConfig
             return $this->establishedModels[$serviceFQCN];
         }
 
-        foreach ($this->serviceMap as $modelFQCN => $serviceFQCN2) {
+        $allServiceMap = array_merge($this->getServiceMap(), $this->getExtensionsServiceMap());
+
+        foreach ($allServiceMap as $modelFQCN => $serviceFQCN2) {
             if ($serviceFQCN === $serviceFQCN2) {
                 $this->establishedModels[$serviceFQCN] = $modelFQCN;
                 return $modelFQCN;

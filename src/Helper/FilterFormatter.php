@@ -28,46 +28,30 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Model\Traits;
+namespace District5\Mondoc\Helper;
+
+use DateTime;
 
 /**
- * Trait ExcludedPropertiesTrait.
- *
- * @package District5\Mondoc\Db\Model\Traits
+ * Class FilterFormatter
+ * @package District5\Mondoc\Helper
  */
-trait ExcludedPropertiesTrait
+class FilterFormatter
 {
     /**
-     * Holds an array of protected variable names.
-     *
+     * @param array $filter
      * @return array
      */
-    protected function getPropertyExclusions(): array
+    public static function format(array $filter): array
     {
-        return [
-            '_mondocObjectId', '_mondocBson', '_mondocCollection', '_mondocPresetObjectId',
-            '_mondocUnmapped', '_mondocDirty', '_mondocEstablishedNestedSingle', '_mondocEstablishedNestedMultiple',
-            '_mondocRetentionExpiry', '_mondocRetentionChangeMeta', 'mondocNested', 'mondocFieldAliases'
-        ];
-    }
-
-    /**
-     * Check if a single field is, or one of many fields, are excluded from the actual database document.
-     *
-     * @param string|string[] $nameOrNames
-     * @return bool
-     */
-    protected function isPropertyExcluded(string|array $nameOrNames): bool
-    {
-        $exclusions = $this->getPropertyExclusions();
-        if (is_array($nameOrNames)) {
-            foreach ($nameOrNames as $name) {
-                if (in_array($name, $exclusions)) {
-                    return true;
-                }
+        foreach ($filter as $key => $value) {
+            if ($value instanceof DateTime) {
+                $filter[$key] = MondocTypes::phpDateToMongoDateTime($value);
+            } elseif (is_array($value)) {
+                $filter[$key] = self::format($value);
             }
-            return false;
         }
-        return in_array($nameOrNames, $exclusions);
+
+        return $filter;
     }
 }

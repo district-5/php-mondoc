@@ -32,6 +32,7 @@ namespace District5\Mondoc\Db\Service\Traits\Aggregation;
 
 use DateTime;
 use District5\Mondoc\Dto\AggregateSmaDto;
+use District5\Mondoc\Helper\FilterFormatter;
 use District5\Mondoc\Helper\MondocTypes;
 use Exception;
 use MongoDB\Driver\Cursor;
@@ -98,7 +99,10 @@ trait FinancialSmaTrait
         ];
 
         if (!empty($additionalFilter)) {
-            $match['$match'] = array_merge($match['$match'], $additionalFilter);
+            $match['$match'] = array_merge(
+                $match['$match'],
+                FilterFormatter::format($additionalFilter)
+            );
         }
 
         $group = [
@@ -157,7 +161,7 @@ trait FinancialSmaTrait
                     'sma' => [
                         '$avg' => '$price',
                         'window' => [
-                            'documents' => [(0-$smaNumPeriods), 0]
+                            'documents' => [(0 - $smaNumPeriods), 0]
                         ]
                     ]
                 ],

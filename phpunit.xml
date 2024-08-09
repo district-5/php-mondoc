@@ -29,7 +29,6 @@
       <directory>tests</directory>
     </exclude>
     <report>
-      <php outputFile="build/coverage/php.php"/>
       <html outputDirectory="build/coverage/html" lowUpperBound="50" highLowerBound="90"/>
     </report>
   </coverage>

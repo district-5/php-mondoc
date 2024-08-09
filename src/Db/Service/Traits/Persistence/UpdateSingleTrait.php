@@ -32,6 +32,9 @@ namespace District5\Mondoc\Db\Service\Traits\Persistence;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
+use District5\Mondoc\Extensions\Retention\MondocRetentionService;
+use District5\Mondoc\Helper\FilterFormatter;
 use District5\MondocBuilder\QueryBuilder;
 use MongoDB\Collection;
 
@@ -51,6 +54,7 @@ trait UpdateSingleTrait
      * @return bool
      *
      * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
      */
     public static function update(MondocAbstractModel $model, array $updateOptions = []): bool
@@ -90,12 +94,16 @@ trait UpdateSingleTrait
         }
         $performed = $collection->updateOne(
             ['_id' => $model->getObjectId()],
-            $query,
+            FilterFormatter::format($query),
             $updateOptions
         );
         if ($performed->isAcknowledged() && $performed->getMatchedCount() === 1) {
             $model->clearDirty();
             $model->setMongoCollection($collection);
+
+            if ($model->isMondocRetentionEnabled()) {
+                MondocRetentionService::create($model);
+            }
 
             return true;
         }
@@ -108,7 +116,7 @@ trait UpdateSingleTrait
      * this model, held in the code are not updated.
      *
      * @param array $filter
-     * @param array $query
+     * @param array $update
      * @param array $updateOptions
      *
      * @return bool
@@ -126,15 +134,15 @@ trait UpdateSingleTrait
      *      );
      *
      */
-    public static function updateOne(array $filter, array $query, array $updateOptions = []): bool
+    public static function updateOne(array $filter, array $update, array $updateOptions = []): bool
     {
         $collection = self::getCollection(
             get_called_class()
         );
 
         $perform = $collection->updateOne(
-            $filter,
-            $query,
+            FilterFormatter::format($filter),
+            FilterFormatter::format($update),
             $updateOptions
         );
 
@@ -147,23 +155,17 @@ trait UpdateSingleTrait
      * not updated.
      *
      * @param QueryBuilder $queryBuilder
-     * @param array $query
+     * @param array $update
      *
      * @return bool
      * @throws MondocConfigConfigurationException
      */
-    public static function updateOneByQueryBuilder(QueryBuilder $queryBuilder, array $query): bool
+    public static function updateOneByQueryBuilder(QueryBuilder $queryBuilder, array $update): bool
     {
-        $collection = self::getCollection(
-            get_called_class()
-        );
-
-        $perform = $collection->updateOne(
+        return self::updateOne(
             $queryBuilder->getArrayCopy(),
-            $query,
+            $update,
             $queryBuilder->getOptions()->getArrayCopy()
         );
-
-        return $perform->isAcknowledged();
     }
 }

@@ -34,6 +34,7 @@ use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
+use District5\Mondoc\Helper\FilterFormatter;
 use District5\Mondoc\Helper\MondocTypes;
 use District5\MondocBuilder\QueryBuilder;
 use MongoDB\Model\BSONDocument;
@@ -57,7 +58,7 @@ trait GetMultiTrait
     public static function getMultiByQueryBuilder(QueryBuilder $builder): array
     {
         return self::getMultiByCriteria(
-            $builder->getArrayCopy(),
+            $builder->getArrayCopy(), // Formatted in the getMultiByCriteria method
             $builder->getOptions()->getArrayCopy()
         );
     }
@@ -78,7 +79,10 @@ trait GetMultiTrait
         $collection = self::getCollection(
             $calledClass
         );
-        $cursor = $collection->find($filter, $options);
+        $cursor = $collection->find(
+            FilterFormatter::format($filter),
+            $options
+        );
         $objs = [];
         /* @var $calledClass MondocAbstractService */
         $clz = $calledClass::getModelClass();
@@ -138,7 +142,7 @@ trait GetMultiTrait
     public static function getMultiWhereKeyEqualsValue(string $key, mixed $value): array
     {
         return self::getMultiByCriteria([
-            $key => ['$eq' => $value]
+            $key => ['$eq' => $value] // Formatted in the getMultiByCriteria method
         ]);
     }
 

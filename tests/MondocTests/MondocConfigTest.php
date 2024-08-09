@@ -147,6 +147,7 @@ class MondocConfigTest extends MondocBaseTest
             $this->assertEquals('MondocConfig: database connection not found for connection ID: default', $e->getMessage());
         }
         $newInstance->addDatabase($oldDb);
+        $newInstance->addDatabase($oldDb, 'mondoc_retention');
         $newInstance->setServiceMap($oldMap);
         $this->assertInstanceOf(Database::class, $newInstance->getDatabase());
         $this->assertEquals($old->getServiceMap(), $newInstance->getServiceMap());

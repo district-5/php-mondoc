@@ -34,6 +34,7 @@ namespace District5Tests\MondocTests\Dto;
 use DateTime;
 use District5\Date\Date;
 use District5\Mondoc\Dto\AggregateSmaDto;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5Tests\MondocTests\TestObjects\Model\FinancialCandleModel;
 use District5Tests\MondocTests\TestObjects\Service\FinancialCandleService;
 use Exception;
@@ -109,5 +110,14 @@ class AggregateSmaDtoTest extends AbstractFinancialTest
         $this->assertGreaterThan(0, $sma[0]->getSma());
         $this->assertGreaterThan(0, $sma[0]->getPrice());
         $this->assertInstanceOf(DateTime::class, $sma[0]->getDate());
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function tearDown(): void
+    {
+        FinancialCandleService::deleteMulti([]);
     }
 }

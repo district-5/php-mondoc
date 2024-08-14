@@ -72,6 +72,7 @@ trait InsertSingleTrait
             $model->clearPresetObjectId();
             $model->setObjectId($insert->getInsertedId());
             $model->setMongoCollection($collection);
+            $model->clearDirty();
 
             if ($model->isMondocRetentionEnabled()) {
                 MondocRetentionService::create($model);

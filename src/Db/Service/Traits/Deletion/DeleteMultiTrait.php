@@ -79,9 +79,6 @@ trait DeleteMultiTrait
         if (empty($objectIds)) {
             return 0;
         }
-        foreach ($objectIds as $key => $objectId) {
-            $objectIds[$key] = MondocTypes::toObjectId($objectId);
-        }
 
         $collection = self::getCollection(
             get_called_class()
@@ -90,7 +87,7 @@ trait DeleteMultiTrait
             FilterFormatter::format(
                 [
                     '_id' => [
-                        '$in' => array_values(
+                        '$in' => MondocTypes::deduplicateArrayOfObjectIds(
                             $objectIds
                         )
                     ]

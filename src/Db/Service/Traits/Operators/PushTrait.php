@@ -45,12 +45,12 @@ trait PushTrait
      *
      * @param array $filter
      * @param string $field
-     * @param string $value
+     * @param mixed $value
      * @return bool
      * @throws MondocConfigConfigurationException
      * @noinspection PhpUnused
      */
-    protected static function pushIntoArrayWithFilter(array $filter, string $field, string $value): bool
+    protected static function pushIntoArrayWithFilter(array $filter, string $field, mixed $value): bool
     {
         return self::updateOne(
             $filter, // Formatted in the updateOne method

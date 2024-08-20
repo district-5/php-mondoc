@@ -45,7 +45,7 @@ trait PullTrait
      *
      * @param array $filter
      * @param string $field
-     * @param string|int|bool $value
+     * @param mixed $value
      * @return bool
      * @throws MondocConfigConfigurationException
      * @noinspection PhpUnused

@@ -54,7 +54,7 @@ class AllTypesModel extends MondocAbstractModel
     protected object|null $object = null;
     protected DateTime|UTCDateTime|null $phpDate = null;
     protected UTCDateTime|DateTime|null $mongoDate = null;
-    protected array|BSONArray|null $phpArray = [];
+    protected array|null $phpArray = [];
     protected BSONArray|array $bsonArray = [];
     protected BSONDocument|stdClass|array|null $phpObject = null;
     protected BSONDocument|stdClass|array|null $bsonObject = null;

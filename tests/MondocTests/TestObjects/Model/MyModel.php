@@ -95,12 +95,9 @@ class MyModel extends MondocAbstractModel
                 'age' => $this->getAge(),
                 'foo' => 'bar'
             ];
-        } else {
-            return [
-                'name' => $this->getName(),
-                'age' => $this->getAge()
-            ];
         }
+
+        return parent::asArray();
     }
 
     /**
@@ -129,7 +126,6 @@ class MyModel extends MondocAbstractModel
     public function setName(string $val): static
     {
         $this->name = trim($val);
-        $this->addDirty('name');
 
         return $this;
     }
@@ -150,7 +146,6 @@ class MyModel extends MondocAbstractModel
     public function setAge(int $age): static
     {
         $this->age = $age;
-        $this->addDirty('age');
 
         return $this;
     }
@@ -189,12 +184,23 @@ class MyModel extends MondocAbstractModel
      * Hack to allow it through for tests
      *
      * @param string $property
-     * @param string $value
      * @return void
      */
-    public function proxyAddDirty(string $property, string $value): void
+    public function proxyAddDirty(string $property): void
     {
         $this->addDirty($property);
+    }
+
+    /**
+     * Hack to allow it through for tests
+     *
+     * @param string $property
+     * @param mixed $value
+     * @return void
+     */
+    public function proxySetKey(string $property, mixed $value): void
+    {
+        $this->__set($property, $value);
     }
 
     /**

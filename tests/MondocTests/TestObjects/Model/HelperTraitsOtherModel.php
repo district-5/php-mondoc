@@ -60,7 +60,6 @@ class HelperTraitsOtherModel extends MondocAbstractModel
     public function setName(string $name): self
     {
         $this->name = $name;
-        $this->addDirty('name');
         return $this;
     }
 

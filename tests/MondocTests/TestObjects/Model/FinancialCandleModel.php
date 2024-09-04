@@ -75,7 +75,6 @@ class FinancialCandleModel extends MondocAbstractModel
     public function setDate(DateTime $date): static
     {
         $this->date = $date;
-        $this->addDirty('date');
 
         return $this;
     }
@@ -96,7 +95,6 @@ class FinancialCandleModel extends MondocAbstractModel
     public function setPrice(float|int $price): static
     {
         $this->price = $price;
-        $this->addDirty('price');
 
         return $this;
     }
@@ -117,7 +115,6 @@ class FinancialCandleModel extends MondocAbstractModel
     public function setSymbol(string|null $symbol): static
     {
         $this->symbol = $symbol;
-        $this->addDirty('symbol');
 
         return $this;
     }

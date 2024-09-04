@@ -58,8 +58,8 @@ class SingleAndNestedTest extends MondocBaseTest
         $this->assertTrue($nested->isMondocSubModel());
     }
 
-    /** @noinspection PhpPossiblePolymorphicInvocationInspection */
     /**
+     * @noinspection PhpPossiblePolymorphicInvocationInspection
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
      */
@@ -203,5 +203,72 @@ class SingleAndNestedTest extends MondocBaseTest
         $this->assertEquals('bar', $sub->foo);
         /** @noinspection PhpUndefinedFieldInspection */
         $this->assertNull($sub->thisDoesntExist);
+    }
+
+
+    public function testChangingSubModelReflectsInDatabase()
+    {
+        $model = new SingleAndMultiNestedModel();
+        $foodOne = new FoodSubModel();
+        $foodOne->setFood('bread');
+        $model->setFood($foodOne);
+        $this->assertTrue($model->save());
+
+        $retrieved = SingleAndMultiNestedService::getById($model->getObjectId());
+        $this->assertEmpty($retrieved->getDirty());
+        $this->assertEquals('bread', $retrieved->getFood()->getFood());
+        $retrieved->getFood()->setFood('cheese');
+        $this->assertNotEmpty($retrieved->getDirty());
+        $this->assertContains('food', $retrieved->getDirty());
+        $this->assertTrue($retrieved->save());
+
+        $reloaded = SingleAndMultiNestedService::getById($model->getObjectId());
+        $this->assertEmpty($reloaded->getDirty());
+        $this->assertEquals('cheese', $reloaded->getFood()->getFood());
+
+        $this->assertTrue($model->delete());
+    }
+
+    public function testChangingArrayOfSubModelsReflectsInDatabase()
+    {
+        $model = new SingleAndMultiNestedModel();
+        $foodOne = new FoodSubModel();
+        $foodOne->setFood('not-testing');
+        $model->setFood($foodOne);
+
+        $avocado = new FoodSubModel();
+        $avocado->setFood('avocado');
+        $attribute = new FoodAttributesSubModel();
+        $attribute->setSmell('fresh');
+        $attribute->setColour('green');
+        $avocado->setAttributes([$attribute]);
+
+        $broccoli = new FoodSubModel();
+        $broccoli->setFood('broccoli');
+        $attribute = new FoodAttributesSubModel();
+        $attribute->setSmell('earthy');
+        $attribute->setColour('green');
+        $broccoli->setAttributes([$attribute]);
+        $model->setFoods([$avocado, $broccoli]);
+
+        $this->assertTrue($model->save());
+
+        $retrieved = SingleAndMultiNestedService::getById($model->getObjectId());
+        /* @var $retrieved SingleAndMultiNestedModel */
+        $this->assertEmpty($retrieved->getDirty());
+
+        $broccoli = $retrieved->getFoods()[1];
+        $this->assertEquals('broccoli', $broccoli->getFood());
+        $broccoli->setFood('purple-sprouting-broccoli');
+        $this->assertNotEmpty($retrieved->getDirty());
+        $this->assertContains('foods', $retrieved->getDirty());
+        $this->assertTrue($retrieved->save());
+
+        $retrieved = SingleAndMultiNestedService::getById($model->getObjectId());
+        /* @var $retrieved SingleAndMultiNestedModel */
+        $this->assertEmpty($retrieved->getDirty());
+        $this->assertEquals('purple-sprouting-broccoli', $retrieved->getFoods()[1]->getFood());
+
+        $this->assertTrue($model->delete());
     }
 }

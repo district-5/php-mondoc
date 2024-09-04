@@ -40,9 +40,15 @@ use District5\Mondoc\Helper\MondocTypes;
 use District5Tests\MondocTests\MondocBaseTest;
 use District5Tests\MondocTests\TestObjects\Model\AllTypesModel;
 use District5Tests\MondocTests\TestObjects\Model\NoServiceModel;
+use District5Tests\MondocTests\TestObjects\Model\Subs\FoodAttributesSubModel;
+use District5Tests\MondocTests\TestObjects\Model\Subs\FoodSubModel;
 use District5Tests\MondocTests\TestObjects\Service\AllTypesService;
 use JsonException;
+use MongoDB\BSON\Decimal128;
+use MongoDB\BSON\Int64;
+use MongoDB\BSON\Javascript;
 use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\Timestamp;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
@@ -218,6 +224,40 @@ class TypesTest extends MondocBaseTest
         $stdClass = new stdClass();
         $stdClass->foo = 'bar';
 
+        $decimal128 = new Decimal128('1.01');
+        $this->assertEquals('1.01', MondocTypes::typeToJsonFriendly($decimal128));
+
+        $int64 = new Int64(1);
+        $this->assertEquals('1', MondocTypes::typeToJsonFriendly($int64));
+
+        $ts = time();
+        $timestamp = new Timestamp(1, $ts);
+        $this->assertEquals(['t' => $ts, 'i' => 1], MondocTypes::typeToJsonFriendly($timestamp));
+
+        $javascript = new Javascript('function() { return 1; }');
+        $this->assertEquals(['$code' => 'function() { return 1; }'], MondocTypes::typeToJsonFriendly($javascript));
+
+        $this->assertNull(MondocTypes::typeToJsonFriendly(fopen('php://memory', 'r')));
+
+        $subModel = new FoodSubModel();
+        $subModel->setFood('pizza');
+        $attr = new FoodAttributesSubModel();
+        $attr->setSmell('good');
+        $attr->setColour('mixed');
+        $subModel->setAttributes([$attr]);
+        $this->assertEquals(
+            [
+                'type' => 'pizza',
+                'attributes' => [
+                    [
+                        'smell' => 'good',
+                        'colour' => 'mixed'
+                    ]
+                ],
+            ],
+            MondocTypes::typeToJsonFriendly($subModel)
+        );
+
         $convertedArray = MondocTypes::typeToJsonFriendly($array);
         $this->assertIsArray($convertedArray);
         $this->assertArrayHasKey(0, $convertedArray);
@@ -251,7 +291,7 @@ class TypesTest extends MondocBaseTest
             public string $foo = 'bar';
         };
 
-        $this->assertNull(MondocTypes::typeToJsonFriendly($foo));
+        $this->assertEquals(['foo' => 'bar'], MondocTypes::typeToJsonFriendly($foo));
 
         $this->assertTrue(MondocTypes::typeToJsonFriendly(true));
         $this->assertFalse(MondocTypes::typeToJsonFriendly(false));
@@ -400,13 +440,20 @@ class TypesTest extends MondocBaseTest
     public function testDirty()
     {
         $myModel = new NoServiceModel();
-        $this->assertFalse($myModel->isDirty(null));
-        $this->assertFalse($myModel->isDirty('name'));
-        $this->assertFalse($myModel->isDirty('blah'));
+        $myModel->__set('nonField', 'foo');
+        $this->assertTrue($myModel->isDirty(null)); // new models are dirty
+        $this->assertTrue($myModel->isDirty('name'));
+        $this->assertTrue($myModel->isDirtyField('nonField'));
+        $this->assertTrue($myModel->isDirty('blah')); // fields that don't exist are by nature dirty
+        $myModel->__set('blah', 'val');
+        $this->assertTrue($myModel->isDirty('blah')); // this field is now dirty
         $myModel->setName('foo');
         $this->assertTrue($myModel->isDirty(null));
         $this->assertTrue($myModel->isDirty('name'));
-        $this->assertFalse($myModel->isDirty('blah'));
+        $this->assertTrue($myModel->isDirty('blah')); // fields that don't exist are by nature dirty
+
+        $this->assertTrue($myModel->isDirtyField('blah')); // fields that don't exist are by nature dirty
+        $this->assertTrue($myModel->isDirtyField('nonField')); // fields that don't exist are by nature dirty
     }
 
     public function testDeduplicationOfArrayOfObjectIds()

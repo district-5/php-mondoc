@@ -63,7 +63,6 @@ class TopLevelRetainedTestModel extends MondocAbstractModel
     public function setName(string $name): TopLevelRetainedTestModel
     {
         $this->name = $name;
-        $this->addDirty('name');
         return $this;
     }
 }

@@ -82,7 +82,6 @@ class SingleAndMultiNestedModel extends MondocAbstractModel
     public function setFriends(array $friends): void
     {
         $this->friends = $friends;
-        $this->addDirty('friends');
     }
 
     /**
@@ -98,7 +97,6 @@ class SingleAndMultiNestedModel extends MondocAbstractModel
      */
     public function setFood(?FoodSubModel $food): void
     {
-        $this->addDirty('food');
         $this->food = $food;
     }
 
@@ -115,7 +113,6 @@ class SingleAndMultiNestedModel extends MondocAbstractModel
      */
     public function setFoods(array $foods): void
     {
-        $this->addDirty('foods');
         $this->foods = $foods;
     }
 
@@ -133,7 +130,6 @@ class SingleAndMultiNestedModel extends MondocAbstractModel
     public function setName(string $name): void
     {
         $this->name = $name;
-        $this->addDirty('name');
     }
 
     /**

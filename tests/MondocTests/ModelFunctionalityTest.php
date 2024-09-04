@@ -93,6 +93,28 @@ class ModelFunctionalityTest extends MondocBaseTest
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
      */
+    public function testInsertionAndBSONArePresent()
+    {
+        $m = new MyModel();
+        $m->setAge(2);
+        $m->setName('Joe');
+        $dirty = $m->getDirty();
+        $this->assertCount(2, $dirty);
+        $this->assertNull($m->getOriginalBsonDocument());
+        $this->assertTrue($m->save());
+
+        $this->assertEmpty($m->getDirty());
+        $this->assertNotNull($m->getOriginalBsonDocument());
+        $this->assertEquals(2, $m->getOriginalBsonDocument()->getArrayCopy()['age']);
+        $this->assertEquals('Joe', $m->getOriginalBsonDocument()->getArrayCopy()['name']);
+
+        $this->assertTrue($m->delete());
+    }
+
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testDeleteWorksAsExpected()
     {
         $m = new MyModel();
@@ -100,6 +122,7 @@ class ModelFunctionalityTest extends MondocBaseTest
         $m->setName('Joe');
         $this->assertTrue($m->save());
         $this->assertTrue($m->hasObjectId());
+        $this->assertTrue($m->save());
         $this->assertTrue($m->delete());
         $this->assertFalse($m->hasObjectId());
 

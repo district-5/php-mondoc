@@ -31,12 +31,27 @@
 namespace District5Tests\MondocTests\TestObjects\Service;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Helper\MondocPaginationHelper;
+use District5\MondocBuilder\QueryBuilder;
+use District5Tests\MondocTests\TestObjects\Model\SingleAndMultiNestedModel;
 use MongoDB\BSON\ObjectId;
 
 /**
  * Class SingleAndMultiNestedService.
  *
  * @package District5Tests\MondocTests\TestObjects\Service
+ * @method static SingleAndMultiNestedModel[] getMultiByCriteria(array $filter = [], array $options = [])
+ * @method static SingleAndMultiNestedModel[] getMultiByQueryBuilder(QueryBuilder $builder)
+ * @method static SingleAndMultiNestedModel[] getByIds(array $ids)
+ * @method static SingleAndMultiNestedModel[] getMultiWhereKeyEqualsValue(string $key, $value)
+ * @method static SingleAndMultiNestedModel[] getMultiWhereKeyDoesNotEqualValue(string $key, $value)
+ * @method static SingleAndMultiNestedModel|null getOneByCriteria(array $filter = [], array $options = [])
+ * @method static SingleAndMultiNestedModel|null getById(ObjectId|string $id)
+ * @method static SingleAndMultiNestedModel|null getOneByQueryBuilder(QueryBuilder $builder)
+ * @method static SingleAndMultiNestedModel|null getOneWhereKeyEqualsValue(string $key, mixed $value)
+ * @method static SingleAndMultiNestedModel|null getOneWhereKeyDoesNotEqualValue(string $key, mixed $value)
+ * @method static SingleAndMultiNestedModel[] getPage(MondocPaginationHelper $paginator, ?string $sortByField = '_id', int $sortDirection = -1): array
+ * @method static SingleAndMultiNestedModel[] getPageByByObjectIdPagination(MondocPaginationHelper $paginator, ObjectId|string|null $currentId, int $sortDirection = -1, array $filter = [])
  */
 class SingleAndMultiNestedService extends AbstractTestService
 {

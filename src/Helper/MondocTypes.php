@@ -31,11 +31,18 @@
 namespace District5\Mondoc\Helper;
 
 use DateTime;
+use District5\Mondoc\Db\Model\MondocAbstractSubModel;
 use District5\Mondoc\Helper\Traits\ArrayConversionTrait;
 use District5\Mondoc\Helper\Traits\DateObjectConversionTrait;
 use District5\Mondoc\Helper\Traits\ObjectIdConversionTrait;
+use MongoDB\BSON\Decimal128;
+use MongoDB\BSON\Int64;
 use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\Timestamp;
+use MongoDB\BSON\Type;
 use MongoDB\BSON\UTCDateTime;
+use MongoDB\Model\BSONArray;
+use MongoDB\Model\BSONDocument;
 use stdClass;
 
 /**
@@ -71,25 +78,46 @@ class MondocTypes
         } else if (is_null($val)) {
             return $val;
         } else if (is_object($val)) {
-            $val = clone $v; // it's an object
-            if (method_exists($val, 'jsonSerialize')) {
+            if ($val instanceof Type) {
+                if ($val instanceof BSONArray || $val instanceof BSONDocument) {
+                    return self::typeToJsonFriendly($val->getArrayCopy());
+                }
+                if ($val instanceof UTCDateTime) {
+                    return self::dateToPHPDateTime($val)->format('Uv');
+                }
                 if ($val instanceof ObjectId) {
                     return MondocTypes::objectIdToString($val);
                 }
-                if ($val instanceof UTCDateTime) {
-                    return $val->jsonSerialize()['$date']['$numberLong'];
+                if ($val instanceof Decimal128) {
+                    return $val->jsonSerialize()['$numberDecimal'];
                 }
-                return self::typeToJsonFriendly(
-                    $val->jsonSerialize()
-                );
-            }
-        }
+                if ($val instanceof Int64) {
+                    return $val->__toString();
+                }
+                if ($val instanceof Timestamp) {
+                    return $val->jsonSerialize()['$timestamp'];
+                }
 
-        if ($val instanceof DateTime) {
-            return $val->format('Uv');
-        }
-        if ($val instanceof stdClass) {
-            return (array)$val;
+                if (method_exists($val, 'jsonSerialize')) {
+                    return self::typeToJsonFriendly(
+                        $val->jsonSerialize()
+                    );
+                }
+            }
+            $val = clone $v; // it's an object
+
+            if ($val instanceof DateTime) {
+                return $val->format('Uv');
+            }
+            if ($val instanceof stdClass) {
+                return (array)$val;
+            }
+
+            if ($val instanceof MondocAbstractSubModel) {
+                $val = $val->asArray();
+            } else {
+                $val = (array)$val;
+            }
         }
 
         if (is_array($val)) {

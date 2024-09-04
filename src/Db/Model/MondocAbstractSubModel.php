@@ -333,7 +333,13 @@ abstract class MondocAbstractSubModel
      */
     public function getMondocObjectVars(): array
     {
-        return get_object_vars($this);
+        $vars = get_object_vars($this);
+        $ignore = $this->getPropertyExclusions();
+        foreach ($ignore as $i) {
+            unset($vars[$i]);
+        }
+
+        return $vars;
     }
 
     /**

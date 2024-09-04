@@ -65,6 +65,9 @@ trait UpdateSingleTrait
         $data = $model->asArray();
         unset($data['_id']);
         $dirty = $model->getDirty();
+        if (empty($dirty)) {
+            return true;
+        }
         $changeSet = [];
         foreach ($dirty as $key) {
             $key = $model->getFieldAliasSingleMap($key, true);

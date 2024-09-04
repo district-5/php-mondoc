@@ -30,6 +30,9 @@
 
 namespace District5\Mondoc\Db\Model\Traits;
 
+use District5\Mondoc\Helper\MondocTypes;
+use MongoDB\Model\BSONDocument;
+
 /**
  * Trait DirtyAttributesTrait.
  *
@@ -38,10 +41,10 @@ namespace District5\Mondoc\Db\Model\Traits;
 trait DirtyAttributesTrait
 {
     /**
-     * Holds any dirty values. As called with `$this->addDirty('foo');`
-     * Dirty values aren't referenced for new objects. New documents
-     * are established by the presence of an `_id` field. Which results
-     * in a full insertion.
+     * Holds any explicitly defined dirty values. As called with
+     * `$this->addDirty('foo');`. Dirty values aren't referenced for
+     * new objects. New documents are established by the presence of
+     * an `_id` field. Which results in a full insertion.
      *
      * @var array
      */
@@ -60,17 +63,10 @@ trait DirtyAttributesTrait
     }
 
     /**
-     * Get the array of dirty values (values that need to be updated). Dirty values aren't referenced for new objects.
-     *
-     * @return array
-     */
-    public function getDirty(): array
-    {
-        return $this->_mondocDirty;
-    }
-
-    /**
      * Add a dirty value, indicating it should be saved upon updating. Dirty values aren't referenced for new objects.
+     * Using this method is unnecessary if you're setting a value directly, as the value is either for a new model
+     * or it's calculated as dirty. However, there may be circumstances where you want to mark a field as dirty
+     * explicitly.
      *
      * @param string $property
      *
@@ -95,6 +91,81 @@ trait DirtyAttributesTrait
             return !empty($this->getDirty());
         }
 
-        return in_array($property, $this->getDirty());
+        return $this->isDirtyField($property);
     }
+
+    /**
+     * Get the array of dirty values (values that need to be updated). Dirty values aren't referenced for new objects.
+     *
+     * @return array
+     */
+    public function getDirty(): array
+    {
+        $initialDirty = $this->_mondocDirty;
+        foreach ($this->getMondocObjectVars() as $key => $value) {
+            if (in_array($key, $initialDirty)) {
+                continue;
+            }
+            $aliased = $this->getFieldAliasSingleMap($key, true);
+            if ($this->isDirtyField($aliased) === true) {
+                $initialDirty[] = $key;
+            }
+        }
+
+        $additionalVars = $this->getUnmappedFields();
+        foreach ($additionalVars as $key => $value) {
+            if ($this->isDirtyField($key) === true) {
+                $initialDirty[] = $key;
+            }
+        }
+
+        return array_unique($initialDirty);
+    }
+
+    /**
+     * Check if a field is dirty. Dirty values aren't referenced for new objects.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isDirtyField(string $property): bool
+    {
+        if ($this->getOriginalBsonDocument() === null) {
+            return true;
+        }
+        if (in_array($property, $this->_mondocDirty)) {
+            return true;
+        }
+        $bsonValues = $this->getOriginalBsonDocument()->getArrayCopy();
+        if (!array_key_exists($property, $bsonValues)) {
+            return array_key_exists($property, $this->getUnmappedFields()); // check if it's in the unmapped fields
+        }
+
+        return MondocTypes::typeToJsonFriendly($this->__get($property)) !== MondocTypes::typeToJsonFriendly($bsonValues[$property]);
+    }
+
+    /**
+     * @see MondocAbstractModel::getOriginalBsonDocument()
+     */
+    abstract public function getOriginalBsonDocument(): ?BSONDocument;
+
+    /**
+     * @see MondocAbstractSubModel::getMondocObjectVars()
+     */
+    abstract public function getMondocObjectVars(): array;
+
+    /**
+     * @see ExcludedPropertiesTrait::getPropertyExclusions()
+     */
+    abstract protected function getPropertyExclusions(): array;
+
+    /**
+     * @see FieldAliasMapTrait::getFieldAliasSingleMap()
+     */
+    abstract public function getFieldAliasSingleMap(string $field, bool $remote): string;
+
+    /**
+     * @see UnmappedPropertiesTrait::getUnmappedFields()
+     */
+    abstract public function getUnmappedFields(): array;
 }

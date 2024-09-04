@@ -34,6 +34,7 @@ use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Extensions\Retention\MondocRetentionService;
+use MongoDB\Model\BSONDocument;
 
 /**
  * Trait InsertSingleTrait.
@@ -73,6 +74,8 @@ trait InsertSingleTrait
             $model->setObjectId($insert->getInsertedId());
             $model->setMongoCollection($collection);
             $model->clearDirty();
+            $data['_id'] = $model->getObjectId();
+            $model->setOriginalBsonDocument(new BSONDocument($data));
 
             if ($model->isMondocRetentionEnabled()) {
                 MondocRetentionService::create($model);

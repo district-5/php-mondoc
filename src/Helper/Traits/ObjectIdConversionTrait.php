@@ -105,7 +105,8 @@ trait ObjectIdConversionTrait
     {
         $tmp = [];
         $final = [];
-        foreach ($ids as $id) {
+        $arrayOfIds = self::arrayOfObjectIdsToObjectIds($ids);
+        foreach ($arrayOfIds as $id) {
             $newId = self::toObjectId($id);
             if (null !== $newId && !in_array($stringId = MondocTypes::objectIdToString($newId), $tmp)) {
                 $final[] = $newId;
@@ -114,5 +115,24 @@ trait ObjectIdConversionTrait
         }
 
         return $final;
+    }
+
+    /**
+     * Given an array of ObjectIds, this will ensure they are indeed ObjectIds.
+     *
+     * @param array $data
+     *
+     * @return ObjectId[]
+     */
+    public static function arrayOfObjectIdsToObjectIds(array $data): array
+    {
+        $n = [];
+        foreach ($data as $i) {
+            if (null !== $id = self::toObjectId($i)) {
+                $n[] = $id;
+            }
+        }
+
+        return array_values($n);
     }
 }

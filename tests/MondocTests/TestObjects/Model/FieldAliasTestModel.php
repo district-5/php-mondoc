@@ -85,7 +85,6 @@ class FieldAliasTestModel extends MondocAbstractModel
     public function setAttributes(FieldAliasSubModel $attributes): static
     {
         $this->attributes = $attributes;
-        $this->addDirty('attributes');
         return $this;
     }
 
@@ -105,7 +104,6 @@ class FieldAliasTestModel extends MondocAbstractModel
     public function setMultiAttributes(array $multiAttributes): static
     {
         $this->multiAttributes = $multiAttributes;
-        $this->addDirty('multiAttributes');
         return $this;
     }
 
@@ -133,7 +131,6 @@ class FieldAliasTestModel extends MondocAbstractModel
     public function setName(string $name): static
     {
         $this->name = $name;
-        $this->addDirty('name');
         return $this;
     }
 
@@ -153,7 +150,6 @@ class FieldAliasTestModel extends MondocAbstractModel
     public function setCity(string $city): static
     {
         $this->city = $city;
-        $this->addDirty('city');
         return $this;
     }
 
@@ -173,7 +169,6 @@ class FieldAliasTestModel extends MondocAbstractModel
     public function setAge(int $age): static
     {
         $this->age = $age;
-        $this->addDirty('age');
         return $this;
     }
 }

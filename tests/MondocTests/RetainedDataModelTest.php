@@ -181,7 +181,7 @@ class RetainedDataModelTest extends MondocBaseTest
 
         $totalLoops = 10;
         for ($i = 1; $i < ($totalLoops + 1); $i++) {
-            $m->setName('foo');
+            $m->setName('foo' . $i);
             $this->assertTrue($m->save());
             $this->assertEquals($i + 2, MondocRetentionService::countRetentionModelsForClassName(TopLevelRetainedTestModel::class));
         }

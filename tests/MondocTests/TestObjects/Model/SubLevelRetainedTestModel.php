@@ -72,7 +72,6 @@ class SubLevelRetainedTestModel extends AbstractRetainedTestModel
     public function setName(string $name): SubLevelRetainedTestModel
     {
         $this->name = $name;
-        $this->addDirty('name');
         return $this;
     }
 
@@ -92,7 +91,6 @@ class SubLevelRetainedTestModel extends AbstractRetainedTestModel
     public function setAge(AgeSubModel $age): SubLevelRetainedTestModel
     {
         $this->age = $age;
-        $this->addDirty('age');
         return $this;
     }
 }

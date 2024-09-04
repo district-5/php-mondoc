@@ -104,7 +104,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
      *
      * @return $this
      */
-    private function setOriginalBsonDocument(BSONDocument $document): MondocAbstractModel
+    public function setOriginalBsonDocument(BSONDocument $document): MondocAbstractModel
     {
         $this->_mondocBson = $document;
 

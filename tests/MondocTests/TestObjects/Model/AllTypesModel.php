@@ -62,7 +62,6 @@ class AllTypesModel extends MondocAbstractModel
     public function setAnId($v): void
     {
         $this->anId = $v;
-        $this->addDirty('anId');
     }
 
     /**
@@ -79,66 +78,55 @@ class AllTypesModel extends MondocAbstractModel
     public function setString($v): void
     {
         $this->string = $v;
-        $this->addDirty('string');
     }
 
     public function setInt($v): void
     {
         $this->int = $v;
-        $this->addDirty('int');
     }
 
     public function setNull($v): void
     {
         $this->null = $v;
-        $this->addDirty('null');
     }
 
     public function setFloat($v): void
     {
         $this->float = $v;
-        $this->addDirty('float');
     }
 
     public function setBool($v): void
     {
         $this->bool = $v;
-        $this->addDirty('bool');
     }
 
     public function setPhpArray($v): void
     {
         $this->phpArray = $v;
-        $this->addDirty('phpArray');
     }
 
     public function setPhpDate($v): void
     {
         $this->phpDate = $v;
-        $this->addDirty('phpDate');
     }
 
     public function setMongoDate($v): void
     {
         $this->mongoDate = $v;
-        $this->addDirty('mongoDate');
     }
 
     public function setBsonArray($v): void
     {
         $this->bsonArray = $v;
-        $this->addDirty('bsonArray');
     }
 
     public function setPhpObject($v): void
     {
         $this->phpObject = $v;
-        $this->addDirty('phpObject');
     }
 
     public function setBsonObject($v): void
     {
         $this->bsonObject = $v;
-        $this->addDirty('bsonObject');
     }
 }

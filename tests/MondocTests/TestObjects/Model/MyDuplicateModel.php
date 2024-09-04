@@ -68,7 +68,6 @@ class MyDuplicateModel extends MondocAbstractModel
     public function setName(string $val): static
     {
         $this->name = trim($val);
-        $this->addDirty('name');
 
         return $this;
     }
@@ -89,7 +88,6 @@ class MyDuplicateModel extends MondocAbstractModel
     public function setAge(int $age): static
     {
         $this->age = $age;
-        $this->addDirty('age');
 
         return $this;
     }

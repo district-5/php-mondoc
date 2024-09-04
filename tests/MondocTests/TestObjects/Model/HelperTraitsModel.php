@@ -55,7 +55,6 @@ class HelperTraitsModel extends AbstractHelperTraitsModel
     public function setName(string $name): self
     {
         $this->name = $name;
-        $this->addDirty('name');
         return $this;
     }
 

@@ -125,7 +125,6 @@ class MondocRetentionModel extends MondocAbstractModel
     public function setSourceModelData(array|BSONDocument $data): static
     {
         $this->doc = MondocTypes::arrayToPhp($data);
-        $this->addDirty('doc');
 
         return $this;
     }
@@ -147,13 +146,12 @@ class MondocRetentionModel extends MondocAbstractModel
     }
 
     /**
-     * @param ObjectId $srcId
+     * @param ObjectId $id
      * @return $this
      */
-    public function setSourceObjectId(ObjectId $srcId): static
+    public function setSourceObjectId(ObjectId $id): static
     {
-        $this->id = $srcId;
-        $this->addDirty('id');
+        $this->id = $id;
 
         return $this;
     }
@@ -173,7 +171,6 @@ class MondocRetentionModel extends MondocAbstractModel
     public function setSourceClassName(string $class): static
     {
         $this->class = $class;
-        $this->addDirty('srcClass');
 
         return $this;
     }
@@ -195,7 +192,6 @@ class MondocRetentionModel extends MondocAbstractModel
     public function setRetentionData(array $retention): static
     {
         $this->retention = MondocTypes::arrayToPhp($retention);
-        $this->addDirty('retention');
 
         return $this;
     }
@@ -223,7 +219,6 @@ class MondocRetentionModel extends MondocAbstractModel
     public function setRetentionExpiry(DateTime|UTCDateTime|null $expiry): static
     {
         $this->expiry = $expiry;
-        $this->addDirty('expiry');
 
         return $this;
     }

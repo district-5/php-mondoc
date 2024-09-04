@@ -105,19 +105,18 @@ class InsertionTest extends MondocBaseTest
         $m->setAge(1);
         $m->setName(uniqid());
         $this->assertTrue($m->save());
-        $this->assertTrue($m->save()); // subsequent saves should not cause an issue and return true
-        $this->assertTrue($m->save());
-        $this->assertTrue($m->save());
-        $this->assertTrue($m->save());
 
         $model = MyService::getById($m->getObjectId());
-        $model->proxyAddDirty('car', 'ford');
+        $model->proxyAddDirty('car');
+        $model->proxySetKey('bestTv', 'A-Team');
         $model->save();
 
         $another = MyService::getById($m->getObjectId());
         $arrayCopy = $another->getOriginalBsonDocument()->getArrayCopy();
         $this->assertArrayHasKey('car', $arrayCopy);
+        $this->assertArrayHasKey('bestTv', $arrayCopy);
         $this->assertNull($arrayCopy['car']); // invalid keys are not saved
+        $this->assertEquals('A-Team', $arrayCopy['bestTv']);
 
 
         $another->setAge(2);

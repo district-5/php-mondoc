@@ -9,7 +9,7 @@
         forceCoversAnnotation="false"
         processIsolation="false"
         stopOnError="false"
-        stopOnFailure="false"
+        stopOnFailure="true"
         stopOnIncomplete="false"
         stopOnSkipped="false"
         timeoutForSmallTests="1"
@@ -29,7 +29,7 @@
       <directory>tests</directory>
     </exclude>
     <report>
-      <html outputDirectory="build/coverage/html" lowUpperBound="50" highLowerBound="90"/>
+      <html outputDirectory="build/html" lowUpperBound="50" highLowerBound="90"/>
     </report>
   </coverage>
   <php>

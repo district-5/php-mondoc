@@ -120,7 +120,6 @@ abstract class MondocAbstractSubModel
         $cl = get_called_class();
         $inst = new $cl();
         /* @var $inst MondocAbstractSubModel */
-        $classMap = $inst->getKeyToClassMap();
 
         foreach ($data as $k => $v) {
             if (is_int($k)) {
@@ -133,11 +132,8 @@ abstract class MondocAbstractSubModel
 
             $isNestedAny = $inst->isMondocNestedAnyType($k);
             if ((is_array($v) || is_object($v)) && $isNestedAny === true) {
-                $subClassName = $classMap[$k];
+                $subClassName = $inst->getMondocNestedClassName($k);
                 $isMulti = $inst->isMondocNestedMultipleObjects($k);
-                if ($isMulti === true) {
-                    $subClassName = substr($subClassName, 0, -2);
-                }
                 if (is_object($v)) {
                     $v = MondocTypes::arrayToPhp($v);
                 }
@@ -156,14 +152,6 @@ abstract class MondocAbstractSubModel
         }
 
         return $inst;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getKeyToClassMap(): array
-    {
-        return $this->mondocNested;
     }
 
     /**
@@ -279,9 +267,6 @@ abstract class MondocAbstractSubModel
         $data = [];
         foreach ($this->getMondocObjectVars() as $originalK => $v) {
             $k = $this->getFieldAliasSingleMap($originalK, true);
-            if ($this->isPropertyExcluded([$k, $originalK]) === true) {
-                continue;
-            }
             if ($this->isMondocNestedAnyType([$k, $originalK]) === true) {
                 if ($this->isMondocNestedMultipleObjects([$k, $originalK]) === true) {
                     /* @var $v MondocAbstractSubModel[] */

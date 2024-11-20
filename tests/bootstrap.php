@@ -6,6 +6,7 @@ use District5Tests\MondocTests\TestObjects\Model\AllTypesModel;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
 use District5Tests\MondocTests\TestObjects\Model\FieldAliasTestModel;
 use District5Tests\MondocTests\TestObjects\Model\FinancialCandleModel;
+use District5Tests\MondocTests\TestObjects\Model\FlexibleNestedTestModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModelWithSub;
 use District5Tests\MondocTests\TestObjects\Model\SubLevelRetainedTestModel;
@@ -17,6 +18,7 @@ use District5Tests\MondocTests\TestObjects\Service\AllTypesService;
 use District5Tests\MondocTests\TestObjects\Service\DateService;
 use District5Tests\MondocTests\TestObjects\Service\FieldAliasTestService;
 use District5Tests\MondocTests\TestObjects\Service\FinancialCandleService;
+use District5Tests\MondocTests\TestObjects\Service\FlexibleNestedTestService;
 use District5Tests\MondocTests\TestObjects\Service\HelperTraitsOtherService;
 use District5Tests\MondocTests\TestObjects\Service\MyService;
 use District5Tests\MondocTests\TestObjects\Service\MySubService;
@@ -45,7 +47,8 @@ $mondoc->setServiceMap([
     MyModelWithSub::class => MySubService::class,
     SingleAndMultiNestedModel::class => SingleAndMultiNestedService::class,
     FinancialCandleModel::class => FinancialCandleService::class,
-    FieldAliasTestModel::class => FieldAliasTestService::class
+    FieldAliasTestModel::class => FieldAliasTestService::class,
+    FlexibleNestedTestModel::class => FlexibleNestedTestService::class
 ]); // just to cover the setServiceMap method
 $mondoc->addServiceMapping(
     HelperTraitsModel::class,

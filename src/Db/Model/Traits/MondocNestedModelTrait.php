@@ -30,6 +30,7 @@
 
 namespace District5\Mondoc\Db\Model\Traits;
 
+
 /**
  * Trait MondocNestedModelTrait.
  *
@@ -72,7 +73,7 @@ trait MondocNestedModelTrait
      */
     protected function initMondocNestedModels(): void
     {
-        foreach ($this->mondocNested as $k => $className) {
+        foreach ($this->getMondocNestedModelMap() as $k => $className) {
             if (str_ends_with($className, '[]')) {
                 $this->{$k} = [];
                 $cleanedName = substr($className, 0, -2);
@@ -144,5 +145,33 @@ trait MondocNestedModelTrait
         }
 
         return false;
+    }
+
+    /**
+     * You can override this method to provide a custom map of fields to classes.
+     *
+     * @return array
+     */
+    protected function getMondocNestedModelMap(): array
+    {
+        return $this->mondocNested;
+    }
+
+    /**
+     * @param string $field
+     * @return string|null
+     */
+    protected function getMondocNestedClassName(string $field): ?string
+    {
+        $map = $this->getMondocNestedModelMap();
+
+        $v = null;
+        if ($this->isMondocNestedSingleObject($field)) {
+            $v = $map[$field];
+        } else if ($this->isMondocNestedMultipleObjects($field)) {
+            $v = substr($map[$field], 0, -2);
+        }
+
+        return $v;
     }
 }

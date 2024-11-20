@@ -191,16 +191,10 @@ class MondocAbstractModel extends MondocAbstractSubModel
     public function getMondocKeysToRemove(): array
     {
         $allSetVariables = $this->getMondocObjectVars();
-        $ignore = $this->getPropertyExclusions();
         $fieldMapKey = array_keys($this->getFieldAliasMap());
         $bsonArray = [];
         if ($this->getOriginalBsonDocument() !== null) {
             $bsonArray = array_keys($this->getOriginalBsonDocument()->getArrayCopy());
-            foreach ($allSetVariables as $objVar => $objVal) {
-                if (in_array($objVar, $ignore)) {
-                    unset($allSetVariables[$objVar]);
-                }
-            }
         }
         $allSetVariables = array_keys($allSetVariables);
 

@@ -102,7 +102,7 @@ class FlexibleNestedTestModel extends MondocAbstractModel
     protected function getMondocNestedModelMap(): array
     {
         return [
-            'nested' => FlexibleControlTestConfigSingleton::getInstance()->getClassName()
+            'nested' => FlexibleControlTestConfigSingleton::getInstance()->getClassName() // only exists for testing purposes. In a real world scenario, you could use getenv('nested_model_class_name') or similar
         ];
     }
 }

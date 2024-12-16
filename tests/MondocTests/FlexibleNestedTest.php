@@ -59,7 +59,7 @@ class FlexibleNestedTest extends MondocBaseTest
         $this->assertEquals(0, FlexibleNestedTestService::countAll());
         $mFood = new FlexibleNestedTestModel();
         $mFood->setName('test1');
-        FlexibleControlTestConfigSingleton::getInstance()->setClassName(FoodSubModel::class); // default
+        FlexibleControlTestConfigSingleton::getInstance()->setClassName(FoodSubModel::class); // only exists for testing purposes
         $food = new FoodSubModel();
         $attribute1 = new FoodAttributesSubModel();
         $attribute1->setColour('red');
@@ -72,7 +72,7 @@ class FlexibleNestedTest extends MondocBaseTest
         $mFood->setNested($food);
         $this->assertTrue($mFood->save());
 
-        FlexibleControlTestConfigSingleton::getInstance()->setClassName(AgeSubModel::class);
+        FlexibleControlTestConfigSingleton::getInstance()->setClassName(AgeSubModel::class); // only exists for testing purposes
 
         $mAge = new FlexibleNestedTestModel();
         $mAge->setName('test2');
@@ -84,12 +84,12 @@ class FlexibleNestedTest extends MondocBaseTest
         $mAge->setNested($age);
         $this->assertTrue($mAge->save());
 
-        FlexibleControlTestConfigSingleton::getInstance()->setClassName(FoodSubModel::class); // default
+        FlexibleControlTestConfigSingleton::getInstance()->setClassName(FoodSubModel::class); // only exists for testing purposes
         $retrievedWithFood = FlexibleNestedTestService::getById($mFood->getObjectId());
         /** @var FlexibleNestedTestModel $retrievedWithFood */
         $this->assertInstanceOf(FoodSubModel::class, $retrievedWithFood->getNested());
 
-        FlexibleControlTestConfigSingleton::getInstance()->setClassName(AgeSubModel::class);
+        FlexibleControlTestConfigSingleton::getInstance()->setClassName(AgeSubModel::class); // only exists for testing purposes
         $retrievedWithAge = FlexibleNestedTestService::getById($mAge->getObjectId());
         /** @var FlexibleNestedTestModel $retrievedWithAge */
         $this->assertInstanceOf(AgeSubModel::class, $retrievedWithAge->getNested());

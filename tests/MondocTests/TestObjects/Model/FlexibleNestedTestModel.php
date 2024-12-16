@@ -34,6 +34,7 @@ use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5Tests\MondocTests\TestObjects\FlexibleControlTestConfigSingleton;
 use District5Tests\MondocTests\TestObjects\Model\Subs\AgeSubModel;
 use District5Tests\MondocTests\TestObjects\Model\Subs\FoodSubModel;
+use District5Tests\MondocTests\TestObjects\Model\Subs\PersonSubModel;
 
 /**
  * Class FlexibleNestedTestModel
@@ -53,11 +54,16 @@ class FlexibleNestedTestModel extends MondocAbstractModel
     protected AgeSubModel|FoodSubModel $nested;
 
     /**
-     * @var string[]
+     * @var PersonSubModel|null
      */
-    protected array $mondocNested = [
-        'nested' => FlexibleNestedTestModel::class
-    ];
+    protected PersonSubModel|null $person = null;
+
+    // /**
+    //  * @var string[]
+    //  */
+    // protected array $mondocNested = [
+    //     YOU CANNOT USE THIS PROPERTY WHEN USING THE getMondocNestedModelMap METHOD
+    // ];
 
     /**
      * @return string
@@ -99,10 +105,34 @@ class FlexibleNestedTestModel extends MondocAbstractModel
         return $this;
     }
 
+    /**
+     * @return PersonSubModel|null
+     */
+    public function getPerson(): PersonSubModel|null
+    {
+        if (null === $this->person) {
+            $this->person = new PersonSubModel();
+        }
+        return $this->person;
+    }
+
+    /**
+     * @param PersonSubModel|null $val
+     *
+     * @return $this
+     */
+    public function setPerson(PersonSubModel|null $val): static
+    {
+        $this->person = $val;
+
+        return $this;
+    }
+
     protected function getMondocNestedModelMap(): array
     {
         return [
-            'nested' => FlexibleControlTestConfigSingleton::getInstance()->getClassName() // only exists for testing purposes. In a real world scenario, you could use getenv('nested_model_class_name') or similar
+            'nested' => FlexibleControlTestConfigSingleton::getInstance()->getClassName(), // only exists for testing purposes. In a real world scenario, you could use getenv('nested_model_class_name') or similar
+            'person' => PersonSubModel::class
         ];
     }
 }

@@ -59,6 +59,8 @@ class FlexibleNestedTest extends MondocBaseTest
         $this->assertEquals(0, FlexibleNestedTestService::countAll());
         $mFood = new FlexibleNestedTestModel();
         $mFood->setName('test1');
+        $person1 = $mFood->getPerson();
+        $person1->setName('John');
         FlexibleControlTestConfigSingleton::getInstance()->setClassName(FoodSubModel::class); // only exists for testing purposes
         $food = new FoodSubModel();
         $attribute1 = new FoodAttributesSubModel();
@@ -76,6 +78,8 @@ class FlexibleNestedTest extends MondocBaseTest
 
         $mAge = new FlexibleNestedTestModel();
         $mAge->setName('test2');
+        $person2 = $mAge->getPerson();
+        $person2->setName('Jane');
         $age = new AgeSubModel();
         $age->setAge(10);
         $ageWord = new AgeWordSubModel();
@@ -88,11 +92,13 @@ class FlexibleNestedTest extends MondocBaseTest
         $retrievedWithFood = FlexibleNestedTestService::getById($mFood->getObjectId());
         /** @var FlexibleNestedTestModel $retrievedWithFood */
         $this->assertInstanceOf(FoodSubModel::class, $retrievedWithFood->getNested());
+        $this->assertEquals('John', $retrievedWithFood->getPerson()->getName());
 
         FlexibleControlTestConfigSingleton::getInstance()->setClassName(AgeSubModel::class); // only exists for testing purposes
         $retrievedWithAge = FlexibleNestedTestService::getById($mAge->getObjectId());
         /** @var FlexibleNestedTestModel $retrievedWithAge */
         $this->assertInstanceOf(AgeSubModel::class, $retrievedWithAge->getNested());
+        $this->assertEquals('Jane', $retrievedWithAge->getPerson()->getName());
 
         $this->assertEquals(2, FlexibleNestedTestService::deleteByIds([$mFood->getObjectId(), $mAge->getObjectId()]));
     }

@@ -36,7 +36,6 @@ use District5\Mondoc\Helper\Traits\ArrayConversionTrait;
 use District5\Mondoc\Helper\Traits\DateObjectConversionTrait;
 use District5\Mondoc\Helper\Traits\ObjectIdConversionTrait;
 use MongoDB\BSON\Decimal128;
-use MongoDB\BSON\Int64;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\Timestamp;
 use MongoDB\BSON\Type;

@@ -146,25 +146,11 @@ trait FinancialCandlesTrait
         }
 
         if (!empty($candles)) {
-            if ($sortDirection === -1) {
-                usort($candles, function ($first, $second) {
-                    /* @var $first AggregateFinancialCandleDto */
-                    /* @var $second AggregateFinancialCandleDto */
-                    if ($first->getDate() < $second->getDate()) {
-                        return -1;
-                    }
-                    return 1;
-                });
-            } else {
-                usort($candles, function ($first, $second) {
-                    /* @var $first AggregateFinancialCandleDto */
-                    /* @var $second AggregateFinancialCandleDto */
-                    if ($first->getDate() < $second->getDate()) {
-                        return 1;
-                    }
-                    return -1;
-                });
-            }
+            usort($candles, function ($first, $second) use ($sortDirection) {
+                /* @var $first AggregateFinancialCandleDto */
+                /* @var $second AggregateFinancialCandleDto */
+                return ($first->getDate() < $second->getDate() ? 1 : -1) * $sortDirection;
+            });
         }
 
         return $candles;

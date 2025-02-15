@@ -91,9 +91,6 @@ class MondocTypes
                 if ($val instanceof Decimal128) {
                     return $val->jsonSerialize()['$numberDecimal'];
                 }
-                if ($val instanceof Int64) {
-                    return $val->__toString();
-                }
                 if ($val instanceof Timestamp) {
                     return $val->jsonSerialize()['$timestamp'];
                 }

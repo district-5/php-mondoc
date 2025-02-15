@@ -50,7 +50,7 @@ use MongoDB\BSON\UTCDateTime;
  *
  * @internal
  */
-class HelperTraitsModelTest extends MondocBaseTest
+class HelperTraitsModelTest extends MondocBaseTestAbstract
 {
     /**
      * @throws MondocConfigConfigurationException

@@ -36,7 +36,7 @@ use District5\Date\Date;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\FilterFormatter;
-use District5Tests\MondocTests\MondocBaseTest;
+use District5Tests\MondocTests\MondocBaseTestAbstract;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
 use District5Tests\MondocTests\TestObjects\Service\DateService;
 use MongoDB\BSON\UTCDateTime;
@@ -47,7 +47,7 @@ use MongoDB\Model\BSONDocument;
  *
  * @package District5Tests\MondocTests\Helper
  */
-class FilterFormatterTest extends MondocBaseTest
+class FilterFormatterTest extends MondocBaseTestAbstract
 {
     public function testFilterFormatter()
     {

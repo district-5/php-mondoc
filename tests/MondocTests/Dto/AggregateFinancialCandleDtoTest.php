@@ -46,7 +46,7 @@ use InvalidArgumentException;
  *
  * @internal
  */
-class AggregateFinancialCandleDtoTest extends AbstractFinancialTest
+class AggregateFinancialCandleDtoTest extends MondocFinancialTestAbstract
 {
     public function testConstruction()
     {

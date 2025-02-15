@@ -34,11 +34,11 @@ use District5\Mondoc\MondocConfig;;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class MondocBaseTest.
+ * Class MondocBaseTestAbstract.
  *
  * @package District5Tests\MondocTests
  */
-abstract class MondocBaseTest extends TestCase
+abstract class MondocBaseTestAbstract extends TestCase
 {
     /**
      * @var null|string

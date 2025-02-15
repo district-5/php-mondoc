@@ -49,7 +49,7 @@ use District5Tests\MondocTests\TestObjects\Service\TopLevelRetainedTestService;
  *
  * @internal
  */
-class RetainedDataModelTest extends MondocBaseTest
+class RetainedDataModelTest extends MondocBaseTestAbstract
 {
     /**
      * @return void

@@ -32,16 +32,16 @@
 namespace District5Tests\MondocTests\Dto;
 
 use District5\Date\Date;
-use District5Tests\MondocTests\MondocBaseTest;
+use District5Tests\MondocTests\MondocBaseTestAbstract;
 
 /**
- * Class AggregateFinancialCandleDtoTest.
+ * Class MondocFinancialTestAbstract.
  *
  * @package District5Tests\MondocTests\Dto
  *
  * @internal
  */
-abstract class AbstractFinancialTest extends MondocBaseTest
+abstract class MondocFinancialTestAbstract extends MondocBaseTestAbstract
 {
     protected function getTestData(): array
     {

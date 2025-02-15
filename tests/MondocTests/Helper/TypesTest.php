@@ -37,7 +37,7 @@ use District5\Date\Date;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\MondocTypes;
-use District5Tests\MondocTests\MondocBaseTest;
+use District5Tests\MondocTests\MondocBaseTestAbstract;
 use District5Tests\MondocTests\TestObjects\Model\AllTypesModel;
 use District5Tests\MondocTests\TestObjects\Model\NoServiceModel;
 use District5Tests\MondocTests\TestObjects\Model\Subs\FoodAttributesSubModel;
@@ -45,7 +45,7 @@ use District5Tests\MondocTests\TestObjects\Model\Subs\FoodSubModel;
 use District5Tests\MondocTests\TestObjects\Service\AllTypesService;
 use JsonException;
 use MongoDB\BSON\Decimal128;
-use MongoDB\BSON\Int64;
+// use MongoDB\BSON\Int64; final private function __construct() {}
 use MongoDB\BSON\Javascript;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\Timestamp;
@@ -61,7 +61,7 @@ use stdClass;
  *
  * @internal
  */
-class TypesTest extends MondocBaseTest
+class TypesTest extends MondocBaseTestAbstract
 {
     public function testDateToPHPDateTime()
     {
@@ -227,8 +227,8 @@ class TypesTest extends MondocBaseTest
         $decimal128 = new Decimal128('1.01');
         $this->assertEquals('1.01', MondocTypes::typeToJsonFriendly($decimal128));
 
-        $int64 = new Int64(1);
-        $this->assertEquals('1', MondocTypes::typeToJsonFriendly($int64));
+        //$int64 = new Int64(1); // final private function __construct() {}
+        //$this->assertEquals('1', MondocTypes::typeToJsonFriendly($int64));
 
         $ts = time();
         $timestamp = new Timestamp(1, $ts);
@@ -302,6 +302,7 @@ class TypesTest extends MondocBaseTest
      * @throws JsonException
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @noinspection PhpRedundantOptionalArgumentInspection
      */
     public function testAsJsonEncodableOption()
     {

@@ -48,7 +48,7 @@ use District5Tests\MondocTests\TestObjects\Service\FlexibleNestedTestService;
  *
  * @internal
  */
-class FlexibleNestedTest extends MondocBaseTest
+class FlexibleNestedTest extends MondocBaseTestAbstract
 {
     /**
      * @throws MondocConfigConfigurationException

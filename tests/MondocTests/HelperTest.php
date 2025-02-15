@@ -40,7 +40,7 @@ use MongoDB\Model\BSONDocument;
 /**
  * @internal
  */
-class HelperTest extends MondocBaseTest
+class HelperTest extends MondocBaseTestAbstract
 {
     public function testBuiltInFunctionsAreCorrectBeforeRunningTests()
     {

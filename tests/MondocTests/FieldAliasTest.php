@@ -43,7 +43,7 @@ use MongoDB\BSON\ObjectId;
  *
  * @internal
  */
-class FieldAliasTest extends MondocBaseTest
+class FieldAliasTest extends MondocBaseTestAbstract
 {
     /**
      * @throws MondocServiceMapErrorException

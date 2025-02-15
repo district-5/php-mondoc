@@ -45,7 +45,7 @@ use District5Tests\MondocTests\TestObjects\Service\SingleAndMultiNestedService;
  *
  * @internal
  */
-class SingleAndNestedTest extends MondocBaseTest
+class SingleAndNestedTest extends MondocBaseTestAbstract
 {
     public function testMondocModelVsSubModel()
     {

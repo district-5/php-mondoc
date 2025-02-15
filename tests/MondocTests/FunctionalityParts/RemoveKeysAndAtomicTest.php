@@ -33,7 +33,7 @@ namespace District5Tests\MondocTests\FunctionalityParts;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
-use District5Tests\MondocTests\MondocBaseTest;
+use District5Tests\MondocTests\MondocBaseTestAbstract;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
 use District5Tests\MondocTests\TestObjects\Model\NoServiceModel;
 use District5Tests\MondocTests\TestObjects\Service\MyService;
@@ -43,7 +43,7 @@ use District5Tests\MondocTests\TestObjects\Service\MyService;
  *
  * @package District5Tests\MondocTests\FunctionalityParts
  */
-class RemoveKeysAndAtomicTest extends MondocBaseTest
+class RemoveKeysAndAtomicTest extends MondocBaseTestAbstract
 {
     /**
      * @throws MondocServiceMapErrorException

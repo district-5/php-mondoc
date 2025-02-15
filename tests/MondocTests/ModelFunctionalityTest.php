@@ -51,7 +51,7 @@ use MongoDB\Model\BSONDocument;
  *
  * @internal
  */
-class ModelFunctionalityTest extends MondocBaseTest
+class ModelFunctionalityTest extends MondocBaseTestAbstract
 {
     /**
      * @throws MondocConfigConfigurationException

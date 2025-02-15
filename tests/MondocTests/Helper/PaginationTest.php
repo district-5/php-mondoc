@@ -31,27 +31,15 @@
 
 namespace District5Tests\MondocTests\Helper;
 
-use DateTime;
-use DateTimeInterface;
-use District5\Date\Date;
 use District5\Mondoc\Helper\MondocPaginationHelper;
-use District5\Mondoc\Helper\MondocTypes;
-use District5Tests\MondocTests\MondocBaseTest;
-use District5Tests\MondocTests\TestObjects\Model\AllTypesModel;
-use District5Tests\MondocTests\TestObjects\Service\AllTypesService;
-use JsonException;
-use MongoDB\BSON\ObjectId;
-use MongoDB\BSON\UTCDateTime;
-use MongoDB\Model\BSONArray;
-use MongoDB\Model\BSONDocument;
-use stdClass;
+use District5Tests\MondocTests\MondocBaseTestAbstract;
 
 /**
  * Class PaginationTest.
  *
  * @package District5Tests\MondocTests\Helper
  */
-class PaginationTest extends MondocBaseTest
+class PaginationTest extends MondocBaseTestAbstract
 {
     public function testBasicFirstPagePagination()
     {

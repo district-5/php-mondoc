@@ -46,7 +46,7 @@ use Exception;
  *
  * @internal
  */
-class AggregateSmaDtoTest extends AbstractFinancialTest
+class AggregateSmaDtoTest extends MondocFinancialTestAbstract
 {
     public function testConstruction()
     {

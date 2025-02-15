@@ -34,7 +34,7 @@ use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\MondocBuilder\QueryBuilder;
 use District5\MondocBuilder\QueryTypes\ValueEqualTo;
-use District5Tests\MondocTests\MondocBaseTest;
+use District5Tests\MondocTests\MondocBaseTestAbstract;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
 use District5Tests\MondocTests\TestObjects\Service\MyService;
 use MongoDB\BSON\ObjectId;
@@ -46,7 +46,7 @@ use MongoDB\BSON\ObjectId;
  *
  * @internal
  */
-class BuilderTest extends MondocBaseTest
+class BuilderTest extends MondocBaseTestAbstract
 {
     /**
      * @throws MondocServiceMapErrorException

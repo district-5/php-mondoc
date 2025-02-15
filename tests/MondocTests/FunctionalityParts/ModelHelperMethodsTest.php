@@ -32,7 +32,7 @@
 namespace District5Tests\MondocTests\FunctionalityParts;
 
 use DateTime;
-use District5Tests\MondocTests\MondocBaseTest;
+use District5Tests\MondocTests\MondocBaseTestAbstract;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
 use District5Tests\MondocTests\TestObjects\Service\DateService;
@@ -45,7 +45,7 @@ use stdClass;
  *
  * @package District5Tests\MondocTests\FunctionalityParts
  */
-class ModelHelperMethodsTest extends MondocBaseTest
+class ModelHelperMethodsTest extends MondocBaseTestAbstract
 {
     public function testCommonSubMethods()
     {

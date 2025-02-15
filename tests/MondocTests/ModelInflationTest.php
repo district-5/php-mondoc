@@ -47,7 +47,7 @@ use MongoDB\BSON\ObjectId;
  *
  * @internal
  */
-class ModelInflationTest extends MondocBaseTest
+class ModelInflationTest extends MondocBaseTestAbstract
 {
     public function testInflationDeflation()
     {

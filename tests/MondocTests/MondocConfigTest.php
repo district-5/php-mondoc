@@ -49,7 +49,7 @@ use MongoDB\Database;
  *
  * @internal
  */
-class MondocConfigTest extends MondocBaseTest
+class MondocConfigTest extends MondocBaseTestAbstract
 {
     /**
      * @return void

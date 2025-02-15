@@ -33,7 +33,7 @@ namespace District5Tests\MondocTests\FunctionalityParts;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
-use District5Tests\MondocTests\MondocBaseTest;
+use District5Tests\MondocTests\MondocBaseTestAbstract;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
 use District5Tests\MondocTests\TestObjects\Service\MyService;
 
@@ -44,7 +44,7 @@ use District5Tests\MondocTests\TestObjects\Service\MyService;
  *
  * @internal
  */
-class MinMaxTest extends MondocBaseTest
+class MinMaxTest extends MondocBaseTestAbstract
 {
     /**
      * @throws MondocServiceMapErrorException

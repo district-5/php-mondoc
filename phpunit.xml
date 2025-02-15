@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
         backupGlobals="true"
-        backupStaticAttributes="false"
         colors="true"
-        convertErrorsToExceptions="true"
-        convertNoticesToExceptions="true"
-        convertWarningsToExceptions="true"
-        forceCoversAnnotation="false"
         processIsolation="false"
         stopOnError="false"
         stopOnFailure="true"
@@ -17,19 +12,18 @@
         timeoutForLargeTests="60"
         bootstrap="tests/bootstrap.php"
         cacheResult="false"
-        verbose="true">
+        displayDetailsOnTestsThatTriggerDeprecations="true"
+        displayDetailsOnTestsThatTriggerErrors="true"
+        displayDetailsOnTestsThatTriggerNotices="true"
+        displayDetailsOnTestsThatTriggerWarnings="true"
+        displayDetailsOnPhpunitDeprecations="true">
   <coverage includeUncoveredFiles="true"
             pathCoverage="false"
             ignoreDeprecatedCodeUnits="true"
             disableCodeCoverageIgnore="true">
-    <include>
-      <directory>src</directory>
-    </include>
-    <exclude>
-      <directory>tests</directory>
-    </exclude>
     <report>
       <html outputDirectory="build/html" lowUpperBound="50" highLowerBound="90"/>
+      <clover outputFile="coverage.xml" />
     </report>
   </coverage>
   <php>
@@ -40,4 +34,15 @@
       <directory>tests/</directory>
     </testsuite>
   </testsuites>
+  <logging>
+    <testdoxHtml outputFile="build/testdox.html"/>
+  </logging>
+  <source>
+    <include>
+      <directory>src</directory>
+    </include>
+    <exclude>
+      <directory>tests</directory>
+    </exclude>
+  </source>
 </phpunit>

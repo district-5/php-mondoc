@@ -45,7 +45,7 @@ use District5Tests\MondocTests\TestObjects\Service\MySubService;
  *
  * @internal
  */
-class SubModelFunctionalityTest extends MondocBaseTest
+class SubModelFunctionalityTest extends MondocBaseTestAbstract
 {
     /**
      * @throws MondocServiceMapErrorException

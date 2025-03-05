@@ -124,13 +124,25 @@ class MondocConfig
      */
     public function getDatabase(string $connectionId = 'default'): Database
     {
-        if (!array_key_exists($connectionId, $this->databases)) {
+        if (false === $this->hasConnectionId($connectionId)) {
             throw new MondocConfigConfigurationException(
                 'MondocConfig: database connection not found for connection ID: ' . $connectionId
             );
         }
 
         return $this->databases[$connectionId];
+    }
+
+    /**
+     * Does the connection ID exist?
+     *
+     * @param string $connectionId
+     *
+     * @return bool
+     */
+    public function hasConnectionId(string $connectionId): bool
+    {
+        return array_key_exists($connectionId, $this->databases);
     }
 
     /**

@@ -43,6 +43,7 @@ use District5Tests\MondocTests\TestObjects\Model\NoServiceModel;
 use District5Tests\MondocTests\TestObjects\Model\Subs\FoodAttributesSubModel;
 use District5Tests\MondocTests\TestObjects\Model\Subs\FoodSubModel;
 use District5Tests\MondocTests\TestObjects\Service\AllTypesService;
+use District5Tests\MondocTests\TestObjects\TestEnum;
 use JsonException;
 use MongoDB\BSON\Decimal128;
 // use MongoDB\BSON\Int64; final private function __construct() {}
@@ -490,5 +491,18 @@ class TypesTest extends MondocBaseTestAbstract
             Date::output($datePhp)->toFormat('Y-m-d H:i:s.u'),
             Date::output(Date::input($objectId->getTimestamp())->fromTimestamp())->toFormat('Y-m-d H:i:s.u')
         );
+    }
+
+    public function testEnumHandling()
+    {
+        $enum = TestEnum::BAZ;
+        $this->assertEquals('qux', MondocTypes::typeToJsonFriendly($enum));
+
+        $enums = [
+            TestEnum::FOO,
+            TestEnum::BAZ,
+        ];
+
+        $this->assertEquals(['bar', 'qux'], MondocTypes::typeToJsonFriendly($enums));
     }
 }

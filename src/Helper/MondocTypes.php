@@ -30,6 +30,7 @@
 
 namespace District5\Mondoc\Helper;
 
+use BackedEnum;
 use DateTime;
 use District5\Mondoc\Db\Model\MondocAbstractSubModel;
 use District5\Mondoc\Helper\Traits\ArrayConversionTrait;
@@ -100,6 +101,11 @@ class MondocTypes
                     );
                 }
             }
+
+            if (is_subclass_of($val, BackedEnum::class)) {
+                return $val->value;
+            }
+
             $val = clone $v; // it's an object
 
             if ($val instanceof DateTime) {

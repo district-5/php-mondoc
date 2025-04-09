@@ -464,4 +464,31 @@ class TypesTest extends MondocBaseTestAbstract
         );
         $this->assertCount(4, $deDuplicatedObjectIds);
     }
+
+    public function testCreatingObjectIdFromDate()
+    {
+        $date = Date::createYMDHISM(2010, 1, 2, 3, 4, 5);
+        $this->assertInstanceOf(DateTime::class, $date);
+        $objectId = MondocTypes::newObjectIdFromDateObject($date);
+        $this->assertInstanceOf(ObjectId::class, $objectId);
+        $this->assertEquals('4b3eb7a50000000000000000', $objectId->__toString());
+        $this->assertEquals(
+            Date::output($date)->toFormat('Y-m-d H:i:s.u'),
+            Date::output(Date::input($objectId->getTimestamp())->fromTimestamp())->toFormat('Y-m-d H:i:s.u')
+        );
+    }
+
+    public function testCreatingObjectIdFromUTCDateTime()
+    {
+        $datePhp = Date::createYMDHISM(2010, 1, 2, 3, 4, 5);
+        $date = Date::mongo()->convertTo($datePhp);
+        $this->assertInstanceOf(UTCDateTime::class, $date);
+        $objectId = MondocTypes::newObjectIdFromDateObject($date);
+        $this->assertInstanceOf(ObjectId::class, $objectId);
+        $this->assertEquals('4b3eb7a50000000000000000', $objectId->__toString());
+        $this->assertEquals(
+            Date::output($datePhp)->toFormat('Y-m-d H:i:s.u'),
+            Date::output(Date::input($objectId->getTimestamp())->fromTimestamp())->toFormat('Y-m-d H:i:s.u')
+        );
+    }
 }

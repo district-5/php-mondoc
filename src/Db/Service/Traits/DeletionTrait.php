@@ -44,25 +44,4 @@ trait DeletionTrait
 {
     use DeleteSingleTrait;
     use DeleteMultiTrait;
-
-    /**
-     * Delete a model from the collection.
-     *
-     * @param MondocAbstractModel $model
-     *
-     * @return bool
-     * @throws MondocConfigConfigurationException
-     * @throws MondocConfigConfigurationException
-     */
-    public static function deleteModel(MondocAbstractModel $model): bool
-    {
-        if (self::delete($model->getObjectId())) {
-            $model->setMongoCollection(null);
-            $model->unsetObjectId();
-
-            return true;
-        }
-
-        return false;
-    }
 }

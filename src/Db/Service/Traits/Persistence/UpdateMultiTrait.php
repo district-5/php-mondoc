@@ -30,8 +30,12 @@
 
 namespace District5\Mondoc\Db\Service\Traits\Persistence;
 
+use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\FilterFormatter;
+use District5\Mondoc\MondocConfig;
 use District5\MondocBuilder\QueryBuilder;
 
 /**
@@ -87,5 +91,44 @@ trait UpdateMultiTrait
         );
 
         return $perform->isAcknowledged();
+    }
+
+    /**
+     * Updates many models in the collection. This does save each model individually.
+     *
+     * The return from this method is an array of booleans, each representing the success of the corresponding indexed
+     * model in the $models array.
+     *
+     * @param MondocAbstractModel[] $models
+     * @param array $updateOptions
+     *
+     * @return bool[]
+     *
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
+     * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
+     */
+    public static function updateManyModels(array $models, array $updateOptions = []): array
+    {
+        $results = [];
+        $establishedServices = [];
+        /* @var $establishedServices MondocAbstractService[] */
+        foreach ($models as $model) {
+            if ($model->hasObjectId() === false) {
+                continue;
+            }
+            if ($model instanceof MondocAbstractModel) {
+                $clz = get_class($model);
+                if (!array_key_exists($clz, $establishedServices)) {
+                    $establishedServices[$clz] = MondocConfig::getInstance()->getServiceForModel(
+                        get_class($model)
+                    );
+                }
+
+                $results[] = $establishedServices[$clz]::update($model, $updateOptions);
+            }
+        }
+
+        return $results;
     }
 }

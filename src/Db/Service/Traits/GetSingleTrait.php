@@ -97,7 +97,7 @@ trait GetSingleTrait
         if ($match) {
             /* @var $match BSONDocument */
             /* @var $calledClass MondocAbstractService */
-            $clz = $calledClass::getModelClass();
+            $clz = $calledClass::getMondocModelClass();
             /* @var $clz MondocAbstractModel - it's not. It's actually a string. */
             $m = $clz::inflateSingleBsonDocument($match);
             $m->setMongoCollection($collection);

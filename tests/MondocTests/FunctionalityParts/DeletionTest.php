@@ -58,6 +58,20 @@ class DeletionTest extends MondocBaseTestAbstract
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
      */
+    public function testDeleteMultiWithoutIds()
+    {
+        $m = new MyModel();
+        $m->setAge(1)->setName(uniqid());
+        $m2 = new MyModel();
+        $m2->setAge(2)->setName(uniqid());
+
+        $this->assertEquals(0, MyService::deleteModels([$m, $m2]));
+    }
+
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
     public function testDeleteByIdsHasResults()
     {
         $m = new MyModel();
@@ -66,6 +80,20 @@ class DeletionTest extends MondocBaseTestAbstract
         $mT->setAge(2)->setName(uniqid())->save();
 
         $this->assertEquals(2, MyService::deleteByIds([$m->getObjectId(), $mT->getObjectId()]));
+    }
+
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     */
+    public function testDeleteMultipleModelsResultsInSuccess()
+    {
+        $m = new MyModel();
+        $m->setAge(1)->setName(uniqid())->save();
+        $mT = new MyModel();
+        $mT->setAge(2)->setName(uniqid())->save();
+
+        $this->assertEquals(2, MyService::deleteModels([$m, $mT]));
     }
 
     /**

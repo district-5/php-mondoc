@@ -30,6 +30,7 @@
 
 namespace District5\Mondoc\Db\Service\Traits\Deletion;
 
+use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Helper\FilterFormatter;
 use District5\Mondoc\Helper\MondocTypes;
@@ -81,5 +82,26 @@ trait DeleteSingleTrait
         );
 
         return $delete instanceof DeleteResult ? $delete->getDeletedCount() : false;
+    }
+
+    /**
+     * Delete a model from the collection.
+     *
+     * @param MondocAbstractModel $model
+     *
+     * @return bool
+     * @throws MondocConfigConfigurationException
+     * @throws MondocConfigConfigurationException
+     */
+    public static function deleteModel(MondocAbstractModel $model): bool
+    {
+        if (self::delete($model->getObjectId())) {
+            $model->setMongoCollection(null);
+            $model->unsetObjectId();
+
+            return true;
+        }
+
+        return false;
     }
 }

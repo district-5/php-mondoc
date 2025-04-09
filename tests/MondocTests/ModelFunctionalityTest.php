@@ -32,6 +32,8 @@
 namespace District5Tests\MondocTests;
 
 use DateTime;
+use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\MondocBuilder\QueryBuilder;
@@ -64,6 +66,24 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
             $collection->getCollectionName(),
             $otherCollection->getCollectionName()
         );
+    }
+
+    /**
+     * @throws MondocServiceMapErrorException
+     */
+    public function testGetServiceFromModelAndModelFromService()
+    {
+        $model = MyService::getMondocModelClass();
+        $tmp = MyService::getModelClass(); // to be removed after deprecation ends
+        $this->assertEquals($model, $tmp);
+
+        $service = MyModel::getMondocServiceClass();
+        /* @var $service MondocAbstractService (it's actually a string) */
+        $modelFromService = $service::getMondocModelClass();
+        /* @var $modelFromService MondocAbstractModel (it's actually a string) */
+        $this->assertEquals($model, $modelFromService);
+
+        $this->assertEquals($service, $modelFromService::getMondocServiceClass());
     }
 
     /**

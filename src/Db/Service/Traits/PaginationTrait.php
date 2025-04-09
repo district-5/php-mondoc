@@ -137,6 +137,30 @@ trait PaginationTrait
     }
 
     /**
+     * Get a page of results for a specific query filter, passing in options.
+     *
+     * @param MondocPaginationHelper $paginator
+     * @param array $options
+     * @return MondocAbstractModel[]
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
+     */
+    public static function getPageWithOptions(MondocPaginationHelper $paginator, array $options): array
+    {
+        if (!array_key_exists('skip', $options)) {
+            $options['skip'] = $paginator->getSkip();
+        }
+        if (!array_key_exists('limit', $options)) {
+            $options['limit'] = $paginator->getLimit();
+        }
+
+        return self::getMultiByCriteria(
+            $paginator->getFilter(), // Formatted in the getMultiByCriteria method
+            $options
+        );
+    }
+
+    /**
      * Get a page of results for a specific query filter. This method is to be used for _id based pagination.
      *
      * @param MondocPaginationHelper $paginator

@@ -302,4 +302,15 @@ class MondocAbstractModel extends MondocAbstractSubModel
 
         return $data;
     }
+
+    /**
+     * @return string
+     * @throws MondocServiceMapErrorException
+     */
+    public static function getMondocServiceClass(): string
+    {
+        return MondocConfig::getInstance()->getServiceForModel(
+            get_called_class()
+        );
+    }
 }

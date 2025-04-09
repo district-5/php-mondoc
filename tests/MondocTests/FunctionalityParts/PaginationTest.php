@@ -33,6 +33,7 @@ namespace District5Tests\MondocTests\FunctionalityParts;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
+use District5\Mondoc\Helper\MondocPaginationHelper;
 use District5\MondocBuilder\QueryBuilder;
 use District5\MondocBuilder\QueryTypes\ValueEqualTo;
 use District5\MondocBuilder\QueryTypes\ValueGreaterThan;
@@ -76,6 +77,13 @@ class PaginationTest extends MondocBaseTestAbstract
 
         $paginator = MyService::getPaginationHelper(1, 1, []);
         $this->assertEquals(3, $paginator->getTotalPages());
+
+        $results = MyService::getPageWithOptions($paginator, ['sort' => ['age' => 1]]);
+        $this->assertEquals('Joe', $results[0]->getName());
+        $this->assertEquals(2, $results[0]->getAge());
+        $resultsBack = MyService::getPageWithOptions($paginator, ['sort' => ['age' => -1]]);
+        $this->assertEquals('Jane', $resultsBack[0]->getName());
+        $this->assertEquals(6, $resultsBack[0]->getAge());
 
         $ids = [];
         $results = MyService::getPage($paginator, 'name', 1);

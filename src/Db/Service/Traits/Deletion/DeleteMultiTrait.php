@@ -30,9 +30,13 @@
 
 namespace District5\Mondoc\Db\Service\Traits\Deletion;
 
+use District5\Mondoc\Db\Model\MondocAbstractModel;
+use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\FilterFormatter;
 use District5\Mondoc\Helper\MondocTypes;
+use District5\Mondoc\MondocConfig;
 use MongoDB\BSON\ObjectId;
 use MongoDB\DeleteResult;
 
@@ -97,5 +101,45 @@ trait DeleteMultiTrait
         );
 
         return $delete instanceof DeleteResult ? $delete->getDeletedCount() : 0;
+    }
+
+    /**
+     * Delete multiple models from the collection. Returns the number of deleted models.
+     *
+     * @param MondocAbstractModel[] $models
+     *
+     * @return int
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
+     */
+    public static function deleteModels(array $models): int
+    {
+        $establishedServices = [];
+        $idsForServices = [];
+        /* @var $establishedServices MondocAbstractService[] */
+        /* @var $idsForServices array|ObjectId[] */
+        foreach ($models as $model) {
+            if ($model->hasObjectId() === false) {
+                continue;
+            }
+            if ($model instanceof MondocAbstractModel) {
+                $clz = get_class($model);
+                if (!array_key_exists($clz, $establishedServices)) {
+                    $serviceClz = $model::getMondocServiceClass();
+                    $establishedServices[$clz] = $serviceClz;
+                    $idsForServices[$serviceClz] = [];
+                }
+
+                $idsForServices[$establishedServices[$clz]][] = $model->getObjectId();
+            }
+        }
+
+        $count = 0;
+        foreach ($idsForServices as $srv => $ids) {
+            /* @var $srv MondocAbstractService */
+            $count += $srv::deleteByIds($ids);
+        }
+
+        return $count;
     }
 }

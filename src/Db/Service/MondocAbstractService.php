@@ -139,8 +139,18 @@ abstract class MondocAbstractService
     /**
      * @return string
      * @throws MondocServiceMapErrorException
+     * @deprecated Use getMondocModelClass() instead
      */
     public static function getModelClass(): string
+    {
+        return self::getMondocModelClass();
+    }
+
+    /**
+     * @return string
+     * @throws MondocServiceMapErrorException
+     */
+    public static function getMondocModelClass(): string
     {
         return MondocConfig::getInstance()->getModelForService(
             get_called_class()

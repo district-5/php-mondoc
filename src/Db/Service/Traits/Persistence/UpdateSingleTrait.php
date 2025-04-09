@@ -59,6 +59,9 @@ trait UpdateSingleTrait
      */
     public static function update(MondocAbstractModel $model, array $updateOptions = []): bool
     {
+        if ($model->hasObjectId() === false) {
+            return false;
+        }
         $dirty = $model->getDirty();
         if (empty($model->getDirty())) {
             return true;

@@ -80,7 +80,7 @@ class MondocPaginationHelper
         $this->cleanPerPage($perPage);
         $this->cleanCurrentPage($currentPage);
         $this->cleanTotalResults($totalResults);
-        $this->filter = $filter;
+        $this->setFilter($filter);
         $this->establishTotalPages();
         $this->establishSkip();
     }
@@ -257,6 +257,17 @@ class MondocPaginationHelper
     public function getFilter(): array
     {
         return $this->filter;
+    }
+
+    /**
+     * @param array $filter
+     * @return MondocPaginationHelper
+     */
+    public function setFilter(array $filter): self
+    {
+        $this->filter = $filter;
+
+        return $this;
     }
 
     /**

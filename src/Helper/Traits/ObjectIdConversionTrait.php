@@ -30,8 +30,12 @@
 
 namespace District5\Mondoc\Helper\Traits;
 
+use DateTime;
+use DateTimeZone;
+use District5\Date\Date;
 use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\UTCDateTime;
 
 /**
  * Trait ObjectIdConversionTrait
@@ -48,6 +52,20 @@ trait ObjectIdConversionTrait
     public static function newObjectId(): ObjectId
     {
         return new ObjectId();
+    }
+
+    /**
+     * Create a new ObjectId using a DateTime or UTCDateTime object as the base.
+     *
+     * @param DateTime|UTCDateTime $dateTime
+     * @return ObjectId
+     */
+    public static function newObjectIdFromDateObject(DateTime|UTCDateTime $dateTime): ObjectId
+    {
+        $dateTime = $dateTime instanceof UTCDateTime ? $dateTime : new UTCDateTime($dateTime->getTimestamp() * 1000);
+        $dateTime = $dateTime->toDateTime();
+
+        return Date::mongo()->toObjectId($dateTime);
     }
 
     /**

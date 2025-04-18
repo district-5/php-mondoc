@@ -707,7 +707,6 @@ $willWork = new \District5\Mondoc\Db\Builder\MondocBuilder\MondocBuilder();
 $willWork->addFilter('n', 'John'); // This will work with the field mapping
 ```
 
-
 #### Testing
 
 You can run PHPUnit against the library by running `composer install` and then running `phpunit`. Before doing so,

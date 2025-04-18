@@ -16,12 +16,6 @@
             pathCoverage="false"
             ignoreDeprecatedCodeUnits="true"
             disableCodeCoverageIgnore="true">
-    <include>
-      <directory>src</directory>
-    </include>
-    <exclude>
-      <directory>tests</directory>
-    </exclude>
     <report>
       <html outputDirectory="build/html" lowUpperBound="50" highLowerBound="90"/>
       <clover outputFile="coverage.xml" />

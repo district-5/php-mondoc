@@ -1,15 +1,31 @@
-District5 - Mondoc
-======
+Mondoc, by District5
+====
 
-![CI](https://github.com/district-5/php-mondoc/actions/workflows/ci.yml/badge.svg?branch=master)
+[![CI](https://github.com/district-5/php-mondoc/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/district-5/php-mondoc/actions)
+[![Latest Stable Version](http://poser.pugx.org/district5/mondoc/v)](https://packagist.org/packages/district5/mondoc)
+[![PHP Version Require](http://poser.pugx.org/district5/mondoc/require/php)](https://packagist.org/packages/district5/mondoc)
+[![Codecov](https://codecov.io/gh/district-5/php-mondoc/branch/master/graph/badge.svg)](https://codecov.io/gh/district-5/php-mondoc)
 
-### Composer...
+## The effortless MongoDB interaction layer for your PHP applications
 
-Use composer to add this library as a dependency onto your project.
+### Installing with composer
 
 ```
 composer require district5/mondoc
 ```
+
+### Documentation...
+
+All documentation for Mondoc is available at [mondoc.district5.dev](https://mondoc.district5.dev).
+
+#### Common topics...
+
+* Getting started: [mondoc.district5.dev/quick-start](https://mondoc.district5.dev/quick-start)
+* Configuration: [mondoc.district5.dev/documentation/configuration](https://mondoc.district5.dev/documentation/configuration)
+* Model: [mondoc.district5.dev/documentation/model](https://mondoc.district5.dev/documentation/model)
+    * Nesting models: [mondoc.district5.dev/documentation/model/nested-models](https://mondoc.district5.dev/documentation/model/nested-models)
+    * Helpful traits: [mondoc.district5.dev/documentation/model/traits](https://mondoc.district5.dev/documentation/model/traits)
+* Service: [mondoc.district5.dev/documentation/service](https://mondoc.district5.dev/documentation/service)
 
 ## Important...
 

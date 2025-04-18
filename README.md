@@ -11,6 +11,10 @@ Use composer to add this library as a dependency onto your project.
 composer require district5/mondoc
 ```
 
+#### Important...
+
+As of version 7.0.0, MongoDB 2.0.0 is supported.
+
 Usage...
 --------
 

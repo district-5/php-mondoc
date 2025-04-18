@@ -3,3 +3,4 @@ vendor/*
 .idea
 composer.lock
 coverage.xml
+junit.xml

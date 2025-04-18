@@ -29,7 +29,11 @@ jobs:
           version: 9.6
           php_version: 8.3
           php_extensions: "xdebug mongodb calendar sockets"
-          args: "-d date.timezone=UTC"
+          args: "-d date.timezone=UTC --coverage-clover ./coverage.xml"
           configuration: phpunit.xml
           testsuite: MondocTestSuite
           bootstrap: tests/bootstrap.php
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

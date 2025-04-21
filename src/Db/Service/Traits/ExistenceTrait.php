@@ -33,7 +33,9 @@ namespace District5\Mondoc\Db\Service\Traits;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\FilterFormatter;
+use District5\Mondoc\Helper\MondocTypes;
 use District5\MondocBuilder\QueryBuilder;
+use MongoDB\BSON\ObjectId;
 
 /**
  * Trait ExistenceTrait.
@@ -94,5 +96,24 @@ trait ExistenceTrait
             return true;
         }
         return false;
+    }
+
+    /**
+     * Does a document with a given ID exist?
+     *
+     * @param ObjectId|string $documentId
+     * @return bool
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
+     */
+    public static function existsById(ObjectId|string $documentId): bool
+    {
+        return self::exists(
+            [
+                '_id' => [
+                    '$eq' => MondocTypes::toObjectId($documentId),
+                ],
+            ]
+        );
     }
 }

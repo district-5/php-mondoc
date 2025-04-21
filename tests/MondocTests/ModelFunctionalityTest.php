@@ -36,6 +36,7 @@ use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
+use District5\Mondoc\Helper\MondocTypes;
 use District5\MondocBuilder\QueryBuilder;
 use District5\MondocBuilder\QueryTypes\ValueEqualTo;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
@@ -236,6 +237,9 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
         $m->setAge(12345);
         $m->setName('existence');
         $this->assertTrue($m->save());
+
+        $this->assertTrue(MyService::existsById($m->getObjectId()));
+        $this->assertFalse(MyService::existsById(MondocTypes::newObjectId()));
 
         $this->assertTrue(MyService::exists(['age' => 12345]));
         $this->assertTrue(MyService::exists(['name' => 'existence']));

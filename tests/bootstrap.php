@@ -14,6 +14,10 @@ use District5Tests\MondocTests\TestObjects\Model\TopLevelRetainedTestModel;
 use District5Tests\MondocTests\TestObjects\Model\SingleAndMultiNestedModel;
 use District5Tests\MondocTests\TestObjects\Model\HelperTraitsModel;
 use District5Tests\MondocTests\TestObjects\Model\HelperTraitsOtherModel;
+use District5Tests\MondocTests\TestObjects\ModelChanges\FooModel;
+use District5Tests\MondocTests\TestObjects\ModelChanges\FooService;
+use District5Tests\MondocTests\TestObjects\ModelChanges\FooWithMoreFieldsModel;
+use District5Tests\MondocTests\TestObjects\ModelChanges\FooWithMoreFieldsService;
 use District5Tests\MondocTests\TestObjects\Service\AllTypesService;
 use District5Tests\MondocTests\TestObjects\Service\DateService;
 use District5Tests\MondocTests\TestObjects\Service\FieldAliasTestService;
@@ -65,18 +69,29 @@ $mondoc->addServiceMapping(
 )->addServiceMapping(
     SubLevelRetainedTestModel::class,
     SubLevelRetainedTestService::class
+)->addServiceMapping(
+    FooModel::class,
+    FooService::class
+)->addServiceMapping(
+    FooWithMoreFieldsModel::class,
+    FooWithMoreFieldsService::class
 ); // just to cover the addServiceMapping method
 
 function cleanupCollections($mondoc): void
 {
     $map = array_values($mondoc->getServiceMap());
     foreach ($map as $className) {
+        if ($className === FooService::class || $className === FooWithMoreFieldsService::class) {
+            continue; // Skip the test classes
+        }
         $parts = explode('\\', $className);
         $collectionName = 'test_' . array_pop($parts);
         $mondoc->getDatabase()->dropCollection($collectionName);
     }
     $mondoc->getDatabase()->dropCollection('mondoc_retention');
 }
+
+$mondoc->getDatabase()->dropCollection('test_foo'); // Drop the test collection
 
 cleanupCollections($mondoc); // Start with a clean slate
 try {

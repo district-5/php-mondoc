@@ -138,7 +138,7 @@ trait DirtyAttributesTrait
         }
         $bsonValues = $this->getOriginalBsonDocument()->getArrayCopy();
         if (!array_key_exists($property, $bsonValues)) {
-            return array_key_exists($property, $this->getUnmappedFields()); // check if it's in the unmapped fields
+            return true;
         }
 
         return MondocTypes::typeToJsonFriendly($this->__get($property)) !== MondocTypes::typeToJsonFriendly($bsonValues[$property]);

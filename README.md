@@ -6,6 +6,8 @@ Mondoc, by District5
 [![PHP Version Require](http://poser.pugx.org/district5/mondoc/require/php)](https://packagist.org/packages/district5/mondoc)
 [![Codecov](https://codecov.io/gh/district-5/php-mondoc/branch/master/graph/badge.svg)](https://codecov.io/gh/district-5/php-mondoc)
 
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdistrict-5%2Fphp-mondoc.svg?type=small)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdistrict-5%2Fphp-mondoc?ref=badge_small)
+
 ## The effortless MongoDB interaction layer for your PHP applications
 
 ### Installing with composer

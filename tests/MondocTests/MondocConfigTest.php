@@ -36,10 +36,8 @@ use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\MondocConfig;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
-use District5Tests\MondocTests\TestObjects\Model\NoServiceModel;
 use District5Tests\MondocTests\TestObjects\Service\DateService;
 use District5Tests\MondocTests\TestObjects\Service\MyService;
-use MongoDB\BSON\ObjectId;
 use MongoDB\Database;
 
 /**
@@ -51,6 +49,25 @@ use MongoDB\Database;
  */
 class MondocConfigTest extends MondocBaseTestAbstract
 {
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    public function testGetDatabaseForConnection()
+    {
+        $this->assertIsString(MondocConfig::getInstance()->getDatabaseName('default'));
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    public function testGetDatabaseForInvalidConnection()
+    {
+        $this->expectException(MondocConfigConfigurationException::class);
+        MondocConfig::getInstance()->getDatabaseName('invalid-connection');
+    }
+
     /**
      * @return void
      * @throws MondocConfigConfigurationException

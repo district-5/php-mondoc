@@ -59,7 +59,8 @@ trait FinancialCandlesTrait
      * @return AggregateFinancialCandleDto[]
      *
      * @throws MondocConfigConfigurationException
-     * @example $this->getFinancialXMinuteCandles(
+     * @example
+     *  $this->getFinancialXMinuteCandles(
      *      [
      *          'pair' => 'BTC-USD',
      *          'exchange' => 'some-crypto-exchange'
@@ -72,7 +73,7 @@ trait FinancialCandlesTrait
      *      5,
      *      1, // Sort direction, 1 or -1
      *      100
-     * );
+     *  );
      */
     public function getFinancialXMinuteCandles(array $filter, array $group, string $priceField, string $dateField, int $minuteGranularity, int $sortDirection, ?int $limitNumber = null): array
     {

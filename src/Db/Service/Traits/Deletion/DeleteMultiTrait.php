@@ -36,9 +36,7 @@ use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\FilterFormatter;
 use District5\Mondoc\Helper\MondocTypes;
-use District5\Mondoc\MondocConfig;
 use MongoDB\BSON\ObjectId;
-use MongoDB\DeleteResult;
 
 /**
  * Trait DeleteMultiTrait.
@@ -66,7 +64,7 @@ trait DeleteMultiTrait
             $options
         );
 
-        return $delete instanceof DeleteResult ? $delete->getDeletedCount() : 0;
+        return $delete->getDeletedCount();
     }
 
     /**
@@ -100,7 +98,7 @@ trait DeleteMultiTrait
             $options
         );
 
-        return $delete instanceof DeleteResult ? $delete->getDeletedCount() : 0;
+        return $delete->getDeletedCount();
     }
 
     /**

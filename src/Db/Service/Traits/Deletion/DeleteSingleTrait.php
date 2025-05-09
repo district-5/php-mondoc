@@ -35,7 +35,6 @@ use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Helper\FilterFormatter;
 use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\BSON\ObjectId;
-use MongoDB\DeleteResult;
 
 /**
  * Trait DeleteSingleTrait.
@@ -81,7 +80,7 @@ trait DeleteSingleTrait
             $options
         );
 
-        return $delete instanceof DeleteResult ? $delete->getDeletedCount() : false;
+        return $delete->getDeletedCount();
     }
 
     /**

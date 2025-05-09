@@ -28,70 +28,74 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc;
+namespace District5\Mondoc\Traits\Config;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Traits\Config\MondocConfigDatabaseTrait;
-use District5\Mondoc\Traits\Config\MondocConfigServiceMappingTrait;
-use MongoDB\Collection;
+use MongoDB\Database;
 
 /**
- * Class MondocConfig.
+ * Trait MondocConfigDatabaseTrait
  *
- * @package District5\Mondoc
+ * @package District5\Mondoc\Traits\Config
  */
-class MondocConfig
+trait MondocConfigDatabaseTrait
 {
-    use MondocConfigDatabaseTrait;
-    use MondocConfigServiceMappingTrait;
-
     /**
-     * Static variable, holding the instance of this Singleton.
-     *
-     * @var MondocConfig|null
+     * @var Database[]
      */
-    protected static ?MondocConfig $_instance = null;
+    protected array $databases = [];
 
     /**
      * @var string[]
      */
-    private array $establishedModels = [];
+    protected array $databaseNames = [];
 
     /**
-     * MondocConfig constructor. Protected to avoid direct construction.
-     */
-    protected function __construct()
-    {
-    }
-
-    /**
-     * Retrieve an instance of this object.
-     *
-     * @return MondocConfig
-     */
-    public static function getInstance(): MondocConfig
-    {
-        if (null === self::$_instance) {
-            self::$_instance = new self();
-        }
-
-        return self::$_instance;
-    }
-
-    /**
-     * @param string $name
+     * @param Database $database
      * @param string $connectionId
      *
-     * @return Collection
+     * @return $this
+     */
+    public function addDatabase(Database $database, string $connectionId = 'default'): static
+    {
+        $this->databases[$connectionId] = $database;
+        $this->databaseNames[$connectionId] = $database->getDatabaseName();
+
+        return $this;
+    }
+
+    /**
+     * @param string $connectionId
+     *
+     * @return Database
      * @throws MondocConfigConfigurationException
      */
-    public function getCollection(string $name, string $connectionId = 'default'): Collection
+    public function getDatabase(string $connectionId = 'default'): Database
     {
-        return $this->getDatabase(
-            $connectionId
-        )->selectCollection(
-            $name
-        );
+        if (false === $this->hasConnectionId($connectionId)) {
+            throw new MondocConfigConfigurationException(
+                'MondocConfig: database connection not found for connection ID: ' . $connectionId
+            );
+        }
+
+        return $this->databases[$connectionId];
+    }
+
+    /**
+     * @param string $connectionId
+     *
+     * @return string
+     * @throws MondocConfigConfigurationException
+     */
+    public function getDatabaseName(string $connectionId = 'default'): string
+    {
+        if (!array_key_exists($connectionId, $this->databaseNames)) {
+            throw new MondocConfigConfigurationException(
+                'MondocConfig: database name not resolvable. Missing connection ID: ' . $connectionId
+            );
+        }
+
+        return $this->databaseNames[$connectionId];
     }
 
     /**
@@ -101,17 +105,5 @@ class MondocConfig
      *
      * @return bool
      */
-    public function hasConnectionId(string $connectionId): bool
-    {
-        return array_key_exists($connectionId, $this->databases);
-    }
-
-    /**
-     * @return MondocConfig
-     */
-    public function reconstruct(): MondocConfig
-    {
-        self::$_instance = null;
-        return self::getInstance();
-    }
+    abstract public function hasConnectionId(string $connectionId): bool;
 }

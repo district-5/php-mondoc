@@ -53,11 +53,6 @@ class MondocConfig
     protected static ?MondocConfig $_instance = null;
 
     /**
-     * @var string[]
-     */
-    private array $establishedModels = [];
-
-    /**
      * MondocConfig constructor. Protected to avoid direct construction.
      */
     protected function __construct()

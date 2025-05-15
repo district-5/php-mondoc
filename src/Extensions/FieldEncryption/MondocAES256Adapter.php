@@ -114,7 +114,7 @@ class MondocAES256Adapter implements MondocEncryptionInterface
         );
 
         return openssl_error_string() === false ? base64_encode($encryptedValue) : throw new MondocEncryptionException(
-            'Failed to decrypt the value: ' . openssl_error_string()
+            'Failed to encrypt the value: ' . openssl_error_string()
         );
     }
 }

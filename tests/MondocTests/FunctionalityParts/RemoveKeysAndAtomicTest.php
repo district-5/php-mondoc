@@ -32,6 +32,7 @@
 namespace District5Tests\MondocTests\FunctionalityParts;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\MondocBaseTestAbstract;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
@@ -48,6 +49,8 @@ class RemoveKeysAndAtomicTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testRemovingKey()
     {
@@ -86,6 +89,12 @@ class RemoveKeysAndAtomicTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testIncrementDecrementModelShortcuts()
     {
@@ -124,6 +133,8 @@ class RemoveKeysAndAtomicTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testIncrementDecrementMulti()
     {

@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 
 /**
  * District5 Mondoc Library
@@ -161,6 +161,9 @@ class DeletionTest extends MondocBaseTestAbstract
         $this->assertFalse(MyService::deleteOne(['age' => 2]));
     }
 
+    /**
+     * @throws MondocConfigConfigurationException
+     */
     protected function tearDown(): void
     {
         MyService::getCollection()->drop();

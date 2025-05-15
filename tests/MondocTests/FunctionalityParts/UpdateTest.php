@@ -31,16 +31,15 @@
 
 namespace District5Tests\MondocTests\FunctionalityParts;
 
-use DateTime;
 use District5\Date\Date;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\MondocBaseTestAbstract;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
 use District5Tests\MondocTests\TestObjects\Service\DateService;
 use District5Tests\MondocTests\TestObjects\Service\MyService;
-use MongoDB\BSON\ObjectId;
 
 /**
  * Class UpdateTest.
@@ -82,6 +81,8 @@ class UpdateTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testUpdateOne()
     {
@@ -103,6 +104,7 @@ class UpdateTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
      */
     public function testUpdateMulti()
     {
@@ -132,6 +134,8 @@ class UpdateTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testUpdateMultiWithDifferentServices()
     {

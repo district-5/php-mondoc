@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 
 /**
  * District5 Mondoc Library
@@ -35,6 +35,7 @@ use DateTime;
 use DateTimeInterface;
 use District5\Date\Date;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\MondocTypes;
 use District5Tests\MondocTests\MondocBaseTestAbstract;
@@ -216,6 +217,9 @@ class TypesTest extends MondocBaseTestAbstract
         $this->assertTrue(in_array('bar', $phpRepresentation));
     }
 
+    /**
+     * @throws MondocConfigConfigurationException
+     */
     public function testJsonEncodableTypes()
     {
         $array = new BSONArray([1, 2]);
@@ -303,6 +307,7 @@ class TypesTest extends MondocBaseTestAbstract
      * @throws JsonException
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
      * @noinspection PhpRedundantOptionalArgumentInspection
      */
     public function testAsJsonEncodableOption()
@@ -439,6 +444,9 @@ class TypesTest extends MondocBaseTestAbstract
         $this->assertEquals($ids[5], $converted[5]->__toString());
     }
 
+    /**
+     * @throws MondocConfigConfigurationException
+     */
     public function testDirty()
     {
         $myModel = new NoServiceModel();
@@ -471,7 +479,6 @@ class TypesTest extends MondocBaseTestAbstract
         $date = Date::createYMDHISM(2010, 1, 2, 3, 4, 5);
         $this->assertInstanceOf(DateTime::class, $date);
         $objectId = MondocTypes::newObjectIdFromDateObject($date);
-        $this->assertInstanceOf(ObjectId::class, $objectId);
         $this->assertEquals('4b3eb7a50000000000000000', $objectId->__toString());
         $this->assertEquals(
             Date::output($date)->toFormat('Y-m-d H:i:s.u'),
@@ -485,7 +492,6 @@ class TypesTest extends MondocBaseTestAbstract
         $date = Date::mongo()->convertTo($datePhp);
         $this->assertInstanceOf(UTCDateTime::class, $date);
         $objectId = MondocTypes::newObjectIdFromDateObject($date);
-        $this->assertInstanceOf(ObjectId::class, $objectId);
         $this->assertEquals('4b3eb7a50000000000000000', $objectId->__toString());
         $this->assertEquals(
             Date::output($datePhp)->toFormat('Y-m-d H:i:s.u'),
@@ -493,6 +499,9 @@ class TypesTest extends MondocBaseTestAbstract
         );
     }
 
+    /**
+     * @throws MondocConfigConfigurationException
+     */
     public function testEnumHandling()
     {
         $enum = TestEnum::BAZ;

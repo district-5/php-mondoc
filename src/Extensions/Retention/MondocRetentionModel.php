@@ -35,6 +35,8 @@ use District5\Date\Date;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
 use District5\Mondoc\Db\Model\Traits\MondocRetentionTrait;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
@@ -89,6 +91,8 @@ class MondocRetentionModel extends MondocAbstractModel
 
     /**
      * @return MondocAbstractModel
+     * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
      */
     public function toOriginalModel(): MondocAbstractModel
     {
@@ -241,10 +245,11 @@ class MondocRetentionModel extends MondocAbstractModel
     /**
      * @param MondocAbstractModel $model
      * @return void
+     * @throws MondocConfigConfigurationException
      */
     public function setSourceModel(MondocAbstractModel $model): void
     {
-        $this->setSourceModelData($model->asArray());
+        $this->setSourceModelData($model->asArray(true));
         $this->setSourceObjectId($model->getObjectId());
         $this->setSourceClassName(get_class($model));
         /* @var $model MondocRetentionTrait (for suppression of IDE warnings) */

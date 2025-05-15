@@ -31,25 +31,14 @@
 
 namespace District5Tests\MondocTests;
 
-use DateTime;
-use District5\Mondoc\Db\Model\MondocAbstractModel;
-use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
-use District5\Mondoc\Helper\MondocTypes;
-use District5\MondocBuilder\QueryBuilder;
-use District5\MondocBuilder\QueryTypes\ValueEqualTo;
-use District5Tests\MondocTests\TestObjects\Model\DateModel;
-use District5Tests\MondocTests\TestObjects\Model\MyModel;
-use District5Tests\MondocTests\TestObjects\Model\NoServiceModel;
 use District5Tests\MondocTests\TestObjects\ModelChanges\FooModel;
 use District5Tests\MondocTests\TestObjects\ModelChanges\FooService;
 use District5Tests\MondocTests\TestObjects\ModelChanges\FooWithMoreFieldsModel;
 use District5Tests\MondocTests\TestObjects\ModelChanges\FooWithMoreFieldsService;
-use District5Tests\MondocTests\TestObjects\Service\DateService;
 use District5Tests\MondocTests\TestObjects\Service\MyService;
-use MongoDB\Model\BSONArray;
-use MongoDB\Model\BSONDocument;
 
 /**
  * Class TestNewFieldIntroductionTest.
@@ -64,6 +53,7 @@ class TestNewFieldIntroductionTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
      */
     public function testBasicModel()
     {
@@ -82,6 +72,7 @@ class TestNewFieldIntroductionTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
      */
     public function testOtherBasicModelWithSameCollection()
     {
@@ -100,6 +91,11 @@ class TestNewFieldIntroductionTest extends MondocBaseTestAbstract
         $this->assertTrue($m->delete());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
+     * @throws MondocConfigConfigurationException
+     */
     public function testSavingWithFooThenIntroducingArray()
     {
         $m = new FooModel();
@@ -114,10 +110,10 @@ class TestNewFieldIntroductionTest extends MondocBaseTestAbstract
         $this->assertTrue($retrieved->save());
 
         $retrieved = FooWithMoreFieldsService::getById($m->getObjectId());
-        $this->assertEquals($retrieved->getOriginalBsonDocument()->data->foo, 'bar');
-        $this->assertEquals($retrieved->getOriginalBsonDocument()->name, 'foo');
-        $this->assertEquals($retrieved->getOriginalBsonDocument()->age, 40);
-        $this->assertEquals($retrieved->getAge(), 40);
+        $this->assertEquals('bar', $retrieved->getOriginalBsonDocument()->data->foo);
+        $this->assertEquals('foo', $retrieved->getOriginalBsonDocument()->name);
+        $this->assertEquals(40, $retrieved->getOriginalBsonDocument()->age);
+        $this->assertEquals(40, $retrieved->getAge());
     }
 
     /**

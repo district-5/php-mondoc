@@ -33,9 +33,13 @@ namespace District5\Mondoc\Db\Model;
 use DateTime;
 use District5\Mondoc\Db\Model\Traits\ExcludedPropertiesTrait;
 use District5\Mondoc\Db\Model\Traits\FieldAliasMapTrait;
+use District5\Mondoc\Db\Model\Traits\MondocEncryptedFieldsTrait;
 use District5\Mondoc\Db\Model\Traits\MondocNestedModelTrait;
 use District5\Mondoc\Db\Model\Traits\UnmappedPropertiesTrait;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Helper\MondocTypes;
+use MongoDB\BSON\UTCDateTime;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
 
@@ -48,6 +52,7 @@ abstract class MondocAbstractSubModel
 {
     use ExcludedPropertiesTrait;
     use FieldAliasMapTrait;
+    use MondocEncryptedFieldsTrait;
     use MondocNestedModelTrait;
     use UnmappedPropertiesTrait;
 
@@ -67,6 +72,8 @@ abstract class MondocAbstractSubModel
      *
      * @return $this[]
      *
+     * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
      * @example
      * MyModel::inflateMultipleArrays(
      *      [
@@ -114,6 +121,8 @@ abstract class MondocAbstractSubModel
      * @param array $data
      *
      * @return $this
+     * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
      */
     public static function inflateSingleArray(array $data): static
     {
@@ -129,6 +138,10 @@ abstract class MondocAbstractSubModel
                 continue;
             }
             $k = $inst->getFieldAliasSingleMap($k, false);
+            $v = $inst->decryptMondocField($k, $v);
+            if ($v instanceof UTCDateTime) {
+                $v = MondocTypes::dateToPHPDateTime($v);
+            }
 
             $isNestedAny = $inst->isMondocNestedAnyType($k);
             if ((is_array($v) || is_object($v)) && $isNestedAny === true) {
@@ -260,9 +273,11 @@ abstract class MondocAbstractSubModel
     /**
      * Get an array export representation of this model and all child models.
      *
+     * @param bool $withEncryption
      * @return array
+     * @throws MondocConfigConfigurationException
      */
-    public function asArray(): array
+    public function asArray(bool $withEncryption = false): array
     {
         $data = [];
         foreach ($this->getMondocObjectVars() as $originalK => $v) {
@@ -273,20 +288,25 @@ abstract class MondocAbstractSubModel
                     $subs = [];
                     foreach ($v as $datum) {
                         if ($datum instanceof MondocAbstractSubModel) {
-                            $subs[] = $datum->asArray();
+                            $subs[] = $datum->asArray($withEncryption);
                         }
                     }
                     $v = $subs;
                 } else {
                     if ($v instanceof MondocAbstractSubModel) {
                         /* @var $v MondocAbstractSubModel */
-                        $v = $v->asArray();
+                        $v = $v->asArray($withEncryption);
                     }
                 }
             } elseif ($v instanceof DateTime) {
                 $v = MondocTypes::phpDateToMongoDateTime($v);
             }
-            $data[$k] = $v;
+
+            if ($withEncryption === true) {
+                $data[$k] = $this->encryptMondocField($k, $v);
+            } else {
+                $data[$k] = $v;
+            }
         }
         if ($this->hasUnmappedProperties() === true) {
             $data = array_merge_recursive($this->_mondocUnmapped, $data);
@@ -300,11 +320,13 @@ abstract class MondocAbstractSubModel
      *
      * @param array $omitKeys (optional) fields to omit.
      * @return array
+     * @throws MondocConfigConfigurationException
+     * @noinspection PhpRedundantOptionalArgumentInspection
      */
     public function asJsonEncodableArray(array $omitKeys = []): array
     {
         $data = MondocTypes::typeToJsonFriendly(
-            $this->asArray()
+            $this->asArray(false)
         );
         foreach ($omitKeys as $o) {
             unset($data[$o]);

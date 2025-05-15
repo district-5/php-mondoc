@@ -33,6 +33,7 @@ namespace District5Tests\MondocTests\FunctionalityParts;
 
 use DateTime;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\MondocBaseTestAbstract;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
@@ -98,6 +99,9 @@ class InsertionTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testDirtyFieldWithNewKeySet()
     {
@@ -140,6 +144,10 @@ class InsertionTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testInsertMultiWithMultipleModelsAcrossTwoServices()
     {

@@ -35,6 +35,7 @@ use DateTime;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\MondocTypes;
 use District5\MondocBuilder\QueryBuilder;
@@ -90,6 +91,7 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
      */
     public function testDateMethods()
     {
@@ -150,6 +152,11 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
         $this->assertFalse($m->delete()); // already deleted, no ObjectId now
     }
 
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     * @noinspection PhpRedundantOptionalArgumentInspection
+     */
     public function testBasicModelMethods()
     {
         $m = new MyModel();
@@ -158,7 +165,7 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
         $this->assertEquals(2, $m->getAge());
         $this->assertEquals('Joe', $m->getName());
 
-        $array = $m->asArray();
+        $array = $m->asArray(false);
         $this->assertArrayHasKey('age', $array);
         $this->assertArrayHasKey('name', $array);
 
@@ -209,6 +216,10 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testGetWhereEqualOrNotEqual()
     {
@@ -230,6 +241,18 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testModelExistence()
     {
@@ -269,6 +292,7 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
      */
     public function testGetByIdWhereEmptyOrInvalidIds()
     {
@@ -279,6 +303,8 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testGetByIdsWhereEmptyOrInvalidIds()
     {
@@ -294,11 +320,23 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
     /**
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testPersistAndQuery()
     {
 
-        $this->assertEquals(0, MyService::countAll([]));
+        $this->assertEquals(0, MyService::countAll());
 
         $name = 'Joe ' . $this->getUniqueKey();
         $m = new MyModel();

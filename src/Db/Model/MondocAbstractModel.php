@@ -37,6 +37,7 @@ use District5\Mondoc\Db\Model\Traits\MondocRetentionTrait;
 use District5\Mondoc\Db\Model\Traits\PresetObjectIdTrait;
 use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\HasTraitHelper;
 use District5\Mondoc\MondocConfig;
@@ -70,6 +71,8 @@ class MondocAbstractModel extends MondocAbstractSubModel
      * @param BSONDocument $document
      *
      * @return $this
+     * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
      */
     public static function inflateSingleBsonDocument(BSONDocument $document): static
     {
@@ -87,6 +90,8 @@ class MondocAbstractModel extends MondocAbstractSubModel
      * @param array $data
      *
      * @return $this
+     * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
      */
     public static function inflateSingleArray(array $data): static
     {
@@ -291,6 +296,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
      *
      * @param array $omitKeys (optional) fields to omit.
      * @return array
+     * @throws MondocConfigConfigurationException
      */
     public function asJsonEncodableArray(array $omitKeys = []): array
     {

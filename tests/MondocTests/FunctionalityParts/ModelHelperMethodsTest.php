@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 
 /**
  * District5 Mondoc Library
@@ -31,13 +31,8 @@
 
 namespace District5Tests\MondocTests\FunctionalityParts;
 
-use DateTime;
 use District5Tests\MondocTests\MondocBaseTestAbstract;
-use District5Tests\MondocTests\TestObjects\Model\DateModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
-use District5Tests\MondocTests\TestObjects\Service\DateService;
-use District5Tests\MondocTests\TestObjects\Service\MyService;
-use MongoDB\BSON\ObjectId;
 use stdClass;
 
 /**

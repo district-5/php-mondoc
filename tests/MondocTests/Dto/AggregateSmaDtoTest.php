@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 
 /**
  * District5 Mondoc Library
@@ -87,8 +87,8 @@ class AggregateSmaDtoTest extends MondocFinancialTestAbstract
 
         $startDate = $data[count($data) - 1]['date'];
         $endDate = $data[0]['date'];
-        $startDate = Date::modify($startDate, true)->minus()->minutes(1);
-        $endDate = Date::modify($endDate, true)->plus()->minutes(1);
+        $startDate = Date::modify($startDate)->minus()->minutes(1);
+        $endDate = Date::modify($endDate)->plus()->minutes(1);
 
         $sma = FinancialCandleService::aggregate()->getFinancialSma(
             'symbol',

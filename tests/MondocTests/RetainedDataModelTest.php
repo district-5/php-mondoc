@@ -33,6 +33,7 @@ namespace District5Tests\MondocTests;
 
 use District5\Date\Date;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Extensions\Retention\MondocRetentionModel;
 use District5\Mondoc\Extensions\Retention\MondocRetentionService;
@@ -53,6 +54,7 @@ class RetainedDataModelTest extends MondocBaseTestAbstract
 {
     /**
      * @return void
+     * @throws MondocConfigConfigurationException
      */
     public function testRawUnsavedRetentionModels()
     {
@@ -83,6 +85,10 @@ class RetainedDataModelTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testRetainedDataOnTopLevelModel()
     {
@@ -119,6 +125,11 @@ class RetainedDataModelTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testRetainedDataOnExtendedModel()
     {
@@ -216,10 +227,15 @@ class RetainedDataModelTest extends MondocBaseTestAbstract
         $this->assertEquals(12, MondocRetentionService::deleteMulti(['class' => TopLevelRetainedTestModel::class]));
     }
 
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
+     */
     public function testInsertMulti(): void
     {
         MondocRetentionService::deleteMulti([]);
-        $this->assertEquals(0, MondocRetentionService::countAll([]));
+        $this->assertEquals(0, MondocRetentionService::countAll());
 
         $m1 = new TopLevelRetainedTestModel();
         $m1->setName('foo');
@@ -243,7 +259,7 @@ class RetainedDataModelTest extends MondocBaseTestAbstract
         ]);
 
         $this->assertTrue(TopLevelRetainedTestService::insertMulti([$m1, $m2, $m3]));
-        $this->assertEquals(3, MondocRetentionService::countAll([]));
+        $this->assertEquals(3, MondocRetentionService::countAll());
 
         $this->assertEquals(3, TopLevelRetainedTestService::deleteMulti([]));
         $this->assertEquals(3, MondocRetentionService::deleteMulti([]));
@@ -253,6 +269,10 @@ class RetainedDataModelTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testExpiry()
     {
@@ -293,7 +313,7 @@ class RetainedDataModelTest extends MondocBaseTestAbstract
         $this->assertTrue($m2->save());
         $this->assertTrue($m3->save());
 
-        $this->assertEquals(3, MondocRetentionService::countAll([]));
+        $this->assertEquals(3, MondocRetentionService::countAll());
         $this->assertEquals(1, MondocRetentionService::countRetentionModelsForModel($m1)); // it's ID based.
         $paginatorClassName = MondocRetentionService::getPaginatorForExpiredRetentionForClassName(TopLevelRetainedTestModel::class, 1, 10);
         $paginatorModel = MondocRetentionService::getPaginatorForExpiredRetentionForObject($m1, 1, 10);

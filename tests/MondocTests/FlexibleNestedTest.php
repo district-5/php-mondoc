@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 
 /**
  * District5 Mondoc Library
@@ -32,6 +32,7 @@
 namespace District5Tests\MondocTests;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\TestObjects\FlexibleControlTestConfigSingleton;
 use District5Tests\MondocTests\TestObjects\Model\FlexibleNestedTestModel;
@@ -53,6 +54,8 @@ class FlexibleNestedTest extends MondocBaseTestAbstract
     /**
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testBasic()
     {

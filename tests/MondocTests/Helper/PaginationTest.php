@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 
 /**
  * District5 Mondoc Library
@@ -43,7 +43,7 @@ class PaginationTest extends MondocBaseTestAbstract
 {
     public function testBasicFirstPagePagination()
     {
-        $paginator = MondocPaginationHelper::init(100, 1, 10);
+        $paginator = MondocPaginationHelper::init(100, 1);
 
         $this->assertEquals(100, $paginator->getTotalResults());
         $this->assertEquals(1, $paginator->getCurrentPage());
@@ -90,7 +90,7 @@ class PaginationTest extends MondocBaseTestAbstract
 
     public function testBasicNonFirstPagePagination()
     {
-        $paginator = MondocPaginationHelper::init(100, 2, 10);
+        $paginator = MondocPaginationHelper::init(100, 2);
 
         $this->assertEquals(100, $paginator->getTotalResults());
         $this->assertEquals(2, $paginator->getCurrentPage());
@@ -105,7 +105,7 @@ class PaginationTest extends MondocBaseTestAbstract
 
     public function testBasicLastPagePagination()
     {
-        $paginator = MondocPaginationHelper::init(100, 10, 10);
+        $paginator = MondocPaginationHelper::init(100, 10);
 
         $this->assertEquals(100, $paginator->getTotalResults());
         $this->assertEquals(10, $paginator->getCurrentPage());
@@ -120,7 +120,7 @@ class PaginationTest extends MondocBaseTestAbstract
 
     public function testBasicInvalidPaginationDataForPagination()
     {
-        $paginator = MondocPaginationHelper::init(100, 15, 10); // only 10 pages
+        $paginator = MondocPaginationHelper::init(100, 15); // only 10 pages
 
         $this->assertEquals(100, $paginator->getTotalResults());
         $this->assertEquals(10, $paginator->getCurrentPage());
@@ -132,19 +132,19 @@ class PaginationTest extends MondocBaseTestAbstract
         $this->assertTrue($paginator->hasPreviousPage());
         $this->assertTrue($paginator->hasMultiplePages());
 
-        $paginatorAlt = MondocPaginationHelper::init(-1, 1, 10); // cannot have negative results
+        $paginatorAlt = MondocPaginationHelper::init(-1, 1); // cannot have negative results
         $this->assertEquals(0, $paginatorAlt->getTotalResults());
     }
 
     public function testUiPageDisplayControls()
     {
-        $paginatorOneResult = MondocPaginationHelper::init(1, 1, 10); // only 10 pages
+        $paginatorOneResult = MondocPaginationHelper::init(1, 1); // only 10 pages
         $this->assertFalse($paginatorOneResult->shouldShowPageOnUi(1, 1));
 
-        $paginatorUnlimited = MondocPaginationHelper::init(100, 1, 10); // only 10 pages
+        $paginatorUnlimited = MondocPaginationHelper::init(100, 1); // only 10 pages
         $this->assertTrue($paginatorUnlimited->shouldShowPageOnUi(1, null)); // null allows all
 
-        $paginator = MondocPaginationHelper::init(100, 2, 10); // only 10 pages
+        $paginator = MondocPaginationHelper::init(100, 2); // only 10 pages
 
         $this->assertTrue($paginator->shouldShowPageOnUi(2, 1));
         $this->assertTrue($paginator->shouldShowPageOnUi(2, 2));

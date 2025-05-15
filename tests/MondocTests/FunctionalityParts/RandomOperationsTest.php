@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 
 /**
  * District5 Mondoc Library
@@ -58,7 +58,7 @@ class RandomOperationsTest extends MondocBaseTestAbstract
         $m2 = new MyModel();
         $this->assertTrue($m2->setName('Jane')->setAge(4)->save());
 
-        $this->assertEquals(2, MyService::countAll([]));
+        $this->assertEquals(2, MyService::countAll());
         $values = MyService::getDistinctValuesForKey('name');
         $this->assertCount(2, $values);
         $this->assertContains('Joe', $values);

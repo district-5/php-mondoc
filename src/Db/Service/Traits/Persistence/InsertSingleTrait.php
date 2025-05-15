@@ -59,7 +59,7 @@ trait InsertSingleTrait
         $collection = self::getCollection(
             get_called_class()
         );
-        $data = $model->asArray();
+        $data = $model->asArray(true);
         if ($model->hasPresetObjectId()) {
             $data['_id'] = $model->getPresetObjectId();
         }

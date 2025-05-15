@@ -31,6 +31,7 @@
 namespace MondocTests;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\MondocBuilder\QueryBuilder;
 use District5\MondocBuilder\QueryTypes\ValueEqualTo;
@@ -51,6 +52,10 @@ class BuilderTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testPersistAndQuery()
     {

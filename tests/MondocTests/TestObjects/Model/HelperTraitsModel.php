@@ -30,12 +30,6 @@
 
 namespace District5Tests\MondocTests\TestObjects\Model;
 
-use District5\Mondoc\Db\Model\MondocAbstractModel;
-use District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
-use District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
-use District5\Mondoc\Db\Model\Traits\MondocRevisionNumberTrait;
-use District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
-
 /**
  * Class HelperTraitsModel
  *

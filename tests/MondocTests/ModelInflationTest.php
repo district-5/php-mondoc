@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 
 /**
  * District5 Mondoc Library
@@ -32,6 +32,7 @@
 namespace District5Tests\MondocTests;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\TestObjects\Model\InvalidNestedModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
@@ -49,6 +50,11 @@ use MongoDB\BSON\ObjectId;
  */
 class ModelInflationTest extends MondocBaseTestAbstract
 {
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
+     */
     public function testInflationDeflation()
     {
         $data = [
@@ -73,6 +79,10 @@ class ModelInflationTest extends MondocBaseTestAbstract
         $this->assertEquals($anId->__toString(), $inflated->getObjectIdString());
     }
 
+    /**
+     * @throws MondocEncryptionException
+     * @throws MondocConfigConfigurationException
+     */
     public function testInvalidClassMapInflation()
     {
         $data = ['a' => 'b'];
@@ -89,6 +99,10 @@ class ModelInflationTest extends MondocBaseTestAbstract
         $this->assertEquals('foo', $d->asArray()['name']);
     }
 
+    /**
+     * @throws MondocEncryptionException
+     * @throws MondocConfigConfigurationException
+     */
     public function testInflationWithInvalidDataReturnsEmptyModel()
     {
         $data = ['foo', 'bar', '_mondocUnmapped' => ['f']]; // all of this is invalid
@@ -99,6 +113,10 @@ class ModelInflationTest extends MondocBaseTestAbstract
         $this->assertEmpty($m->asArray()['food']['attributes']);
     }
 
+    /**
+     * @throws MondocEncryptionException
+     * @throws MondocConfigConfigurationException
+     */
     public function testInflationDeflationOfVersionedModel()
     {
         $data = [
@@ -124,8 +142,9 @@ class ModelInflationTest extends MondocBaseTestAbstract
     }
 
     /**
-     * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
+     * @throws MondocServiceMapErrorException
      */
     public function testInflateMultipleArrays()
     {

@@ -33,6 +33,7 @@ namespace District5\Mondoc\Db\Service\Traits;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\FilterFormatter;
 use District5\Mondoc\Helper\MondocTypes;
@@ -55,6 +56,7 @@ trait GetSingleTrait
      * @return MondocAbstractModel|null
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
      */
     public static function getOneByQueryBuilder(QueryBuilder $builder): ?MondocAbstractModel
     {
@@ -73,8 +75,9 @@ trait GetSingleTrait
      * @param array $options
      *
      * @return MondocAbstractModel|null
-     * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
      */
     public static function getOneByCriteria(array $filter = [], array $options = []): ?MondocAbstractModel
     {
@@ -116,6 +119,7 @@ trait GetSingleTrait
      * @return null|MondocAbstractModel
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
      */
     public static function getById(ObjectId|string $id): ?MondocAbstractModel
     {
@@ -138,6 +142,7 @@ trait GetSingleTrait
      * @return MondocAbstractModel|null
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
      */
     public static function getOneWhereKeyEqualsValue(string $key, mixed $value): ?MondocAbstractModel
     {
@@ -155,6 +160,7 @@ trait GetSingleTrait
      * @return MondocAbstractModel|null
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
      */
     public static function getOneWhereKeyDoesNotEqualValue(string $key, mixed $value): ?MondocAbstractModel
     {

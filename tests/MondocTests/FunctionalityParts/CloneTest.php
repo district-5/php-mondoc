@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 
 /**
  * District5 Mondoc Library
@@ -32,6 +32,7 @@
 namespace District5Tests\MondocTests\FunctionalityParts;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\MondocConfig;
 use District5Tests\MondocTests\MondocBaseTestAbstract;
@@ -50,6 +51,7 @@ class CloneTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
      */
     public function testCloneModelWithSave()
     {
@@ -70,6 +72,8 @@ class CloneTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testCloneModelWithAlternateModel()
     {
@@ -103,6 +107,7 @@ class CloneTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
      */
     public function testCloneModelWithoutSave()
     {
@@ -124,6 +129,7 @@ class CloneTest extends MondocBaseTestAbstract
 
     /**
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
      */
     public function testCloneModelWithInvalidModel()
     {

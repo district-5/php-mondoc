@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 
 /**
  * District5 Mondoc Library
@@ -55,7 +55,7 @@ class AverageSumAverageTest extends MondocBaseTestAbstract
         MyService::deleteMulti([]);
         $this->assertEquals(0, MyService::aggregate()->getSum('age'));
         $this->assertEquals(0, MyService::aggregate()->getAverage('age'));
-        $this->assertEquals(0, MyService::countAll([]));
+        $this->assertEquals(0, MyService::countAll());
 
         $ages = [2 => 'Joe', 4 => 'Joe', 6 => 'Jane'];
         foreach ($ages as $age => $name) {

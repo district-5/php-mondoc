@@ -33,6 +33,7 @@ namespace District5\Mondoc\Db\Service\Traits;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\FilterFormatter;
 use District5\Mondoc\Helper\MondocTypes;
@@ -53,6 +54,7 @@ trait GetMultiTrait
      *
      * @return MondocAbstractModel[]
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
      * @throws MondocServiceMapErrorException
      */
     public static function getMultiByQueryBuilder(QueryBuilder $builder): array
@@ -72,6 +74,7 @@ trait GetMultiTrait
      * @return MondocAbstractModel[]
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
      */
     public static function getMultiByCriteria(array $filter = [], array $options = []): array
     {
@@ -105,6 +108,7 @@ trait GetMultiTrait
      *
      * @return MondocAbstractModel[]
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
      * @throws MondocServiceMapErrorException
      */
     public static function getByIds(array $ids): array
@@ -137,6 +141,7 @@ trait GetMultiTrait
      *
      * @return MondocAbstractModel[]
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
      * @throws MondocServiceMapErrorException
      */
     public static function getMultiWhereKeyEqualsValue(string $key, mixed $value): array
@@ -154,6 +159,7 @@ trait GetMultiTrait
      *
      * @return MondocAbstractModel[]
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
      * @throws MondocServiceMapErrorException
      */
     public static function getMultiWhereKeyDoesNotEqualValue(string $key, mixed $value): array

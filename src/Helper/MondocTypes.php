@@ -33,6 +33,7 @@ namespace District5\Mondoc\Helper;
 use BackedEnum;
 use DateTime;
 use District5\Mondoc\Db\Model\MondocAbstractSubModel;
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Helper\Traits\ArrayConversionTrait;
 use District5\Mondoc\Helper\Traits\DateObjectConversionTrait;
 use District5\Mondoc\Helper\Traits\ObjectIdConversionTrait;
@@ -62,7 +63,9 @@ class MondocTypes
      * @param mixed $v
      *
      * @return mixed
+     * @throws MondocConfigConfigurationException
      * @noinspection PhpExpressionAlwaysNullInspection
+     * @noinspection PhpRedundantOptionalArgumentInspection
      */
     public static function typeToJsonFriendly(mixed $v): mixed
     {
@@ -116,7 +119,7 @@ class MondocTypes
             }
 
             if ($val instanceof MondocAbstractSubModel) {
-                $val = $val->asArray();
+                $val = $val->asArray(false);
             } else {
                 $val = (array)$val;
             }

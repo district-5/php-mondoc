@@ -83,9 +83,11 @@ class MyModel extends MondocAbstractModel
     /**
      * This method must return the array to insert into Mongo.
      *
+     * @param bool $withEncryption
      * @return array
+     * @throws MondocConfigConfigurationException
      */
-    public function asArray(): array
+    public function asArray(bool $withEncryption = false): array
     {
         $this->assignDefaultVars();
 
@@ -97,7 +99,7 @@ class MyModel extends MondocAbstractModel
             ];
         }
 
-        return parent::asArray();
+        return parent::asArray($withEncryption);
     }
 
     /**

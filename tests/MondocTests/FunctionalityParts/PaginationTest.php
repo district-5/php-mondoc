@@ -32,10 +32,9 @@
 namespace District5Tests\MondocTests\FunctionalityParts;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
-use District5\Mondoc\Helper\MondocPaginationHelper;
 use District5\MondocBuilder\QueryBuilder;
-use District5\MondocBuilder\QueryTypes\ValueEqualTo;
 use District5\MondocBuilder\QueryTypes\ValueGreaterThan;
 use District5Tests\MondocTests\MondocBaseTestAbstract;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
@@ -53,8 +52,9 @@ use MongoDB\BSON\ObjectId;
 class PaginationTest extends MondocBaseTestAbstract
 {
     /**
-     * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
+     * @throws MondocServiceMapErrorException
      */
     public function testPagination()
     {
@@ -62,7 +62,7 @@ class PaginationTest extends MondocBaseTestAbstract
 
         $builder = new QueryBuilder();
 
-        $this->assertEquals(0, MyService::countAll([]));
+        $this->assertEquals(0, MyService::countAll());
         $this->assertEquals(0, MyService::countAllByQueryBuilder($builder));
 
         $ages = [2 => 'Joe', 4 => 'Joe', 6 => 'Jane'];
@@ -75,7 +75,7 @@ class PaginationTest extends MondocBaseTestAbstract
             $idsSaved[] = $m->getObjectId();
         }
 
-        $paginator = MyService::getPaginationHelper(1, 1, []);
+        $paginator = MyService::getPaginationHelper(1, 1);
         $this->assertEquals(3, $paginator->getTotalPages());
 
         $results = MyService::getPageWithOptions($paginator, ['sort' => ['age' => 1]]);
@@ -91,14 +91,14 @@ class PaginationTest extends MondocBaseTestAbstract
         $this->assertFalse(in_array($results[0]->getObjectIdString(), $ids));
         $ids[] = $results[0]->getObjectIdString();
 
-        $paginator = MyService::getPaginationHelper(2, 1, []);
+        $paginator = MyService::getPaginationHelper(2, 1);
         $this->assertEquals(3, $paginator->getTotalPages());
         $results = MyService::getPage($paginator, 'name', 1);
         $this->assertCount(1, $results);
         $this->assertFalse(in_array($results[0]->getObjectIdString(), $ids));
         $ids[] = $results[0]->getObjectIdString();
 
-        $paginator = MyService::getPaginationHelper(3, 1, []);
+        $paginator = MyService::getPaginationHelper(3, 1);
         $this->assertEquals(3, $paginator->getTotalPages());
         $results = MyService::getPage($paginator, 'name', 1);
         $this->assertCount(1, $results);
@@ -119,7 +119,7 @@ class PaginationTest extends MondocBaseTestAbstract
         $this->assertCount(1, $results);
         $this->assertFalse(in_array($results[0]->getObjectIdString(), $ids));
 
-        $paginator = MyService::getPaginationHelperForObjectIdPagination(1, []);
+        $paginator = MyService::getPaginationHelperForObjectIdPagination(1);
         $firstPage = MyService::getPageByByObjectIdPagination($paginator, null, 1);
         $this->assertCount(1, $firstPage);
         $this->assertEquals('Joe', $firstPage[0]->getName());
@@ -128,7 +128,7 @@ class PaginationTest extends MondocBaseTestAbstract
         $this->assertCount(1, $firstPage);
         $this->assertEquals('Jane', $firstPage[0]->getName());
 
-        $paginator = MyService::getPaginationHelperForObjectIdPagination(1, []);
+        $paginator = MyService::getPaginationHelperForObjectIdPagination(1);
         $this->assertEquals($idsSaved[1]->__toString(), MyService::getPageByByObjectIdPagination($paginator, $idsSaved[0], 1)[0]->getObjectIdString());
         $this->assertEquals($idsSaved[1]->__toString(), MyService::getPageByByObjectIdPagination($paginator, $idsSaved[2], -1)[0]->getObjectIdString());
 
@@ -139,13 +139,14 @@ class PaginationTest extends MondocBaseTestAbstract
     }
 
     /**
-     * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
      */
     public function testInvalidSortDirectionForPaginationByObjectId()
     {
         $this->expectException(InvalidArgumentException::class);
-        $paginator = MyService::getPaginationHelperForObjectIdPagination(1, []);
-        MyService::getPageByByObjectIdPagination($paginator, new ObjectId(), 2, []); // invalid sort direction
+        $paginator = MyService::getPaginationHelperForObjectIdPagination(1);
+        MyService::getPageByByObjectIdPagination($paginator, new ObjectId(), 2); // invalid sort direction
     }
 }

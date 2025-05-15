@@ -66,7 +66,7 @@ trait UpdateSingleTrait
         if (empty($model->getDirty())) {
             return true;
         }
-        $data = $model->asArray();
+        $data = $model->asArray(true);
         unset($data['_id']);
         $changeSet = [];
         foreach ($dirty as $key) {

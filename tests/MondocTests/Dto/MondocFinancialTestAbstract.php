@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 
 /**
  * District5 Mondoc Library
@@ -45,6 +45,7 @@ abstract class MondocFinancialTestAbstract extends MondocBaseTestAbstract
 {
     protected function getTestData(): array
     {
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
         $now = Date::createYMDHISM(2024, 6, 2, 12, 0, 0); // 2024-06-02 12:00:00 (UTC)
         return [
             [
@@ -54,162 +55,162 @@ abstract class MondocFinancialTestAbstract extends MondocBaseTestAbstract
             ],
             [
                 'price' => 1.01,
-                'date' => Date::modify($now, true)->minus()->minutes(1),
+                'date' => Date::modify($now)->minus()->minutes(1),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 1.3,
-                'date' => Date::modify($now, true)->minus()->minutes(2),
+                'date' => Date::modify($now)->minus()->minutes(2),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.2,
-                'date' => Date::modify($now, true)->minus()->minutes(3),
+                'date' => Date::modify($now)->minus()->minutes(3),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.1,
-                'date' => Date::modify($now, true)->minus()->minutes(4),
+                'date' => Date::modify($now)->minus()->minutes(4),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.3,
-                'date' => Date::modify($now, true)->minus()->minutes(5),
+                'date' => Date::modify($now)->minus()->minutes(5),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.4,
-                'date' => Date::modify($now, true)->minus()->minutes(6),
+                'date' => Date::modify($now)->minus()->minutes(6),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.5,
-                'date' => Date::modify($now, true)->minus()->minutes(7),
+                'date' => Date::modify($now)->minus()->minutes(7),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.6,
-                'date' => Date::modify($now, true)->minus()->minutes(8),
+                'date' => Date::modify($now)->minus()->minutes(8),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.7,
-                'date' => Date::modify($now, true)->minus()->minutes(9),
+                'date' => Date::modify($now)->minus()->minutes(9),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.8,
-                'date' => Date::modify($now, true)->minus()->minutes(10),
+                'date' => Date::modify($now)->minus()->minutes(10),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.9,
-                'date' => Date::modify($now, true)->minus()->minutes(11),
+                'date' => Date::modify($now)->minus()->minutes(11),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.8,
-                'date' => Date::modify($now, true)->minus()->minutes(12),
+                'date' => Date::modify($now)->minus()->minutes(12),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.7,
-                'date' => Date::modify($now, true)->minus()->minutes(13),
+                'date' => Date::modify($now)->minus()->minutes(13),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.6,
-                'date' => Date::modify($now, true)->minus()->minutes(14),
+                'date' => Date::modify($now)->minus()->minutes(14),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.5,
-                'date' => Date::modify($now, true)->minus()->minutes(15),
+                'date' => Date::modify($now)->minus()->minutes(15),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.4,
-                'date' => Date::modify($now, true)->minus()->minutes(16),
+                'date' => Date::modify($now)->minus()->minutes(16),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.3,
-                'date' => Date::modify($now, true)->minus()->minutes(17),
+                'date' => Date::modify($now)->minus()->minutes(17),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.2,
-                'date' => Date::modify($now, true)->minus()->minutes(18),
+                'date' => Date::modify($now)->minus()->minutes(18),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.1,
-                'date' => Date::modify($now, true)->minus()->minutes(19),
+                'date' => Date::modify($now)->minus()->minutes(19),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 2.0,
-                'date' => Date::modify($now, true)->minus()->minutes(20),
+                'date' => Date::modify($now)->minus()->minutes(20),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 1.9,
-                'date' => Date::modify($now, true)->minus()->minutes(21),
+                'date' => Date::modify($now)->minus()->minutes(21),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 1.8,
-                'date' => Date::modify($now, true)->minus()->minutes(22),
+                'date' => Date::modify($now)->minus()->minutes(22),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 1.7,
-                'date' => Date::modify($now, true)->minus()->minutes(23),
+                'date' => Date::modify($now)->minus()->minutes(23),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 1.6,
-                'date' => Date::modify($now, true)->minus()->minutes(24),
+                'date' => Date::modify($now)->minus()->minutes(24),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 1.5,
-                'date' => Date::modify($now, true)->minus()->minutes(25),
+                'date' => Date::modify($now)->minus()->minutes(25),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 1.4,
-                'date' => Date::modify($now, true)->minus()->minutes(26),
+                'date' => Date::modify($now)->minus()->minutes(26),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 1.3,
-                'date' => Date::modify($now, true)->minus()->minutes(27),
+                'date' => Date::modify($now)->minus()->minutes(27),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 1.2,
-                'date' => Date::modify($now, true)->minus()->minutes(28),
+                'date' => Date::modify($now)->minus()->minutes(28),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 1.1,
-                'date' => Date::modify($now, true)->minus()->minutes(29),
+                'date' => Date::modify($now)->minus()->minutes(29),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 1.0,
-                'date' => Date::modify($now, true)->minus()->minutes(30),
+                'date' => Date::modify($now)->minus()->minutes(30),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 0.9,
-                'date' => Date::modify($now, true)->minus()->minutes(31),
+                'date' => Date::modify($now)->minus()->minutes(31),
                 'symbol' => 'JOES-COIN'
             ],
             [
                 'price' => 0.8,
-                'date' => Date::modify($now, true)->minus()->minutes(32),
+                'date' => Date::modify($now)->minus()->minutes(32),
                 'symbol' => 'JOES-COIN'
             ],
         ];

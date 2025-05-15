@@ -110,7 +110,7 @@ trait InsertMultiTrait
                 $model->incrementRevisionNumber();
             }
 
-            $asArray = $model->asArray();
+            $asArray = $model->asArray(true);
             if ($model->hasPresetObjectId()) {
                 $asArray['_id'] = $model->getPresetObjectId();
             }

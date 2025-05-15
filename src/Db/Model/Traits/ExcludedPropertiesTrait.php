@@ -47,7 +47,7 @@ trait ExcludedPropertiesTrait
         return [
             '_mondocObjectId', '_mondocBson', '_mondocCollection', '_mondocPresetObjectId',
             '_mondocUnmapped', '_mondocDirty', '_mondocEstablishedNestedSingle', '_mondocEstablishedNestedMultiple',
-            '_mondocRetentionExpiry', '_mondocRetentionChangeMeta', 'mondocNested', 'mondocFieldAliases'
+            '_mondocRetentionExpiry', '_mondocRetentionChangeMeta', 'mondocEncrypted', 'mondocNested', 'mondocFieldAliases'
         ];
     }
 

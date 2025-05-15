@@ -30,6 +30,7 @@
 
 namespace District5\Mondoc\Db\Model\Traits;
 
+use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\Model\BSONDocument;
 
@@ -84,6 +85,7 @@ trait DirtyAttributesTrait
      *
      * @param string|null $property
      * @return bool
+     * @throws MondocConfigConfigurationException
      */
     public function isDirty(string|null $property): bool
     {
@@ -98,6 +100,7 @@ trait DirtyAttributesTrait
      * Get the array of dirty values (values that need to be updated). Dirty values aren't referenced for new objects.
      *
      * @return array
+     * @throws MondocConfigConfigurationException
      */
     public function getDirty(): array
     {
@@ -127,6 +130,7 @@ trait DirtyAttributesTrait
      *
      * @param string $property
      * @return bool
+     * @throws MondocConfigConfigurationException
      */
     public function isDirtyField(string $property): bool
     {

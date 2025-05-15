@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 
 /**
  * District5 Mondoc Library
@@ -34,6 +34,7 @@ namespace District5Tests\MondocTests;
 use DateTime;
 use District5\Date\Date;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
 use District5Tests\MondocTests\TestObjects\Model\HelperTraitsModel;
@@ -71,14 +72,14 @@ class HelperTraitsModelTest extends MondocBaseTestAbstract
         $this->assertFalse($m->isVersionableModel());
 
         $m = new HelperTraitsModel();
-        $this->assertNull($m->getModifiedDate(false));
-        $this->assertNull($m->getCreatedDate(false));
+        $this->assertNull($m->getModifiedDate());
+        $this->assertNull($m->getCreatedDate());
 
         $m->touchModifiedDate();
         $m->touchCreatedDate();
 
-        $this->assertInstanceOf(DateTime::class, $m->getModifiedDate(false));
-        $this->assertInstanceOf(DateTime::class, $m->getCreatedDate(false));
+        $this->assertInstanceOf(DateTime::class, $m->getModifiedDate());
+        $this->assertInstanceOf(DateTime::class, $m->getCreatedDate());
 
         $this->assertTrue($m->isVersionableModel());
     }
@@ -87,6 +88,10 @@ class HelperTraitsModelTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testFullVersioningFunctionality()
     {
@@ -176,10 +181,10 @@ class HelperTraitsModelTest extends MondocBaseTestAbstract
         $this->assertTrue($model->hasObjectId());
         $this->assertTrue($other->hasObjectId());
 
-        $this->assertInstanceOf(DateTime::class, $model->getCreatedDate(false));
-        $this->assertInstanceOf(DateTime::class, $model->getModifiedDate(false));
-        $this->assertInstanceOf(DateTime::class, $other->getCreatedDate(false));
-        $this->assertInstanceOf(DateTime::class, $other->getModifiedDate(false));
+        $this->assertInstanceOf(DateTime::class, $model->getCreatedDate());
+        $this->assertInstanceOf(DateTime::class, $model->getModifiedDate());
+        $this->assertInstanceOf(DateTime::class, $other->getCreatedDate());
+        $this->assertInstanceOf(DateTime::class, $other->getModifiedDate());
         $this->assertEquals(1, $model->getRevisionNumber());
         $this->assertEquals(1, $other->getRevisionNumber());
 

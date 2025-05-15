@@ -31,8 +31,8 @@
 namespace District5Tests\MondocTests;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
-use District5\Mondoc\MondocConfig;
 use District5Tests\MondocTests\TestObjects\Model\SingleAndMultiNestedModel;
 use District5Tests\MondocTests\TestObjects\Model\Subs\FoodAttributesSubModel;
 use District5Tests\MondocTests\TestObjects\Model\Subs\FoodSubModel;
@@ -59,9 +59,9 @@ class SingleAndNestedTest extends MondocBaseTestAbstract
     }
 
     /**
-     * @noinspection PhpPossiblePolymorphicInvocationInspection
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
      */
     public function testFull()
     {
@@ -120,6 +120,10 @@ class SingleAndNestedTest extends MondocBaseTestAbstract
         $this->assertTrue($m->delete());
     }
 
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
     public function testAsArrayWithUnmappedStillAddsThem()
     {
         $single = new SingleAndMultiNestedModel();
@@ -133,6 +137,12 @@ class SingleAndNestedTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
+     * @throws MondocEncryptionException
      */
     public function testPushAndPull()
     {
@@ -141,38 +151,35 @@ class SingleAndNestedTest extends MondocBaseTestAbstract
         $this->assertTrue($m->save());
 
         $found = SingleAndMultiNestedService::getById($m->getObjectId());
-        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         $this->assertEquals(['Joe', 'Jane'], $found->getFriends());
 
         SingleAndMultiNestedService::pullFriendById($m->getObjectId(), 'Joe');
         $found = SingleAndMultiNestedService::getById($m->getObjectId());
-        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         $this->assertEquals(['Jane'], $found->getFriends());
 
         SingleAndMultiNestedService::pushFriendById($m->getObjectId(), 'Joe');
         $found = SingleAndMultiNestedService::getById($m->getObjectId());
-        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         $this->assertEquals(['Jane', 'Joe'], $found->getFriends());
 
         SingleAndMultiNestedService::pullFriendByFilter(['_id' => $m->getObjectId()], 'Joe');
         $found = SingleAndMultiNestedService::getById($m->getObjectId());
-        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         $this->assertEquals(['Jane'], $found->getFriends());
 
         SingleAndMultiNestedService::pushFriendByFilter(['_id' => $m->getObjectId()], 'Joe');
         $found = SingleAndMultiNestedService::getById($m->getObjectId());
-        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         $this->assertEquals(['Jane', 'Joe'], $found->getFriends());
 
         SingleAndMultiNestedService::pushFriendById($m->getObjectId(), 'Dave');
         $found = SingleAndMultiNestedService::getById($m->getObjectId());
-        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         $this->assertEquals(['Jane', 'Joe', 'Dave'], $found->getFriends());
 
         // Delete the document
         $this->assertTrue($m->delete());
     }
 
+    /**
+     * @throws MondocConfigConfigurationException
+     */
     public function testSubModelValues()
     {
         $sub = new FoodSubModel();
@@ -206,6 +213,11 @@ class SingleAndNestedTest extends MondocBaseTestAbstract
     }
 
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
+     * @throws MondocConfigConfigurationException
+     */
     public function testChangingSubModelReflectsInDatabase()
     {
         $model = new SingleAndMultiNestedModel();
@@ -229,6 +241,11 @@ class SingleAndNestedTest extends MondocBaseTestAbstract
         $this->assertTrue($model->delete());
     }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
+     * @throws MondocConfigConfigurationException
+     */
     public function testChangingArrayOfSubModelsReflectsInDatabase()
     {
         $model = new SingleAndMultiNestedModel();

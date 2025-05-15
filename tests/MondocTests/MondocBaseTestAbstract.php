@@ -30,7 +30,6 @@
 
 namespace District5Tests\MondocTests;
 
-use District5\Mondoc\MondocConfig;;
 use PHPUnit\Framework\TestCase;
 
 /**

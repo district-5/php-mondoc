@@ -457,8 +457,8 @@ $results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectI
 
 #### Model to array...
 
-You can export a model to an array by calling [`asArray()`](./src/Db/Model/MondocAbstractSubModel.php) on the model.
-This will return an array of the model's properties.
+You can export a model to MongoDB compatible array by calling [`asArray()`](./src/Db/Model/MondocAbstractSubModel.php)
+on the model. This will return an array of the model's properties, as expected for insertion.
 
 The properties returned by the [`asArray()`](./src/Db/Model/MondocAbstractSubModel.php) method are the properties and
 types that have been set on the model, which means they're likely not able to be directly encoded to JSON. To get around
@@ -484,7 +484,6 @@ force the model to absorb this ObjectId and not generate a new one upon insertio
 
 ```php
 <?php
-/** @noinspection SpellCheckingInspection */
 $theId = new \MongoDB\BSON\ObjectId('61dfee5591efcf44e023d692');
 
 $person = new Person();
@@ -539,7 +538,6 @@ $bsonArray = new \MongoDB\Model\BSONArray(['foo', 'bar']);
 $phpArrayFromArray = MondocTypes::arrayToPhp($bsonArray);
 
 // ObjectIds
-/** @noinspection SpellCheckingInspection */
 $anId = '61dfee5591efcf44e023d692';
 $objectId = MondocTypes::toObjectId($anId);
 // You can also pass existing ObjectId's into the conversion and nothing happens.

@@ -33,6 +33,7 @@ namespace District5\Mondoc\Db\Model\Traits;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Model\MondocAbstractSubModel;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocEncryptionException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 
 /**
@@ -46,8 +47,10 @@ trait MondocCloneableTrait
      * @param bool $save
      * @param string|MondocAbstractModel|null $clz
      * @return MondocAbstractModel|static|null
-     * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
+     * @throws MondocEncryptionException
+     * @noinspection PhpRedundantOptionalArgumentInspection
      */
     public function clone(bool $save = false, string|MondocAbstractModel|null $clz = null): MondocAbstractModel|static|null
     {
@@ -56,7 +59,7 @@ trait MondocCloneableTrait
             if ($clz instanceof MondocAbstractSubModel) {
                 $clz = get_class($clz);
             }
-            $new = $clz::inflateSingleArray($this->asArray());
+            $new = $clz::inflateSingleArray($this->asArray(false));
         } else {
             $new = clone $this;
         }
@@ -72,7 +75,8 @@ trait MondocCloneableTrait
     }
 
     /**
+     * @param bool $withEncryption
      * @return array
      */
-    abstract public function asArray(): array;
+    abstract public function asArray(bool $withEncryption = false): array;
 }

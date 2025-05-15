@@ -1,12 +1,15 @@
 <?php
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Extensions\FieldEncryption\MondocAES256Adapter;
 use District5\Mondoc\MondocConfig;
 use District5Tests\MondocTests\TestObjects\Model\AllTypesModel;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
 use District5Tests\MondocTests\TestObjects\Model\FieldAliasTestModel;
 use District5Tests\MondocTests\TestObjects\Model\FinancialCandleModel;
 use District5Tests\MondocTests\TestObjects\Model\FlexibleNestedTestModel;
+use District5Tests\MondocTests\TestObjects\Model\MixedEncryptedModel;
+use District5Tests\MondocTests\TestObjects\Model\MixedEncryptedWithEncryptedSubModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModelWithSub;
 use District5Tests\MondocTests\TestObjects\Model\SubLevelRetainedTestModel;
@@ -24,6 +27,8 @@ use District5Tests\MondocTests\TestObjects\Service\FieldAliasTestService;
 use District5Tests\MondocTests\TestObjects\Service\FinancialCandleService;
 use District5Tests\MondocTests\TestObjects\Service\FlexibleNestedTestService;
 use District5Tests\MondocTests\TestObjects\Service\HelperTraitsOtherService;
+use District5Tests\MondocTests\TestObjects\Service\MixedEncryptedService;
+use District5Tests\MondocTests\TestObjects\Service\MixedEncryptedWithEncryptedSubModelService;
 use District5Tests\MondocTests\TestObjects\Service\MyService;
 use District5Tests\MondocTests\TestObjects\Service\MySubService;
 use District5Tests\MondocTests\TestObjects\Service\SubLevelRetainedTestService;
@@ -36,10 +41,13 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $connection = new Client(getenv('MONGO_CONNECTION_STRING'));
 $mondoc = MondocConfig::getInstance();
-/** @noinspection PhpRedundantOptionalArgumentInspection */
+$mondoc->setEncryptionAdapter(
+    new MondocAES256Adapter('12345678901234567890123456789012')
+);
+
 $mondoc->addDatabase(
     $connection->selectDatabase(getenv('MONGO_DATABASE') . php_uname('s')),
-    'default'
+    // uses 'default' as the connectionId
 );
 $mondoc->addDatabase(
     $connection->selectDatabase(getenv('MONGO_DATABASE') . php_uname('s')),
@@ -52,7 +60,9 @@ $mondoc->setServiceMap([
     SingleAndMultiNestedModel::class => SingleAndMultiNestedService::class,
     FinancialCandleModel::class => FinancialCandleService::class,
     FieldAliasTestModel::class => FieldAliasTestService::class,
-    FlexibleNestedTestModel::class => FlexibleNestedTestService::class
+    FlexibleNestedTestModel::class => FlexibleNestedTestService::class,
+    MixedEncryptedModel::class => MixedEncryptedService::class,
+    MixedEncryptedWithEncryptedSubModel::class => MixedEncryptedWithEncryptedSubModelService::class
 ]); // just to cover the setServiceMap method
 $mondoc->addServiceMapping(
     HelperTraitsModel::class,
@@ -91,6 +101,7 @@ function cleanupCollections($mondoc): void
     $mondoc->getDatabase()->dropCollection('mondoc_retention');
 }
 
+/** @noinspection PhpUnhandledExceptionInspection */
 $mondoc->getDatabase()->dropCollection('test_foo'); // Drop the test collection
 
 cleanupCollections($mondoc); // Start with a clean slate

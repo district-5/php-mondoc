@@ -32,6 +32,7 @@ namespace District5\Mondoc;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Traits\Config\MondocConfigDatabaseTrait;
+use District5\Mondoc\Traits\Config\MondocConfigEncryptionTrait;
 use District5\Mondoc\Traits\Config\MondocConfigServiceMappingTrait;
 use MongoDB\Collection;
 
@@ -43,6 +44,7 @@ use MongoDB\Collection;
 class MondocConfig
 {
     use MondocConfigDatabaseTrait;
+    use MondocConfigEncryptionTrait;
     use MondocConfigServiceMappingTrait;
 
     /**

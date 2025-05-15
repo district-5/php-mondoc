@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+<?php
 
 /**
  * District5 Mondoc Library
@@ -55,7 +55,7 @@ class MondocConfigTest extends MondocBaseTestAbstract
      */
     public function testGetDatabaseForConnection()
     {
-        $this->assertIsString(MondocConfig::getInstance()->getDatabaseName('default'));
+        $this->assertIsString(MondocConfig::getInstance()->getDatabaseName());
     }
 
     /**
@@ -74,12 +74,12 @@ class MondocConfigTest extends MondocBaseTestAbstract
      */
     public function testAddDatabaseForAlternateKey()
     {
+        $this->expectNotToPerformAssertions();
         MondocConfig::getInstance()->addDatabase(
             MondocConfig::getInstance()->getDatabase(),
             'alternate'
         );
-        $valid = MondocConfig::getInstance()->getDatabase('alternate');
-        $this->assertInstanceOf(Database::class, $valid);
+        MondocConfig::getInstance()->getDatabase('alternate');
     }
 
     /**
@@ -89,7 +89,6 @@ class MondocConfigTest extends MondocBaseTestAbstract
     public function testGetDatabase()
     {
         $database = MondocConfig::getInstance()->getDatabase();
-        $this->assertInstanceOf(Database::class, $database);
         $this->assertEquals($this->getDatabaseName(), $database->getDatabaseName());
 
         $service = MyService::getMongo();

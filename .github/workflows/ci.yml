@@ -31,7 +31,7 @@ jobs:
         with:
           version: latest
           php_version: latest
-          php_extensions: "xdebug mongodb calendar sockets openssl"
+          php_extensions: "xdebug mongodb calendar sockets"
           args: "-d date.timezone=UTC --coverage-clover ./coverage.xml --log-junit junit.xml"
           configuration: phpunit.xml
           testsuite: MondocTestSuite

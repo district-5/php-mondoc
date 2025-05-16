@@ -33,7 +33,7 @@ namespace District5\Mondoc\Db\Model\Traits;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Model\MondocAbstractSubModel;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 
 /**
@@ -49,7 +49,7 @@ trait MondocCloneableTrait
      * @return MondocAbstractModel|static|null
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      * @noinspection PhpRedundantOptionalArgumentInspection
      */
     public function clone(bool $save = false, string|MondocAbstractModel|null $clz = null): MondocAbstractModel|static|null

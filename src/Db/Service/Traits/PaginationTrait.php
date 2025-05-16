@@ -32,7 +32,7 @@ namespace District5\Mondoc\Db\Service\Traits;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\MondocPaginationHelper;
 use District5\Mondoc\Helper\MondocTypes;
@@ -121,7 +121,7 @@ trait PaginationTrait
      * @return MondocAbstractModel[]
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public static function getPage(MondocPaginationHelper $paginator, ?string $sortByField = '_id', int $sortDirection = -1): array
     {
@@ -146,7 +146,7 @@ trait PaginationTrait
      * @return MondocAbstractModel[]
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public static function getPageWithOptions(MondocPaginationHelper $paginator, array $options): array
     {
@@ -172,7 +172,7 @@ trait PaginationTrait
      * @return MondocAbstractModel[]
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public static function getPageByByObjectIdPagination(MondocPaginationHelper $paginator, ObjectId|string|null $currentId, int $sortDirection = -1): array
     {

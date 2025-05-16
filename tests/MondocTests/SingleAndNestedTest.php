@@ -31,7 +31,7 @@
 namespace District5Tests\MondocTests;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\TestObjects\Model\SingleAndMultiNestedModel;
 use District5Tests\MondocTests\TestObjects\Model\Subs\FoodAttributesSubModel;
@@ -61,7 +61,7 @@ class SingleAndNestedTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testFull()
     {
@@ -137,12 +137,7 @@ class SingleAndNestedTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testPushAndPull()
     {
@@ -215,7 +210,7 @@ class SingleAndNestedTest extends MondocBaseTestAbstract
 
     /**
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      * @throws MondocConfigConfigurationException
      */
     public function testChangingSubModelReflectsInDatabase()
@@ -243,7 +238,7 @@ class SingleAndNestedTest extends MondocBaseTestAbstract
 
     /**
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      * @throws MondocConfigConfigurationException
      */
     public function testChangingArrayOfSubModelsReflectsInDatabase()

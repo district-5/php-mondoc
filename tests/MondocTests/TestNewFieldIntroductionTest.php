@@ -32,7 +32,7 @@
 namespace District5Tests\MondocTests;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\TestObjects\ModelChanges\FooModel;
 use District5Tests\MondocTests\TestObjects\ModelChanges\FooService;
@@ -53,7 +53,7 @@ class TestNewFieldIntroductionTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testBasicModel()
     {
@@ -72,7 +72,7 @@ class TestNewFieldIntroductionTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testOtherBasicModelWithSameCollection()
     {
@@ -93,7 +93,7 @@ class TestNewFieldIntroductionTest extends MondocBaseTestAbstract
 
     /**
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      * @throws MondocConfigConfigurationException
      */
     public function testSavingWithFooThenIntroducingArray()

@@ -32,7 +32,7 @@
 namespace District5Tests\MondocTests;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\TestObjects\Model\InvalidNestedModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
@@ -53,7 +53,7 @@ class ModelInflationTest extends MondocBaseTestAbstract
     /**
      * @return void
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testInflationDeflation()
     {
@@ -80,7 +80,7 @@ class ModelInflationTest extends MondocBaseTestAbstract
     }
 
     /**
-     * @throws MondocEncryptionException
+     * @throws MondocException
      * @throws MondocConfigConfigurationException
      */
     public function testInvalidClassMapInflation()
@@ -100,7 +100,7 @@ class ModelInflationTest extends MondocBaseTestAbstract
     }
 
     /**
-     * @throws MondocEncryptionException
+     * @throws MondocException
      * @throws MondocConfigConfigurationException
      */
     public function testInflationWithInvalidDataReturnsEmptyModel()
@@ -114,7 +114,7 @@ class ModelInflationTest extends MondocBaseTestAbstract
     }
 
     /**
-     * @throws MondocEncryptionException
+     * @throws MondocException
      * @throws MondocConfigConfigurationException
      */
     public function testInflationDeflationOfVersionedModel()
@@ -143,7 +143,7 @@ class ModelInflationTest extends MondocBaseTestAbstract
 
     /**
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      * @throws MondocServiceMapErrorException
      */
     public function testInflateMultipleArrays()

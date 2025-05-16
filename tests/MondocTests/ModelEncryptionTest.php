@@ -34,11 +34,12 @@ namespace District5Tests\MondocTests;
 use DateTime;
 use District5\Date\Date;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
-use District5\Mondoc\Extensions\FieldEncryption\MondocAES256Adapter;
-use District5\Mondoc\Extensions\FieldEncryption\MondocNullAdapter;
+use District5\MondocEncryption\Adapters\Sodium\AES256Adapter;
+use District5\MondocEncryption\Adapters\NullAdapter;
 use District5\Mondoc\MondocConfig;
+use District5\MondocEncryption\Exception\MondocEncryptionException;
 use District5Tests\MondocTests\TestObjects\Model\MixedEncryptedModel;
 use District5Tests\MondocTests\TestObjects\Model\MixedEncryptedWithEncryptedSubModel;
 use District5Tests\MondocTests\TestObjects\Model\Subs\PersonalDataWithoutEncryptionModel;
@@ -64,22 +65,22 @@ class ModelEncryptionTest extends MondocBaseTestAbstract
         MondocConfig::getInstance()->removeEncryptionAdapter();
 
         MondocConfig::getInstance()->setEncryptionAdapter(
-            new MondocNullAdapter()
+            new NullAdapter()
         );
-        $this->assertinstanceOf(MondocNullAdapter::class, MondocConfig::getInstance()->getEncryptionAdapter());
+        $this->assertinstanceOf(NullAdapter::class, MondocConfig::getInstance()->getEncryptionAdapter());
 
         MondocConfig::getInstance()->removeEncryptionAdapter();
-        $this->assertinstanceOf(MondocNullAdapter::class, MondocConfig::getInstance()->getEncryptionAdapter()); // defaults to null adapter
+        $this->assertinstanceOf(NullAdapter::class, MondocConfig::getInstance()->getEncryptionAdapter()); // defaults to null adapter
 
         MondocConfig::getInstance()->setEncryptionAdapter(
-            new MondocAES256Adapter(
+            new AES256Adapter(
                 '12345678901234567890123456789012'
             )
         );
-        $this->assertinstanceOf(MondocAES256Adapter::class, MondocConfig::getInstance()->getEncryptionAdapter());
+        $this->assertinstanceOf(AES256Adapter::class, MondocConfig::getInstance()->getEncryptionAdapter());
 
         MondocConfig::getInstance()->removeEncryptionAdapter();
-        $this->assertinstanceOf(MondocNullAdapter::class, MondocConfig::getInstance()->getEncryptionAdapter()); // defaults to null adapter
+        $this->assertinstanceOf(NullAdapter::class, MondocConfig::getInstance()->getEncryptionAdapter()); // defaults to null adapter
     }
 
     /**
@@ -90,7 +91,7 @@ class ModelEncryptionTest extends MondocBaseTestAbstract
     public function testCreateModel()
     {
         MondocConfig::getInstance()->setEncryptionAdapter(
-            new MondocAES256Adapter(
+            new AES256Adapter(
                 '12345678901234567890123456789012'
             )
         );
@@ -137,7 +138,7 @@ class ModelEncryptionTest extends MondocBaseTestAbstract
     public function testCreateModelWithNullAdapterHasNoImpact()
     {
         MondocConfig::getInstance()->setEncryptionAdapter(
-            new MondocNullAdapter()
+            new NullAdapter()
         );
 
         $date = Date::createYMDHISM(2001, 1, 1, 1, 1, 1);
@@ -179,7 +180,7 @@ class ModelEncryptionTest extends MondocBaseTestAbstract
     public function testAdapterWithInvalidKeyThrows()
     {
         MondocConfig::getInstance()->setEncryptionAdapter(
-            new MondocAES256Adapter('12345678901234567890123456789012')
+            new AES256Adapter('12345678901234567890123456789012')
         );
 
         $date = Date::createYMDHISM(2001, 1, 1, 1, 1, 1);
@@ -196,7 +197,7 @@ class ModelEncryptionTest extends MondocBaseTestAbstract
         $encrypted = new BSONDocument($encrypted);
 
         MondocConfig::getInstance()->setEncryptionAdapter(
-            new MondocAES256Adapter('abcdefghijklmnopqrstuvwxyz123456')
+            new AES256Adapter('abcdefghijklmnopqrstuvwxyz123456')
         );
         // invalid key now
         $this->expectException(MondocEncryptionException::class);
@@ -209,11 +210,12 @@ class ModelEncryptionTest extends MondocBaseTestAbstract
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
      * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testCreateModelWithEncryptedSubmodel()
     {
         MondocConfig::getInstance()->setEncryptionAdapter(
-            new MondocAES256Adapter(
+            new AES256Adapter(
                 '12345678901234567890123456789012'
             )
         );

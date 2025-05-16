@@ -31,7 +31,7 @@
 namespace District5\Mondoc\Extensions\FieldEncryption;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 
 /**
  * Interface MondocEncryptionInterface.
@@ -48,7 +48,7 @@ interface MondocEncryptionInterface
      *
      * @return mixed
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function decrypt(string $field, mixed $value): mixed;
 
@@ -60,6 +60,7 @@ interface MondocEncryptionInterface
      *
      * @return string|mixed
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function encrypt(string $field, mixed $value): mixed;
 }

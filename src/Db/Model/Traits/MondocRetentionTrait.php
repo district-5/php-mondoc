@@ -32,7 +32,7 @@ namespace District5\Mondoc\Db\Model\Traits;
 
 use DateTime;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Extensions\Retention\MondocRetentionModel;
 use District5\Mondoc\Extensions\Retention\MondocRetentionService;
@@ -129,7 +129,7 @@ trait MondocRetentionTrait
      * @return MondocRetentionModel[]
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function getRetentionPageByPaginator(MondocPaginationHelper $paginator, string $sortByField = '_id', int $sortDirection = -1): array
     {

@@ -32,7 +32,7 @@
 namespace District5Tests\MondocTests\FunctionalityParts;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\MondocBuilder\QueryBuilder;
 use District5\MondocBuilder\QueryTypes\ValueGreaterThan;
@@ -53,7 +53,7 @@ class PaginationTest extends MondocBaseTestAbstract
 {
     /**
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      * @throws MondocServiceMapErrorException
      */
     public function testPagination()
@@ -141,7 +141,7 @@ class PaginationTest extends MondocBaseTestAbstract
     /**
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testInvalidSortDirectionForPaginationByObjectId()
     {

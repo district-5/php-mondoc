@@ -32,7 +32,7 @@
 namespace District5Tests\MondocTests\FunctionalityParts;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\MondocConfig;
 use District5Tests\MondocTests\MondocBaseTestAbstract;
@@ -51,7 +51,7 @@ class CloneTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testCloneModelWithSave()
     {
@@ -72,8 +72,7 @@ class CloneTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testCloneModelWithAlternateModel()
     {
@@ -107,7 +106,7 @@ class CloneTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testCloneModelWithoutSave()
     {
@@ -129,7 +128,7 @@ class CloneTest extends MondocBaseTestAbstract
 
     /**
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testCloneModelWithInvalidModel()
     {

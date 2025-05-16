@@ -32,7 +32,7 @@ namespace District5\Mondoc\Db\Model\Traits;
 
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\MondocConfig;
 
 /**
@@ -75,7 +75,7 @@ trait MondocEncryptedFieldsTrait
      *
      * @return mixed
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function decryptMondocField(string $field, mixed $value): mixed
     {
@@ -97,6 +97,7 @@ trait MondocEncryptedFieldsTrait
      *
      * @return string|mixed
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function encryptMondocField(string $field, mixed $value): mixed
     {

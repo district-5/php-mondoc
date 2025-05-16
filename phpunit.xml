@@ -3,7 +3,7 @@
         backupGlobals="true"
         colors="true"
         processIsolation="false"
-        stopOnError="false"
+        stopOnError="true"
         stopOnFailure="true"
         stopOnIncomplete="false"
         stopOnSkipped="false"

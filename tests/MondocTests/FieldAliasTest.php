@@ -31,7 +31,7 @@
 namespace District5Tests\MondocTests;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\TestObjects\Model\FieldAliasTestModel;
 use District5Tests\MondocTests\TestObjects\Service\FieldAliasTestService;
@@ -49,8 +49,7 @@ class FieldAliasTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testFieldMap()
     {
@@ -92,9 +91,7 @@ class FieldAliasTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testFieldMapNested()
     {

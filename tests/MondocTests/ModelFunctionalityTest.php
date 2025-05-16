@@ -35,7 +35,7 @@ use DateTime;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\MondocTypes;
 use District5\MondocBuilder\QueryBuilder;
@@ -91,7 +91,7 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testDateMethods()
     {
@@ -216,10 +216,7 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testGetWhereEqualOrNotEqual()
     {
@@ -241,18 +238,7 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testModelExistence()
     {
@@ -292,7 +278,7 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testGetByIdWhereEmptyOrInvalidIds()
     {
@@ -303,8 +289,7 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testGetByIdsWhereEmptyOrInvalidIds()
     {
@@ -320,18 +305,7 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
     /**
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testPersistAndQuery()
     {

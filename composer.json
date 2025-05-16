@@ -10,6 +10,12 @@
             "email": "hello@district5.co.uk"
         }
     ],
+    "repositories": {
+        "district5/mondoc-encryption": {
+            "type": "vcs",
+            "url": "git@github.com:district-5/php-mondoc-encryption.git"
+        }
+    },
     "require": {
         "php": ">=8.1.0",
         "ext-mongodb": "*",
@@ -18,11 +24,13 @@
         "district5/mondoc-builder": "*"
     },
     "require-dev": {
-        "ext-openssl": "*",
+        "district5/mondoc-encryption": "dev-master",
         "phpunit/phpunit": "*"
     },
     "support": {
-        "issues": "https://github.com/district-5/php-mondoc/issues"
+        "issues": "https://github.com/district-5/php-mondoc/issues",
+        "source": "https://github.com/district-5/php-mondoc",
+        "docs": "https://mondoc.district5.dev"
     },
     "suggest": {
         "ext-openssl": "Required if leveraging AES256 field encryption"

@@ -35,7 +35,7 @@ use DateTime;
 use DateTimeInterface;
 use District5\Date\Date;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\MondocTypes;
 use District5Tests\MondocTests\MondocBaseTestAbstract;
@@ -307,7 +307,7 @@ class TypesTest extends MondocBaseTestAbstract
      * @throws JsonException
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      * @noinspection PhpRedundantOptionalArgumentInspection
      */
     public function testAsJsonEncodableOption()

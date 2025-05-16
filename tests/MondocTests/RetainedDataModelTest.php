@@ -33,7 +33,7 @@ namespace District5Tests\MondocTests;
 
 use District5\Date\Date;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Extensions\Retention\MondocRetentionModel;
 use District5\Mondoc\Extensions\Retention\MondocRetentionService;
@@ -85,10 +85,7 @@ class RetainedDataModelTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testRetainedDataOnTopLevelModel()
     {
@@ -125,11 +122,7 @@ class RetainedDataModelTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testRetainedDataOnExtendedModel()
     {
@@ -269,10 +262,7 @@ class RetainedDataModelTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public function testExpiry()
     {

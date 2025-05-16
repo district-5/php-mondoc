@@ -31,7 +31,7 @@
 namespace District5\Mondoc\Db\Service\Traits;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\FilterFormatter;
 use District5\Mondoc\Helper\MondocTypes;
@@ -53,7 +53,7 @@ trait ExistenceTrait
      * @return bool
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public static function existsWithQueryBuilder(QueryBuilder $builder): bool
     {
@@ -74,7 +74,7 @@ trait ExistenceTrait
      * @return bool
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public static function exists(array $criteria, array $options = []): bool
     {
@@ -108,7 +108,7 @@ trait ExistenceTrait
      * @return bool
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public static function existsById(ObjectId|string $documentId): bool
     {

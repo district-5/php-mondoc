@@ -1,7 +1,7 @@
 <?php
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Extensions\FieldEncryption\MondocAES256Adapter;
+use District5\MondocEncryption\Adapters\Sodium\AES256Adapter;
 use District5\Mondoc\MondocConfig;
 use District5Tests\MondocTests\TestObjects\Model\AllTypesModel;
 use District5Tests\MondocTests\TestObjects\Model\DateModel;
@@ -42,7 +42,9 @@ require __DIR__ . '/../vendor/autoload.php';
 $connection = new Client(getenv('MONGO_CONNECTION_STRING'));
 $mondoc = MondocConfig::getInstance();
 $mondoc->setEncryptionAdapter(
-    new MondocAES256Adapter('12345678901234567890123456789012')
+    new AES256Adapter(
+        AES256Adapter::generateKey()
+    )
 );
 
 $mondoc->addDatabase(

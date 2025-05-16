@@ -37,7 +37,7 @@ use District5\Mondoc\Db\Model\Traits\MondocRetentionTrait;
 use District5\Mondoc\Db\Model\Traits\PresetObjectIdTrait;
 use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\HasTraitHelper;
 use District5\Mondoc\MondocConfig;
@@ -72,7 +72,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
      *
      * @return $this
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public static function inflateSingleBsonDocument(BSONDocument $document): static
     {
@@ -91,7 +91,8 @@ class MondocAbstractModel extends MondocAbstractSubModel
      *
      * @return $this
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
+     * @throws \District5\MondocEncryption\Exception\MondocEncryptionException
+     * @noinspection PhpFullyQualifiedNameUsageInspection
      */
     public static function inflateSingleArray(array $data): static
     {

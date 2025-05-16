@@ -34,7 +34,7 @@ use District5\Date\Date;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\MondocPaginationHelper;
 use District5\MondocBuilder\QueryBuilder;
@@ -95,7 +95,7 @@ class MondocRetentionService extends MondocAbstractService
      * @return MondocRetentionModel|null
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public static function getLatestRetentionModelForModel(string $class, ObjectId $objectId): ?MondocRetentionModel
     {
@@ -278,7 +278,7 @@ class MondocRetentionService extends MondocAbstractService
      * @return MondocRetentionModel[]
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      */
     public static function getRetentionPage(MondocPaginationHelper $paginator, string $sortByField = '_id', int $sortDirection = -1): array
     {

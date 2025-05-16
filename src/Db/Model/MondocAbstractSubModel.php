@@ -37,7 +37,7 @@ use District5\Mondoc\Db\Model\Traits\MondocEncryptedFieldsTrait;
 use District5\Mondoc\Db\Model\Traits\MondocNestedModelTrait;
 use District5\Mondoc\Db\Model\Traits\UnmappedPropertiesTrait;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
-use District5\Mondoc\Exception\MondocEncryptionException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Model\BSONArray;
@@ -73,7 +73,7 @@ abstract class MondocAbstractSubModel
      * @return $this[]
      *
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
+     * @throws MondocException
      * @example
      * MyModel::inflateMultipleArrays(
      *      [
@@ -122,7 +122,8 @@ abstract class MondocAbstractSubModel
      *
      * @return $this
      * @throws MondocConfigConfigurationException
-     * @throws MondocEncryptionException
+     * @throws \District5\MondocEncryption\Exception\MondocEncryptionException
+     * @noinspection PhpFullyQualifiedNameUsageInspection
      */
     public static function inflateSingleArray(array $data): static
     {

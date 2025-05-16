@@ -24,7 +24,7 @@
         "district5/mondoc-builder": "*"
     },
     "require-dev": {
-        "district5/mondoc-encryption": ">=0.0.4",
+        "district5/mondoc-encryption": "*",
         "phpunit/phpunit": "*"
     },
     "support": {

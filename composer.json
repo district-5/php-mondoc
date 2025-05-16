@@ -21,10 +21,10 @@
         "ext-mongodb": "*",
         "mongodb/mongodb": "*",
         "district5/date": ">=3.0.4",
-        "district5/mondoc-builder": "*"
+        "district5/mondoc-builder": "*",
+        "district5/mondoc-encryption": "*"
     },
     "require-dev": {
-        "district5/mondoc-encryption": "*",
         "phpunit/phpunit": "*"
     },
     "support": {

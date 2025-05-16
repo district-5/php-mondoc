@@ -31,7 +31,6 @@
 namespace District5\Mondoc\Traits\Config;
 
 use District5\Mondoc\Extensions\FieldEncryption\MondocEncryptionInterface;
-use District5\MondocEncryption\Adapters\NullAdapter;
 
 /**
  * Trait MondocConfigEncryptionTrait
@@ -45,31 +44,27 @@ trait MondocConfigEncryptionTrait
      */
     protected MondocEncryptionInterface|null $fieldEncryption = null;
 
-    public function hasEncryption(): bool
+    public function hasEncryptionAdapter(): bool
     {
         return $this->fieldEncryption instanceof MondocEncryptionInterface;
     }
 
     /**
-     * @return MondocEncryptionInterface
+     * @return MondocEncryptionInterface|null
      */
-    public function getEncryptionAdapter(): MondocEncryptionInterface
+    public function getEncryptionAdapter(): ?MondocEncryptionInterface
     {
-        if (!isset($this->fieldEncryption)) {
-            $this->setEncryptionAdapter(new NullAdapter());
-        }
-
         return $this->fieldEncryption;
     }
 
     /**
      * Set the encryption adapter to be used when declaring `mondocEncrypted` fields.
      *
-     * @param MondocEncryptionInterface $fieldEncryption
+     * @param MondocEncryptionInterface|null $fieldEncryption
      *
      * @return $this
      */
-    public function setEncryptionAdapter(MondocEncryptionInterface $fieldEncryption): static
+    public function setEncryptionAdapter(MondocEncryptionInterface|null $fieldEncryption): static
     {
         $this->fieldEncryption = $fieldEncryption;
 
@@ -83,7 +78,7 @@ trait MondocConfigEncryptionTrait
      */
     public function removeEncryptionAdapter(): static
     {
-        unset($this->fieldEncryption);
+        $this->setEncryptionAdapter(null);
         return $this;
     }
 }

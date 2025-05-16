@@ -79,6 +79,10 @@ trait MondocEncryptedFieldsTrait
      */
     public function decryptMondocField(string $field, mixed $value): mixed
     {
+        if (MondocConfig::getInstance()->hasEncryptionAdapter() === false) {
+            return $value;
+        }
+
         if (!$this->isMondocFieldEncrypted($field)) {
             return $value;
         }
@@ -101,6 +105,10 @@ trait MondocEncryptedFieldsTrait
      */
     public function encryptMondocField(string $field, mixed $value): mixed
     {
+        if (MondocConfig::getInstance()->hasEncryptionAdapter() === false) {
+            return $value;
+        }
+
         if (!$this->isMondocFieldEncrypted($field)) {
             return $value;
         }

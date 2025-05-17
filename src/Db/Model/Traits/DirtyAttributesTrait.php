@@ -109,7 +109,7 @@ trait DirtyAttributesTrait
             if (in_array($key, $initialDirty)) {
                 continue;
             }
-            $aliased = $this->getFieldAliasSingleMap($key, true);
+            $aliased = $this->getFieldAliasMapRemoteName($key);
             if ($this->isDirtyField($aliased) === true) {
                 $initialDirty[] = $key;
             }
@@ -164,9 +164,19 @@ trait DirtyAttributesTrait
     abstract protected function getPropertyExclusions(): array;
 
     /**
-     * @see FieldAliasMapTrait::getFieldAliasSingleMap()
+     * @deprecated - no longer used actively and will be removed in future versions.
      */
     abstract public function getFieldAliasSingleMap(string $field, bool $remote): string;
+
+    /**
+     * @see FieldAliasMapTrait::getFieldAliasMapRemoteName()
+     */
+    abstract public function getFieldAliasMapRemoteName(string $field): string;
+
+    /**
+     * @see FieldAliasMapTrait::getFieldAliasMapLocalName()
+     */
+    abstract public function getFieldAliasMapLocalName(string $field): string;
 
     /**
      * @see UnmappedPropertiesTrait::getUnmappedFields()

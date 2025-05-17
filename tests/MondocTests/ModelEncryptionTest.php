@@ -102,6 +102,8 @@ class ModelEncryptionTest extends MondocBaseTestAbstract
         $model->setLastName('Bloggs');
         $model->setDateOfBirth($date);
         $model->setSocialSecurityNumber('123-45-6789');
+        $model->setShortNameEncrypted('JB-Encrypted');
+        $model->setShortName('JB-Unencrypted');
         $sub = $model->getSubModel();
         $sub->setReligion('Jedi');
         $sub->setFavouriteColour('Blue');
@@ -114,6 +116,8 @@ class ModelEncryptionTest extends MondocBaseTestAbstract
         $this->assertInstanceOf(UTCDateTime::class, $model->asArray()['dateOfBirth']);
         $this->assertNotEquals('123-45-6789', $model->asArray(true)['socialSecurityNumber']);
         $this->assertEquals('123-45-6789', $model->asArray()['socialSecurityNumber']);
+        $this->assertNotEquals('JB-Encrypted', $model->asArray(true)['sne']);
+        $this->assertEquals('JB-Unencrypted', $model->asArray()['s']);
 
         $this->assertTrue($model->hasObjectId());
 
@@ -126,6 +130,10 @@ class ModelEncryptionTest extends MondocBaseTestAbstract
         $this->assertEquals('123-45-6789', $retrievedModel->getSocialSecurityNumber());
         $this->assertEquals('Jedi', $retrievedModel->getSubModel()->getReligion());
         $this->assertEquals('Blue', $retrievedModel->getSubModel()->getFavouriteColour());
+        $this->assertEquals('JB-Encrypted', $retrievedModel->getShortNameEncrypted());
+        $this->assertEquals('JB-Unencrypted', $retrievedModel->getShortName());
+        $this->assertObjectNotHasProperty('shortNameEncrypted', $retrievedModel->getOriginalBsonDocument());
+        $this->assertObjectNotHasProperty('shortName', $retrievedModel->getOriginalBsonDocument());
 
         $this->assertTrue($retrievedModel->delete());
     }
@@ -147,17 +155,21 @@ class ModelEncryptionTest extends MondocBaseTestAbstract
         $model->setLastName('Bloggs');
         $model->setDateOfBirth($date);
         $model->setSocialSecurityNumber('123-45-6789');
+        $model->setShortNameEncrypted('JB-Encrypted');
+        $model->setShortName('JB-Unencrypted');
         $sub = $model->getSubModel();
         $sub->setReligion('Jedi');
         $sub->setFavouriteColour('Blue');
         $this->assertTrue($model->save());
 
         $this->assertInstanceOf(UTCDateTime::class, $model->asArray(true)['dateOfBirth']);
-        $this->assertInstanceOf(UTCDateTime::class, $model->asArray()['dateOfBirth']);
+        $this->assertInstanceOf(UTCDateTime::class, $model->asArray(true)['dateOfBirth']);
 
-        $this->assertInstanceOf(UTCDateTime::class, $model->asArray()['dateOfBirth']);
+        $this->assertInstanceOf(UTCDateTime::class, $model->asArray(true)['dateOfBirth']);
         $this->assertEquals('123-45-6789', $model->asArray(true)['socialSecurityNumber']);
-        $this->assertEquals('123-45-6789', $model->asArray()['socialSecurityNumber']);
+        $this->assertEquals('123-45-6789', $model->asArray(true)['socialSecurityNumber']);
+        $this->assertEquals('JB-Encrypted', $model->asArray(true)['sne']);
+        $this->assertEquals('JB-Unencrypted', $model->asArray(true)['s']);
 
         $this->assertTrue($model->hasObjectId());
 
@@ -170,6 +182,12 @@ class ModelEncryptionTest extends MondocBaseTestAbstract
         $this->assertEquals('123-45-6789', $retrievedModel->getSocialSecurityNumber());
         $this->assertEquals('Jedi', $retrievedModel->getSubModel()->getReligion());
         $this->assertEquals('Blue', $retrievedModel->getSubModel()->getFavouriteColour());
+        $this->assertEquals('JB-Encrypted', $retrievedModel->getShortNameEncrypted());
+        $this->assertEquals('JB-Unencrypted', $retrievedModel->getShortName());
+        $this->assertObjectNotHasProperty('shortNameEncrypted', $retrievedModel->getOriginalBsonDocument());
+        $this->assertObjectNotHasProperty('shortName', $retrievedModel->getOriginalBsonDocument());
+        $this->assertEquals('JB-Encrypted', $retrievedModel->getOriginalBsonDocument()->sne);
+        $this->assertEquals('JB-Unencrypted', $retrievedModel->getOriginalBsonDocument()->s);
 
         $this->assertTrue($retrievedModel->delete());
     }

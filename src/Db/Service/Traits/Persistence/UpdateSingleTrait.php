@@ -70,7 +70,7 @@ trait UpdateSingleTrait
         unset($data['_id']);
         $changeSet = [];
         foreach ($dirty as $key) {
-            $key = $model->getFieldAliasSingleMap($key, true);
+            $key = $model->getFieldAliasMapRemoteName($key);
             if (array_key_exists($key, $data)) {
                 $changeSet[$key] = $data[$key];
             } else {

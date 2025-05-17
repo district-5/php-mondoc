@@ -138,7 +138,7 @@ abstract class MondocAbstractSubModel
             if (in_array($k, $inst->getPropertyExclusions())) {
                 continue;
             }
-            $k = $inst->getFieldAliasSingleMap($k, false);
+            $k = $inst->getFieldAliasMapLocalName($k);
             $v = $inst->decryptMondocField($k, $v);
             if ($v instanceof UTCDateTime) {
                 $v = MondocTypes::dateToPHPDateTime($v);
@@ -277,12 +277,13 @@ abstract class MondocAbstractSubModel
      * @param bool $withEncryption
      * @return array
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function asArray(bool $withEncryption = false): array
     {
         $data = [];
         foreach ($this->getMondocObjectVars() as $originalK => $v) {
-            $k = $this->getFieldAliasSingleMap($originalK, true);
+            $k = $this->getFieldAliasMapRemoteName($originalK);
             if ($this->isMondocNestedAnyType([$k, $originalK]) === true) {
                 if ($this->isMondocNestedMultipleObjects([$k, $originalK]) === true) {
                     /* @var $v MondocAbstractSubModel[] */
@@ -304,7 +305,12 @@ abstract class MondocAbstractSubModel
             }
 
             if ($withEncryption === true) {
-                $data[$k] = $this->encryptMondocField($k, $v);
+                $data[$k] = $this->encryptMondocField(
+                    $this->getFieldAliasMapLocalName(
+                        $k
+                    ),
+                    $v
+                );
             } else {
                 $data[$k] = $v;
             }

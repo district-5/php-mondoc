@@ -62,9 +62,24 @@ class MixedEncryptedModel extends MondocAbstractModel
     protected string $socialSecurityNumber;
 
     /**
+     * @var string
+     */
+    protected string $shortNameEncrypted;
+
+    /**
+     * @var string
+     */
+    protected string $shortName;
+
+    /**
      * @var PersonalDataModel|null
      */
     protected PersonalDataModel|null $subModel = null;
+
+    protected array $mondocFieldAliases = [
+        'sne' => 'shortNameEncrypted',
+        's' => 'shortName',
+    ];
 
     /**
      * @var string[]
@@ -72,6 +87,7 @@ class MixedEncryptedModel extends MondocAbstractModel
     protected array $mondocEncrypted = [
         'dateOfBirth',
         'socialSecurityNumber',
+        'shortNameEncrypted',
         //'subModel'
     ];
 
@@ -149,6 +165,30 @@ class MixedEncryptedModel extends MondocAbstractModel
     public function setSocialSecurityNumber(string $socialSecurityNumber): static
     {
         $this->socialSecurityNumber = $socialSecurityNumber;
+
+        return $this;
+    }
+
+    public function getShortNameEncrypted(): string
+    {
+        return $this->shortNameEncrypted;
+    }
+
+    public function setShortNameEncrypted(string $shortNameEncrypted): static
+    {
+        $this->shortNameEncrypted = $shortNameEncrypted;
+
+        return $this;
+    }
+
+    public function getShortName(): string
+    {
+        return $this->shortName;
+    }
+
+    public function setShortName(string $shortName): static
+    {
+        $this->shortName = $shortName;
 
         return $this;
     }

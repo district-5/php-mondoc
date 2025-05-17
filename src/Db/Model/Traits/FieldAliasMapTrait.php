@@ -67,29 +67,68 @@ trait FieldAliasMapTrait
     }
 
     /**
-     * Get a $mondocFieldAliases mapped field, either remote or local. For example...
+     * @deprecated - See getFieldAliasMapRemoteName() and getFieldAliasMapLocalName()
+     * @see FieldAliasMapTrait::getFieldAliasMapRemoteName()
+     * @see FieldAliasMapTrait::getFieldAliasMapLocalName()
+     */
+    public function getFieldAliasSingleMap(string $field, bool $remote): string
+    {
+        if ($remote) {
+            return $this->getFieldAliasMapRemoteName(
+                $field
+            );
+        }
+
+        return $this->getFieldAliasMapLocalName(
+            $field
+        );
+    }
+
+    /**
+     * Get a field alias $mondocFieldAliases for the remote name. ie, the property name
+     * in the database.
      *
      * $mondocFieldAliases = [
      *     'a_key' => 'aFriendlyVariableNameForCode'
      * ]
-     * Passing ('a_key', false) would return 'aFriendlyVariableNameForCode'
-     * Passing ('aFriendlyVariableNameForCode', true) would return 'a_key'
+     *
+     * Passing ('aFriendlyVariableNameForCode') would return 'a_key'
+     * Similarly, passing ('a_key') would return 'a_key'
      *
      * @param string $field
-     * @param bool $remote
      * @return string
      *
      * @see FieldAliasMapTrait::$mondocFieldAliases
      */
-    public function getFieldAliasSingleMap(string $field, bool $remote): string
+    public function getFieldAliasMapRemoteName(string $field): string
     {
         $fieldMap = $this->getFieldAliasMap();
-        if ($remote) {
-            if (false !== $search = array_search($field, $fieldMap)) {
-                return $search;
-            }
-            return $field;
+        $key = array_search($field, $fieldMap);
+        if ($key !== false) {
+            return $key;
         }
+        return $field;
+    }
+
+    /**
+     * Get a field alias $mondocFieldAliases for the local name. ie, the property name
+     * in the database.
+     *
+     * Passing ('a_key') would return 'aFriendlyVariableNameForCode'
+     * Similarly, passing ('aFriendlyVariableNameForCode') would return 'aFriendlyVariableNameForCode'
+     *
+     * $mondocFieldAliases = [
+     *     'a_key' => 'aFriendlyVariableNameForCode'
+     * ]
+     *
+     * @param string $field
+     * @return string
+     *
+     * @see FieldAliasMapTrait::$mondocFieldAliases
+     */
+    public function getFieldAliasMapLocalName(string $field): string
+    {
+        $fieldMap = $this->getFieldAliasMap();
         if (array_key_exists($field, $fieldMap)) {
             return $fieldMap[$field];
         }

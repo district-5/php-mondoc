@@ -52,6 +52,7 @@ class InsertionTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testInsertMulti()
     {
@@ -82,6 +83,7 @@ class InsertionTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testUpdateDocumentThatDoesntExist()
     {
@@ -191,6 +193,7 @@ class InsertionTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testInsertMultiWithOneModel()
     {
@@ -212,6 +215,7 @@ class InsertionTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testInsertMultiWithPresetIds()
     {
@@ -250,6 +254,7 @@ class InsertionTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testInsertMultiWithOneModelWithPresetIds()
     {
@@ -276,6 +281,7 @@ class InsertionTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testInsertMultiWithNoModels()
     {

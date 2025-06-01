@@ -55,6 +55,7 @@ class RetainedDataModelTest extends MondocBaseTestAbstract
     /**
      * @return void
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testRawUnsavedRetentionModels()
     {
@@ -166,6 +167,7 @@ class RetainedDataModelTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocException
      */
     public function testIterationsOfSavesMatchExpected()
     {
@@ -224,6 +226,7 @@ class RetainedDataModelTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocException
      */
     public function testInsertMulti(): void
     {

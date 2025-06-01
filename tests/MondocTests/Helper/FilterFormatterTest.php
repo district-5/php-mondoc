@@ -34,6 +34,7 @@ namespace District5Tests\MondocTests\Helper;
 use DateTime;
 use District5\Date\Date;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\FilterFormatter;
 use District5Tests\MondocTests\MondocBaseTestAbstract;
@@ -81,6 +82,7 @@ class FilterFormatterTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocException
      */
     public function testThatUpdatingDateUsingDateTimeResultsInUTCDateTime(): void
     {

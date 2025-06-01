@@ -67,24 +67,6 @@ trait FieldAliasMapTrait
     }
 
     /**
-     * @deprecated - See getFieldAliasMapRemoteName() and getFieldAliasMapLocalName()
-     * @see FieldAliasMapTrait::getFieldAliasMapRemoteName()
-     * @see FieldAliasMapTrait::getFieldAliasMapLocalName()
-     */
-    public function getFieldAliasSingleMap(string $field, bool $remote): string
-    {
-        if ($remote) {
-            return $this->getFieldAliasMapRemoteName(
-                $field
-            );
-        }
-
-        return $this->getFieldAliasMapLocalName(
-            $field
-        );
-    }
-
-    /**
      * Get a field alias $mondocFieldAliases for the remote name. ie, the property name
      * in the database.
      *

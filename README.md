@@ -373,7 +373,7 @@ class Person extends MondocAbstractModel
 }
 ```
 
-#### Finding documents..
+#### Finding documents...
 
 ```php
 <?php

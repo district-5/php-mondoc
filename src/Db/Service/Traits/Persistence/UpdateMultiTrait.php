@@ -33,6 +33,7 @@ namespace District5\Mondoc\Db\Service\Traits\Persistence;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\FilterFormatter;
 use District5\Mondoc\MondocConfig;
@@ -106,6 +107,7 @@ trait UpdateMultiTrait
      *
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocException
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
      */
     public static function updateManyModels(array $models, array $updateOptions = []): array

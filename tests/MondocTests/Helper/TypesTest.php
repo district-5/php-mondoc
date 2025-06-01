@@ -219,6 +219,7 @@ class TypesTest extends MondocBaseTestAbstract
 
     /**
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testJsonEncodableTypes()
     {
@@ -420,32 +421,9 @@ class TypesTest extends MondocBaseTestAbstract
         $m->delete();
     }
 
-    public function testConvertArrayOfObjectIds()
-    {
-        $ids = [
-            new ObjectId(),
-            new ObjectId(),
-            new ObjectId(),
-            '5f9b1b3b7f8b9b001f000000',
-            '5f9b1b3b7f8b9b001f000001',
-            '5f9b1b3b7f8b9b001f000002',
-            'invalid'
-        ];
-
-        $a = new AllTypesModel();
-        $converted = $a->exposeConvertArrayOfMongoIdsToMongoIds($ids);
-        $this->assertIsArray($converted);
-        $this->assertCount(6, $converted); // 7th is invalid
-        $this->assertEquals($ids[0]->__toString(), $converted[0]->__toString());
-        $this->assertEquals($ids[1]->__toString(), $converted[1]->__toString());
-        $this->assertEquals($ids[2]->__toString(), $converted[2]->__toString());
-        $this->assertEquals($ids[3], $converted[3]->__toString());
-        $this->assertEquals($ids[4], $converted[4]->__toString());
-        $this->assertEquals($ids[5], $converted[5]->__toString());
-    }
-
     /**
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testDirty()
     {
@@ -501,6 +479,7 @@ class TypesTest extends MondocBaseTestAbstract
 
     /**
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testEnumHandling()
     {

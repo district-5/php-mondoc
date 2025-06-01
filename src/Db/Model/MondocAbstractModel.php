@@ -110,6 +110,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
      *
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-insertOne/
      */

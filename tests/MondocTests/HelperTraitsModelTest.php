@@ -164,6 +164,7 @@ class HelperTraitsModelTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testInsertMultiOnModelsWithTraits()
     {

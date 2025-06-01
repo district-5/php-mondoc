@@ -32,6 +32,7 @@
 namespace District5Tests\MondocTests\FunctionalityParts;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\MondocBaseTestAbstract;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
@@ -49,6 +50,7 @@ class AverageSumAverageTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testAverageSumAverageWorkCorrectly()
     {

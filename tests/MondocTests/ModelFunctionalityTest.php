@@ -76,8 +76,6 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
     public function testGetServiceFromModelAndModelFromService()
     {
         $model = MyService::getMondocModelClass();
-        $tmp = MyService::getModelClass(); // to be removed after deprecation ends
-        $this->assertEquals($model, $tmp);
 
         $service = MyModel::getMondocServiceClass();
         /* @var $service MondocAbstractService (it's actually a string) */
@@ -115,6 +113,7 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testInsertionAndBSONArePresent()
     {
@@ -137,6 +136,7 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testDeleteWorksAsExpected()
     {
@@ -155,6 +155,7 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
     /**
      * @return void
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      * @noinspection PhpRedundantOptionalArgumentInspection
      */
     public function testBasicModelMethods()
@@ -193,6 +194,7 @@ class ModelFunctionalityTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testModelHasAndDoesNotHaveIds()
     {

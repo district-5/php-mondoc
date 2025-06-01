@@ -51,6 +51,7 @@ class UpdateTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testUpdateOneWithoutIdFails()
     {
@@ -64,6 +65,7 @@ class UpdateTest extends MondocBaseTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testUpdateMultiWithoutIdFails()
     {

@@ -41,6 +41,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $connection = new Client(getenv('MONGO_CONNECTION_STRING'));
 $mondoc = MondocConfig::getInstance();
+/** @noinspection PhpUnhandledExceptionInspection */
 $mondoc->setEncryptionAdapter(
     new AES256Adapter(
         AES256Adapter::generateKey()

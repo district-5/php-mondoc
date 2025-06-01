@@ -34,6 +34,7 @@ namespace District5Tests\MondocTests\Dto;
 use District5\Date\Date;
 use District5\Mondoc\Dto\AggregateFinancialCandleDto;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5Tests\MondocTests\TestObjects\Model\FinancialCandleModel;
 use District5Tests\MondocTests\TestObjects\Service\FinancialCandleService;
@@ -62,6 +63,7 @@ class AggregateFinancialCandleDtoTest extends MondocFinancialTestAbstract
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testDatabaseInteractionsForFinancialCandles()
     {

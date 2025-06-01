@@ -36,6 +36,7 @@ use District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
 use District5\Mondoc\Db\Model\Traits\MondocRevisionNumberTrait;
 use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Extensions\Retention\MondocRetentionService;
 use District5\Mondoc\Helper\HasTraitHelper;
@@ -58,6 +59,7 @@ trait InsertMultiTrait
      *
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-insertMany/
      */
     public static function insertMulti(array $models, array $insertOptions = []): bool

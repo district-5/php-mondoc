@@ -34,6 +34,7 @@ use BackedEnum;
 use DateTime;
 use District5\Mondoc\Db\Model\MondocAbstractSubModel;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Helper\Traits\ArrayConversionTrait;
 use District5\Mondoc\Helper\Traits\DateObjectConversionTrait;
 use District5\Mondoc\Helper\Traits\ObjectIdConversionTrait;
@@ -64,6 +65,7 @@ class MondocTypes
      *
      * @return mixed
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      * @noinspection PhpExpressionAlwaysNullInspection
      * @noinspection PhpRedundantOptionalArgumentInspection
      */

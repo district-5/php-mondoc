@@ -33,6 +33,7 @@ namespace District5Tests\MondocTests\TestObjects\Model;
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Db\Model\Traits\MondocCloneableTrait;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
@@ -86,6 +87,7 @@ class MyModel extends MondocAbstractModel
      * @param bool $withEncryption
      * @return array
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function asArray(bool $withEncryption = false): array
     {

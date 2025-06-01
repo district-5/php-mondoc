@@ -72,6 +72,7 @@ class ModelEncryptionTest extends MondocBaseTestAbstract
         MondocConfig::getInstance()->removeEncryptionAdapter();
         $this->assertNull(MondocConfig::getInstance()->getEncryptionAdapter()); // defaults to null adapter
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         MondocConfig::getInstance()->setEncryptionAdapter(
             new AES256Adapter(
                 AES256Adapter::generateKey()

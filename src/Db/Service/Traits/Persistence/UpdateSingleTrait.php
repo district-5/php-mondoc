@@ -32,6 +32,7 @@ namespace District5\Mondoc\Db\Service\Traits\Persistence;
 
 use District5\Mondoc\Db\Model\MondocAbstractModel;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Extensions\Retention\MondocRetentionService;
 use District5\Mondoc\Helper\FilterFormatter;
@@ -55,6 +56,7 @@ trait UpdateSingleTrait
      *
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocException
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
      */
     public static function update(MondocAbstractModel $model, array $updateOptions = []): bool

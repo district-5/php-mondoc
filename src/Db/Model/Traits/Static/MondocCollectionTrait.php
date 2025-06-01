@@ -1,5 +1,4 @@
 <?php
-
 /**
  * District5 Mondoc Library
  *
@@ -29,68 +28,31 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Model\Traits;
+namespace District5\Mondoc\Db\Model\Traits\Static;
 
-use DateTime;
-use District5\Date\Date;
-use District5\Mondoc\Db\Model\Traits\Static\MondocMongoTypeTrait;
-use MongoDB\BSON\UTCDateTime;
+use MongoDB\Collection;
 
 /**
- * Trait MondocCreatedDateTrait.
+ * Trait MondocCollectionTrait.
  *
- * @package District5\Mondoc\Db\Model\Traits
+ * @package District5\Mondoc\Db\Model\Traits\Static
  */
-trait MondocCreatedDateTrait
+trait MondocCollectionTrait
 {
-    use MondocMongoTypeTrait;
-
     /**
-     * The created date of the model
-     *
-     * @var DateTime|UTCDateTime|null
+     * @var null|Collection
      */
-    protected DateTime|UTCDateTime|null $cd = null;
+    private ?Collection $_mondocCollection = null;
 
     /**
-     * Get the created date of this model
-     *
-     * @param bool $asMongo
-     * @return DateTime|UTCDateTime|null
-     */
-    public function getCreatedDate(bool $asMongo = false): DateTime|UTCDateTime|null
-    {
-        return $this->convertDateObject(
-            $this->cd,
-            $asMongo
-        );
-    }
-
-    /**
-     * Set the created date of this model
-     *
-     * @param DateTime $date
+     * @param null|Collection $collection
      *
      * @return $this
      */
-    public function setCreatedDate(DateTime $date): static
+    public function setMongoCollection(?Collection $collection): static
     {
-        $this->cd = $date;
-        if (method_exists($this, 'addDirty')) {
-            $this->addDirty('cd');
-        }
+        $this->_mondocCollection = $collection;
+
         return $this;
-    }
-
-    /**
-     * Touch the created date
-     *
-     * @return $this
-     */
-    public function touchCreatedDate(): static
-    {
-        return $this->setCreatedDate(
-            Date::nowUtc()
-        );
     }
 }

@@ -30,11 +30,14 @@
 
 namespace District5\Mondoc\Db\Model;
 
-use District5\Mondoc\Db\Model\Traits\DirtyAttributesTrait;
-use District5\Mondoc\Db\Model\Traits\MondocMongoTypeTrait;
-use District5\Mondoc\Db\Model\Traits\MondocObjectIdTrait;
 use District5\Mondoc\Db\Model\Traits\MondocRetentionTrait;
-use District5\Mondoc\Db\Model\Traits\PresetObjectIdTrait;
+use District5\Mondoc\Db\Model\Traits\Static\DirtyAttributesTrait;
+use District5\Mondoc\Db\Model\Traits\Static\MondocAtomicOperationsTrait;
+use District5\Mondoc\Db\Model\Traits\Static\MondocBsonDocumentTrait;
+use District5\Mondoc\Db\Model\Traits\Static\MondocCollectionTrait;
+use District5\Mondoc\Db\Model\Traits\Static\MondocMongoTypeTrait;
+use District5\Mondoc\Db\Model\Traits\Static\MondocObjectIdTrait;
+use District5\Mondoc\Db\Model\Traits\Static\PresetObjectIdTrait;
 use District5\Mondoc\Db\Service\MondocAbstractService;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocException;
@@ -42,7 +45,6 @@ use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\HasTraitHelper;
 use District5\Mondoc\MondocConfig;
 use MongoDB\BSON\ObjectId;
-use MongoDB\Collection;
 use MongoDB\Model\BSONDocument;
 
 /**
@@ -52,20 +54,13 @@ use MongoDB\Model\BSONDocument;
  */
 class MondocAbstractModel extends MondocAbstractSubModel
 {
-    use MondocMongoTypeTrait;
-    use PresetObjectIdTrait;
-    use DirtyAttributesTrait;
     use MondocObjectIdTrait;
-
-    /**
-     * @var null|Collection
-     */
-    private ?Collection $_mondocCollection = null;
-
-    /**
-     * @var null|BSONDocument
-     */
-    private ?BSONDocument $_mondocBson = null;
+    use PresetObjectIdTrait;
+    use MondocCollectionTrait;
+    use MondocBsonDocumentTrait;
+    use MondocMongoTypeTrait;
+    use MondocAtomicOperationsTrait;
+    use DirtyAttributesTrait;
 
     /**
      * @param BSONDocument $document
@@ -92,6 +87,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
      * @return $this
      * @throws MondocConfigConfigurationException
      * @throws \District5\MondocEncryption\Exception\MondocEncryptionException
+     * @throws MondocException
      * @noinspection PhpFullyQualifiedNameUsageInspection
      */
     public static function inflateSingleArray(array $data): static
@@ -106,30 +102,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
     }
 
     /**
-     * @param BSONDocument $document
-     *
-     * @return $this
-     */
-    public function setOriginalBsonDocument(BSONDocument $document): MondocAbstractModel
-    {
-        $this->_mondocBson = $document;
-
-        return $this;
-    }
-
-    /**
-     * @param null|Collection $collection
-     *
-     * @return $this
-     */
-    public function setMongoCollection(?Collection $collection): static
-    {
-        $this->_mondocCollection = $collection;
-
-        return $this;
-    }
-
-    /**
      * Save this model. Must be overridden in your code. Inner logic might be `return MyService::saveModel($model);`.
      *
      * @param array $insertOrUpdateOptions
@@ -138,6 +110,7 @@ class MondocAbstractModel extends MondocAbstractSubModel
      *
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-updateOne/
      * @see https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-insertOne/
      */
@@ -215,56 +188,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
     }
 
     /**
-     * @return null|BSONDocument
-     */
-    public function getOriginalBsonDocument(): ?BSONDocument
-    {
-        return $this->_mondocBson;
-    }
-
-    /**
-     * Decrement a field by a given delta.
-     * Internally this method uses `inc` with a negative representation of `$delta`
-     *
-     * @param string $field
-     * @param int $delta
-     * @return bool
-     * @throws MondocServiceMapErrorException
-     * @throws MondocConfigConfigurationException
-     */
-    public function dec(string $field, int $delta = 1): bool
-    {
-        return $this->inc($field, ($delta - ($delta * 2)));
-    }
-
-    /**
-     * Increment a field by a given delta.
-     * Can also handle negative numbers.
-     *
-     * @param string $field
-     * @param int $delta
-     * @return bool
-     * @throws MondocServiceMapErrorException
-     * @throws MondocConfigConfigurationException
-     */
-    public function inc(string $field, int $delta = 1): bool
-    {
-        $service = MondocConfig::getInstance()->getServiceForModel(get_called_class());
-        /* @var $service MondocAbstractService */
-        if ($this->hasObjectId() === false) {
-            $this->{$field} += $delta;
-            return false;
-        }
-
-        $perform = $service::inc($this->getObjectId(), $field, $delta);
-        if ($perform === true) {
-            $this->{$field} += $delta;
-        }
-
-        return $perform;
-    }
-
-    /**
      * @return bool
      */
     public function isMondocRetentionEnabled(): bool
@@ -273,31 +196,12 @@ class MondocAbstractModel extends MondocAbstractSubModel
     }
 
     /**
-     * Given an array of ObjectIds, this will ensure they are indeed ObjectIds.
-     *
-     * @param array $data
-     *
-     * @return ObjectId[]
-     * @noinspection PhpUnused
-     */
-    protected function convertArrayOfMongoIdsToMongoIds(array $data): array
-    {
-        $n = [];
-        foreach ($data as $i) {
-            if (null !== $id = self::toObjectId($i)) {
-                $n[] = $id;
-            }
-        }
-
-        return array_values($n);
-    }
-
-    /**
      * Export the model as a JSON encodable array, optionally omitting certain fields.
      *
      * @param array $omitKeys (optional) fields to omit.
      * @return array
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function asJsonEncodableArray(array $omitKeys = []): array
     {

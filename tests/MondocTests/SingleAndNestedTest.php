@@ -123,6 +123,7 @@ class SingleAndNestedTest extends MondocBaseTestAbstract
     /**
      * @return void
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testAsArrayWithUnmappedStillAddsThem()
     {
@@ -174,6 +175,7 @@ class SingleAndNestedTest extends MondocBaseTestAbstract
 
     /**
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function testSubModelValues()
     {

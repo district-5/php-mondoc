@@ -1,5 +1,4 @@
 <?php
-
 /**
  * District5 Mondoc Library
  *
@@ -29,68 +28,46 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Model\Traits;
-
-use DateTime;
-use District5\Date\Date;
-use District5\Mondoc\Db\Model\Traits\Static\MondocMongoTypeTrait;
-use MongoDB\BSON\UTCDateTime;
+namespace District5\Mondoc\Db\Model\Traits\Static;
 
 /**
- * Trait MondocCreatedDateTrait.
+ * Trait ExcludedPropertiesTrait.
  *
- * @package District5\Mondoc\Db\Model\Traits
+ * @package District5\Mondoc\Db\Model\Traits\Static
  */
-trait MondocCreatedDateTrait
+trait ExcludedPropertiesTrait
 {
-    use MondocMongoTypeTrait;
-
     /**
-     * The created date of the model
+     * Holds an array of protected variable names.
      *
-     * @var DateTime|UTCDateTime|null
+     * @return array
      */
-    protected DateTime|UTCDateTime|null $cd = null;
-
-    /**
-     * Get the created date of this model
-     *
-     * @param bool $asMongo
-     * @return DateTime|UTCDateTime|null
-     */
-    public function getCreatedDate(bool $asMongo = false): DateTime|UTCDateTime|null
+    protected function getPropertyExclusions(): array
     {
-        return $this->convertDateObject(
-            $this->cd,
-            $asMongo
-        );
+        return [
+            '_mondocObjectId', '_mondocBson', '_mondocCollection', '_mondocPresetObjectId',
+            '_mondocUnmapped', '_mondocDirty', '_mondocEstablishedNestedSingle', '_mondocEstablishedNestedMultiple',
+            '_mondocRetentionExpiry', '_mondocRetentionChangeMeta', 'mondocEncrypted', 'mondocNested', 'mondocFieldAliases'
+        ];
     }
 
     /**
-     * Set the created date of this model
+     * Check if a single field is, or one of many fields, are excluded from the actual database document.
      *
-     * @param DateTime $date
-     *
-     * @return $this
+     * @param string|string[] $nameOrNames
+     * @return bool
      */
-    public function setCreatedDate(DateTime $date): static
+    protected function isPropertyExcluded(string|array $nameOrNames): bool
     {
-        $this->cd = $date;
-        if (method_exists($this, 'addDirty')) {
-            $this->addDirty('cd');
+        $exclusions = $this->getPropertyExclusions();
+        if (is_array($nameOrNames)) {
+            foreach ($nameOrNames as $name) {
+                if (in_array($name, $exclusions)) {
+                    return true;
+                }
+            }
+            return false;
         }
-        return $this;
-    }
-
-    /**
-     * Touch the created date
-     *
-     * @return $this
-     */
-    public function touchCreatedDate(): static
-    {
-        return $this->setCreatedDate(
-            Date::nowUtc()
-        );
+        return in_array($nameOrNames, $exclusions);
     }
 }

@@ -179,12 +179,12 @@ class MyModel extends MondocAbstractModel
 <?php
 class MyModel extends \District5\Mondoc\Db\Model\MondocAbstractModel
 {
+    use \District5\Mondoc\Db\Model\Traits\MondocCloneableTrait;
     use \District5\Mondoc\Db\Model\Traits\MondocCreatedDateTrait;
     use \District5\Mondoc\Db\Model\Traits\MondocModifiedDateTrait;
-    use \District5\Mondoc\Db\Model\Traits\MondocCloneableTrait;
+    use \District5\Mondoc\Db\Model\Traits\MondocRetentionTrait;
     use \District5\Mondoc\Db\Model\Traits\MondocRevisionNumberTrait;
     use \District5\Mondoc\Db\Model\Traits\MondocVersionedModelTrait;
-    use \District5\Mondoc\Db\Model\Traits\MondocRetentionTrait;
     
     // Rest of your model code...
 }
@@ -373,7 +373,7 @@ class Person extends MondocAbstractModel
 }
 ```
 
-#### Finding documents..
+#### Finding documents...
 
 ```php
 <?php

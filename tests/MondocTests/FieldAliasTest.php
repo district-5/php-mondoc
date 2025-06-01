@@ -116,7 +116,6 @@ class FieldAliasTest extends MondocBaseTestAbstract
     {
         FieldAliasTestService::deleteMulti([]);
 
-        $thisId = new ObjectId();
         $arrayData = [
             'n' => 'John',
             'a' => 25,
@@ -244,40 +243,5 @@ class FieldAliasTest extends MondocBaseTestAbstract
         $this->assertEquals('foo', $m->getFieldAliasMapRemoteName('foo'));
         $this->assertEquals('bar', $m->getFieldAliasMapLocalName('foo'));
         $this->assertEquals('bar', $m->getFieldAliasMapLocalName('bar'));
-    }
-
-    public function testDeprecatedFieldAliasMapMethod()
-    {
-        $m = new FieldAliasTestModel();
-        $reflection = new ReflectionClass($m);
-        $property = $reflection->getProperty('mondocFieldAliases');
-        /** @noinspection PhpExpressionResultUnusedInspection */
-        $property->setAccessible(true);
-        $property->setValue($m, [
-            'n' => 'name',
-            'a' => 'age',
-            'attr' => 'attributes',
-            'foo' => 'bar'
-        ]);
-
-        $this->assertEquals('n', $m->getFieldAliasSingleMap('name', true));
-        $this->assertEquals('n', $m->getFieldAliasSingleMap('n', true));
-        $this->assertEquals('name', $m->getFieldAliasSingleMap('n', false));
-        $this->assertEquals('name', $m->getFieldAliasSingleMap('name', false));
-
-        $this->assertEquals('a', $m->getFieldAliasSingleMap('age', true));
-        $this->assertEquals('a', $m->getFieldAliasSingleMap('a', true));
-        $this->assertEquals('age', $m->getFieldAliasSingleMap('a', false));
-        $this->assertEquals('age', $m->getFieldAliasSingleMap('age', false));
-
-        $this->assertEquals('attr', $m->getFieldAliasSingleMap('attributes', true));
-        $this->assertEquals('attr', $m->getFieldAliasSingleMap('attr', true));
-        $this->assertEquals('attributes', $m->getFieldAliasSingleMap('attr', false));
-        $this->assertEquals('attributes', $m->getFieldAliasSingleMap('attributes', false));
-
-        $this->assertEquals('foo', $m->getFieldAliasSingleMap('bar', true));
-        $this->assertEquals('foo', $m->getFieldAliasSingleMap('foo', true));
-        $this->assertEquals('bar', $m->getFieldAliasSingleMap('foo', false));
-        $this->assertEquals('bar', $m->getFieldAliasSingleMap('bar', false));
     }
 }

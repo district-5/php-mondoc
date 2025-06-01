@@ -246,6 +246,7 @@ class MondocRetentionModel extends MondocAbstractModel
      * @param MondocAbstractModel $model
      * @return void
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function setSourceModel(MondocAbstractModel $model): void
     {

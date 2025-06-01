@@ -28,16 +28,17 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Model\Traits;
+namespace District5\Mondoc\Db\Model\Traits\Static;
 
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
+use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\Model\BSONDocument;
 
 /**
  * Trait DirtyAttributesTrait.
  *
- * @package District5\Mondoc\Db\Model\Traits
+ * @package District5\Mondoc\Db\Model\Traits\Static
  */
 trait DirtyAttributesTrait
 {
@@ -86,6 +87,7 @@ trait DirtyAttributesTrait
      * @param string|null $property
      * @return bool
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function isDirty(string|null $property): bool
     {
@@ -101,6 +103,7 @@ trait DirtyAttributesTrait
      *
      * @return array
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function getDirty(): array
     {
@@ -131,6 +134,7 @@ trait DirtyAttributesTrait
      * @param string $property
      * @return bool
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public function isDirtyField(string $property): bool
     {
@@ -162,11 +166,6 @@ trait DirtyAttributesTrait
      * @see ExcludedPropertiesTrait::getPropertyExclusions()
      */
     abstract protected function getPropertyExclusions(): array;
-
-    /**
-     * @deprecated - no longer used actively and will be removed in future versions.
-     */
-    abstract public function getFieldAliasSingleMap(string $field, bool $remote): string;
 
     /**
      * @see FieldAliasMapTrait::getFieldAliasMapRemoteName()

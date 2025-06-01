@@ -28,37 +28,39 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Model\Traits;
+namespace District5\Mondoc\Db\Model\Traits\Static;
+
+use MongoDB\Model\BSONDocument;
 
 /**
- * Trait UnmappedPropertiesTrait.
+ * Trait MondocBsonDocumentTrait.
  *
- * @package District5\Mondoc\Db\Model\Traits
+ * @package District5\Mondoc\Db\Model\Traits\Static
  */
-trait UnmappedPropertiesTrait
+trait MondocBsonDocumentTrait
 {
     /**
-     * An array holding all key/value pairs that weren't found in the object.
-     *
-     * @var array
+     * @var BSONDocument|null
      */
-    protected array $_mondocUnmapped = [];
+    private BSONDocument|null $_mondocBson = null;
 
     /**
-     * Get any unmapped fields.
+     * @param BSONDocument $document
      *
-     * @return array
+     * @return $this
      */
-    public function getUnmappedFields(): array
+    public function setOriginalBsonDocument(BSONDocument $document): static
     {
-        return $this->_mondocUnmapped;
+        $this->_mondocBson = $document;
+
+        return $this;
     }
 
     /**
-     * @return bool
+     * @return null|BSONDocument
      */
-    public function hasUnmappedProperties(): bool
+    public function getOriginalBsonDocument(): ?BSONDocument
     {
-        return !empty($this->_mondocUnmapped);
+        return $this->_mondocBson;
     }
 }

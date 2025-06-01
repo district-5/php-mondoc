@@ -61,10 +61,9 @@ trait ObjectIdConversionTrait
      */
     public static function newObjectIdFromDateObject(DateTime|UTCDateTime $dateTime): ObjectId
     {
-        $dateTime = $dateTime instanceof UTCDateTime ? $dateTime : new UTCDateTime($dateTime->getTimestamp() * 1000);
-        $dateTime = $dateTime->toDateTime();
-
-        return Date::mongo()->toObjectId($dateTime);
+        return Date::mongo()->toObjectId(
+            MondocTypes::dateToPHPDateTime($dateTime)
+        );
     }
 
     /**
@@ -150,6 +149,6 @@ trait ObjectIdConversionTrait
             }
         }
 
-        return array_values($n);
+        return $n;
     }
 }

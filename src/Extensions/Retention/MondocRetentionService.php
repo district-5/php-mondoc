@@ -67,6 +67,7 @@ class MondocRetentionService extends MondocAbstractService
      * @return void
      * @throws MondocConfigConfigurationException
      * @throws MondocServiceMapErrorException
+     * @throws MondocException
      */
     public static function create(MondocAbstractModel $model): void
     {
@@ -79,6 +80,7 @@ class MondocRetentionService extends MondocAbstractService
      * @param MondocAbstractModel $model
      * @return MondocRetentionModel
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      */
     public static function createStub(MondocAbstractModel $model): MondocRetentionModel
     {

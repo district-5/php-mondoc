@@ -28,44 +28,37 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Model\Traits;
-
-use DateTime;
-use District5\Mondoc\Helper\Traits\ArrayConversionTrait;
-use District5\Mondoc\Helper\Traits\DateObjectConversionTrait;
-use District5\Mondoc\Helper\Traits\ObjectIdConversionTrait;
-use MongoDB\BSON\UTCDateTime;
+namespace District5\Mondoc\Db\Model\Traits\Static;
 
 /**
- * Trait MondocMongoTypeTrait.
+ * Trait UnmappedPropertiesTrait.
  *
- * @package District5\Mondoc\Db\Model\Traits
+ * @package District5\Mondoc\Db\Model\Traits\Static
  */
-trait MondocMongoTypeTrait
+trait UnmappedPropertiesTrait
 {
-    use ObjectIdConversionTrait;
-    use DateObjectConversionTrait;
-    use ArrayConversionTrait;
+    /**
+     * An array holding all key/value pairs that weren't found in the object.
+     *
+     * @var array
+     */
+    protected array $_mondocUnmapped = [];
 
     /**
-     * Convert a date object to either a PHP DateTime (by passing $asMongo=false)
-     * or as a Mongo UTCDateTime (by passing $asMongo=true).
+     * Get any unmapped fields.
      *
-     * @param UTCDateTime|DateTime|null $date
-     * @param bool $asMongo
-     *
-     * @return null|DateTime|UTCDateTime
+     * @return array
      */
-    protected function convertDateObject(UTCDateTime|DateTime|null $date, bool $asMongo = false): UTCDateTime|DateTime|null
+    public function getUnmappedFields(): array
     {
-        if (null === $date) {
-            return null;
-        }
+        return $this->_mondocUnmapped;
+    }
 
-        if ($asMongo) {
-            return self::phpDateToMongoDateTime($date);
-        }
-
-        return self::dateToPHPDateTime($date);
+    /**
+     * @return bool
+     */
+    public function hasUnmappedProperties(): bool
+    {
+        return !empty($this->_mondocUnmapped);
     }
 }

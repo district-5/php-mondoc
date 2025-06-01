@@ -28,12 +28,12 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Model\Traits;
+namespace District5\Mondoc\Db\Model\Traits\Static;
 
 /**
  * Trait FieldAliasMapTrait.
  *
- * @package District5\Mondoc\Db\Model\Traits
+ * @package District5\Mondoc\Db\Model\Traits\Static
  */
 trait FieldAliasMapTrait
 {
@@ -64,24 +64,6 @@ trait FieldAliasMapTrait
     protected function getFieldAliasMap(): array
     {
         return $this->mondocFieldAliases;
-    }
-
-    /**
-     * @deprecated - See getFieldAliasMapRemoteName() and getFieldAliasMapLocalName()
-     * @see FieldAliasMapTrait::getFieldAliasMapRemoteName()
-     * @see FieldAliasMapTrait::getFieldAliasMapLocalName()
-     */
-    public function getFieldAliasSingleMap(string $field, bool $remote): string
-    {
-        if ($remote) {
-            return $this->getFieldAliasMapRemoteName(
-                $field
-            );
-        }
-
-        return $this->getFieldAliasMapLocalName(
-            $field
-        );
     }
 
     /**

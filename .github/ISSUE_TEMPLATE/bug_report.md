@@ -17,7 +17,7 @@ Please provide the following information:
 
   * What version of PHP are you using?
   * What version of Mondoc are you using? (tag or commit hash)
-  * What operating system and version is the code running on? (e.g. Ubuntu 22.04, Windows 10, MacOS 11.2.3)
+  * What operating system and version is the code running on? (e.g. Ubuntu 22.04, Windows 10, macOS 11.2.3)
 
 ### To Reproduce
 

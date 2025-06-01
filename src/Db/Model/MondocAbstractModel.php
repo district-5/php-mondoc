@@ -196,21 +196,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
     }
 
     /**
-     * Given an array of ObjectIds, this will ensure they are indeed ObjectIds.
-     *
-     * @param array $data
-     *
-     * @return ObjectId[]
-     * @noinspection PhpUnused
-     * @deprecated use `arrayOfObjectIdsToObjectIds()` instead.
-     * @see \District5\Mondoc\Helper\Traits\ObjectIdConversionTrait::arrayOfObjectIdsToObjectIds()
-     */
-    protected function convertArrayOfMongoIdsToMongoIds(array $data): array
-    {
-        return self::arrayOfObjectIdsToObjectIds($data);
-    }
-
-    /**
      * Export the model as a JSON encodable array, optionally omitting certain fields.
      *
      * @param array $omitKeys (optional) fields to omit.

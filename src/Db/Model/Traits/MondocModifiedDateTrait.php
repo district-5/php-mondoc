@@ -33,6 +33,7 @@ namespace District5\Mondoc\Db\Model\Traits;
 
 use DateTime;
 use District5\Date\Date;
+use District5\Mondoc\Db\Model\Traits\Static\MondocMongoTypeTrait;
 use MongoDB\BSON\UTCDateTime;
 
 /**

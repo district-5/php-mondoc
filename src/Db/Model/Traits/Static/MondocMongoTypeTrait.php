@@ -28,39 +28,44 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Model\Traits;
+namespace District5\Mondoc\Db\Model\Traits\Static;
 
-use MongoDB\Model\BSONDocument;
+use DateTime;
+use District5\Mondoc\Helper\Traits\ArrayConversionTrait;
+use District5\Mondoc\Helper\Traits\DateObjectConversionTrait;
+use District5\Mondoc\Helper\Traits\ObjectIdConversionTrait;
+use MongoDB\BSON\UTCDateTime;
 
 /**
- * Trait MondocBsonDocumentTrait.
+ * Trait MondocMongoTypeTrait.
  *
- * @package District5\Mondoc\Db\Model\Traits
+ * @package District5\Mondoc\Db\Model\Traits\Static
  */
-trait MondocBsonDocumentTrait
+trait MondocMongoTypeTrait
 {
-    /**
-     * @var BSONDocument|null
-     */
-    private BSONDocument|null $_mondocBson = null;
+    use ObjectIdConversionTrait;
+    use DateObjectConversionTrait;
+    use ArrayConversionTrait;
 
     /**
-     * @param BSONDocument $document
+     * Convert a date object to either a PHP DateTime (by passing $asMongo=false)
+     * or as a Mongo UTCDateTime (by passing $asMongo=true).
      *
-     * @return $this
+     * @param UTCDateTime|DateTime|null $date
+     * @param bool $asMongo
+     *
+     * @return null|DateTime|UTCDateTime
      */
-    public function setOriginalBsonDocument(BSONDocument $document): static
+    protected function convertDateObject(UTCDateTime|DateTime|null $date, bool $asMongo = false): UTCDateTime|DateTime|null
     {
-        $this->_mondocBson = $document;
+        if (null === $date) {
+            return null;
+        }
 
-        return $this;
-    }
+        if ($asMongo) {
+            return self::phpDateToMongoDateTime($date);
+        }
 
-    /**
-     * @return null|BSONDocument
-     */
-    public function getOriginalBsonDocument(): ?BSONDocument
-    {
-        return $this->_mondocBson;
+        return self::dateToPHPDateTime($date);
     }
 }

@@ -28,13 +28,13 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Model\Traits;
+namespace District5\Mondoc\Db\Model\Traits\Static;
 
 
 /**
  * Trait MondocNestedModelTrait.
  *
- * @package District5\Mondoc\Db\Model\Traits
+ * @package District5\Mondoc\Db\Model\Traits\Static
  */
 trait MondocNestedModelTrait
 {

@@ -31,7 +31,7 @@
 namespace District5Tests\MondocTests\TestObjects\Model\Subs;
 
 use District5\Mondoc\Db\Model\MondocAbstractSubModel;
-use District5\Mondoc\Db\Model\Traits\FieldAliasMapTrait;
+use District5\Mondoc\Db\Model\Traits\Static\FieldAliasMapTrait;
 
 /**
  * Class FoodSubModel

@@ -28,44 +28,31 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Model\Traits;
+namespace District5\Mondoc\Db\Model\Traits\Static;
 
-use DateTime;
-use District5\Mondoc\Helper\Traits\ArrayConversionTrait;
-use District5\Mondoc\Helper\Traits\DateObjectConversionTrait;
-use District5\Mondoc\Helper\Traits\ObjectIdConversionTrait;
-use MongoDB\BSON\UTCDateTime;
+use MongoDB\Collection;
 
 /**
- * Trait MondocMongoTypeTrait.
+ * Trait MondocCollectionTrait.
  *
- * @package District5\Mondoc\Db\Model\Traits
+ * @package District5\Mondoc\Db\Model\Traits\Static
  */
-trait MondocMongoTypeTrait
+trait MondocCollectionTrait
 {
-    use ObjectIdConversionTrait;
-    use DateObjectConversionTrait;
-    use ArrayConversionTrait;
+    /**
+     * @var null|Collection
+     */
+    private ?Collection $_mondocCollection = null;
 
     /**
-     * Convert a date object to either a PHP DateTime (by passing $asMongo=false)
-     * or as a Mongo UTCDateTime (by passing $asMongo=true).
+     * @param null|Collection $collection
      *
-     * @param UTCDateTime|DateTime|null $date
-     * @param bool $asMongo
-     *
-     * @return null|DateTime|UTCDateTime
+     * @return $this
      */
-    protected function convertDateObject(UTCDateTime|DateTime|null $date, bool $asMongo = false): UTCDateTime|DateTime|null
+    public function setMongoCollection(?Collection $collection): static
     {
-        if (null === $date) {
-            return null;
-        }
+        $this->_mondocCollection = $collection;
 
-        if ($asMongo) {
-            return self::phpDateToMongoDateTime($date);
-        }
-
-        return self::dateToPHPDateTime($date);
+        return $this;
     }
 }

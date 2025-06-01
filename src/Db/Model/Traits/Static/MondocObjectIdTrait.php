@@ -28,7 +28,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Model\Traits;
+namespace District5\Mondoc\Db\Model\Traits\Static;
 
 use District5\Mondoc\Helper\MondocTypes;
 use MongoDB\BSON\ObjectId;
@@ -36,7 +36,7 @@ use MongoDB\BSON\ObjectId;
 /**
  * Trait MondocObjectIdTrait.
  *
- * @package District5\Mondoc\Db\Model\Traits
+ * @package District5\Mondoc\Db\Model\Traits\Static
  */
 trait MondocObjectIdTrait
 {

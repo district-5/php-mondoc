@@ -28,46 +28,37 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace District5\Mondoc\Db\Model\Traits;
+namespace District5\Mondoc\Db\Model\Traits\Static;
 
 /**
- * Trait ExcludedPropertiesTrait.
+ * Trait UnmappedPropertiesTrait.
  *
- * @package District5\Mondoc\Db\Model\Traits
+ * @package District5\Mondoc\Db\Model\Traits\Static
  */
-trait ExcludedPropertiesTrait
+trait UnmappedPropertiesTrait
 {
     /**
-     * Holds an array of protected variable names.
+     * An array holding all key/value pairs that weren't found in the object.
+     *
+     * @var array
+     */
+    protected array $_mondocUnmapped = [];
+
+    /**
+     * Get any unmapped fields.
      *
      * @return array
      */
-    protected function getPropertyExclusions(): array
+    public function getUnmappedFields(): array
     {
-        return [
-            '_mondocObjectId', '_mondocBson', '_mondocCollection', '_mondocPresetObjectId',
-            '_mondocUnmapped', '_mondocDirty', '_mondocEstablishedNestedSingle', '_mondocEstablishedNestedMultiple',
-            '_mondocRetentionExpiry', '_mondocRetentionChangeMeta', 'mondocEncrypted', 'mondocNested', 'mondocFieldAliases'
-        ];
+        return $this->_mondocUnmapped;
     }
 
     /**
-     * Check if a single field is, or one of many fields, are excluded from the actual database document.
-     *
-     * @param string|string[] $nameOrNames
      * @return bool
      */
-    protected function isPropertyExcluded(string|array $nameOrNames): bool
+    public function hasUnmappedProperties(): bool
     {
-        $exclusions = $this->getPropertyExclusions();
-        if (is_array($nameOrNames)) {
-            foreach ($nameOrNames as $name) {
-                if (in_array($name, $exclusions)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        return in_array($nameOrNames, $exclusions);
+        return !empty($this->_mondocUnmapped);
     }
 }

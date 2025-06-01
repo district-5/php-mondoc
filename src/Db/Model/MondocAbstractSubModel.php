@@ -31,11 +31,11 @@
 namespace District5\Mondoc\Db\Model;
 
 use DateTime;
-use District5\Mondoc\Db\Model\Traits\ExcludedPropertiesTrait;
-use District5\Mondoc\Db\Model\Traits\FieldAliasMapTrait;
-use District5\Mondoc\Db\Model\Traits\MondocEncryptedFieldsTrait;
-use District5\Mondoc\Db\Model\Traits\MondocNestedModelTrait;
-use District5\Mondoc\Db\Model\Traits\UnmappedPropertiesTrait;
+use District5\Mondoc\Db\Model\Traits\Static\ExcludedPropertiesTrait;
+use District5\Mondoc\Db\Model\Traits\Static\FieldAliasMapTrait;
+use District5\Mondoc\Db\Model\Traits\Static\MondocEncryptedFieldsTrait;
+use District5\Mondoc\Db\Model\Traits\Static\MondocNestedModelTrait;
+use District5\Mondoc\Db\Model\Traits\Static\UnmappedPropertiesTrait;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Helper\MondocTypes;
@@ -123,6 +123,7 @@ abstract class MondocAbstractSubModel
      * @return $this
      * @throws MondocConfigConfigurationException
      * @throws \District5\MondocEncryption\Exception\MondocEncryptionException
+     * @throws MondocException
      * @noinspection PhpFullyQualifiedNameUsageInspection
      */
     public static function inflateSingleArray(array $data): static

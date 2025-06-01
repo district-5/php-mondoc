@@ -150,6 +150,6 @@ trait ObjectIdConversionTrait
             }
         }
 
-        return array_values($n);
+        return $n;
     }
 }

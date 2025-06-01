@@ -328,6 +328,7 @@ abstract class MondocAbstractSubModel
      * @param array $omitKeys (optional) fields to omit.
      * @return array
      * @throws MondocConfigConfigurationException
+     * @throws MondocException
      * @noinspection PhpRedundantOptionalArgumentInspection
      */
     public function asJsonEncodableArray(array $omitKeys = []): array

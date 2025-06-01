@@ -31,6 +31,7 @@
 namespace District5\Mondoc\Db\Model;
 
 use District5\Mondoc\Db\Model\Traits\DirtyAttributesTrait;
+use District5\Mondoc\Db\Model\Traits\MondocBsonDocumentTrait;
 use District5\Mondoc\Db\Model\Traits\MondocMongoTypeTrait;
 use District5\Mondoc\Db\Model\Traits\MondocObjectIdTrait;
 use District5\Mondoc\Db\Model\Traits\MondocRetentionTrait;
@@ -56,16 +57,12 @@ class MondocAbstractModel extends MondocAbstractSubModel
     use PresetObjectIdTrait;
     use DirtyAttributesTrait;
     use MondocObjectIdTrait;
+    use MondocBsonDocumentTrait;
 
     /**
      * @var null|Collection
      */
     private ?Collection $_mondocCollection = null;
-
-    /**
-     * @var null|BSONDocument
-     */
-    private ?BSONDocument $_mondocBson = null;
 
     /**
      * @param BSONDocument $document
@@ -103,18 +100,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
         $done->assignDefaultVars();
 
         return $done;
-    }
-
-    /**
-     * @param BSONDocument $document
-     *
-     * @return $this
-     */
-    public function setOriginalBsonDocument(BSONDocument $document): MondocAbstractModel
-    {
-        $this->_mondocBson = $document;
-
-        return $this;
     }
 
     /**
@@ -212,14 +197,6 @@ class MondocAbstractModel extends MondocAbstractSubModel
         }
 
         return $toUnset;
-    }
-
-    /**
-     * @return null|BSONDocument
-     */
-    public function getOriginalBsonDocument(): ?BSONDocument
-    {
-        return $this->_mondocBson;
     }
 
     /**

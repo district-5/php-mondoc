@@ -44,7 +44,6 @@ use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
 use District5\Mondoc\Helper\HasTraitHelper;
 use District5\Mondoc\MondocConfig;
-use MongoDB\BSON\ObjectId;
 use MongoDB\Model\BSONDocument;
 
 /**

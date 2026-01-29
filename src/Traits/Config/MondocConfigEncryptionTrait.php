@@ -44,12 +44,19 @@ trait MondocConfigEncryptionTrait
      */
     protected MondocEncryptionInterface|null $fieldEncryption = null;
 
+    /**
+     * Check if an encryption adapter has been set.
+     *
+     * @return bool
+     */
     public function hasEncryptionAdapter(): bool
     {
         return $this->fieldEncryption instanceof MondocEncryptionInterface;
     }
 
     /**
+     * Get the encryption adapter to be used when declaring `mondocEncrypted` fields.
+     *
      * @return MondocEncryptionInterface|null
      */
     public function getEncryptionAdapter(): ?MondocEncryptionInterface

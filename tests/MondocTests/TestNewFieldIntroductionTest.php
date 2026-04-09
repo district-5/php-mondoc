@@ -120,6 +120,15 @@ class TestNewFieldIntroductionTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      */
+    protected function setUp(): void
+    {
+        MyService::deleteMulti([]);
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
     protected function tearDown(): void
     {
         MyService::deleteMulti([]);

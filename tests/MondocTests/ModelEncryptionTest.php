@@ -293,6 +293,16 @@ class ModelEncryptionTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      */
+    protected function setUp(): void
+    {
+        MixedEncryptedService::deleteMulti([]);
+        MixedEncryptedWithEncryptedSubModelService::deleteMulti([]);
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
     protected function tearDown(): void
     {
         MixedEncryptedService::deleteMulti([]);

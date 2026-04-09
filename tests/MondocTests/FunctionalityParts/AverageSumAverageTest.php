@@ -48,13 +48,30 @@ use District5Tests\MondocTests\TestObjects\Service\MyService;
 class AverageSumAverageTest extends MondocBaseTestAbstract
 {
     /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function setUp(): void
+    {
+        MyService::deleteMulti([]);
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function tearDown(): void
+    {
+        MyService::deleteMulti([]);
+    }
+
+    /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
      * @throws MondocException
      */
     public function testAverageSumAverageWorkCorrectly()
     {
-        MyService::deleteMulti([]);
         $this->assertEquals(0, MyService::aggregate()->getSum('age'));
         $this->assertEquals(0, MyService::aggregate()->getAverage('age'));
         $this->assertEquals(0, MyService::countAll());

@@ -50,6 +50,24 @@ class DeletionTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      */
+    protected function setUp(): void
+    {
+        MyService::deleteMulti([]);
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function tearDown(): void
+    {
+        MyService::deleteMulti([]);
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
     public function testDeleteByIdsWhenNoIds()
     {
         $this->assertEquals(0, MyService::deleteByIds([]));
@@ -119,7 +137,6 @@ class DeletionTest extends MondocBaseTestAbstract
      */
     public function testDeleteModel()
     {
-        MyService::deleteMulti([]);
         $m = new MyModel();
         $m->setAge(1)->setName(uniqid())->save();
 
@@ -139,7 +156,6 @@ class DeletionTest extends MondocBaseTestAbstract
      */
     public function testDeleteMultiPassesBothScenarios()
     {
-        MyService::deleteMulti([]);
         $m = new MyModel();
         $m->setAge(1)->setName(uniqid())->save();
         $mT = new MyModel();
@@ -156,7 +172,6 @@ class DeletionTest extends MondocBaseTestAbstract
      */
     public function testDeleteOne()
     {
-        MyService::deleteMulti([]);
         $m = new MyModel();
         $m->setAge(1)->setName(uniqid())->save();
         $mT = new MyModel();
@@ -168,12 +183,4 @@ class DeletionTest extends MondocBaseTestAbstract
         $this->assertFalse(MyService::deleteOne(['age' => 2]));
     }
 
-    /**
-     * @throws MondocConfigConfigurationException
-     */
-    protected function tearDown(): void
-    {
-        MyService::getCollection()->drop();
-        parent::tearDown();
-    }
 }

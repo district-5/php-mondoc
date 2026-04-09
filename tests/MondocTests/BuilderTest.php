@@ -56,7 +56,6 @@ class BuilderTest extends MondocBaseTestAbstract
      */
     public function testPersistAndQuery()
     {
-        MyService::deleteMulti([]);
         $objectId = new ObjectId();
 
         $m = new MyModel();
@@ -102,6 +101,15 @@ class BuilderTest extends MondocBaseTestAbstract
         $this->assertEquals($m->getObjectIdString(), $getModels[0]->getObjectIdString());
         $this->assertEquals('Foo', $getModels[0]->getName());
         $this->assertEquals(1, $getModels[0]->getAge());
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function setUp(): void
+    {
+        MyService::deleteMulti([]);
     }
 
     /**

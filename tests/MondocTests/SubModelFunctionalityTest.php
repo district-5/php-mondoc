@@ -150,6 +150,15 @@ class SubModelFunctionalityTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      */
+    protected function setUp(): void
+    {
+        MySubService::deleteMulti([]);
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
     protected function tearDown(): void
     {
         MySubService::deleteMulti([]);

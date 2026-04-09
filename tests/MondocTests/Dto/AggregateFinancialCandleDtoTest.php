@@ -67,7 +67,6 @@ class AggregateFinancialCandleDtoTest extends MondocFinancialTestAbstract
      */
     public function testDatabaseInteractionsForFinancialCandles()
     {
-        FinancialCandleService::deleteMulti([]);
         $data = $this->getTestData();
         foreach ($data as $datum) {
             $m = new FinancialCandleModel();
@@ -143,8 +142,6 @@ class AggregateFinancialCandleDtoTest extends MondocFinancialTestAbstract
         $this->assertEquals(1.8, $reverseCandles[5]->getLow());
         $this->assertEquals(1.9, $reverseCandles[5]->getOpen());
         $this->assertEquals(1.8, $reverseCandles[5]->getClose());
-
-        FinancialCandleService::deleteMulti([]);
     }
 
     /**
@@ -164,6 +161,15 @@ class AggregateFinancialCandleDtoTest extends MondocFinancialTestAbstract
             0, // Invalid sort direction
             100
         );
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function setUp(): void
+    {
+        FinancialCandleService::deleteMulti([]);
     }
 
     /**

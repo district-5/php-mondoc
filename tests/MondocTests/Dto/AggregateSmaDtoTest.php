@@ -62,7 +62,6 @@ class AggregateSmaDtoTest extends MondocFinancialTestAbstract
      */
     public function testDatabaseForAggregateSma()
     {
-        FinancialCandleService::deleteMulti([]);
         $randUpper = 1000;
         $randLower = 500;
 
@@ -110,6 +109,15 @@ class AggregateSmaDtoTest extends MondocFinancialTestAbstract
         $this->assertGreaterThan(0, $sma[0]->getSma());
         $this->assertGreaterThan(0, $sma[0]->getPrice());
         $this->assertInstanceOf(DateTime::class, $sma[0]->getDate());
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function setUp(): void
+    {
+        FinancialCandleService::deleteMulti([]);
     }
 
     /**

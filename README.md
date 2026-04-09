@@ -38,7 +38,7 @@ Usage...
 
 #### Setting up connections...
 
-The `MondoConnections` object is a singleton. Set this up somewhere in your code to initialise the connection, and
+The `MondocConfig` object is a singleton. Set this up somewhere in your code to initialize the connection, and
 within your services you can define `protected static function getConnectionId(): string` to return the correct
 identifier for the relevant model.
 
@@ -676,6 +676,115 @@ $results = MondocRetentionService::getPage(
 // This will return the `MongoRetentionModel` for the `MyModel` with the user `joe.bloggs`
 $firstResultInflated = $results[0]->toOriginalModel();
 echo $firstResultInflated->getName(); // John Doe
+```
+
+#### Lifecycle hooks
+
+Models support six lifecycle hooks that fire around insert, update, and delete operations. Override any of them in
+your model to run custom logic or veto the operation by returning `false` from a `before*` hook.
+
+| Method           | Return | Description                         |
+|------------------|--------|-------------------------------------|
+| `beforeInsert()` | `bool` | Return `false` to cancel the insert |
+| `afterInsert()`  | `void` | Called after a successful insert    |
+| `beforeUpdate()` | `bool` | Return `false` to cancel the update |
+| `afterUpdate()`  | `void` | Called after a successful update    |
+| `beforeDelete()` | `bool` | Return `false` to cancel the delete |
+| `afterDelete()`  | `void` | Called after a successful delete    |
+
+```php
+<?php
+use District5\Mondoc\Db\Model\MondocAbstractModel;
+
+class MyModel extends MondocAbstractModel
+{
+    protected string $name = '';
+    protected bool $active = true;
+
+    // Prevent inserting a model with an empty name
+    public function beforeInsert(): bool
+    {
+        return $this->name !== '';
+    }
+
+    // Stamp a modification time after every successful update
+    public function afterUpdate(): void
+    {
+        // e.g. log, notify, dispatch an event...
+    }
+
+    // Prevent deleting active records
+    public function beforeDelete(): bool
+    {
+        return !$this->active;
+    }
+}
+
+$model = new MyModel();
+$model->setName(''); // empty name
+$model->save(); // returns false — beforeInsert vetoed the insert
+
+$model->setName('Alice');
+$model->save(); // returns true — inserted successfully
+```
+
+Hooks also fire per-model when using `insertMulti()`. Any model whose `beforeInsert()` returns `false` is silently
+skipped; the rest are inserted as normal.
+
+```php
+<?php
+$alice = new MyModel();
+$alice->setName('Alice');
+
+$noName = new MyModel();
+// setName not called — beforeInsert will veto this one
+
+MyService::insertMulti([$alice, $noName]);
+// $alice is inserted and $alice->hasObjectId() === true
+// $noName is skipped and $noName->hasObjectId() === false
+```
+
+#### Query scopes
+
+Services support named, reusable filter criteria called scopes. Override `getScopes()` in your service to define them,
+then use `scope()` to retrieve the filter for one or more scope names. Use `mergeFilters()` to combine scope filters
+with additional criteria.
+
+```php
+<?php
+use District5\Mondoc\Db\Service\MondocAbstractService;
+
+class UserService extends MondocAbstractService
+{
+    protected static function getCollectionName(): string
+    {
+        return 'users';
+    }
+
+    protected static function getScopes(): array
+    {
+        return [
+            'adults'  => ['age' => ['$gte' => 18]],
+            'active'  => ['active' => true],
+            'premium' => ['plan' => 'premium'],
+        ];
+    }
+}
+
+// Single scope
+$filter = UserService::scope('adults');
+$adults = UserService::getMultiByCriteria($filter);
+
+// Multiple scopes merged together
+$filter = UserService::scope('adults', 'active');
+$activeAdults = UserService::getMultiByCriteria($filter);
+
+// Combine a scope with extra criteria
+$filter = UserService::mergeFilters(
+    UserService::scope('adults', 'active'),
+    ['country' => 'GB']
+);
+$gbActiveAdults = UserService::getMultiByCriteria($filter);
 ```
 
 #### Query building

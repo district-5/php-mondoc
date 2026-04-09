@@ -58,6 +58,10 @@ trait InsertSingleTrait
      */
     public static function insert(MondocAbstractModel $model, array $insertOptions = []): bool
     {
+        if ($model->beforeInsert() === false) {
+            return false;
+        }
+
         $collection = self::getCollection(
             get_called_class()
         );
@@ -82,6 +86,8 @@ trait InsertSingleTrait
             if ($model->isMondocRetentionEnabled()) {
                 MondocRetentionService::create($model);
             }
+
+            $model->afterInsert();
         }
 
         return $success;

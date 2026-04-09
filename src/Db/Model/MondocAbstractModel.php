@@ -146,6 +146,63 @@ class MondocAbstractModel extends MondocAbstractSubModel
     }
 
     /**
+     * Called before this model is inserted. Return false to cancel the insert.
+     *
+     * @return bool
+     */
+    public function beforeInsert(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Called after this model has been successfully inserted.
+     *
+     * @return void
+     */
+    public function afterInsert(): void
+    {
+    }
+
+    /**
+     * Called before this model is updated. Return false to cancel the update.
+     *
+     * @return bool
+     */
+    public function beforeUpdate(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Called after this model has been successfully updated.
+     *
+     * @return void
+     */
+    public function afterUpdate(): void
+    {
+    }
+
+    /**
+     * Called before this model is deleted. Return false to cancel the delete.
+     *
+     * @return bool
+     */
+    public function beforeDelete(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Called after this model has been successfully deleted.
+     *
+     * @return void
+     */
+    public function afterDelete(): void
+    {
+    }
+
+    /**
      * @return bool
      */
     final public function isMondocModel(): bool

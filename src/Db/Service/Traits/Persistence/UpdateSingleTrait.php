@@ -68,6 +68,9 @@ trait UpdateSingleTrait
         if (empty($model->getDirty())) {
             return true;
         }
+        if ($model->beforeUpdate() === false) {
+            return false;
+        }
         $data = $model->asArray(true);
         unset($data['_id']);
         $changeSet = [];
@@ -109,6 +112,8 @@ trait UpdateSingleTrait
             if ($model->isMondocRetentionEnabled()) {
                 MondocRetentionService::create($model);
             }
+
+            $model->afterUpdate();
 
             return true;
         }

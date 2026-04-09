@@ -94,9 +94,14 @@ trait DeleteSingleTrait
      */
     public static function deleteModel(MondocAbstractModel $model): bool
     {
+        if ($model->beforeDelete() === false) {
+            return false;
+        }
+
         if (self::delete($model->getObjectId())) {
             $model->setMongoCollection(null);
             $model->unsetObjectId();
+            $model->afterDelete();
 
             return true;
         }

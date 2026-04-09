@@ -137,6 +137,46 @@ abstract class MondocAbstractService
     }
 
     /**
+     * Returns the named query scopes for this service. Override in subclasses to define reusable filters.
+     *
+     * @return array<string, array>
+     */
+    protected static function getScopes(): array
+    {
+        return [];
+    }
+
+    /**
+     * Merge multiple filter arrays into a single filter array.
+     *
+     * @param array ...$filters
+     * @return array
+     */
+    public static function mergeFilters(array ...$filters): array
+    {
+        return array_merge(...$filters);
+    }
+
+    /**
+     * Get the merged filter for one or more named scopes defined in getScopes().
+     *
+     * @param string ...$names
+     * @return array
+     */
+    public static function scope(string ...$names): array
+    {
+        $scopes = static::getScopes();
+        $result = [];
+        foreach ($names as $name) {
+            if (array_key_exists($name, $scopes)) {
+                $result = array_merge($result, $scopes[$name]);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * @return string
      * @throws MondocServiceMapErrorException
      */

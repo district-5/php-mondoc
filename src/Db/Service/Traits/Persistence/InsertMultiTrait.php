@@ -95,6 +95,7 @@ trait InsertMultiTrait
         }
 
         $data = [];
+        $acceptedModels = [];
         foreach ($modelsForThisService as $model) {
             $hasModified = HasTraitHelper::has($model, MondocModifiedDateTrait::class);
             $hasCreated = HasTraitHelper::has($model, MondocCreatedDateTrait::class);
@@ -112,14 +113,19 @@ trait InsertMultiTrait
                 $model->incrementRevisionNumber();
             }
 
+            if ($model->beforeInsert() === false) {
+                continue;
+            }
+
             $asArray = $model->asArray(true);
             if ($model->hasPresetObjectId()) {
                 $asArray['_id'] = $model->getPresetObjectId();
             }
             $data[] = $asArray;
+            $acceptedModels[] = $model;
         }
 
-        if (!empty($modelsForThisService)) {
+        if (!empty($acceptedModels)) {
             $collection = self::getCollection(
                 get_called_class()
             );
@@ -131,11 +137,12 @@ trait InsertMultiTrait
                 $retentionModels = [];
                 $ids = $insert->getInsertedIds();
                 $insertedKey = 0;
-                foreach ($modelsForThisService as $v) {
+                foreach ($acceptedModels as $v) {
                     if (array_key_exists($insertedKey, $ids)) {
                         $v->setObjectId($ids[$insertedKey]);
                         $v->clearPresetObjectId();
                         $v->setMongoCollection($collection);
+                        $v->afterInsert();
                         if ($v->isMondocRetentionEnabled()) {
                             $retentionModels[] = MondocRetentionService::createStub($v);
                         }

@@ -109,6 +109,15 @@ class FlexibleNestedTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      */
+    protected function setUp(): void
+    {
+        FlexibleNestedTestService::deleteMulti([]);
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
     protected function tearDown(): void
     {
         FlexibleNestedTestService::deleteMulti([]);

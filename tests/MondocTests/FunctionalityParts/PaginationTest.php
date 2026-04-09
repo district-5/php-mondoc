@@ -52,14 +52,30 @@ use MongoDB\BSON\ObjectId;
 class PaginationTest extends MondocBaseTestAbstract
 {
     /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function setUp(): void
+    {
+        MyService::deleteMulti([]);
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function tearDown(): void
+    {
+        MyService::deleteMulti([]);
+    }
+
+    /**
      * @throws MondocConfigConfigurationException
      * @throws MondocException
      * @throws MondocServiceMapErrorException
      */
     public function testPagination()
     {
-        MyService::deleteMulti([]);
-
         $builder = new QueryBuilder();
 
         $this->assertEquals(0, MyService::countAll());

@@ -50,6 +50,16 @@ use MongoDB\BSON\ObjectId;
 class InsertionTest extends MondocBaseTestAbstract
 {
     /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function tearDown(): void
+    {
+        MyService::deleteMulti([]);
+        DateService::deleteMulti([]);
+    }
+
+    /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
      * @throws MondocException

@@ -48,14 +48,30 @@ use ReflectionClass;
 class FieldAliasTest extends MondocBaseTestAbstract
 {
     /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function setUp(): void
+    {
+        FieldAliasTestService::deleteMulti([]);
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function tearDown(): void
+    {
+        FieldAliasTestService::deleteMulti([]);
+    }
+
+    /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
      * @throws MondocException
      */
     public function testFieldMap()
     {
-        FieldAliasTestService::deleteMulti([]);
-
         $m = new FieldAliasTestModel();
         $m->setName('John');
         $m->setCity('London');
@@ -114,8 +130,6 @@ class FieldAliasTest extends MondocBaseTestAbstract
      */
     public function testFieldMapNested()
     {
-        FieldAliasTestService::deleteMulti([]);
-
         $arrayData = [
             'n' => 'John',
             'a' => 25,

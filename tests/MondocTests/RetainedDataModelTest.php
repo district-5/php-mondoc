@@ -230,7 +230,6 @@ class RetainedDataModelTest extends MondocBaseTestAbstract
      */
     public function testInsertMulti(): void
     {
-        MondocRetentionService::deleteMulti([]);
         $this->assertEquals(0, MondocRetentionService::countAll());
 
         $m1 = new TopLevelRetainedTestModel();
@@ -269,9 +268,6 @@ class RetainedDataModelTest extends MondocBaseTestAbstract
      */
     public function testExpiry()
     {
-        TopLevelRetainedTestService::deleteMulti([]);
-        MondocRetentionService::deleteMulti([]);
-
         $m1 = new TopLevelRetainedTestModel();
         $m1->setName('foo');
         $m1->setMondocRetentionChangeMeta([
@@ -358,11 +354,21 @@ class RetainedDataModelTest extends MondocBaseTestAbstract
      * @return void
      * @throws MondocConfigConfigurationException
      */
+    protected function setUp(): void
+    {
+        MondocRetentionService::deleteMulti([]);
+        TopLevelRetainedTestService::deleteMulti([]);
+        SubLevelRetainedTestService::deleteMulti([]);
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
     protected function tearDown(): void
     {
         MondocRetentionService::deleteMulti([]);
         TopLevelRetainedTestService::deleteMulti([]);
         SubLevelRetainedTestService::deleteMulti([]);
-        parent::tearDown();
     }
 }

@@ -194,10 +194,18 @@ class HelperTraitsModelTest extends MondocBaseTestAbstract
     /**
      * @throws MondocConfigConfigurationException
      */
+    protected function setUp(): void
+    {
+        HelperTraitsService::deleteMulti([]);
+        HelperTraitsOtherService::deleteMulti([]);
+    }
+
+    /**
+     * @throws MondocConfigConfigurationException
+     */
     protected function tearDown(): void
     {
         HelperTraitsService::deleteMulti([]);
         HelperTraitsOtherService::deleteMulti([]);
-        parent::tearDown();
     }
 }

@@ -31,23 +31,35 @@
 
 namespace District5Tests\MondocTests\FunctionalityParts;
 
+use DateTime;
 use District5\Mondoc\Exception\MondocConfigConfigurationException;
 use District5\Mondoc\Exception\MondocException;
 use District5\Mondoc\Exception\MondocServiceMapErrorException;
-use District5\Mondoc\MondocConfig;
 use District5Tests\MondocTests\MondocBaseTestAbstract;
-use District5Tests\MondocTests\TestObjects\Model\MyDuplicateModel;
+use District5Tests\MondocTests\TestObjects\Model\DateModel;
 use District5Tests\MondocTests\TestObjects\Model\MyModel;
-use District5Tests\MondocTests\TestObjects\Model\NoServiceModel;
+use District5Tests\MondocTests\TestObjects\Service\DateService;
 use District5Tests\MondocTests\TestObjects\Service\MyService;
 
 /**
- * Class CloneTest.
+ * Class ModelPersistenceTest.
  *
  * @package District5Tests\MondocTests\FunctionalityParts
+ *
+ * @internal
  */
-class CloneTest extends MondocBaseTestAbstract
+class ModelPersistenceTest extends MondocBaseTestAbstract
 {
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function setUp(): void
+    {
+        MyService::deleteMulti([]);
+        DateService::deleteMulti([]);
+    }
+
     /**
      * @return void
      * @throws MondocConfigConfigurationException
@@ -55,6 +67,7 @@ class CloneTest extends MondocBaseTestAbstract
     protected function tearDown(): void
     {
         MyService::deleteMulti([]);
+        DateService::deleteMulti([]);
     }
 
     /**
@@ -62,20 +75,41 @@ class CloneTest extends MondocBaseTestAbstract
      * @throws MondocConfigConfigurationException
      * @throws MondocException
      */
-    public function testCloneModelWithSave()
+    public function testInsertionAndBSONArePresent()
     {
         $m = new MyModel();
-        $m->setAge(102);
+        $m->setAge(2);
         $m->setName('Joe');
+
+        $this->assertCount(2, $m->getDirty());
+        $this->assertNull($m->getOriginalBsonDocument());
+
         $this->assertTrue($m->save());
 
-        $clone = $m->clone(true);
-        $this->assertNotEquals($m->getObjectIdString(), $clone->getObjectIdString());
-        $this->assertEquals($m->getAge(), $clone->getAge());
-        $this->assertEquals($m->getName(), $clone->getName());
+        $this->assertEmpty($m->getDirty());
+        $this->assertNotNull($m->getOriginalBsonDocument());
+        $this->assertEquals(2, $m->getOriginalBsonDocument()->getArrayCopy()['age']);
+        $this->assertEquals('Joe', $m->getOriginalBsonDocument()->getArrayCopy()['name']);
+    }
 
+    /**
+     * @throws MondocServiceMapErrorException
+     * @throws MondocConfigConfigurationException
+     * @throws MondocException
+     */
+    public function testDeleteWorksAsExpected()
+    {
+        $m = new MyModel();
+        $m->setAge(2);
+        $m->setName('Joe');
+        $this->assertTrue($m->save());
+        $this->assertTrue($m->hasObjectId());
+
+        $this->assertTrue($m->save()); // save again (update) while it exists
         $this->assertTrue($m->delete());
-        $this->assertTrue($clone->delete());
+        $this->assertFalse($m->hasObjectId());
+
+        $this->assertFalse($m->delete()); // already deleted
     }
 
     /**
@@ -83,70 +117,39 @@ class CloneTest extends MondocBaseTestAbstract
      * @throws MondocConfigConfigurationException
      * @throws MondocException
      */
-    public function testCloneModelWithAlternateModel()
+    public function testModelHasAndDoesNotHaveObjectId()
     {
         $m = new MyModel();
-        $m->setAge(102);
-        $m->setName('Joe');
+        $m->setAge(2);
+        $m->setName($this->getUniqueKey());
+
+        $this->assertFalse($m->hasObjectId());
         $this->assertTrue($m->save());
-
-        MondocConfig::getInstance()->addServiceMapping(
-            MyDuplicateModel::class,
-            MyService::class
-        ); // required to map a service to a model
-
-        $clone = $m->clone(true, MyDuplicateModel::class);
-        $this->assertInstanceOf(MyDuplicateModel::class, $clone);
-        $this->assertNotEquals($m->getObjectIdString(), $clone->getObjectIdString());
-        $this->assertEquals($m->getAge(), $clone->getAge());
-        $this->assertEquals($m->getName(), $clone->getName());
-
-        $clone2 = $m->clone(true, new MyDuplicateModel());
-        $this->assertInstanceOf(MyDuplicateModel::class, $clone2);
-        $this->assertNotEquals($m->getObjectIdString(), $clone2->getObjectIdString());
-        $this->assertEquals($m->getAge(), $clone2->getAge());
-        $this->assertEquals($m->getName(), $clone2->getName());
-
-        $this->assertTrue($m->delete());
-        $this->assertTrue($clone->delete());
-        $this->assertTrue($clone2->delete());
+        $this->assertTrue($m->hasObjectId());
     }
 
     /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
      * @throws MondocException
+     * @noinspection PhpRedundantOptionalArgumentInspection
      */
-    public function testCloneModelWithoutSave()
+    public function testDateFieldRoundTrip()
     {
-        $m = new MyModel();
-        $m->setAge(102);
-        $m->setName('Joe');
+        $nowDate = new DateTime();
+        $m = new DateModel();
+        $m->setDate($nowDate);
+
+        $this->assertEquals($nowDate->format('Y-m-d H:i:s'), $m->getDate(false)->format('Y-m-d H:i:s'));
+        $this->assertEquals($nowDate->format('Y-m-d H:i:s'), $m->getDate(true)->toDateTime()->format('Y-m-d H:i:s'));
+
+        $this->assertFalse($m->hasObjectId());
         $this->assertTrue($m->save());
+        $this->assertTrue($m->hasObjectId());
 
-        /** @noinspection PhpRedundantOptionalArgumentInspection */
-        $clone = $m->clone(false); // false means do not save
-        $this->assertFalse($clone->hasObjectId());
-        $this->assertFalse($clone->hasPresetObjectId());
-
-        $this->assertEquals($m->getAge(), $clone->getAge());
-        $this->assertEquals($m->getName(), $clone->getName());
-
-        $this->assertTrue($m->delete()); // the clone has not been saved
-    }
-
-    /**
-     * @throws MondocConfigConfigurationException
-     * @throws MondocException
-     */
-    public function testCloneModelWithInvalidModel()
-    {
-        $this->expectException(MondocServiceMapErrorException::class);
-        $m = new MyModel();
-        $m->setAge(102);
-        $m->setName('Joe');
-        $this->assertTrue($m->save());
-
-        $this->assertNull($m->clone(true, NoServiceModel::class));
+        $found = DateService::getById($m->getObjectId());
+        /* @var $found DateModel */
+        $this->assertEquals($m->getObjectIdString(), $found->getObjectIdString());
+        $this->assertEquals($m->getDate(false)->format('Y-m-d H:i:s'), $found->getDate(false)->format('Y-m-d H:i:s'));
     }
 }

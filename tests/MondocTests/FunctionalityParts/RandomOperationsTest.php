@@ -47,14 +47,30 @@ use MongoDB\BSON\ObjectId;
 class RandomOperationsTest extends MondocBaseTestAbstract
 {
     /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function setUp(): void
+    {
+        MyService::deleteMulti([]);
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function tearDown(): void
+    {
+        MyService::deleteMulti([]);
+    }
+
+    /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
      * @throws MondocException
      */
     public function testRandomDatabaseOperations()
     {
-        MyService::deleteMulti([]);
-
         $m = new MyModel();
         $this->assertTrue($m->setName('Joe')->setAge(2)->save());
         $m2 = new MyModel();

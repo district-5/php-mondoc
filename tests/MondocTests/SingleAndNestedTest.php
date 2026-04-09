@@ -285,4 +285,22 @@ class SingleAndNestedTest extends MondocBaseTestAbstract
 
         $this->assertTrue($model->delete());
     }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function setUp(): void
+    {
+        SingleAndMultiNestedService::deleteMulti([]);
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function tearDown(): void
+    {
+        SingleAndMultiNestedService::deleteMulti([]);
+    }
 }

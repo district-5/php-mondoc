@@ -49,6 +49,26 @@ use District5Tests\MondocTests\TestObjects\Service\MyService;
 class UpdateTest extends MondocBaseTestAbstract
 {
     /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function setUp(): void
+    {
+        MyService::deleteMulti([]);
+        DateService::deleteMulti([]);
+    }
+
+    /**
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    protected function tearDown(): void
+    {
+        MyService::deleteMulti([]);
+        DateService::deleteMulti([]);
+    }
+
+    /**
      * @throws MondocServiceMapErrorException
      * @throws MondocConfigConfigurationException
      * @throws MondocException
@@ -109,8 +129,6 @@ class UpdateTest extends MondocBaseTestAbstract
      */
     public function testUpdateMulti()
     {
-        MyService::deleteMulti([]);
-
         $m = new MyModel();
         $m->setAge(1);
         $m->setName('Jane');
@@ -139,9 +157,6 @@ class UpdateTest extends MondocBaseTestAbstract
      */
     public function testUpdateMultiWithDifferentServices()
     {
-        MyService::deleteMulti([]);
-        DateService::deleteMulti([]);
-
         $m = new MyModel();
         $m->setAge(1);
         $m->setName('Jane');

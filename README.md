@@ -415,21 +415,21 @@ $currentId = null;
 $perPage = 10;
 $sortDirection = -1;
 $pagination = \District5Tests\MondocTests\TestObjects\MyService::getPaginationHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
-$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection); // Since 6.3.0 the filter is carried through by the pagination helper
+$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $sortDirection); // Since 6.3.0 the filter is carried through by the pagination helper
 
 // paginating results by ID number descending
 $currentId = '5f7deca120c41f29827c0c60'; // or new ObjectId('5f7deca120c41f29827c0c60');
 $perPage = 10;
 $sortDirection = -1;
 $pagination = \District5Tests\MondocTests\TestObjects\MyService::getPaginationHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
-$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection); // Since 6.3.0 the filter is carried through by the pagination helper
+$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $sortDirection); // Since 6.3.0 the filter is carried through by the pagination helper
 
 // paginating results by ID number ascending
 $currentId = '5f7deca120c41f29827c0c60'; // or new ObjectId('5f7deca120c41f29827c0c60');
 $perPage = 10;
 $sortDirection = 1;
 $pagination = \District5Tests\MondocTests\TestObjects\MyService::getPaginationHelperForObjectIdPagination($perPage, ['foo' => 'bar'])
-$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $perPage, $sortDirection); // Since 6.3.0 the filter is carried through by the pagination helper
+$results = \District5Tests\MondocTests\TestObjects\MyService::getPageByByObjectIdPagination($pagination, $currentId, $sortDirection); // Since 6.3.0 the filter is carried through by the pagination helper
 
 // get the distinct values for 'age' with a filter and options
 \District5Tests\MondocTests\TestObjects\MyService::getDistinctValuesForKey('age', ['foo' => 'bar'], ['sort' => ['age' => 1]]);
@@ -642,7 +642,7 @@ class MyModel extends MondocAbstractModel
 
 $model = new MyModel();
 $model->setName('John Doe');
-$model->setMondocRetentionData([
+$model->setMondocRetentionChangeMeta([
     'user' => 'joe.bloggs',
 ]);
 $model->setMondocRetentionExpiry(
@@ -654,7 +654,7 @@ $model->save();
 
 // There is now both a `MyModel` saved, and a `MondocRetentionModel` saved with the retention data.
 $retrieved = MyService::getById($model->getObjectIdString());
-$retrieved->setMondocRetentionData([
+$retrieved->setMondocRetentionChangeMeta([
     'user' => 'jane.bloggs',
 ]);
 $retrieved->setMondocRetentionExpiry(
@@ -809,7 +809,7 @@ class MyModel extends MondocAbstractSubModel
     // Rest of your model code...
 }
 
-$wontWork = new \District5\Mondoc\Db\Builder\MondocBuilder\MondocBuilder();
+$wontWork = new District5\MondocBuilder\QueryBuilder()
 $wontWork->addFilter('name', 'John'); // This WILL NOT WORK with the field mapping
 
 $willWork = new \District5\Mondoc\Db\Builder\MondocBuilder\MondocBuilder();

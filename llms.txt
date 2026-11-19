@@ -1,0 +1,90 @@
+# Mondoc
+
+> A lightweight model-and-service abstraction layer for MongoDB in PHP, by District5. Documents map
+> to typed model classes; all querying lives in all-static service classes. An ODM-lite: no
+> annotations, no proxies, no unit of work, no code generation. PHP >= 8.2, mongodb/mongodb v2.x.
+
+Composer: `composer require district5/mondoc` — package `district5/mondoc`, PSR-4 root
+`District5\Mondoc\` → `src/`.
+
+Three concepts: a **model** (`MondocAbstractModel`, typed properties = document fields, holds `_id`,
+can `save()`/`delete()` itself), a **sub-model** (`MondocAbstractSubModel`, an embedded document),
+and a **service** (`MondocAbstractService`, all-static, knows the collection name, holds every
+query). They are wired together by the `MondocConfig` singleton, which holds the databases, the
+model→service map, and an optional field-encryption adapter. **A model missing from the service map
+throws `MondocServiceMapErrorException` on first use** — this is the most common integration error.
+
+## Start here
+
+- [Agent reference](./docs/agent-reference.md): complete verified API surface — every service and
+  model method with signatures, exact write/hook/dirty-tracking semantics, 20 documented gotchas, and
+  corrections where the README has drifted from the code. Read this before writing Mondoc code.
+- [CLAUDE.md](./CLAUDE.md): for changing the library itself — architecture, trait layout, invariants,
+  test setup, code conventions.
+- [README.md](./README.md): human-oriented overview and examples.
+
+## Official documentation site
+
+- [Home](https://mondoc.district5.dev/)
+- [Quick start](https://mondoc.district5.dev/quick-start)
+- [Documentation index](https://mondoc.district5.dev/documentation)
+- [Source browser](https://mondoc.district5.dev/src)
+
+### Configuration
+
+- [Configuration](https://mondoc.district5.dev/documentation/configuration): the `MondocConfig`
+  singleton, multiple named connections, the service map
+- [Converting types](https://mondoc.district5.dev/documentation/converting-types): `MondocTypes` —
+  BSON ↔ PHP, dates, ObjectIds
+
+### Model
+
+- [Model](https://mondoc.district5.dev/documentation/model): properties, inflation, `asArray()`,
+  `asJsonEncodableArray()`, `assignDefaultVars()`
+- [Nested models](https://mondoc.district5.dev/documentation/model/nested-models): `$mondocNested`,
+  single vs `[]` arrays of sub-models
+- [Model traits](https://mondoc.district5.dev/documentation/model/traits): created/modified dates,
+  revision numbers, model versioning, cloning, retention
+- [Field aliases](https://mondoc.district5.dev/documentation/model/field-aliases):
+  `$mondocFieldAliases` — short database keys, long property names
+- [Field encryption](https://mondoc.district5.dev/documentation/model/field-encryption):
+  `$mondocEncrypted` and the Sodium adapters
+- [Field encryption with aliases](https://mondoc.district5.dev/documentation/model/advanced-field-encryption-with-aliases)
+- [Data retention](https://mondoc.district5.dev/documentation/model/data-retention): automatic change
+  history via `MondocRetentionTrait`
+- [Lifecycle hooks](https://mondoc.district5.dev/documentation/model/lifecycle-hooks):
+  `beforeInsert`/`afterInsert`/`beforeUpdate`/`afterUpdate`/`beforeDelete`/`afterDelete`
+
+### Service
+
+- [Service](https://mondoc.district5.dev/documentation/service): `getCollectionName()`,
+  `getConnectionId()`, reads, writes, deletes
+- [Query scopes](https://mondoc.district5.dev/documentation/service/query-scopes): `getScopes()`,
+  `scope()`, `mergeFilters()`
+- [Pagination](https://mondoc.district5.dev/documentation/service/pagination): page-number and
+  ObjectId-cursor strategies via `MondocPaginationHelper`
+- [Atomic operations](https://mondoc.district5.dev/documentation/service/atomic-operations):
+  `inc`/`dec`/`incMulti`/`decMulti`
+- [Array operators](https://mondoc.district5.dev/documentation/service/array-operators): `$push` and
+  `$pull` helpers
+- [Aggregation](https://mondoc.district5.dev/documentation/service/aggregation): `aggregate()` —
+  average, sum, min, max, percentile, financial candles and SMA
+
+### Query building
+
+- [Query building](https://mondoc.district5.dev/documentation/query-building): the
+  `district5/mondoc-builder` `QueryBuilder` and its `QueryTypes\*` parts
+- [Advanced queries](https://mondoc.district5.dev/documentation/query-building/advanced-queries)
+
+## Related packages
+
+- [district5/mondoc-builder](https://github.com/district-5/php-mondoc-builder) — `District5\MondocBuilder\`, query building
+- [district5/mondoc-encryption](https://github.com/district-5/php-mondoc-encryption) — `District5\MondocEncryption\`, field encryption adapters
+- [district5/date](https://github.com/district-5/php-date) — `District5\Date\`, date creation and manipulation
+
+## Optional
+
+- [GitHub repository](https://github.com/district-5/php-mondoc)
+- [Issues](https://github.com/district-5/php-mondoc/issues)
+- [Packagist](https://packagist.org/packages/district5/mondoc)
+- [Security policy](./SECURITY.md)

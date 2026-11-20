@@ -101,6 +101,12 @@ trait FinancialCandlesTrait
                 '$match' => FilterFormatter::format($filter)
             ],
             [
+                // sort chronologically so that $first / $last give the true open / close prices
+                '$sort' => [
+                    $dateField => 1
+                ],
+            ],
+            [
                 '$group' => [
                     '_id' => $tmpGroup,
                     'high' => [
@@ -118,8 +124,10 @@ trait FinancialCandlesTrait
                 ]
             ],
             [
+                // the returned candles are ordered newest first when $sortDirection is 1 (see the usort below),
+                // so sort the pipeline the same way, ensuring $limit keeps the first N candles of the result.
                 '$sort' => [
-                    '_id' . $dateField => $sortDirection
+                    '_id.' . $dateField => (0 - $sortDirection)
                 ],
             ]
         ];

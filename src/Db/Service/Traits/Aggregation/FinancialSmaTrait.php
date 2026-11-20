@@ -31,6 +31,7 @@
 namespace District5\Mondoc\Db\Service\Traits\Aggregation;
 
 use DateTime;
+use InvalidArgumentException;
 use District5\Mondoc\Dto\AggregateSmaDto;
 use District5\Mondoc\Helper\FilterFormatter;
 use District5\Mondoc\Helper\MondocTypes;
@@ -88,6 +89,16 @@ trait FinancialSmaTrait
      */
     public function getFinancialSma(string $symbolField, string $symbolValue, DateTime $from, DateTime $to, string $dateField, string $priceField, int $numGroupMinutes, int $smaNumPeriods, int $sortDirection = 1, array $additionalFilter = []): array
     {
+        if ($smaNumPeriods < 1) {
+            throw new InvalidArgumentException(
+                'The number of SMA periods must be at least 1'
+            );
+        }
+        if (!in_array($sortDirection, [1, -1])) {
+            throw new InvalidArgumentException(
+                'Sort direction must be either 1 or -1'
+            );
+        }
         $match = [
             '$match' => [
                 $symbolField => $symbolValue,
@@ -132,9 +143,10 @@ trait FinancialSmaTrait
             ]
         ];
 
+        // the moving average is always calculated chronologically, $sortDirection only affects the output order
         $sort = [
             '$sort' => [
-                '_id.time' => $sortDirection,
+                '_id.time' => 1,
             ]
         ];
 
@@ -153,15 +165,16 @@ trait FinancialSmaTrait
 
         $windowFields = [
             '$setWindowFields' => [
-                'partitionBy' => '_id.' . $symbolField,
+                'partitionBy' => '$_id.' . $symbolField,
                 'sortBy' => [
-                    '_id.time' => $sortDirection,
+                    '_id.time' => 1,
                 ],
                 'output' => [
                     'sma' => [
                         '$avg' => '$price',
                         'window' => [
-                            'documents' => [(0 - $smaNumPeriods), 0]
+                            // the current period plus the previous ($smaNumPeriods - 1) periods
+                            'documents' => [(1 - $smaNumPeriods), 0]
                         ]
                     ]
                 ],
@@ -173,10 +186,21 @@ trait FinancialSmaTrait
         )->aggregate(
             [
                 $match,
+                [
+                    // sort chronologically so that $last gives the true closing price of each bucket
+                    '$sort' => [
+                        $dateField => 1,
+                    ]
+                ],
                 $group,
                 $sort,
                 $project,
                 $windowFields,
+                [
+                    '$sort' => [
+                        '_id.time' => $sortDirection,
+                    ]
+                ],
             ]
         );
         /* @var $cursor Cursor */

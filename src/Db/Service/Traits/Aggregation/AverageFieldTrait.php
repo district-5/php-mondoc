@@ -81,7 +81,8 @@ trait AverageFieldTrait
         /* @var $records BSONDocument[] */
         if (1 === count($records)) {
             $array = $records[0]->getArrayCopy();
-            if (array_key_exists($fieldName, $array)) {
+            if (array_key_exists($fieldName, $array) && (is_int($array[$fieldName]) || is_float($array[$fieldName]))) {
+                // $avg returns null when no matched document holds a numeric value for the field
                 return $array[$fieldName];
             }
         }

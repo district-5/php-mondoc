@@ -96,6 +96,29 @@ class MondocConfigTest extends MondocBaseTestAbstract
     }
 
     /**
+     * getMongo() must honour a service's getConnectionId() override.
+     *
+     * @return void
+     * @throws MondocConfigConfigurationException
+     */
+    public function testGetMongoRespectsConnectionIdOverride()
+    {
+        $alternateName = $this->getDatabaseName() . '_alt';
+        MondocConfig::getInstance()->addDatabase(
+            new Database(MondocConfig::getInstance()->getDatabase()->getManager(), $alternateName),
+            'get-mongo-override'
+        );
+        $service = new class extends MyService {
+            protected static function getConnectionId(): string
+            {
+                return 'get-mongo-override';
+            }
+        };
+        $this->assertEquals($alternateName, $service::getMongo()->getDatabaseName());
+        $this->assertEquals($this->getDatabaseName(), MyService::getMongo()->getDatabaseName());
+    }
+
+    /**
      * @throws MondocServiceMapErrorException
      */
     public function testValidServiceMapRetrieval()

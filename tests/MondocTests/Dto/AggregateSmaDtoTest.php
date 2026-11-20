@@ -128,4 +128,41 @@ class AggregateSmaDtoTest extends MondocFinancialTestAbstract
     {
         FinancialCandleService::deleteMulti([]);
     }
+
+    /**
+     * An SMA of N periods averages exactly N buckets, chronologically, regardless of output order.
+     *
+     * @throws Exception
+     */
+    public function testSmaWindowIsExactlyNPeriods()
+    {
+        $base = new DateTime('2025-01-01 10:00:00', new \DateTimeZone('UTC'));
+        for ($i = 1; $i <= 10; $i++) {
+            // an earlier, different price in the same bucket, inserted afterwards; the close must still be $i
+            $m = new FinancialCandleModel();
+            $m->setPrice($i);
+            $m->setDate((clone $base)->modify('+' . $i . ' minutes')->modify('+30 seconds'));
+            $m->setSymbol('SMA-COIN');
+            $this->assertTrue($m->save());
+            $early = new FinancialCandleModel();
+            $early->setPrice(1000);
+            $early->setDate((clone $base)->modify('+' . $i . ' minutes'));
+            $early->setSymbol('SMA-COIN');
+            $this->assertTrue($early->save());
+        }
+        $from = (clone $base)->modify('-1 minute');
+        $to = (clone $base)->modify('+20 minutes');
+
+        $asc = FinancialCandleService::aggregate()->getFinancialSma('symbol', 'SMA-COIN', $from, $to, 'date', 'price', 1, 3, 1);
+        $this->assertCount(10, $asc);
+        $this->assertEquals(1, $asc[0]->getPrice());
+        $this->assertEquals(10, $asc[9]->getPrice());
+        $this->assertEquals(9, $asc[9]->getSma()); // (8 + 9 + 10) / 3
+        $this->assertEquals(2, $asc[2]->getSma()); // (1 + 2 + 3) / 3
+
+        $desc = FinancialCandleService::aggregate()->getFinancialSma('symbol', 'SMA-COIN', $from, $to, 'date', 'price', 1, 3, -1);
+        $this->assertCount(10, $desc);
+        $this->assertEquals(10, $desc[0]->getPrice());
+        $this->assertEquals(9, $desc[0]->getSma()); // still the trailing average, not a future one
+    }
 }

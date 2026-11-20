@@ -229,8 +229,6 @@ class FieldAliasTest extends MondocBaseTestAbstract
         $m = new FieldAliasTestModel();
         $reflection = new ReflectionClass($m);
         $property = $reflection->getProperty('mondocFieldAliases');
-        /** @noinspection PhpExpressionResultUnusedInspection */
-        $property->setAccessible(true);
         $property->setValue($m, [
             'n' => 'name',
             'a' => 'age',

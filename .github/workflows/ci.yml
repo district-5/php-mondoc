@@ -1,47 +1,64 @@
 name: CI
 on: [push]
 
+# The shared test database cannot take parallel runs, so lock the whole workflow
+# (and run the matrix serially below).
+concurrency:
+  group: mondoc-group
+  cancel-in-progress: false
+
 jobs:
   unit-test:
-    name: Unit testing
+    name: Unit testing (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
 
-    concurrency:
-      group: mondoc-group
-      cancel-in-progress: false
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        # Minimums are the PHP2Shell-patched releases (CVE-2026-109618 / CVE-2026-109619);
+        # see the "php" constraint in composer.json.
+        php: ['8.2', '8.3', '8.4', '8.5', '8.6']
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mongodb, calendar, sockets
+          coverage: ${{ matrix.php == '8.5' && 'xdebug' || 'none' }}
+          ini-values: date.timezone=UTC
+
+      - name: Show PHP version
+        run: php -v
 
       - name: Install composer dependencies
-        uses: php-actions/composer@v6
-        with:
-          php_version: 8.4
-          args: --ignore-platform-reqs
+        run: composer update --no-interaction --no-progress --prefer-dist
 
       - name: Run unit tests
-        uses: php-actions/phpunit@v3
         env:
           MONGO_CONNECTION_STRING: '${{ secrets.MONGO_CONNECTION_STRING }}'
           XDEBUG_MODE: coverage
-        with:
-          version: latest
-          php_version: latest
-          php_extensions: "xdebug mongodb calendar sockets"
-          args: "-d date.timezone=UTC --coverage-clover ./coverage.xml --log-junit junit.xml"
-          configuration: phpunit.xml
-          testsuite: MondocTestSuite
-          bootstrap: tests/bootstrap.php
+        run: >-
+          php vendor/bin/phpunit
+          --configuration phpunit.xml
+          --testsuite MondocTestSuite
+          ${{ matrix.php == '8.5' && '--coverage-clover ./coverage.xml --log-junit junit.xml' || '--no-coverage' }}
+
       - name: Upload coverage to Codecov
+        if: ${{ matrix.php == '8.5' }}
         uses: codecov/codecov-action@v5
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
       - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
+        if: ${{ matrix.php == '8.5' && !cancelled() }}
         uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

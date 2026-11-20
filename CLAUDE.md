@@ -13,7 +13,7 @@ methods on a class that knows its collection name).
 
 - PSR-4 root: `District5\Mondoc\` → `src/`
 - Tests: `District5Tests\MondocTests\` → `tests/MondocTests/`
-- PHP `>= 8.2`, requires `ext-mongodb` and the MongoDB PHP library v2.x (since Mondoc 7.0.0)
+- PHP `~8.2.35 || ~8.3.36 || ~8.4.27 || >=8.5.12` (the PHP2Shell-patched releases; tested on 8.2–8.6), requires `ext-mongodb` and the MongoDB PHP library v2.x (since Mondoc 7.0.0)
 - Public docs site: <https://mondoc.district5.dev> (the source of truth for user-facing prose)
 - Versioning is SemVer; current line is `7.x` (latest tag `7.6.1`)
 
@@ -112,7 +112,7 @@ php vendor/bin/phpunit --filter LifecycleHooksTest
   start**. Collection names come from `AbstractTestService::getCollectionName()` →
   `'test_' . <short service class name>`.
 - `phpunit.xml` sets `stopOnError`/`stopOnFailure` — the run aborts on the first problem.
-- CI (`.github/workflows/ci.yml`) runs on every push against PHP 8.4 with a `mongodb-group`
+- CI (`.github/workflows/ci.yml`) runs on every push against a PHP 8.2–8.6 matrix (serially) with a `mongodb-group`
   concurrency lock (the shared test database cannot take parallel runs), and uploads coverage to
   Codecov.
 

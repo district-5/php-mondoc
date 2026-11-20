@@ -112,9 +112,10 @@ php vendor/bin/phpunit --filter LifecycleHooksTest
   start**. Collection names come from `AbstractTestService::getCollectionName()` →
   `'test_' . <short service class name>`.
 - `phpunit.xml` sets `stopOnError`/`stopOnFailure` — the run aborts on the first problem.
-- CI (`.github/workflows/ci.yml`) runs on every push against a PHP 8.2–8.6 matrix (serially) with a `mongodb-group`
-  concurrency lock (the shared test database cannot take parallel runs), and uploads coverage to
-  Codecov.
+- CI (`.github/workflows/ci.yml`) runs on every push against a PHP 8.2–8.6 × MongoDB 7/8 matrix, in
+  parallel. Each job gets its own throwaway `mongo:<version>` service container (no secrets needed).
+  Coverage is collected and uploaded to Codecov from the PHP 8.5 / MongoDB 8 job only; every other
+  job must pass `--no-coverage` or PHPUnit silently runs zero tests.
 
 ### Adding a test
 

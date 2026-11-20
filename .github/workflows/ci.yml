@@ -1,15 +1,9 @@
 name: CI
 on: [push]
 
-# The shared test database cannot take parallel runs, so lock the whole workflow
-# (and run the matrix serially below).
-concurrency:
-  group: mondoc-group
-  cancel-in-progress: false
-
 jobs:
   unit-test:
-    name: Unit testing (PHP ${{ matrix.php }})
+    name: Unit testing (PHP ${{ matrix.php }}, MongoDB ${{ matrix.mongodb }})
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -17,11 +11,26 @@ jobs:
 
     strategy:
       fail-fast: false
-      max-parallel: 1
       matrix:
         # Minimums are the PHP2Shell-patched releases (CVE-2026-109618 / CVE-2026-109619);
         # see the "php" constraint in composer.json.
         php: ['8.2', '8.3', '8.4', '8.5', '8.6']
+        mongodb: ['7', '8']
+
+    # Each job gets its own throwaway MongoDB, so the matrix can run in parallel.
+    services:
+      mongodb:
+        image: mongo:${{ matrix.mongodb }}
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 }).ok'"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      COVERAGE: ${{ matrix.php == '8.5' && matrix.mongodb == '8' }}
 
     steps:
       - name: Checkout repo
@@ -32,7 +41,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: mongodb, calendar, sockets
-          coverage: ${{ matrix.php == '8.5' && 'xdebug' || 'none' }}
+          coverage: ${{ env.COVERAGE == 'true' && 'xdebug' || 'none' }}
           ini-values: date.timezone=UTC
 
       - name: Show PHP version
@@ -43,22 +52,24 @@ jobs:
 
       - name: Run unit tests
         env:
-          MONGO_CONNECTION_STRING: '${{ secrets.MONGO_CONNECTION_STRING }}'
+          MONGO_CONNECTION_STRING: 'mongodb://localhost:27017'
           XDEBUG_MODE: coverage
+        # --no-coverage is required without a coverage driver: phpunit.xml configures coverage
+        # reports, and without a driver PHPUnit would otherwise execute no tests and still pass.
         run: >-
           php vendor/bin/phpunit
           --configuration phpunit.xml
           --testsuite MondocTestSuite
-          ${{ matrix.php == '8.5' && '--coverage-clover ./coverage.xml --log-junit junit.xml' || '--no-coverage' }}
+          ${{ env.COVERAGE == 'true' && '--coverage-clover ./coverage.xml --log-junit junit.xml' || '--no-coverage' }}
 
       - name: Upload coverage to Codecov
-        if: ${{ matrix.php == '8.5' }}
+        if: ${{ env.COVERAGE == 'true' }}
         uses: codecov/codecov-action@v5
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload test results to Codecov
-        if: ${{ matrix.php == '8.5' && !cancelled() }}
+        if: ${{ env.COVERAGE == 'true' && !cancelled() }}
         uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

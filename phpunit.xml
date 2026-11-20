@@ -10,8 +10,7 @@
         timeoutForSmallTests="1"
         timeoutForMediumTests="10"
         timeoutForLargeTests="60"
-        bootstrap="tests/bootstrap.php"
-        cacheResult="false">
+        bootstrap="tests/bootstrap.php">
   <coverage includeUncoveredFiles="true"
             pathCoverage="false"
             ignoreDeprecatedCodeUnits="true"

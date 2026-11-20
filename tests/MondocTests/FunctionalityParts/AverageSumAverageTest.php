@@ -96,6 +96,9 @@ class AverageSumAverageTest extends MondocBaseTestAbstract
         $this->assertEquals(4, MyService::aggregate()->getAverage('age'));
         $this->assertEquals(3, MyService::aggregate()->getAverage('age', ['name' => 'Joe']));
         $this->assertEquals(3, MyService::aggregate()->getAverage('age', ['name' => ['$eq' => 'Joe']]));
+        // documents match, but none hold a numeric value for the field ($avg yields null)
+        $this->assertSame(0, MyService::aggregate()->getAverage('aFieldThatDoesNotExist'));
+        $this->assertSame(0, MyService::aggregate()->getAverage('name'));
     }
 
     /**

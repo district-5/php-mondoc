@@ -92,21 +92,22 @@ class AggregateFinancialCandleDtoTest extends MondocFinancialTestAbstract
             100
         );
 
+        // the fixture is inserted newest-first; open/close must follow time order, not insertion order
         $this->assertCount(17, $candles);
         $this->assertEquals(2.5, $candles[0]->getHigh());
         $this->assertEquals(2.5, $candles[0]->getLow());
-        $this->assertEquals(2.5, $candles[0]->getOpen());
         $this->assertEquals(2.5, $candles[0]->getClose());
+        $this->assertEquals(2.5, $candles[0]->getOpen());
 
         $this->assertEquals(1.3, $candles[1]->getHigh());
         $this->assertEquals(1.01, $candles[1]->getLow());
-        $this->assertEquals(1.01, $candles[1]->getOpen());
-        $this->assertEquals(1.3, $candles[1]->getClose());
+        $this->assertEquals(1.01, $candles[1]->getClose());
+        $this->assertEquals(1.3, $candles[1]->getOpen());
 
         $this->assertEquals(2.8, $candles[5]->getHigh());
         $this->assertEquals(2.7, $candles[5]->getLow());
-        $this->assertEquals(2.7, $candles[5]->getOpen());
-        $this->assertEquals(2.8, $candles[5]->getClose());
+        $this->assertEquals(2.7, $candles[5]->getClose());
+        $this->assertEquals(2.8, $candles[5]->getOpen());
 
         $reverseCandles = FinancialCandleService::aggregate()->getFinancialXMinuteCandles(
             [
@@ -125,23 +126,23 @@ class AggregateFinancialCandleDtoTest extends MondocFinancialTestAbstract
         $this->assertCount(17, $reverseCandles);
         $this->assertEquals(0.9, $reverseCandles[0]->getHigh());
         $this->assertEquals(0.8, $reverseCandles[0]->getLow());
-        $this->assertEquals(0.9, $reverseCandles[0]->getOpen());
-        $this->assertEquals(0.8, $reverseCandles[0]->getClose());
+        $this->assertEquals(0.9, $reverseCandles[0]->getClose());
+        $this->assertEquals(0.8, $reverseCandles[0]->getOpen());
 
         $this->assertEquals(1.1, $reverseCandles[1]->getHigh());
         $this->assertEquals(1.0, $reverseCandles[1]->getLow());
-        $this->assertEquals(1.1, $reverseCandles[1]->getOpen());
-        $this->assertEquals(1.0, $reverseCandles[1]->getClose());
+        $this->assertEquals(1.1, $reverseCandles[1]->getClose());
+        $this->assertEquals(1.0, $reverseCandles[1]->getOpen());
 
         $this->assertEquals(1.3, $reverseCandles[2]->getHigh());
         $this->assertEquals(1.2, $reverseCandles[2]->getLow());
-        $this->assertEquals(1.3, $reverseCandles[2]->getOpen());
-        $this->assertEquals(1.2, $reverseCandles[2]->getClose());
+        $this->assertEquals(1.3, $reverseCandles[2]->getClose());
+        $this->assertEquals(1.2, $reverseCandles[2]->getOpen());
 
         $this->assertEquals(1.9, $reverseCandles[5]->getHigh());
         $this->assertEquals(1.8, $reverseCandles[5]->getLow());
-        $this->assertEquals(1.9, $reverseCandles[5]->getOpen());
-        $this->assertEquals(1.8, $reverseCandles[5]->getClose());
+        $this->assertEquals(1.9, $reverseCandles[5]->getClose());
+        $this->assertEquals(1.8, $reverseCandles[5]->getOpen());
     }
 
     /**
@@ -179,5 +180,43 @@ class AggregateFinancialCandleDtoTest extends MondocFinancialTestAbstract
     protected function tearDown(): void
     {
         FinancialCandleService::deleteMulti([]);
+    }
+
+    /**
+     * Open/close must follow time order (not insertion order), and $limit must keep the first N returned candles.
+     *
+     * @throws MondocConfigConfigurationException
+     * @throws MondocServiceMapErrorException
+     * @throws MondocException
+     */
+    public function testCandleOpenCloseAndLimitAreChronological()
+    {
+        $base = new \DateTime('2025-01-01 10:00:00', new \DateTimeZone('UTC'));
+        // [minute offset, price], deliberately inserted out of time order
+        $rows = [[1, 12], [0, 10], [2, 14], [11, 22], [10, 20], [12, 24], [21, 32], [20, 30], [22, 34]];
+        foreach ($rows as [$offset, $price]) {
+            $m = new FinancialCandleModel();
+            $m->setPrice($price);
+            $m->setDate((clone $base)->modify('+' . $offset . ' minutes'));
+            $m->setSymbol('ORDER-COIN');
+            $this->assertTrue($m->save());
+        }
+
+        $newestFirst = FinancialCandleService::aggregate()->getFinancialXMinuteCandles(
+            ['symbol' => 'ORDER-COIN'], ['symbol' => '$symbol'], 'price', 'date', 10, 1, 2
+        );
+        $this->assertCount(2, $newestFirst);
+        $this->assertEquals(30, $newestFirst[0]->getOpen());
+        $this->assertEquals(34, $newestFirst[0]->getClose());
+        $this->assertEquals(20, $newestFirst[1]->getOpen());
+        $this->assertEquals(24, $newestFirst[1]->getClose());
+
+        $oldestFirst = FinancialCandleService::aggregate()->getFinancialXMinuteCandles(
+            ['symbol' => 'ORDER-COIN'], ['symbol' => '$symbol'], 'price', 'date', 10, -1, 2
+        );
+        $this->assertCount(2, $oldestFirst);
+        $this->assertEquals(10, $oldestFirst[0]->getOpen());
+        $this->assertEquals(14, $oldestFirst[0]->getClose());
+        $this->assertEquals(20, $oldestFirst[1]->getOpen());
     }
 }

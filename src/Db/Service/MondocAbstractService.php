@@ -77,7 +77,7 @@ abstract class MondocAbstractService
     public static function getMongo(): ?Database
     {
         return MondocConfig::getInstance()->getDatabase(
-            self::getConnectionId()
+            static::getConnectionId()
         );
     }
 

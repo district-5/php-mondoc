@@ -19,7 +19,7 @@
     "require": {
         "php": "~8.2.35 || ~8.3.36 || ~8.4.27 || >=8.5.12",
         "ext-mongodb": "*",
-        "mongodb/mongodb": "*",
+        "mongodb/mongodb": "^2.0",
         "district5/date": ">=3.0.4",
         "district5/mondoc-builder": ">=2.4.0",
         "district5/mondoc-encryption": "*"

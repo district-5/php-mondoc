@@ -3,45 +3,73 @@ on: [push]
 
 jobs:
   unit-test:
-    name: Unit testing
+    name: Unit testing (PHP ${{ matrix.php }}, MongoDB ${{ matrix.mongodb }})
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
 
-    concurrency:
-      group: mondoc-group
-      cancel-in-progress: false
+    strategy:
+      fail-fast: false
+      matrix:
+        # Minimums are the PHP2Shell-patched releases (CVE-2026-109618 / CVE-2026-109619);
+        # see the "php" constraint in composer.json.
+        php: ['8.2', '8.3', '8.4', '8.5', '8.6']
+        mongodb: ['7', '8']
+
+    # Each job gets its own throwaway MongoDB, so the matrix can run in parallel.
+    services:
+      mongodb:
+        image: mongo:${{ matrix.mongodb }}
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 }).ok'"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      COVERAGE: ${{ matrix.php == '8.5' && matrix.mongodb == '8' }}
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mongodb, calendar, sockets
+          coverage: ${{ env.COVERAGE == 'true' && 'xdebug' || 'none' }}
+          ini-values: date.timezone=UTC
+
+      - name: Show PHP version
+        run: php -v
 
       - name: Install composer dependencies
-        uses: php-actions/composer@v6
-        with:
-          php_version: 8.4
-          args: --ignore-platform-reqs
+        run: composer update --no-interaction --no-progress --prefer-dist
 
       - name: Run unit tests
-        uses: php-actions/phpunit@v3
         env:
-          MONGO_CONNECTION_STRING: '${{ secrets.MONGO_CONNECTION_STRING }}'
+          MONGO_CONNECTION_STRING: 'mongodb://localhost:27017'
           XDEBUG_MODE: coverage
-        with:
-          version: latest
-          php_version: latest
-          php_extensions: "xdebug mongodb calendar sockets"
-          args: "-d date.timezone=UTC --coverage-clover ./coverage.xml --log-junit junit.xml"
-          configuration: phpunit.xml
-          testsuite: MondocTestSuite
-          bootstrap: tests/bootstrap.php
+        # --no-coverage is required without a coverage driver: phpunit.xml configures coverage
+        # reports, and without a driver PHPUnit would otherwise execute no tests and still pass.
+        run: >-
+          php vendor/bin/phpunit
+          --configuration phpunit.xml
+          --testsuite MondocTestSuite
+          ${{ env.COVERAGE == 'true' && '--coverage-clover ./coverage.xml --log-junit junit.xml' || '--no-coverage' }}
+
       - name: Upload coverage to Codecov
+        if: ${{ env.COVERAGE == 'true' }}
         uses: codecov/codecov-action@v5
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
       - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
+        if: ${{ env.COVERAGE == 'true' && !cancelled() }}
         uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

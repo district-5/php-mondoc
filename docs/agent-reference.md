@@ -45,7 +45,7 @@ composer require district5/mondoc
 ```
 
 - PHP `~8.2.35 || ~8.3.36 || ~8.4.27 || >=8.5.12` (the PHP2Shell-patched releases; tested on 8.2–8.6), `ext-mongodb`, `mongodb/mongodb` **v2.x** (required since Mondoc 7.0.0)
-- Pulls in `district5/date` (`>= 3.0.4`), `district5/mondoc-builder`, `district5/mondoc-encryption`
+- Pulls in `district5/date` (`>= 3.0.4`), `district5/mondoc-builder` (`>= 2.4.0`), `district5/mondoc-encryption`
 - `ext-sodium` suggested — needed only if you use field encryption
 
 ---

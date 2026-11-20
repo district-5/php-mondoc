@@ -15,18 +15,24 @@ methods on a class that knows its collection name).
 - Tests: `District5Tests\MondocTests\` → `tests/MondocTests/`
 - PHP `~8.2.35 || ~8.3.36 || ~8.4.27 || >=8.5.12` (the PHP2Shell-patched releases; tested on 8.2–8.6), requires `ext-mongodb` and the MongoDB PHP library v2.x (since Mondoc 7.0.0)
 - Public docs site: <https://mondoc.district5.dev> (the source of truth for user-facing prose)
-- Versioning is SemVer; current line is `7.x` (latest tag `7.6.1`)
+- Versioning is SemVer; current line is `7.x` (latest tag `7.7.0`)
 
 ### Sibling District5 packages this depends on
 
-| Package                       | Namespace                     | Role                                                                             |
-|-------------------------------|-------------------------------|----------------------------------------------------------------------------------|
-| `district5/mondoc-builder`    | `District5\MondocBuilder\`    | Fluent query builder (`QueryBuilder`, `QueryTypes\*`)                            |
-| `district5/mondoc-encryption` | `District5\MondocEncryption\` | Field-level encryption adapters (Sodium AES256 / SecretBox / Null)               |
-| `district5/date`              | `District5\Date\`             | Date creation/manipulation (`Date::nowUtc()`, `Date::mongo()`, `Date::modify()`) |
+| Package                       | Constraint | Namespace                     | Role                                                                             |
+|-------------------------------|------------|-------------------------------|----------------------------------------------------------------------------------|
+| `district5/mondoc-builder`    | `>=2.4.0`  | `District5\MondocBuilder\`    | Fluent query builder (`QueryBuilder`, `QueryTypes\*`)                            |
+| `district5/mondoc-encryption` | `*`        | `District5\MondocEncryption\` | Field-level encryption adapters (Sodium AES256 / SecretBox / Null)               |
+| `district5/date`              | `>=3.0.4`  | `District5\Date\`             | Date creation/manipulation (`Date::nowUtc()`, `Date::mongo()`, `Date::modify()`) |
 
 Do not reimplement date maths or query building in this repo — delegate to those packages. Commit
 `2f30aff` deliberately removed Mondoc's own date-conversion complexity in favour of `district5/date`.
+
+Keep these constraints bounded below rather than `*`. With `*`, Composer silently falls back to an
+old release whenever the current one can't install (a missing extension, a stricter `php`
+constraint), and that old release may not work: `district5/date` 2.0.0 is picked without
+`ext-sockets` and fails on PHP 8.6, and builder 2.3.0 was picked on PHP 8.2/8.3 while builder
+required `>=8.4`. All four District5 packages share the same PHP constraint as Mondoc.
 
 ## Architecture
 
